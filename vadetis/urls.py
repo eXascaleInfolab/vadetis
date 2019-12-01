@@ -18,7 +18,7 @@ from django.urls import path, include
 from django.views.defaults import page_not_found
 
 urlpatterns = [
-    path('', include('lisa.urls')),
+    path('', include('vadetisweb.urls')),
     path('accounts/password/set/', page_not_found, {'exception': Exception()}),
     path('accounts/password/change/', page_not_found, {'exception': Exception()}),
     path('accounts/social/connections/', page_not_found, {'exception': Exception()}),

@@ -1,0 +1,30 @@
+{% extends 'vadetisweb/base.html' %}
+{% load static %}
+{% load mytags %}
+
+{% block head %}
+{% endblock %}
+
+{% block js_content %}
+{% endblock %}
+
+{% block breadcrumbs %}
+{% clear_breadcrumbs %}
+{% breadcrumb "Home" "/" %}
+{% endblock %}
+
+{% block breadcrumb_content %}
+{% render_breadcrumbs %}
+{% endblock %}
+
+{% block page_title %}
+<h1 class="page-title">Overview</h1>
+{% endblock %}
+
+{% block content %}
+{{ block.super }}
+<div>
+	Content
+</div>
+
+{% endblock %}
