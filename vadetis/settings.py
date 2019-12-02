@@ -67,7 +67,11 @@ ROOT_URLCONF = 'vadetis.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, 'templates', 'allauth')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'), # global templates, e.g. admin backend
+            os.path.join(BASE_DIR, 'vadetisweb', 'templates'), # vadetisweb site templates
+            os.path.join(BASE_DIR, 'vadetisweb', 'templates', 'allauth') # vadetisweb allauth templates
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -81,6 +85,8 @@ TEMPLATES = [
         },
     },
 ]
+
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'vadetisweb', 'static'), )
 
 WSGI_APPLICATION = 'vadetis.wsgi.application'
 
@@ -164,7 +170,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
