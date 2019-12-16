@@ -86,8 +86,6 @@ TEMPLATES = [
     },
 ]
 
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'vadetisweb', 'static'), )
-
 WSGI_APPLICATION = 'vadetis.wsgi.application'
 
 # Database

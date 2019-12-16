@@ -1,0 +1,18 @@
+{% if messages %}
+
+{% regroup messages|dictsort:"level_tag" by level_tag as message_list  %}
+
+{% for level in message_list %}
+<div class="messages messages-{{ level.grouper }}">
+    {% if level.list|length > 1 %}
+    <ul class="messages_list">
+        {% for message in level.list %}
+        <li class="messages_item">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    {{ level.list|first }}
+    {% endif %}
+</div>
+{% endfor %}
+{% endif %}
