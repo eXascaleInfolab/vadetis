@@ -18,8 +18,8 @@
     <!-- begin:: Header Mobile -->
     <div id="kt_header_mobile" class="kt-header-mobile  kt-header-mobile--fixed ">
         <div class="kt-header-mobile__logo">
-            <a href="demo9/index.html">
-                <img alt="Logo" src="./assets/media/logos/logo-9-sm.png" />
+            <a href="{% url 'vadetisweb:index' %}">
+                <img alt="Logo" src="{% static 'img/global/icon.png' %}" />
             </a>
         </div>
         <div class="kt-header-mobile__toolbar">
@@ -174,8 +174,8 @@
 
                         <!-- begin:: Brand -->
                         <div class="kt-header__brand   kt-grid__item" id="kt_header_brand">
-                            <a class="kt-header__brand-logo" href="demo9/index.html">
-                                <img alt="Logo" src="./assets/media/logos/logo-9.png" />
+                            <a class="kt-header__brand-logo" href="{% url 'vadetisweb:index' %}">
+                                <img alt="Logo" src="{% static 'img/global/logo.png' %}" />
                             </a>
                         </div>
 
