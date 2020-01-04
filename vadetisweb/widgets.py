@@ -2,6 +2,7 @@ from django.forms.widgets import CheckboxInput, TextInput
 from django.utils.safestring import mark_safe
 
 class IconCheckboxInput(CheckboxInput):
+
     def __init__(self, default=False, label=None, *args, **kwargs):
         super(IconCheckboxInput, self).__init__(*args, **kwargs)
         self.default = default

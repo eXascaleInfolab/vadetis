@@ -1,14 +1,40 @@
 {% extends 'account/base.html' %}
+{% load account socialaccount %}
 
 {% block content %}
-<div class="kt-portlet">
-    <div class="kt-portlet__head">
-        <div class="kt-portlet__head-label">
-            <h3 class="kt-portlet__head-title">
-                Login
-            </h3>
+<div class="row">
+    <div class="col-md-6">
+        <div class="kt-portlet">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">Login</h3>
+                </div>
+            </div>
+            {% include "allauth/account/forms/login_form.html" with form=form %}
         </div>
     </div>
-    {% include "allauth/account/forms/login_form.html" with form=form %}
+    <div class="col-md-6">
+        <div class="kt-portlet">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">Authentication</h3>
+                </div>
+            </div>
+            <div class="kt-portlet__body">
+                {% get_providers as socialaccount_providers %}
+                {% if socialaccount_providers %}
+                    <p>Please sign in with your {{ site.name }} account, or use one of your existing third party accounts.</p>
+                    <div class="socialaccount_ballot">
+                      <ul class="socialaccount_providers">
+                        {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+                      </ul>
+                    </div>
+                    {% include "socialaccount/snippets/login_extra.html" %}
+                {% endif %}
+                <p>If you have not created an {{ site.name }} account yet, then please <a href="{{ signup_url }}">create an account</a> first.</p>
+                <p>Forgot your password?<br/> Click here to <a href="{% url 'account_reset_password' %}">reset your password</a>.</p>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
