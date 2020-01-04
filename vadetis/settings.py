@@ -152,6 +152,10 @@ ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_USERNAME_MIN_LENGTH = 5
 ACCOUNT_USERNAME_VALIDATORS = 'vadetisweb.validators.username_validators'
 
+ACCOUNT_FORMS = {
+    'login' : 'vadetisweb.forms.AccountLoginForm',
+}
+
 # Mail - CHANGE MAIL SETTINGS WHEN GOING LIVE!
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -165,7 +169,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
-USE_I18N = True
+USE_I18N = False
 USE_L10N = True
 USE_TZ = True
 
