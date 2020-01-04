@@ -1,5 +1,5 @@
 from django.forms import CharField, PasswordInput, BooleanField, EmailField
-from vadetisweb.widgets import IconCheckboxInput, IconUserTextInput
+from vadetisweb.widgets import IconCheckboxInput, UserTextInput
 from allauth.account import app_settings
 from allauth.account.forms import LoginForm, ResetPasswordForm, ChangePasswordForm, SetPasswordForm, get_username_max_length, set_form_field_order, filter_users_by_email
 
@@ -18,8 +18,8 @@ class AddonPasswordField(CharField):
     def __init__(self, *args, **kwargs):
         render_value = kwargs.pop('render_value', app_settings.PASSWORD_INPUT_RENDER_VALUE)
         kwargs['widget'] = PasswordInput(render_value=render_value,
-                                         attrs={'placeholder': kwargs.get("label"),
-                                                'class': 'form-control form-control-solid placeholder-no-fix'})
+                                         attrs={'placeholder': kwargs.get('label'),
+                                                'class': 'form-control'})
         super(AddonPasswordField, self).__init__(*args, **kwargs)
 
 #########################################################
@@ -29,31 +29,32 @@ class AddonPasswordField(CharField):
 class AccountLoginForm(LoginForm):
 
     password = AddonPasswordField(label="Password")
-    remember = BooleanField(widget=IconCheckboxInput(default=True), required=False, label='Stay signed in')
+    remember = BooleanField(widget=IconCheckboxInput(default=True, label='Stay signed in'), required=False, label='Stay signed in')
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(AccountLoginForm, self).__init__(*args, **kwargs)
 
         if app_settings.AUTHENTICATION_METHOD == app_settings.AuthenticationMethod.EMAIL:
-            login_widget = IconUserTextInput('email', attrs={'type' : 'email',
-                                                         'placeholder':  _('E-mail address'),
+            login_widget = UserTextInput('email', attrs={'type' : 'email',
+                                                         'placeholder':  'E-mail address',
                                                          'autofocus': 'autofocus'})
             login_field = EmailField(label='E-mail',
-                                           widget=login_widget)
+                                     widget=login_widget)
 
         elif app_settings.AUTHENTICATION_METHOD == app_settings.AuthenticationMethod.USERNAME:
-            login_widget = IconUserTextInput('username', attrs={'placeholder' : 'Username',
+            login_widget = UserTextInput('username', attrs={'placeholder' : 'Username',
                                                             'autofocus': 'autofocus'})
             login_field = CharField(label='Username',
-                                          widget=login_widget,
-                                          max_length=get_username_max_length())
+                                    widget=login_widget,
+                                    max_length=get_username_max_length())
         else:
             assert app_settings.AUTHENTICATION_METHOD == app_settings.AuthenticationMethod.USERNAME_EMAIL
-            login_widget = IconUserTextInput('username_email', attrs={'placeholder' : 'Username or e-mail',
-                                                                      'autofocus': 'autofocus'})
+            login_widget = UserTextInput('username_email', attrs={'placeholder' : 'Username or e-mail',
+                                                                  'autofocus': 'autofocus'})
             login_field = CharField(label='Login',
                                     widget=login_widget)
+
         self.fields["login"] = login_field
 
         set_form_field_order(self, ["login", "password", "remember"])
