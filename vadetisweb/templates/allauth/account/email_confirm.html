@@ -1,8 +1,14 @@
 {% extends 'account/base.html' %}
 {% load account %}
+{% load breadcrumbs %}
 
 {% block page_title %}
 <h3 class="kt-subheader__title">Confirm E-Mail</h3>
+{% endblock %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+{% breadcrumb "Sign Up" "signup_url" %}
 {% endblock %}
 
 {% block content %}

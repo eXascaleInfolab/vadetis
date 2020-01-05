@@ -1,7 +1,13 @@
 {% extends 'account/base.html' %}
+{% load breadcrumbs %}
 
 {% block page_title %}
 <h3 class="kt-subheader__title">Logout</h3>
+{% endblock %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+{% breadcrumb "Sign out" "account_logout" %}
 {% endblock %}
 
 {% block content %}

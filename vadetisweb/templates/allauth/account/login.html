@@ -1,8 +1,14 @@
 {% extends 'account/base.html' %}
 {% load account socialaccount %}
+{% load breadcrumbs %}
 
 {% block page_title %}
-<h3 class="kt-subheader__title">Login</h3>
+<h3 class="kt-subheader__title">Sign In</h3>
+{% endblock %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+{% breadcrumb "Sign In" "login_url" %}
 {% endblock %}
 
 {% block content %}

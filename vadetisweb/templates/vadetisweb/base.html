@@ -1,4 +1,4 @@
-<!DOCTYPE html>{% load static %}
+<!DOCTYPE html>{% load static %}{% load breadcrumbs %}
 <html>
 <head>
     <title>Vadetis | Validator for Anomaly Detection in Times Series</title>
@@ -278,16 +278,8 @@
                                 <div class="kt-subheader__main">
                                     {% block page_title %}{% endblock %}
                                     <span class="kt-subheader__separator kt-hidden"></span>
-                                    <div class="kt-subheader__breadcrumbs">
-                                        <a href="#" class="kt-subheader__breadcrumbs-home"><i class="mdi mdi-home-outline mdi-18px"></i></a>
-                                        <span class="kt-subheader__breadcrumbs-separator"></span>
-                                        <a href="" class="kt-subheader__breadcrumbs-link">
-                                            Dashboard </a>
-                                        <span class="kt-subheader__breadcrumbs-separator"></span>
-                                        <a href="" class="kt-subheader__breadcrumbs-link">
-                                            Default Dashboard </a>
-                                        <!-- <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Active link</span> -->
-                                    </div>
+                                    {% block breadcrumbs %}{% endblock %}
+                                    {% block breadcrumbs_content %}{% render_breadcrumbs %}{% endblock %}
                                 </div>
                             </div>
                             <!-- end:: Subheader -->

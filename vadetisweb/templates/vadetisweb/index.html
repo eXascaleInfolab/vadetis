@@ -1,6 +1,5 @@
 {% extends 'vadetisweb/base.html' %}
-{% load static %}
-{% load mytags %}
+{% load breadcrumbs %}
 
 {% block head %}
 {% endblock %}
@@ -10,11 +9,6 @@
 
 {% block breadcrumbs %}
 {% clear_breadcrumbs %}
-{% breadcrumb "Home" "/" %}
-{% endblock %}
-
-{% block breadcrumb_content %}
-{% render_breadcrumbs %}
 {% endblock %}
 
 {% block page_title %}

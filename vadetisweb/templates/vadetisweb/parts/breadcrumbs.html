@@ -1,5 +1,5 @@
 <div class="kt-subheader__breadcrumbs">
-    <a href="#" class="kt-subheader__breadcrumbs-home"><i class="mdi mdi-home-outline mdi-18px"></i></a>
+    <a href="{% url 'vadetisweb:index' %}" class="kt-subheader__breadcrumbs-home"><i class="mdi mdi-home-outline mdi-18px"></i></a>
     {% if breadcrumbs|length > 0 %}<span class="kt-subheader__breadcrumbs-separator"></span>{% endif %}
     {% for url, label in breadcrumbs %}
     {% if url and forloop.counter != breadcrumbs_total %}

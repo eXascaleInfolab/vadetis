@@ -56,6 +56,7 @@ def breadcrumb_raw_safe(context, label, viewname, *args, **kwargs):
 @register.simple_tag(takes_context=True)
 @requires_request
 def render_breadcrumbs(context, *args):
+    print("will render")
     try:
         template_path = args[0]
     except IndexError:
