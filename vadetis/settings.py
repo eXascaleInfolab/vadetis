@@ -156,9 +156,22 @@ ACCOUNT_FORMS = {
     'login' : 'vadetisweb.forms.AccountLoginForm',
     'signup' : 'vadetisweb.forms.AccountSignUpForm',
     'reset_password' : 'vadetisweb.forms.AccountResetPasswordForm',
+    'reset_password_from_key': 'allauth.account.forms.ResetPasswordKeyForm',
 }
 
-# Mail - CHANGE MAIL SETTINGS WHEN GOING LIVE!
+SOCIALACCOUNT_PROVIDERS = {
+     'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+
+# MAILING - CHANGE MAIL SETTINGS WHEN GOING PRODUCTION!
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
