@@ -11,7 +11,7 @@
                 </div>
             </div>
             {% if confirmation %}
-                {% include "allauth/account/forms/email_confirm_form.html" with form=form %}
+                {% include "allauth/account/forms/email_confirm_form.html" %}
             {% else %}
             <div class="kt-portlet__body">
                 {% url 'account_email' as email_url %}

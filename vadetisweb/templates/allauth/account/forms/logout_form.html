@@ -1,0 +1,19 @@
+{% load account %}
+<!-- begin:: Logout Form -->
+<form class="kt-form" method="post" action="{% url 'account_logout' %}">
+    {% csrf_token %}
+    <div class="kt-portlet__body">
+        <div class="form-group form-group-last">
+            <p>Are you sure you want to sign out?</p>
+        </div>
+        {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+    </div>
+    <div class="kt-portlet__foot">
+        <div class="kt-form__actions">
+            <button type="submit" class="btn btn-primary">Logout</button>
+        </div>
+    </div>
+</form>
+<!-- end:: Logout Form -->
