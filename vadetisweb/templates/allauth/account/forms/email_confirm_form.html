@@ -1,0 +1,25 @@
+{% load account %}
+<!-- begin:: Confirm E-Mail Form -->
+<form class="kt-form" method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+    {% csrf_token %}
+    <div class="kt-portlet__body">
+        <div class="form-group form-group-last">
+            <div class="alert alert-secondary" role="alert">
+                <div class="alert-text">
+                    {% user_display confirmation.email_address.user as user_display %}
+                    <p>Hello {{ user_display }},<br/>
+                    Please confirm that {{ confirmation.email_address.email }} is your email address.</p>
+                </div>
+            </div>
+        </div>
+        {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+    </div>
+    <div class="kt-portlet__foot">
+        <div class="kt-form__actions">
+            <button type="submit" class="btn btn-primary">Confirm</button>
+        </div>
+    </div>
+</form>
+<!-- end:: Confirm E-Mail Form -->
