@@ -1,0 +1,45 @@
+<!-- begin:: Login Form -->
+<form class="kt-form" method="POST" action="{% url 'account_signup' %}">
+    {% csrf_token %}
+    <div class="kt-portlet__body">
+        <div class="form-group form-group-last">
+            <div class="alert alert-secondary" role="alert">
+                <div class="alert-icon"><i class="mdi mdi-alert-outline mdi-24px"></i></div>
+                <div class="alert-text">
+                    Already have an account? Then please <a href="{{ login_url }}">sign in</a>.
+                </div>
+            </div>
+        </div>
+        {% for field in form %}
+            {% if field.errors %}
+            <div class="form-group error {% if forloop.last %}form-group-last{% endif %}">
+                <label>{{ field.label }}</label>
+                {{ field }}
+                <span class="help-inline">
+                    {% for error in field.errors %}{{ error }}{% endfor %}
+                </span>
+                {% if field.help_text %}
+                    <span class="form-text text-muted">{{ field.help_text }}</span>
+                {% endif %}
+            </div>
+            {% else %}
+            <div class="form-group {% if forloop.last %}form-group-last{% endif %}">
+                <label>{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                    <span class="form-text text-muted">{{ field.help_text }}</span>
+                {% endif %}
+            </div>
+            {% endif %}
+        {% endfor %}
+        {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+    </div>
+    <div class="kt-portlet__foot">
+        <div class="kt-form__actions">
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+        </div>
+    </div>
+</form>
+<!-- end:: Login Form -->

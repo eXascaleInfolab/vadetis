@@ -66,3 +66,24 @@ class AccountLoginForm(LoginForm):
 
         # You must return the original result.
         return super(AccountLoginForm, self).login(*args, **kwargs)
+
+
+class AccountSignUpForm(AllauthAccountSignupForm):
+
+    username = CharField(label='Username',
+                               min_length=app_settings.USERNAME_MIN_LENGTH,
+                               widget=UserTextInput('username', attrs={'placeholder' : 'Username',
+                                                                       'autofocus': 'autofocus'}))
+    email = EmailField(widget=UserTextInput('email', attrs={'type' : 'email',
+                                                            'placeholder':  'E-mail address',
+                                                            'autofocus': 'autofocus'}))
+
+    def __init__(self, *args, **kwargs):
+        super(AccountSignUpForm, self).__init__(*args, **kwargs)
+        self.fields['password1'] = AddonPasswordField(label='Password')
+        if app_settings.SIGNUP_PASSWORD_ENTER_TWICE:
+            self.fields['password2'] = AddonPasswordField(
+                label='Password (again)')
+
+        if hasattr(self, 'field_order'):
+            set_form_field_order(self, self.field_order)
