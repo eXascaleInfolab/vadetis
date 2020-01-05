@@ -1,0 +1,29 @@
+{% extends "socialaccount/base.html" %}
+{% load breadcrumbs %}
+
+{% block page_title %}
+<h3 class="kt-subheader__title">Login Cancelled</h3>
+{% endblock %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+{% breadcrumb "Sign In" "login_url" %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="kt-portlet">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">Cancelled</h3>
+                </div>
+            </div>
+            <div class="kt-portlet__body">
+                <p>You decided to cancel logging in to our site using one of your existing accounts.
+                    If this was a mistake, please proceed to <a href="{{login_url}}">sign in</a>.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

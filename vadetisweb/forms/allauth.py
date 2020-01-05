@@ -23,7 +23,7 @@ class AddonPasswordField(CharField):
         super(AddonPasswordField, self).__init__(*args, **kwargs)
 
 #########################################################
-# ALLAUTH FORM OVERRIDES
+# Account Forms & Registration
 #########################################################
 
 class AccountLoginForm(LoginForm):
@@ -98,3 +98,75 @@ class AccountResetPasswordForm(ResetPasswordForm):
         super(AccountResetPasswordForm, self).__init__(*args, **kwargs)
 
 
+class AccountChangePasswordForm(ChangePasswordForm):
+
+    def __init__(self, user=None, *args, **kwargs):
+        super(AccountChangePasswordForm, self).__init__(user, *args, **kwargs)
+        for field in ('oldpassword', 'password1', 'password2'):
+            self.fields[field].widget.attrs = {'class': 'form-control'}
+
+    def save(self):
+        # Ensure you call the parent classes save
+        # .save() does not return anything
+        super(AccountChangePasswordForm, self).save()
+
+
+class AccountSetPasswordForm(SetPasswordForm):
+
+    def __init__(self, *args, **kwargs):
+        super(AccountSetPasswordForm, self).__init__(*args, **kwargs)
+        for field in ('password1', 'password2'):
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+    def save(self):
+        # Ensure you call the parent classes save
+        # .save() does not return anything
+        super(AccountSetPasswordForm, self).save()
+
+
+class AccountSocialDisconnectForm(DisconnectForm):
+
+    def save(self):
+
+        # Add your own processing here if you do need access to the
+        # socialaccount being deleted.
+
+        # Ensure you call the parent classes save.
+        # .save() does not return anything
+        super(AccountSocialDisconnectForm, self).save()
+
+        # Add your own processing here if you don't need access to the
+        # socialaccount being deleted.
+
+
+#########################################################
+# Social Account Forms & Registration
+#########################################################
+
+class SocialAccountSignupForm(AllauthSocialSignupForm):
+
+    email_widget = UserTextInput('email', attrs={'type': 'email',
+                                                 'placeholder': 'E-mail address'})
+    email = EmailField(label='E-mail', widget=email_widget)
+
+    username_widget = UserTextInput('username', attrs={'placeholder': 'Username',
+                                                         'autofocus': 'autofocus'})
+    username = CharField(label='Username',
+                                  widget=username_widget,
+                                  max_length=get_username_max_length())
+
+    def __init__(self, *args, **kwargs):
+        super(SocialAccountSignupForm, self).__init__(*args, **kwargs)
+        for field in ('username', 'email'):
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+    def save(self):
+
+        # Ensure you call the parent classes save.
+        # .save() returns a User object.
+        user = super(SocialAccountSignupForm, self).save()
+
+        # Add your own processing here.
+
+        # You must return the original result.
+        return user

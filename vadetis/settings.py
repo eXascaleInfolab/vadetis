@@ -157,6 +157,14 @@ ACCOUNT_FORMS = {
     'signup' : 'vadetisweb.forms.AccountSignUpForm',
     'reset_password' : 'vadetisweb.forms.AccountResetPasswordForm',
     'reset_password_from_key': 'allauth.account.forms.ResetPasswordKeyForm',
+    'change_password': 'vadetisweb.forms.AccountChangePasswordForm',
+    'set_password': 'vadetisweb.forms.AccountSetPasswordForm',
+    'disconnect': 'vadetisweb.forms.AccountSocialDisconnectForm',
+}
+
+SOCIALACCOUNT_FORMS = {
+    'login': 'allauth.socialaccount.forms.DisconnectForm',
+    'signup': 'vadetisweb.forms.SocialAccountSignupForm',
 }
 
 SOCIALACCOUNT_PROVIDERS = {

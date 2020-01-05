@@ -1,0 +1,26 @@
+{% extends "socialaccount/base.html" %}
+{% load breadcrumbs %}
+
+{% block page_title %}
+<h3 class="kt-subheader__title">Sign Up</h3>
+{% endblock %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+{% breadcrumb "Sign Up" "account_signup" %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="kt-portlet">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">Sign Up</h3>
+                </div>
+            </div>
+            {% include 'allauth/socialaccount/forms/signup_form.html' with form=form %}
+        </div>
+    </div>
+</div>
+{% endblock %}
