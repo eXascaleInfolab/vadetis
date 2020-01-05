@@ -155,6 +155,7 @@ ACCOUNT_USERNAME_VALIDATORS = 'vadetisweb.validators.username_validators'
 ACCOUNT_FORMS = {
     'login' : 'vadetisweb.forms.AccountLoginForm',
     'signup' : 'vadetisweb.forms.AccountSignUpForm',
+    'reset_password' : 'vadetisweb.forms.AccountResetPasswordForm',
 }
 
 # Mail - CHANGE MAIL SETTINGS WHEN GOING LIVE!

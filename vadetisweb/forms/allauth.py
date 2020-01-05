@@ -87,3 +87,14 @@ class AccountSignUpForm(AllauthAccountSignupForm):
 
         if hasattr(self, 'field_order'):
             set_form_field_order(self, self.field_order)
+
+
+class AccountResetPasswordForm(ResetPasswordForm):
+
+    email = EmailField(label='E-mail', required=True, widget=UserTextInput('email', attrs={'type' : 'email',
+                                                                                           'size' : '30',
+                                                                                           'placeholder': 'E-mail address',}))
+    def __init__(self, *args, **kwargs):
+        super(AccountResetPasswordForm, self).__init__(*args, **kwargs)
+
+
