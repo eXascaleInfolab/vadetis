@@ -1,0 +1,15 @@
+<div class="kt-subheader__breadcrumbs">
+    <a href="#" class="kt-subheader__breadcrumbs-home"><i class="mdi mdi-home-outline mdi-18px"></i></a>
+    {% if breadcrumbs|length > 0 %}<span class="kt-subheader__breadcrumbs-separator"></span>{% endif %}
+    {% for url, label in breadcrumbs %}
+    {% if url and forloop.counter != breadcrumbs_total %}
+        <a href="{{ url }}" class="kt-subheader__breadcrumbs-link">{{ label|safe }}</a>
+    {% else %}
+        {{ label|safe }}
+    {% endif %}
+    {% if not forloop.last %}
+        <span class="kt-subheader__breadcrumbs-separator"></span>
+    {% endif %}
+{% endfor %}
+<!-- <span class="kt-subheader__breadcrumbs-link kt-subheader__breadcrumbs-link--active">Active link</span> -->
+</div>
