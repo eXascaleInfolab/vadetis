@@ -1,0 +1,24 @@
+{% extends 'account/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="kt-portlet">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">Verified E-Mail Required</h3>
+                </div>
+            </div>
+            <div class="kt-portlet__body">
+                <p>Verify your e-mail address: </p>
+                {% url 'account_email' as email_url %}
+                <p>This site requires to verify that you are who you claim to be. For this purpose, we require that you verify ownership of your e-mail address.</p>
+
+                <p>We have sent an e-mail to you for verification. Please click on the link inside this e-mail.</p>
+
+                <p><strong>Note:</strong> you can still <a href="{{ email_url }}">change your e-mail address</a>.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
