@@ -1,0 +1,25 @@
+{% extends 'vadetisweb/base.html' %}
+{% load breadcrumbs %}
+
+{% block head %}
+{% endblock %}
+
+{% block js_content %}
+{% endblock %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+{% breadcrumb 'Account' 'account' %}
+{% endblock %}
+
+{% block page_title %}
+<h3 class="kt-subheader__title">Account</h3>
+{% endblock %}
+
+{% block content %}
+{{ block.super }}
+<div>
+	Account
+</div>
+
+{% endblock %}
