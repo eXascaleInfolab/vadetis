@@ -15,10 +15,8 @@
         </div>
     {% endif %}
 
-
     <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropdown-menu-xl">
-
-        <!--begin: Head -->
+        <!--begin: User Nav Main -->
         <div class="kt-user-card kt-user-card--skin-light kt-notification-item-padding-x">
             <div class="kt-user-card__name">
                 {{ user.username }}
@@ -27,17 +25,16 @@
                 <span class="btn btn-label-primary btn-sm btn-bold btn-font-md">23 messages</span>
             </div>
         </div>
-        <!--end: Head -->
-
-        <!--begin: Navigation -->
+        <!--end: User Nav Main -->
+        <!--begin: User Navigation -->
         <div class="kt-notification">
             <a href="#" class="kt-notification__item">
                 <div class="kt-notification__item-icon">
-                    <i class="flaticon2-calendar-3 kt-font-success"></i>
+                    <i class="mdi mdi-account-outline mdi-24px kt-font-success"></i>
                 </div>
                 <div class="kt-notification__item-details">
                     <div class="kt-notification__item-title kt-font-bold">
-                        My Profile
+                        Profile
                     </div>
                     <div class="kt-notification__item-time">
                         Account settings and more
@@ -46,11 +43,11 @@
             </a>
             <a href="#" class="kt-notification__item">
                 <div class="kt-notification__item-icon">
-                    <i class="flaticon2-mail kt-font-warning"></i>
+                    <i class="mdi mdi-bell-outline mdi-24px kt-font-warning"></i>
                 </div>
                 <div class="kt-notification__item-details">
                     <div class="kt-notification__item-title kt-font-bold">
-                        My Messages
+                        Notifications
                     </div>
                     <div class="kt-notification__item-time">
                         Inbox and tasks
@@ -59,40 +56,27 @@
             </a>
             <a href="#" class="kt-notification__item">
                 <div class="kt-notification__item-icon">
-                    <i class="flaticon2-rocket-1 kt-font-danger"></i>
+                    <i class="mdi mdi-timeline-clock-outline mdi-24px kt-font-brand"></i>
                 </div>
                 <div class="kt-notification__item-details">
                     <div class="kt-notification__item-title kt-font-bold">
-                        My Activities
+                        Tasks
                     </div>
                     <div class="kt-notification__item-time">
-                        Logs and notifications
+                        Latest tasks
                     </div>
                 </div>
             </a>
             <a href="#" class="kt-notification__item">
                 <div class="kt-notification__item-icon">
-                    <i class="flaticon2-hourglass kt-font-brand"></i>
+                    <i class="mdi mdi-chart-timeline-variant mdi-24px kt-font-brand"></i>
                 </div>
                 <div class="kt-notification__item-details">
                     <div class="kt-notification__item-title kt-font-bold">
-                        My Tasks
+                        My Datasets
                     </div>
                     <div class="kt-notification__item-time">
-                        latest tasks and projects
-                    </div>
-                </div>
-            </a>
-            <a href="#" class="kt-notification__item">
-                <div class="kt-notification__item-icon">
-                    <i class="flaticon2-cardiogram kt-font-warning"></i>
-                </div>
-                <div class="kt-notification__item-details">
-                    <div class="kt-notification__item-title kt-font-bold">
-                        Billing
-                    </div>
-                    <div class="kt-notification__item-time">
-                        billing & statements <span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill kt-badge--rounded">2 pending</span>
+                        Manage own datasets
                     </div>
                 </div>
             </a>
@@ -100,7 +84,6 @@
                 <a href="{% url 'account_logout' %}" class="btn btn-label btn-label-brand btn-sm btn-bold">Sign Out</a>
             </div>
         </div>
-
-        <!--end: Navigation -->
+        <!--end: User Navigation -->
     </div>
 </div>
