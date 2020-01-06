@@ -19,7 +19,6 @@ def account(request):
     form_account_delete = None
     form_social_disconnect = None
     form_user = None
-    last_submit = 'user'
 
     if request.method == 'POST':
 
@@ -51,8 +50,6 @@ def account(request):
                 message = "Could not update password!"
                 messages.error(request, message)
 
-            last_submit = 'password'
-
         elif 'submit-social-account-disconnect' in request.POST:
             form_social_disconnect = AccountSocialDisconnectForm(request=request, data=request.POST)
             if form_social_disconnect.is_valid():
@@ -63,8 +60,6 @@ def account(request):
                 message = "Could not disconnect social account!"
                 messages.error(request, message)
                 print(form_social_disconnect.errors)
-
-            last_submit = 'social'
 
         elif 'submit-account-delete' in request.POST:
             form_account_delete = AccountDeleteUserForm(instance=current_user, data=request.POST)
@@ -79,8 +74,6 @@ def account(request):
                     message = "Account has been removed"
                     messages.success(request, message)
                     return HttpResponseRedirect(reverse_lazy('account_logout'))
-                else:
-                    last_submit = 'account_delete'
 
     if form_user is None:
         form_user = AccountUserForm(instance=current_user)
@@ -102,6 +95,6 @@ def account(request):
                                                                    'form_password':form_password,
                                                                    'form_social_disconnect' : form_social_disconnect,
                                                                    'form_account_delete':form_account_delete,
-                                                                   'url_social_connect_success_redirect' : url_social_connect_success_redirect,
-                                                                   'last_submit': last_submit })
+                                                                   'url_social_connect_success_redirect' : url_social_connect_success_redirect
+                                                                   })
     return response

@@ -17,9 +17,57 @@
 {% endblock %}
 
 {% block content %}
-{{ block.super }}
-<div>
-	Account
+<div class="row">
+    <div class="col-md-6">
+        <div class="kt-portlet">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">User</h3>
+                </div>
+            </div>
+            {% include "vadetisweb/account/forms/user_form.html" with form=form_user %}
+        </div>
+        <div class="kt-portlet">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">Password</h3>
+                </div>
+            </div>
+            {% include "vadetisweb/account/forms/password_form.html" with form=form_password %}
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="kt-portlet">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">Social Account</h3>
+                </div>
+            </div>
+            {% if form_social_disconnect.accounts %}
+                <div class="kt-portlet__body">
+                    <p>You can sign in to your account using any of the following third party accounts:</p>
+                </div>
+            {% else %}
+                <div class="kt-portlet__body">
+                    <p>You currently have no social network accounts connected to your Vadetis account.</p>
+                    <ul class="socialaccount_providers">
+                        {% include "socialaccount/snippets/provider_list_logged_in.html" with process="connect" next=url_social_connect_success_redirect %}
+                    </ul>
+                    {% include "socialaccount/snippets/login_extra.html" %}
+                </div>
+            {% endif %}
+            {% if form_social_disconnect.accounts %}
+                {% include 'vadetisweb/account/forms/social_disconnect_form.html' with form=form_social_disconnect %}
+            {% endif %}
+        </div>
+        <div class="kt-portlet">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">Delete Account</h3>
+                </div>
+            </div>
+            {% include "vadetisweb/account/forms/account_delete_form.html" with form=form_account_delete %}
+        </div>
+    </div>
 </div>
-
 {% endblock %}

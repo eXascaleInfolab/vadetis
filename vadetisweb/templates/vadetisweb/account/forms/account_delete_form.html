@@ -1,0 +1,37 @@
+<!-- begin:: Account Delete Form -->
+<form id="account_delete_form" class="kt-form" method="POST" action="{% url 'vadetisweb:account' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="kt-portlet__body">
+        {% for field in form %}
+            {% if field.errors %}
+            <div class="form-group error {% if forloop.last %}form-group-last{% endif %}">
+                {% if field.name != 'is_active' %}<label>{{ field.label }}</label>{% endif %}
+                {{ field }}
+                <span class="help-inline">
+                    {% for error in field.errors %}{{ error }}{% endfor %}
+                </span>
+                {% if field.help_text %}
+                    <span class="form-text text-muted">{{ field.help_text }}</span>
+                {% endif %}
+            </div>
+            {% else %}
+            <div class="form-group {% if forloop.last %}form-group-last{% endif %}">
+                {% if field.name != 'is_active' %}<label>{{ field.label }}</label>{% endif %}
+                {{ field }}
+                {% if field.help_text %}
+                    <span class="form-text text-muted">{{ field.help_text }}</span>
+                {% endif %}
+            </div>
+            {% endif %}
+        {% endfor %}
+        {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+    </div>
+    <div class="kt-portlet__foot">
+        <div class="kt-form__actions">
+            <button type="submit" class="btn btn-primary">Delete Account</button>
+        </div>
+    </div>
+</form>
+<!-- end:: Account Delete Form -->
