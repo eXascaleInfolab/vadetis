@@ -1,6 +1,28 @@
 from django.forms.widgets import CheckboxInput, TextInput
 from django.utils.safestring import mark_safe
 
+
+class ColorPickerTextInput(TextInput):
+    class Media:
+        js = ('js/lib/jquery-minicolors/jquery.minicolors.min.js',
+              'js/lib/jquery-minicolors/minicolors.init.js')
+        css = {
+            'all':
+                ('css/lib/jquery-minicolors/jquery.minicolors.css',)
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(ColorPickerTextInput, self).__init__(*args, **kwargs)
+        self.attrs.update({
+            'class': 'minicolors-input form-control',
+        })
+
+    def render(self, name, value, attrs=None, renderer=None):
+        final_attrs = self.build_attrs(self.attrs, attrs)
+        output = super(ColorPickerTextInput, self).render(name, value, final_attrs, renderer)
+        return mark_safe(output)
+
+
 class IconCheckboxInput(CheckboxInput):
 
     def __init__(self, default=False, label=None, *args, **kwargs):

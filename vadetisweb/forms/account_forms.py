@@ -5,6 +5,9 @@ from allauth.account.models import EmailAddress
 from allauth.account.forms import SignupForm as AllauthAccountSignupForm, get_adapter as get_account_adapter, LoginForm, ResetPasswordForm, ChangePasswordForm, SetPasswordForm, get_username_max_length, set_form_field_order, filter_users_by_email
 from allauth.socialaccount.forms import SignupForm as AllauthSocialSignupForm, DisconnectForm
 
+from vadetisweb.models import UserSettings
+from vadetisweb.widgets import ColorPickerTextInput
+
 #########################################################
 # Account Forms
 #########################################################
@@ -101,3 +104,28 @@ class AccountDeleteUserForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(AccountDeleteUserForm, self).__init__(*args, **kwargs)
         self.fields['is_active'].help_text = 'Uncheck this box if you are sure you want to delete your account.'
+
+
+
+class UserSettingsForm(ModelForm):
+    """
+    The form for the settings of the user
+    """
+    #group = forms.ModelChoiceField(queryset=Group.objects.all(), required=True)
+
+    class Meta:
+        model = UserSettings
+        fields = ('highcharts_height', 'legend_height', 'color_outliers', 'color_clusters',
+                  'color_true_positive', 'color_false_positive', 'color_false_negative', 'round_digits')
+        widgets = {
+            'color_outliers' : ColorPickerTextInput,
+            'color_clusters' : ColorPickerTextInput,
+            'color_true_positive' : ColorPickerTextInput,
+            'color_false_positive' : ColorPickerTextInput,
+            'color_false_negative' : ColorPickerTextInput,
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(UserSettingsForm, self).__init__(*args, **kwargs)
+        for field in ('highcharts_height', 'legend_height', 'round_digits'):
+            self.fields[field].widget.attrs = {'class': 'form-control'}

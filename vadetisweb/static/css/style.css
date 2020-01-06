@@ -24805,21 +24805,6 @@ body.swal2-height-auto {
       color: #591df1; }
   .kt-notification .kt-notification__item.kt-notification__item--read {
     opacity: 0.5; }
-  .kt-notification .kt-notification__item::after {
-    border: 0;
-    font-family: "LineAwesome";
-    text-decoration: inherit;
-    text-rendering: optimizeLegibility;
-    text-transform: none;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
-    font-smoothing: antialiased;
-    content: "";
-    font-size: 0.8rem;
-    line-height: 0;
-    position: relative;
-    color: #a7abc3; }
-
 .kt-notification .kt-notification__custom {
   display: -webkit-box;
   display: -ms-flexbox;

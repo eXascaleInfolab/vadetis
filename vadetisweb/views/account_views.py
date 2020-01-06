@@ -5,7 +5,9 @@ from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 
-from vadetisweb.forms import AccountUserForm, AccountSetPasswordForm, AccountChangePasswordForm, AccountSocialDisconnectForm, AccountDeleteUserForm
+from vadetisweb.forms.account_forms import *
+from vadetisweb.utils import cookie_settings_dict
+from vadetisweb.models import UserSettings
 
 #########################################################
 # Account Views
@@ -97,4 +99,70 @@ def account(request):
                                                                    'form_account_delete':form_account_delete,
                                                                    'url_social_connect_success_redirect' : url_social_connect_success_redirect
                                                                    })
+    return response
+
+
+def application_settings(request):
+    user = request.user
+    settings_dict = cookie_settings_dict(request)
+    updateCookies = False
+
+    if user.is_authenticated: #use profile
+
+        settings, created = UserSettings.objects.get_or_create(user=user)
+        if created:
+            # fill profile with values from cookies
+            # (e.g. user used app, then later made an account-> values from cookies should be inserted into profile)
+            for (key, value) in settings_dict.items():
+                setattr(settings, key, value)
+            settings.save()
+
+        if request.method == 'POST':
+            form = UserSettingsForm(instance=settings, data=request.POST)
+
+            if form.is_valid():
+                user_settings = form.save(commit=False)
+                user_settings.user = user
+
+                user_settings.save()
+
+                message = "Your settings have been updated!"
+                messages.success(request, message)
+
+                updateCookies = True
+            else:
+                message = "Settings could not be saved! Check for form errors below."
+                messages.error(request, message)
+
+        else:
+            form = UserSettingsForm(instance=settings)
+
+    else:   #use cookie
+        temp_settings = UserSettings(**settings_dict)
+
+        if request.method == 'POST':
+            form = UserSettingsForm(instance=temp_settings, data=request.POST)
+
+            if form.is_valid():
+                #set cookies
+
+                message = "Your settings have been updated!"
+                messages.success(request, message)
+
+                updateCookies = True
+
+            else:
+                message = "Settings could not be saved! Check for form errors below."
+                messages.error(request, message)
+
+        else:
+            form = UserSettingsForm(instance=temp_settings)
+
+    response = render(request, 'vadetisweb/account/application_settings.html', {'form' : form, })
+
+    #set cookies for response
+    if updateCookies:
+        for key in settings_dict.keys():
+            response.set_cookie(key=key, value=form.cleaned_data[key])
+
     return response
