@@ -30826,7 +30826,8 @@ body {
         -ms-flex-pack: center;
         justify-content: center;
         height: 42px;
-        width: 42px;
+        width: auto;
+        min-width: 42px;
         cursor: pointer;
         background: transparent;
         -webkit-transition: all 0.3s;
