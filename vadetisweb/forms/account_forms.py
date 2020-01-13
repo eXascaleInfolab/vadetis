@@ -106,7 +106,6 @@ class AccountDeleteUserForm(ModelForm):
         self.fields['is_active'].help_text = 'Uncheck this box if you are sure you want to delete your account.'
 
 
-
 class UserSettingsForm(ModelForm):
     """
     The form for the settings of the user

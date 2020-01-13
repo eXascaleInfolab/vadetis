@@ -4,6 +4,13 @@
     <title>Vadetis | Validator for Anomaly Detection in Times Series</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     {% include 'vadetisweb/parts/includes/head.html' %}
+    {% block form_media_css %}
+        {% if form %}
+            <!-- begin:: Form Media CSS -->
+            {{ form.media.css }}
+            <!-- end:: Form Media CSS -->
+        {% endif %}
+    {% endblock %}
     {% block css %}
         {% include 'vadetisweb/parts/includes/css.html' %}
 	{% endblock %}
