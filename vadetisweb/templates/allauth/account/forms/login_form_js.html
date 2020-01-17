@@ -1,0 +1,30 @@
+<!-- BEGIN LOGIN FORM JS -->
+<script type="text/javascript">
+    $('#login_form').on('submit', function(event){
+        console.log("ON SUBMIT");
+        event.preventDefault();
+        var data = {
+            "login": $('#id_login').val(),
+            "password": $('#id_password').val(),
+            "remember": $('#id_remember').val()
+        };
+        $.post({
+            url: "{% url 'account_login' %}",
+            headers: {"X-CSRFToken": '{{ csrf_token }}' },
+            type: "POST",
+            data: data,
+            contentType: "application/x-www-form-urlencoded",
+            dataType: "text",
+            success: function (data, status, xhr) {
+                var json = JSON.parse(data);
+                if(json.hasOwnProperty('location')){
+                    window.location = json.location;
+                }
+            },
+            error: function (data, status, xhr) {
+                console.error("Login Failed");
+            }
+        });
+    });
+</script>
+<!-- END LOGIN FORM JS -->

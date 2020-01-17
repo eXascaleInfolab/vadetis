@@ -48,3 +48,8 @@
     </div>
 </div>
 {% endblock %}
+
+{% block additional_bootom_js %}
+    {{ block.super }}
+    {% include "allauth/account/forms/login_form_js.html" %}
+{% endblock %}

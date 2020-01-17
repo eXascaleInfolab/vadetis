@@ -1,5 +1,5 @@
 <!-- begin:: Login Form -->
-<form class="kt-form" method="POST" action="{% url 'account_login' %}">
+<form id="login_form" class="kt-form" method="POST" action="{% url 'account_login' %}">
     {% csrf_token %}
     <div class="kt-portlet__body">
         {% for field in form %}
