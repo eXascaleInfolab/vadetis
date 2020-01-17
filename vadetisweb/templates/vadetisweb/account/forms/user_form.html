@@ -1,5 +1,5 @@
 <!-- begin:: User Form -->
-<form id="account_edit_form" class="kt-form" method="POST" action="{% url 'vadetisweb:account' %}" enctype="multipart/form-data">
+<form id="user_form" class="kt-form" method="POST" action="{% url 'vadetisweb:account' %}" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="kt-portlet__body">
         {% for field in form %}

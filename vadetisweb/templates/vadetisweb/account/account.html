@@ -33,7 +33,7 @@
                     <h3 class="kt-portlet__head-title">Password</h3>
                 </div>
             </div>
-            {% include "vadetisweb/account/forms/password_form.html" with form=form_password %}
+            {% include "vadetisweb/account/forms/password_change_form.html" with form=form_password %}
         </div>
     </div>
     <div class="col-md-6">
@@ -70,4 +70,12 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block additional_bottom_js %}
+    {{ block.super }}
+    {% include "vadetisweb/parts/ajax_form_js.html" with formid="user_form" %}
+    {% include "vadetisweb/parts/ajax_form_js.html" with formid="password_change_form" %}
+    {% include "vadetisweb/parts/ajax_form_js.html" with formid="social_disconnect_form" %}
+    {% include "vadetisweb/parts/ajax_form_js.html" with formid="account_delete_form" %}
 {% endblock %}

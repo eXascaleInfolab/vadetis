@@ -1,0 +1,20 @@
+<!-- BEGIN AJAX FORM JS -->
+<script type="text/javascript">
+    $('#{{ formid }}').on('submit', function (event) {
+        event.preventDefault();
+        $.post({
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            type: $(this).attr('method'),
+            success: function (data, status, xhr) {
+                if (data.location) {
+                    window.location = data.location;
+                }
+            },
+            error: function (data, status, xhr) {
+                console.error("Sending asynchronous failed");
+            }
+        });
+    });
+</script>
+<!-- END AJAX FORM JS -->

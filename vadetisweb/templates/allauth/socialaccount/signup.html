@@ -27,5 +27,5 @@
 
 {% block additional_bottom_js %}
     {{ block.super }}
-    {% include "../shared/parts/ajax_form_js.html" with formid="socialaccount_signup_form" %}
+    {% include "allauth/shared/parts/ajax_form_js.html" with formid="socialaccount_signup_form" %}
 {% endblock %}
