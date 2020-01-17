@@ -32,3 +32,8 @@
     </div>
 </div>
 {% endblock %}
+
+{% block additional_bottom_js %}
+    {{ block.super }}
+    {% include "allauth/account/forms/email_confirm_form_js.html" %}
+{% endblock %}

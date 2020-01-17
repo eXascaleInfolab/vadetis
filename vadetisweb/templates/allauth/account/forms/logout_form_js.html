@@ -3,7 +3,7 @@
     $('#logout_form').on('submit', function(event){
         event.preventDefault();
         $.post({
-            url: "{% url 'account_logout' %}",
+            url: $(this).attr("action"),
             headers: {"X-CSRFToken": '{{ csrf_token }}' },
             type: "POST",
             contentType: "application/x-www-form-urlencoded",

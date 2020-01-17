@@ -1,17 +1,11 @@
-<!-- BEGIN LOGIN FORM JS -->
+<!-- BEGIN EMAIL CONFIRM FORM JS -->
 <script type="text/javascript">
-    $('#login_form').on('submit', function(event){
+    $('#email_confirm_form').on('submit', function(event){
         event.preventDefault();
-        var data = {
-            "login": $('#id_login').val(),
-            "password": $('#id_password').val(),
-            "remember": $('#id_remember').val()
-        };
         $.post({
             url: $(this).attr("action"),
             headers: {"X-CSRFToken": '{{ csrf_token }}' },
             type: "POST",
-            data: data,
             contentType: "application/x-www-form-urlencoded",
             dataType: "text",
             success: function (data, status, xhr) {
@@ -21,9 +15,9 @@
                 }
             },
             error: function (data, status, xhr) {
-                console.error("Login failed");
+                console.error("Logout failed");
             }
         });
     });
 </script>
-<!-- END LOGIN FORM JS -->
+<!-- END EMAIL CONFIRM FORM JS -->
