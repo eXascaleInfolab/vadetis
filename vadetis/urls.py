@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.defaults import page_not_found
+from rest_framework.documentation import include_docs_urls
 
 urlpatterns = [
     path('', include('vadetisweb.urls', namespace='vadetisweb')),
@@ -24,4 +25,6 @@ urlpatterns = [
     path('accounts/social/connections/', page_not_found, {'exception': Exception()}),
     path('accounts/', include('allauth.urls')),
     path('admin/', admin.site.urls),
+    path('docs/', include_docs_urls(title='Vadetis REST API', public=True)),  # todo only for authenticated user: add public=False
+
 ]
