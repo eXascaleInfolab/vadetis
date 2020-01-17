@@ -1,6 +1,6 @@
 {% load account %}
 <!-- begin:: Logout Form -->
-<form class="kt-form" method="post" action="{% url 'account_logout' %}">
+<form id="logout_form" class="kt-form" method="post" action="{% url 'account_logout' %}">
     {% csrf_token %}
     <div class="kt-portlet__body">
         <div class="form-group form-group-last">

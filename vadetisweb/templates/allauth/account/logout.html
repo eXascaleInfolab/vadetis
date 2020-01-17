@@ -24,3 +24,8 @@
     </div>
 </div>
 {% endblock %}
+
+{% block additional_bottom_js %}
+    {{ block.super }}
+    {% include "allauth/account/forms/logout_form_js.html" %}
+{% endblock %}
