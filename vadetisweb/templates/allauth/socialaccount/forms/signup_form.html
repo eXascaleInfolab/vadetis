@@ -1,5 +1,5 @@
 <!-- begin:: Sign Up Form -->{% load account %}
-<form class="kt-form" method="POST" action="{% url 'socialaccount_signup' %}">
+<form id="socialaccount_signup_form" class="kt-form" method="POST" action="{% url 'socialaccount_signup' %}">
     {% csrf_token %}
     <div class="kt-portlet__body">
         <div class="form-group form-group-last">

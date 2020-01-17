@@ -27,5 +27,5 @@
 
 {% block additional_bottom_js %}
     {{ block.super }}
-    {% include "allauth/account/forms/logout_form_js.html" %}
+    {% include "allauth/shared/ajax_form_js.html" with formid="logout_form" %}
 {% endblock %}

@@ -51,5 +51,5 @@
 
 {% block additional_bottom_js %}
     {{ block.super }}
-    {% include "allauth/account/forms/login_form_js.html" %}
+    {% include "allauth/shared/ajax_form_js.html" with formid="login_form" %}
 {% endblock %}

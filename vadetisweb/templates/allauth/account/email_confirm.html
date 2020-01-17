@@ -35,5 +35,5 @@
 
 {% block additional_bottom_js %}
     {{ block.super }}
-    {% include "allauth/account/forms/email_confirm_form_js.html" %}
+    {% include "allauth/shared/ajax_form_js.html" with formid="email_confirm_form" %}
 {% endblock %}
