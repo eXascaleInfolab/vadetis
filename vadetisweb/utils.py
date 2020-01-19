@@ -1,7 +1,7 @@
 
 from vadetisweb.parameters import *
 
-def cookie_settings_dict(request):
+def get_cookie_settings_dict(request):
     """
     Returns a dict of the cookie values relevant for the settings (profile), returns default values if cookie is not available
     :param request: the request of the view

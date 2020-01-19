@@ -323,5 +323,12 @@
 	{% endblock %}
     {% block additional_bottom_js %}
     {% endblock %}
+    {% block form_media_js %}
+        {% if form %}
+            <!-- begin:: Form Media Scripts -->
+            {{ form.media.js }}
+            <!-- end:: Form Media Scripts -->
+        {% endif %}
+    {% endblock %}
 </body>
 </html>

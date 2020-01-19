@@ -32,10 +32,3 @@
 <!-- begin::Global Scripts -->
 <script src="{% static 'js/global/scripts.js' %}" type="text/javascript"></script>
 <!-- end::Global Script -->
-{% block form_media_js %}
-    {% if form %}
-        <!-- begin:: Form Media Scripts -->
-        {{ form.media.js }}
-        <!-- end:: Form Media Scripts -->
-    {% endif %}
-{% endblock %}
