@@ -18,15 +18,29 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-md-12">
-            <div class="kt-portlet">
-                <div class="kt-portlet__head">
-                    <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title">Training Datasets</h3>
-                    </div>
+    <div class="kt-portlet kt-portlet--mobile">
+        <div class="kt-portlet__head kt-portlet__head--lg">
+            <div class="kt-portlet__head-label">
+                <span class="kt-portlet__head-icon">
+                    <i class="mdi mdi-chart-timeline-variant mdi-24px kt-font-brand"></i>
+                </span>
+                <h3 class="kt-portlet__head-title">
+                    Browse Training Datasets
+                </h3>
+            </div>
+            <div class="kt-portlet__head-toolbar">
+                <div class="kt-portlet__head-wrapper">
+                    <button type="button" class="btn btn-brand btn-icon-sm" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        <i class="mdi mdi-plus mdi-18px"></i> Add Training Dataset
+                    </button>
                 </div>
             </div>
+        </div>
+        <div class="kt-portlet__body kt-portlet__body--fit">
+            <!--begin: Datatable -->
+            <div class="kt-datatable" id="ajax_data"></div>
+            <!--end: Datatable -->
         </div>
     </div>
 {% endblock %}
