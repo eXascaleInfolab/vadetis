@@ -8,9 +8,20 @@ from django.contrib.auth.decorators import login_required
 from vadetisweb.forms.account_forms import *
 from vadetisweb.models import UserSettings
 
+
 #########################################################
 # Account Views
 #########################################################
+
+@login_required
+def account_datasets(request):
+    return render(request, 'vadetisweb/account/account_datasets.html')
+
+
+@login_required
+def account_training_datasets(request):
+    return render(request, 'vadetisweb/account/account_training_datasets.html')
+
 
 @login_required
 def account(request):
@@ -92,11 +103,10 @@ def account(request):
 
     url_social_connect_success_redirect = reverse('vadetisweb:account')
 
-    response = render(request, 'vadetisweb/account/account.html', {'form_user' : form_user,
-                                                                   'form_password':form_password,
-                                                                   'form_social_disconnect' : form_social_disconnect,
-                                                                   'form_account_delete':form_account_delete,
-                                                                   'url_social_connect_success_redirect' : url_social_connect_success_redirect
+    response = render(request, 'vadetisweb/account/account.html', {'form_user': form_user,
+                                                                   'form_password': form_password,
+                                                                   'form_social_disconnect': form_social_disconnect,
+                                                                   'form_account_delete': form_account_delete,
+                                                                   'url_social_connect_success_redirect': url_social_connect_success_redirect
                                                                    })
     return response
-

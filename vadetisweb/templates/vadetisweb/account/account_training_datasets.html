@@ -1,0 +1,37 @@
+{% extends 'vadetisweb/base.html' %}
+{% load static %}
+{% load breadcrumbs %}
+{% load rest_framework %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "Account Training Datasets" "account_training_datasets" %}
+{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+    <link href="{% static 'css/lib/datatables/datatables.min.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block page_title %}
+    <h3 class="kt-subheader__title">Your Training Datasets</h3>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">Training Datasets</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block bottom_js %}
+    {{ block.super }}
+    <script src="{% static 'js/lib/datatables/datatables.min.js' %}" type="text/javascript"></script>
+{% endblock %}

@@ -67,16 +67,29 @@
                     </div>
                 </div>
             </a>
-            <a href="#" class="kt-notification__item">
+            <a href="{% url 'vadetisweb:account_datasets' %}" class="kt-notification__item">
                 <div class="kt-notification__item-icon">
                     <i class="mdi mdi-chart-timeline-variant mdi-24px kt-font-brand"></i>
                 </div>
                 <div class="kt-notification__item-details">
                     <div class="kt-notification__item-title kt-font-bold">
-                        My Datasets
+                        Datasets
                     </div>
                     <div class="kt-notification__item-time">
-                        Manage own datasets
+                        Manage your datasets
+                    </div>
+                </div>
+            </a>
+            <a href="{% url 'vadetisweb:account_training_datasets' %}" class="kt-notification__item">
+                <div class="kt-notification__item-icon">
+                    <i class="mdi mdi-chart-timeline-variant mdi-24px kt-font-brand"></i>
+                </div>
+                <div class="kt-notification__item-details">
+                    <div class="kt-notification__item-title kt-font-bold">
+                        Training Datasets
+                    </div>
+                    <div class="kt-notification__item-time">
+                        Manage your training datasets
                     </div>
                 </div>
             </a>

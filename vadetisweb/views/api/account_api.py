@@ -15,7 +15,7 @@ from django.shortcuts import redirect
 
 class ApplicationSettings(APIView):
     """
-    Deliver applications settings on GET, or save them on POST
+    Request applications settings on GET, or save them on POST
     """
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'vadetisweb/account/application_settings.html'
