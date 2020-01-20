@@ -28,7 +28,8 @@
                         <h3 class="kt-portlet__head-title">Settings</h3>
                     </div>
                 </div>
-                {% include 'vadetisweb/account/forms/application_settings_form.html' with formid="application_settings_form" %}
+                {% url 'vadetisweb:application_settings' as fromurl %}
+                {% include 'vadetisweb/parts/forms/serializer_form.html' with formid="application_settings_form" url=fromurl %}
             </div>
         </div>
     </div>

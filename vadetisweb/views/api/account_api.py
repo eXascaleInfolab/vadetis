@@ -1,11 +1,7 @@
 from rest_framework import status
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from vadetisweb.serializers import UserSettingsSerializer
 from vadetisweb.models import UserSettings
 from vadetisweb.utils import get_cookie_settings_dict
 
-from django.shortcuts import get_object_or_404
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.views import APIView
 from rest_framework.response import Response
