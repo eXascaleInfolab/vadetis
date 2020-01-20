@@ -75,6 +75,9 @@ def render_breadcrumbs(context, *args):
                         current_app = resolver_match.namespace
                     except Resolver404:
                         current_app = None
+
+                if current_app is not None:
+                    viewname = current_app+":"+viewname
                 url = reverse(viewname=viewname, args=view_args, kwargs=view_kwargs, current_app=current_app)
             except NoReverseMatch:
                 url = viewname

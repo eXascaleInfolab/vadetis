@@ -30,10 +30,11 @@
             </div>
             <div class="kt-portlet__head-toolbar">
                 <div class="kt-portlet__head-wrapper">
-                    <button type="button" class="btn btn-brand btn-icon-sm" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                        <i class="mdi mdi-plus mdi-18px"></i> Add Dataset
-                    </button>
+                    <a href="{% url 'vadetisweb:account_datasets_upload' %}">
+                        <button type="button" class="btn btn-brand btn-icon-sm">
+                            <i class="mdi mdi-plus mdi-18px"></i> Add Dataset
+                        </button>
+                    </a>
                 </div>
             </div>
         </div>

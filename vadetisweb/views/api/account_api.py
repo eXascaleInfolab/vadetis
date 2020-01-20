@@ -56,4 +56,4 @@ class ApplicationSettings(APIView):
 
             return response
 
-        return redirect('application_settings')
+        return redirect('vadetisweb:application_settings')
