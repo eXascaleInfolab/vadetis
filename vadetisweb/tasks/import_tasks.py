@@ -56,14 +56,15 @@ class TaskImportData(Task):
             group_by_ts_name = df_read.groupby('ts_name')
             df_ts_unit = group_by_ts_name.apply(lambda x: x['unit'].unique())
 
-            for idx, row in df_ts_unit.items(): # check length of units at each series must be 1
+            for idx, row in df_ts_unit.items():  # check length of units at each series must be 1
                 if not len(row) == 1:
                     err_msg = "Series {0} has multiple units".format(idx)
                     raise ValueError(err_msg)
 
             # check each series distinct name => each series has only one value for a given index
             group_by_index = df_read.groupby(level=0)
-            if group_by_index.apply(lambda x: x['ts_name'].duplicated()).any(): #true if any value is true => at least one duplicated index for a time series name
+            if group_by_index.apply(lambda x: x[
+                'ts_name'].duplicated()).any():  # true if any value is true => at least one duplicated index for a time series name
                 err_msg = "Duplicated index for a time series found"
                 raise ValueError(err_msg)
 
@@ -102,7 +103,7 @@ class TaskImportData(Task):
                 ts.datasets.add(dataset)
                 ts.save()
                 # replace column in dataframe by time series database id
-                df.rename(columns={idx : ts.id})
+                df.rename(columns={idx: ts.id})
 
             # check if different units
             units = []
@@ -127,7 +128,7 @@ class TaskImportData(Task):
 
             dataset.save()
 
-            if spatial_data==SPATIAL:
+            if spatial_data == SPATIAL:
                 with open(self.spatial_csv_name, 'r') as locations_csv:
 
                     # get location df
@@ -145,7 +146,8 @@ class TaskImportData(Task):
 
                     # check if needed columns are present and check if values complete
                     required_cols = pd.Series(['l_name', 'lon', 'lat', 'height'])
-                    if not required_cols.isin(df.columns).all() or df_loc.loc[ts_names, required_cols].isnull().values.any():
+                    if not required_cols.isin(df.columns).all() or df_loc.loc[
+                        ts_names, required_cols].isnull().values.any():
                         err_msg = "Some required values are missing"
                         raise ValueError(err_msg)
 
@@ -171,7 +173,8 @@ class TaskImportData(Task):
                         location.save()
 
         execution_time = format_time(timezone.now() - start_time)
-        result = {'measurements_added': df.count().sum(), 'time_series_added:': len(df.columns), 'execution_time': execution_time}
+        result = {'measurements_added': df.count().sum(), 'time_series_added:': len(df.columns),
+                  'execution_time': execution_time}
 
         return result
 

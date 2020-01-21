@@ -8,8 +8,9 @@ from django.shortcuts import redirect
 from celery.utils import uuid
 
 from vadetisweb.models import DataSet, UserTasks
-from vadetisweb.serializers import DatasetSerializer, TrainingDatasetSerializer, DatasetTitleSerializer
+from vadetisweb.serializers import DatasetSerializer, TrainingDatasetSerializer
 from vadetisweb.utils import datatable_dataset_rows, write_to_tempfile
+from vadetisweb.tasks import TaskImportData
 from vadetisweb.parameters import SPATIAL
 
 
@@ -48,6 +49,7 @@ class AccountUploadDataset(APIView):
         user = request.user
         serializer = DatasetSerializer(data=request.data)
         if serializer.is_valid():
+            print("is valid data")
 
             # handle dataset file
             dataset_file_raw = serializer.csv_file
@@ -55,15 +57,17 @@ class AccountUploadDataset(APIView):
             dataset_file = write_to_tempfile(dataset_file_raw)
 
             # handle spatial file
-            if serializer.spatial_data == SPATIAL:
+            spatial_data = serializer.spatial_data
+            if spatial_data == SPATIAL:
                 spatial_file_raw = serializer.csv_spatial_file
                 print("Spatial file received: ", spatial_file_raw.name)
                 spatial_file = write_to_tempfile(spatial_file_raw)
             else:
                 spatial_file = None
 
+            title = serializer.title
             type = serializer.type  # real world or synthetic
-            type_of_data = serializer.type_of_data # same or different units
+
 
             # start import task
             user_tasks = UserTasks.objects.create(user=user)
@@ -77,6 +81,7 @@ class AccountUploadDataset(APIView):
                                                              type, spatial_data], task_id=task_uuid)
 
         else:
+            print(serializer.error_messages)
             return redirect('vadetisweb:account_datasets_upload')
 
 
