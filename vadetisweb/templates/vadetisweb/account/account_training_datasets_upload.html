@@ -29,6 +29,5 @@
 {% endblock %}
 
 {% block additional_bottom_js %}
-    {{ block.super }}
-    {% include "vadetisweb/parts/ajax_form_js.html" with formid="training_dataset_upload_form" %}
+    {% comment %}{% include "vadetisweb/parts/ajax_form_js.html" with formid="training_dataset_upload_form" %}{% endcomment %}
 {% endblock %}

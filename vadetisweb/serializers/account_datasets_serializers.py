@@ -37,18 +37,21 @@ class DatasetSerializer(serializers.Serializer):
                                            style={'template': 'vadetisweb/parts/input/select_input.html'})
 
     csv_spatial_file = serializers.FileField(label='Spatial CSV File',
+                                             required=False,
+                                             allow_empty_file=True,
                                              help_text='The csv file of spatial information. It\'s only required if dataset is spatial.',
                                              validators=[FileExtensionValidator(allowed_extensions=['csv'])],
                                              style={'template': 'vadetisweb/parts/input/text_input.html'})
 
-    class Meta:
-        validators = [
-            UniqueTogetherValidator(
-                queryset=DataSet.objects.all(),
-                fields=['title', 'owner'],
-                message='You already have a dataset with this title. Title and owner of a dataset must be distinct.'
-            )
-        ]
+    # TODO
+    # class Meta:
+    #     validators = [
+    #         UniqueTogetherValidator(
+    #             queryset=DataSet.objects.all(),
+    #             fields=['title', 'owner'],
+    #             message='You already have a dataset with this title. Title and owner of a dataset must be distinct.'
+    #         )
+    #     ]
 
     def validate(self, data):
         """
