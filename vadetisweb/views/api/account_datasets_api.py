@@ -1,11 +1,14 @@
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from vadetisweb.models import DataSet
-from vadetisweb.utils import datatable_dataset_rows
 from django.shortcuts import redirect
+from vadetisweb.models import DataSet
+from vadetisweb.serializers import DatasetUploadSerializer, TrainingDatasetUploadSerializer, DatasetSerializer
+from vadetisweb.utils import datatable_dataset_rows
+
 
 class AccountDatasets(APIView):
     """
@@ -23,14 +26,20 @@ class AccountDatasets(APIView):
         data = datatable_dataset_rows(data, datasets)
 
         return Response(data)
-    
+
 
 class AccountUploadDataset(APIView):
     """
-   Upload a new dataset
+    Upload a new dataset
     """
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'vadetisweb/account/account_datasets_upload.html'
+
+    def get(self, request):
+        serializer = DatasetUploadSerializer()
+        return Response({'serializer': serializer}, status=status.HTTP_200_OK)
 
     def post(self, request):
         user = request.user
@@ -58,10 +67,16 @@ class AccountTrainingDatasets(APIView):
 
 class AccountUploadTrainingDataset(APIView):
     """
-   Upload a new dataset
+    Upload a new dataset
     """
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'vadetisweb/account/account_training_datasets_upload.html'
+
+    def get(self, request):
+        serializer = TrainingDatasetUploadSerializer()
+        return Response({'serializer': serializer}, status=status.HTTP_200_OK)
 
     def post(self, request):
         user = request.user
