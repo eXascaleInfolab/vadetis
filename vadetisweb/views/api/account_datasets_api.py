@@ -5,9 +5,12 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.shortcuts import redirect
-from vadetisweb.models import DataSet
-from vadetisweb.serializers import DatasetUploadSerializer, TrainingDatasetUploadSerializer, DatasetSerializer
-from vadetisweb.utils import datatable_dataset_rows
+from celery.utils import uuid
+
+from vadetisweb.models import DataSet, UserTasks
+from vadetisweb.serializers import DatasetSerializer, TrainingDatasetSerializer, DatasetTitleSerializer
+from vadetisweb.utils import datatable_dataset_rows, write_to_tempfile
+from vadetisweb.parameters import SPATIAL
 
 
 class AccountDatasets(APIView):
@@ -38,13 +41,43 @@ class AccountUploadDataset(APIView):
     template_name = 'vadetisweb/account/account_datasets_upload.html'
 
     def get(self, request):
-        serializer = DatasetUploadSerializer()
+        serializer = DatasetSerializer()
         return Response({'serializer': serializer}, status=status.HTTP_200_OK)
 
     def post(self, request):
         user = request.user
+        serializer = DatasetSerializer(data=request.data)
+        if serializer.is_valid():
 
-        return redirect('vadetisweb:account_datasets_upload')
+            # handle dataset file
+            dataset_file_raw = serializer.csv_file
+            print("Dataset file received: ", dataset_file_raw.name)
+            dataset_file = write_to_tempfile(dataset_file_raw)
+
+            # handle spatial file
+            if serializer.spatial_data == SPATIAL:
+                spatial_file_raw = serializer.csv_spatial_file
+                print("Spatial file received: ", spatial_file_raw.name)
+                spatial_file = write_to_tempfile(spatial_file_raw)
+            else:
+                spatial_file = None
+
+            type = serializer.type  # real world or synthetic
+            type_of_data = serializer.type_of_data # same or different units
+
+            # start import task
+            user_tasks = UserTasks.objects.create(user=user)
+            task_uuid = uuid()
+            if serializer.spatial_data == SPATIAL:
+                user_tasks.apply_async(TaskImportData, args=[user.username, dataset_file.name, title,
+                                                             type, spatial_data],
+                                       kwargs={'spatial_file_name': spatial_file.name}, task_id=task_uuid)
+            else:
+                user_tasks.apply_async(TaskImportData, args=[user.username, dataset_file.name, title,
+                                                             type, spatial_data], task_id=task_uuid)
+
+        else:
+            return redirect('vadetisweb:account_datasets_upload')
 
 
 class AccountTrainingDatasets(APIView):
@@ -75,7 +108,7 @@ class AccountUploadTrainingDataset(APIView):
     template_name = 'vadetisweb/account/account_training_datasets_upload.html'
 
     def get(self, request):
-        serializer = TrainingDatasetUploadSerializer()
+        serializer = TrainingDatasetSerializer()
         return Response({'serializer': serializer}, status=status.HTTP_200_OK)
 
     def post(self, request):
