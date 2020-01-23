@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.core.validators import FileExtensionValidator
 from rest_framework.validators import UniqueTogetherValidator
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import IsAuthenticated
 from vadetisweb.models import DataSet, User
 from vadetisweb.parameters import *
 
@@ -18,12 +19,17 @@ class DatasetTitleSerializer(serializers.ModelSerializer):
         fields = ('title',)
 
 
-class DatasetChoicesViewSet(ModelViewSet):
+class UserDatasetViewSet(ModelViewSet):
     """
-    A viewset for viewing and editing dataset instances.
+    This view returns a list of all main datasets
+    for the currently authenticated user.
     """
-    queryset = DataSet.objects.filter(is_training_data=False)
-    serializer = DatasetTitleSerializer(queryset, many=False)
+    serializer_class = DatasetTitleSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return DataSet.objects.filter(owner=user, is_training_data=False)
 
 
 class DatasetSerializer(serializers.Serializer):
@@ -76,7 +82,7 @@ class TrainingDatasetSerializer(serializers.Serializer):
 
     owner = UserSerializer(read_only=True, default=serializers.CurrentUserDefault())
 
-    original_dataset = DatasetChoicesViewSet()
+    original_dataset = UserDatasetViewSet()
 
     csv_file = serializers.FileField(required=True, label='CSV File', help_text='The csv file of the dataset',
                                      style={'template': 'vadetisweb/parts/input/text_input.html'})

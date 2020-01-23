@@ -1,6 +1,6 @@
 from celery.task import Task
 import pandas as pd, numpy as np
-
+import collections
 from django.db import transaction, IntegrityError
 from django.utils import timezone
 
@@ -183,3 +183,130 @@ class TaskImportData(Task):
         silent_remove(self.dataset_csv_name)
         if self.spatial_csv_name and self.spatial_csv_name is not None:
             silent_remove(self.spatial_csv_name)
+
+
+class TaskImportTrainingData(Task):
+    """
+    Task to insert a test dataset into database
+    """
+    def run(self, owner_username, original_dataset_id, training_dataset_file_name, title):
+
+        # set start time
+        start_time = timezone.now()
+
+        self.filename = training_dataset_file_name
+
+        user = User.objects.get(username=owner_username)
+
+        # import time series
+        with open(self.filename, 'r') as file_csv, transaction.atomic():
+
+            # get flatten df
+            df_read = pd.read_csv(file_csv,
+                                  sep=';',
+                                  index_col='time',
+                                  parse_dates=True)
+
+            # check each series must have same unit
+            group_by_ts_name = df_read.groupby('ts_name')
+            df_ts_unit = group_by_ts_name.apply(lambda x: x['unit'].unique())
+
+            for idx, row in df_ts_unit.items():  # check length of units at each series must be 1
+                if not len(row) == 1:
+                    err_msg = "Series {0} has multiple units".format(idx)
+                    raise ValueError(err_msg)
+
+            # check if all time series from original dataset provided, and not more or less
+            ts_names_from_original = TimeSeries.objects.filter(datasets__id=original_dataset_id).values('name')
+            compare = lambda x, y: collections.Counter(x) == collections.Counter(y)
+            if compare(ts_names_from_original, df_ts_unit.index.tolist()):
+                err_msg = "Either some series are missing or some series are provided that are not in the original dataset."
+                raise ValueError(err_msg)
+
+            # check each series distinct name => each series has only one value for a given index
+            group_by_index = df_read.groupby(level=0)
+            if group_by_index.apply(lambda x: x[
+                'ts_name'].duplicated()).any():  # true if any value is true => at least one duplicated index for a time series name
+                err_msg = "Duplicated index for a time series found"
+                raise ValueError(err_msg)
+
+            # unflatten dataframe
+            df = df_read.pivot(columns='ts_name', values='value')
+
+            # check if same frequency => pandas can infer a frequency
+            freq = df.index.inferred_freq
+            if freq is None:
+                err_msg = "Series do not have same frequency"
+                raise ValueError(err_msg)
+
+            # get anomaly df
+            df_class = df_read.pivot(columns='ts_name', values='class')
+            df_class = df_class.applymap(lambda x: True if x == 1 else False)
+
+            # check for NaN values, we need complete data for some algorithms
+            if df.isnull().values.any() or df_class.isnull().values.any():
+                err_msg = "Some values are missing"
+                raise ValueError(err_msg)
+
+            original_dataset = DataSet.objects.get(id=original_dataset_id)
+
+            # create (and saves) training dataset
+            training_dataset = DataSet.objects.create(title=title,
+                                                      owner=user,
+                                                      type=original_dataset.type,
+                                                      type_of_data=original_dataset.type_of_data,
+                                                      spatial_data=original_dataset.spatial_data,
+                                                      frequency=freq,
+                                                      is_training_data=True,
+                                                      original_dataset=original_dataset)
+
+            print("Test dataset {0} added".format(training_dataset))
+
+            # for each series get the time series object
+            for idx, row in df_ts_unit.items():
+                ts = TimeSeries.objects.get(name=idx,
+                                            datasets__id=original_dataset.id)
+
+                print("Time series: {0} fetched".format(idx))
+                ts.datasets.add(training_dataset)
+                ts.save()
+                # replace column in dataframe by time series database id
+                df.rename(columns={idx : ts.id})
+
+            # check if different units
+            units = []
+            for idx, row in df_ts_unit.items():
+                unit = row[0]
+                if unit not in units:
+                    units.append(unit)
+
+            if len(units):
+                if len(units) > 1:
+                    training_dataset.type_of_data = DIFFERENT_UNITS
+                else:
+                    training_dataset.type_of_data = SAME_UNITS
+
+            # check if both datasets have same type of data
+            if not training_dataset.type_of_data != original_dataset.type_of_data:
+                err_msg = "Training dataset does not have the same type of data as the original: {0} / {1}".format(
+                    training_dataset.type_of_data, original_dataset.type_of_data)
+                raise ValueError(err_msg)
+
+            # localize to UTC
+            df.index.tz_localize('UTC')
+            df_class.tz_localize('UTC')
+
+            # set dfs
+            training_dataset.dataframe = df
+            training_dataset.dataframe_class = df_class
+
+            training_dataset.save()
+
+        execution_time = format_time(timezone.now() - start_time)
+        result = {'measurements_added': df.count().sum(), 'execution_time': execution_time }
+
+        return result
+
+    def on_success(self, retval, task_id, args, kwargs):
+        #usually tempfile is removed as soon as closed, but just to make sure
+        silent_remove(self.filename)

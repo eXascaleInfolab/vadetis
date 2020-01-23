@@ -11,7 +11,7 @@ from celery.utils import uuid
 from vadetisweb.models import DataSet, UserTasks
 from vadetisweb.serializers import DatasetSerializer, TrainingDatasetSerializer
 from vadetisweb.utils import datatable_dataset_rows, write_to_tempfile
-from vadetisweb.tasks import TaskImportData
+from vadetisweb.tasks import TaskImportData, TaskImportTrainingData
 from vadetisweb.parameters import SPATIAL
 
 
@@ -51,7 +51,6 @@ class AccountUploadDataset(APIView):
         user = request.user
         serializer = DatasetSerializer(data=request.data, context={"request": self.request,})
         if serializer.is_valid():
-            print("is valid data")
 
             # handle dataset file
             dataset_file_raw = serializer.validated_data['csv_file']
@@ -124,5 +123,35 @@ class AccountUploadTrainingDataset(APIView):
 
     def post(self, request):
         user = request.user
+        serializer = TrainingDatasetSerializer(data=request.data, context={"request": self.request, })
 
-        return redirect('vadetisweb:account_trainig_datasets_upload')
+        if serializer.is_valid():
+            title = serializer.validated_data['title']
+            owner = serializer.validated_data['original_dataset'].user
+            original_dataset = serializer.validated_data['original_dataset']
+            training_dataset_file_raw = serializer.validated_data['csv_file']
+
+            # check if somebody tries to insert for another user
+            if owner != request.user or original_dataset.owner != request.user:
+                return redirect('vadetisweb:account_training_datasets_upload')
+
+            else: # user is ok
+                print("Training dataset file received: ", training_dataset_file_raw.name)
+                training_dataset_file = write_to_tempfile(training_dataset_file_raw)
+
+                user_tasks, _ = UserTasks.objects.get_or_create(user=user)
+
+                # start import task
+                task_uuid = uuid()
+                user_tasks.apply_async(TaskImportTrainingData,
+                                       args=[user.username, original_dataset.id, training_dataset_file.name,
+                                             title], task_id=task_uuid)
+
+        else:
+            print(serializer.errors)
+            # return redirect('vadetisweb:account_datasets_upload')
+            emessage = serializer.errors
+            return Response({
+                'status': 'Bad request',
+                'message': emessage,
+            }, status=status.HTTP_400_BAD_REQUEST)
