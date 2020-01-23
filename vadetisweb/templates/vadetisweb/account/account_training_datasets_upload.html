@@ -25,9 +25,25 @@
                 {% include 'vadetisweb/parts/forms/serializer_form.html' with formid="training_dataset_upload_form" url=fromurl %}
             </div>
         </div>
+        <div class="col-md-6">
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">Info</h3>
+                    </div>
+                </div>
+                <div class="kt-portlet__body">
+                    <p>Note that datasets are immutable after they are inserted into the database. You may want to
+                        insert training data afterwards.
+                        See the <a class="kt-link kt-font-bold"
+                                   href="{% comment %}{% url 'vadetisweb:faq' %}{% endcomment %}">FAQ</a> section for
+                        requirements of the CSV files.</p>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 
 {% block additional_bottom_js %}
-    {% comment %}{% include "vadetisweb/parts/ajax_form_js.html" with formid="training_dataset_upload_form" %}{% endcomment %}
+    {% include "vadetisweb/parts/ajax_form_js.html" with formid="training_dataset_upload_form" %}
 {% endblock %}

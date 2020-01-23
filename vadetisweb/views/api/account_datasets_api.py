@@ -71,7 +71,7 @@ class AccountUploadDataset(APIView):
             type = serializer.validated_data['type']  # real world or synthetic
 
             # start import task
-            user_tasks = UserTasks.objects.create(user=user)
+            user_tasks, _ = UserTasks.objects.get_or_create(user=user)
             task_uuid = uuid()
             if spatial_data == SPATIAL:
                 user_tasks.apply_async(TaskImportData, args=[user.username, dataset_file.name, title,
@@ -83,7 +83,7 @@ class AccountUploadDataset(APIView):
 
         else:
             print(serializer.errors)
-            #return redirect('vadetisweb:account_datasets_upload')
+            # return redirect('vadetisweb:account_datasets_upload')
             emessage = serializer.errors
             return Response({
                 'status': 'Bad request',
