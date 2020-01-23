@@ -2,8 +2,14 @@ from rest_framework import serializers
 from django.core.validators import FileExtensionValidator
 from rest_framework.validators import UniqueTogetherValidator
 from rest_framework.viewsets import ModelViewSet
-from vadetisweb.models import DataSet
+from vadetisweb.models import DataSet, User
 from vadetisweb.parameters import *
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username',)
 
 
 class DatasetTitleSerializer(serializers.ModelSerializer):
@@ -28,6 +34,8 @@ class DatasetSerializer(serializers.Serializer):
                                      validators=[FileExtensionValidator(allowed_extensions=['csv'])],
                                      style={'template': 'vadetisweb/parts/input/text_input.html'})
 
+    owner = UserSerializer(read_only=True, default=serializers.CurrentUserDefault())
+
     type = serializers.ChoiceField(choices=DATASET_TYPE, default=REAL_WORLD,
                                    help_text='Determines whether this dataset is real world or synthetic data.',
                                    style={'template': 'vadetisweb/parts/input/select_input.html'})
@@ -43,15 +51,14 @@ class DatasetSerializer(serializers.Serializer):
                                              validators=[FileExtensionValidator(allowed_extensions=['csv'])],
                                              style={'template': 'vadetisweb/parts/input/text_input.html'})
 
-    # TODO
-    # class Meta:
-    #     validators = [
-    #         UniqueTogetherValidator(
-    #             queryset=DataSet.objects.all(),
-    #             fields=['title', 'owner'],
-    #             message='You already have a dataset with this title. Title and owner of a dataset must be distinct.'
-    #         )
-    #     ]
+    class Meta:
+        validators = [
+            UniqueTogetherValidator(
+                queryset=DataSet.objects.all(),
+                fields=['title', 'owner'],
+                message='You already have a dataset with this title. Title and owner of a dataset must be distinct.'
+            )
+        ]
 
     def validate(self, data):
         """
@@ -66,6 +73,8 @@ class TrainingDatasetSerializer(serializers.Serializer):
     title = serializers.CharField(required=True, max_length=128,
                                   help_text='Human readable title of the training dataset',
                                   style={'template': 'vadetisweb/parts/input/text_input.html'})
+
+    owner = UserSerializer(read_only=True, default=serializers.CurrentUserDefault())
 
     original_dataset = DatasetChoicesViewSet()
 

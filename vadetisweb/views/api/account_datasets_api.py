@@ -44,12 +44,12 @@ class AccountUploadDataset(APIView):
     template_name = 'vadetisweb/account/account_datasets_upload.html'
 
     def get(self, request):
-        serializer = DatasetSerializer()
+        serializer = DatasetSerializer(context={"request": self.request,})
         return Response({'serializer': serializer}, status=status.HTTP_200_OK)
 
     def post(self, request):
         user = request.user
-        serializer = DatasetSerializer(data=request.data)
+        serializer = DatasetSerializer(data=request.data, context={"request": self.request,})
         if serializer.is_valid():
             print("is valid data")
 
@@ -119,7 +119,7 @@ class AccountUploadTrainingDataset(APIView):
     template_name = 'vadetisweb/account/account_training_datasets_upload.html'
 
     def get(self, request):
-        serializer = TrainingDatasetSerializer()
+        serializer = TrainingDatasetSerializer(context={"request": self.request,})
         return Response({'serializer': serializer}, status=status.HTTP_200_OK)
 
     def post(self, request):
