@@ -6,7 +6,7 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from vadetisweb.serializers import AnomalyDetectionSerializer
+from vadetisweb.serializers import AlgorithmSerializer
 from vadetisweb.models import DataSet
 from vadetisweb.utils import datatable_dataset_rows
 from vadetisweb.parameters import REAL_WORLD, SYNTHETIC
