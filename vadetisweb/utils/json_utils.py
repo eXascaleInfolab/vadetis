@@ -1,18 +1,20 @@
 import numpy as np
+from django.urls import reverse
+from vadetisweb.parameters import REAL_WORLD
 
 def datatable_dataset_rows(data, datasets):
 
     for dataset in datasets:
         row = []
 
-        # if dataset.type == REAL_WORLD:
-        #     link = reverse('lisa:view_dataset_real_world', args=[dataset.id])
-        # else:
-        #     link = reverse('lisa:view_dataset_synthetic', args=[dataset.id])
+        if dataset.type == REAL_WORLD:
+            link = reverse('vadetisweb:view_dataset_real_world', args=[dataset.id])
+        else:
+            link = reverse('vadetisweb:view_dataset_synthetic', args=[dataset.id])
 
         np_num_values = dataset.dataframe.count().sum()
 
-        dataset_link = '<a href="%s">%s (%s)</a>' % ("link", dataset.title, dataset.id)
+        dataset_link = '<a href="%s">%s (%s)</a>' % (link, dataset.title, dataset.id)
         row.append(dataset_link)
         row.append(dataset.owner.username)
         row.append(dataset.timeseries_set.count())

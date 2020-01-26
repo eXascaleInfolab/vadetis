@@ -115,6 +115,7 @@ class AccountUploadTrainingDataset(APIView):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
     renderer_classes = [TemplateHTMLRenderer]
+    parser_classes = [MultiPartParser]
     template_name = 'vadetisweb/account/account_training_datasets_upload.html'
 
     def get(self, request):
