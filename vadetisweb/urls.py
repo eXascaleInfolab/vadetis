@@ -5,10 +5,13 @@ app_name = 'vadetisweb'
 
 urlpatterns = [
 
-    path('api/account/datasets', views.AccountDatasets.as_view(), name='account_datasets'),
-    path('api/account/training-datasets', views.AccountTrainingDatasets.as_view(), name='account_training_datasets'),
-    path('api/datasets/real-world', views.RealWorldDatasets.as_view(), name='real_world_datasets'),
-    path('api/datasets/synthetic', views.SyntheticDatasets.as_view(), name='synthetic_datasets'),
+    path('api/account/datasets', views.AccountDatasetsJson.as_view(), name='account_datasets_json'),
+    path('api/account/training-datasets', views.AccountTrainingDatasetsJson.as_view(), name='account_training_datasets_json'),
+    path('api/datasets/real-world', views.RealWorldDatasetsJson.as_view(), name='real_world_datasets_json'),
+    path('api/datasets/synthetic', views.SyntheticDatasetsJson.as_view(), name='synthetic_datasets_json'),
+
+    path('datasets/real-world', views.RealWorldDatasets.as_view(), name='real_world_datasets'),
+    path('datasets/synthetic', views.SyntheticDatasets.as_view(), name='synthetic_datasets'),
 
     path('account/application-settings/', views.ApplicationSettings.as_view(), name='application_settings'),
     path('account/datasets', views.account_datasets, name='account_datasets'),

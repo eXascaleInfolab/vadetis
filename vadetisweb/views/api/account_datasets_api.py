@@ -15,7 +15,7 @@ from vadetisweb.tasks import TaskImportData, TaskImportTrainingData
 from vadetisweb.parameters import SPATIAL
 
 
-class AccountDatasets(APIView):
+class AccountDatasetsJson(APIView):
     """
     Request information about datasets of current user
     """
@@ -90,7 +90,7 @@ class AccountUploadDataset(APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
 
-class AccountTrainingDatasets(APIView):
+class AccountTrainingDatasetsJson(APIView):
     """
     Request information about datasets of current user
     """

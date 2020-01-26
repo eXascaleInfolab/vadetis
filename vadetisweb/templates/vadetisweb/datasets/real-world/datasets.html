@@ -5,7 +5,7 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    {% breadcrumb "Account Training Datasets" "account_training_datasets" %}
+    {% breadcrumb "Real-World Datasets" "real_world_datasets" %}
 {% endblock %}
 
 {% block css %}
@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block page_title %}
-    <h3 class="kt-subheader__title">Your Training Datasets</h3>
+    <h3 class="kt-subheader__title">Real-World Datasets</h3>
 {% endblock %}
 
 {% block content %}
@@ -25,22 +25,13 @@
                     <i class="mdi mdi-chart-timeline-variant mdi-24px kt-font-brand"></i>
                 </span>
                 <h3 class="kt-portlet__head-title">
-                    Browse Training Datasets
+                    Browse Real-World Datasets
                 </h3>
-            </div>
-            <div class="kt-portlet__head-toolbar">
-                <div class="kt-portlet__head-wrapper">
-                    <a href="{% url 'vadetisweb:account_training_datasets_upload' %}">
-                        <button type="button" class="btn btn-brand btn-icon-sm">
-                            <i class="mdi mdi-plus mdi-18px"></i> Add Training Dataset
-                        </button>
-                    </a>
-                </div>
             </div>
         </div>
         <div class="kt-portlet__body kt-portlet__body--fit">
             <!--begin: Datatable -->
-            <table id="table_account_training_datasets" class="kt-datatable"></table>
+            <table id="table_real_world_datasets" class="kt-datatable"></table>
             <!--end: Datatable -->
         </div>
     </div>
@@ -52,7 +43,7 @@
     <script src="{% static 'js/lib/datatables/datatables.init.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
         jQuery(document).ready(function () {
-            VadetisDatatables.init("table_account_training_datasets", "{% url 'vadetisweb:account_training_datasets_json' %}");
+            VadetisDatatables.init("table_real_world_datasets", "{% url 'vadetisweb:real_world_datasets_json' %}");
         });
     </script>
 {% endblock %}
