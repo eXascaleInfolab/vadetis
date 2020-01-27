@@ -62,3 +62,25 @@ class RealWorldDatasets(APIView):
 
     def get(self, request):
         return Response(status=status.HTTP_200_OK)
+
+
+class SyntheticDataset(APIView):
+    """
+    View for a single synthetic dataset
+    """
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'vadetisweb/datasets/synthetic/dataset.html'
+
+    def get(self, request, dataset_id):
+        return Response(status=status.HTTP_200_OK)
+
+
+class RealWorldDataset(APIView):
+    """
+    View for a single real world dataset
+    """
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'vadetisweb/datasets/real-world/dataset.html'
+
+    def get(self, request, dataset_id):
+        return Response(status=status.HTTP_200_OK)

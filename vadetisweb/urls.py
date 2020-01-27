@@ -11,7 +11,9 @@ urlpatterns = [
     path('api/datasets/synthetic', views.SyntheticDatasetsJson.as_view(), name='synthetic_datasets_json'),
 
     path('datasets/real-world/', views.RealWorldDatasets.as_view(), name='real_world_datasets'),
+    path('datasets/real-world/<int:dataset_id>/', views.RealWorldDataset.as_view(), name='real_world_dataset'),
     path('datasets/synthetic/', views.SyntheticDatasets.as_view(), name='synthetic_datasets'),
+    path('datasets/synthetic/<int:dataset_id>/', views.SyntheticDataset.as_view(), name='synthetic_dataset'),
 
     path('account/application-settings/', views.ApplicationSettings.as_view(), name='application_settings'),
     path('account/datasets/', views.account_datasets, name='account_datasets'),
