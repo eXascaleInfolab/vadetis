@@ -121,6 +121,7 @@ var VadetisHighcharts = function () {
             series : dataset_series,
         });
 
+        //TODO place into utils
         function loadSeriesForType(type) {
             current_type = type;
             //TODO show loading img highchart.showLoading('<img alt="" src="{% static 'img/loading.gif' %}" />');
