@@ -1,11 +1,19 @@
 from rest_framework import serializers
 from vadetisweb.parameters import TIME_RANGE, ANOMALY_DETECTION_SCORE_TYPES
-from vadetisweb.models import DataSet
+from vadetisweb.models import DataSet, TimeSeries
 
 
 class TrainingDatasetField(serializers.PrimaryKeyRelatedField):
     def get_queryset(self):
         return DataSet.objects.none()
+
+    def display_value(self, instance):
+        return instance.name
+
+
+class TimeSeriesField(serializers.PrimaryKeyRelatedField):
+    def get_queryset(self):
+        return TimeSeries.objects.none()
 
     def display_value(self, instance):
         return instance.name
@@ -29,17 +37,16 @@ class RandomSeedIntegerField(serializers.IntegerField):
 
 class TimeRangeChoiceField(serializers.ChoiceField):
     def __init__(self, **kwargs):
-        super(TimeRangeChoiceField, self).__init__(**kwargs)
+        super(TimeRangeChoiceField, self).__init__(choices=TIME_RANGE, **kwargs)
         self.label = 'Time Range'
-        self.choices = TIME_RANGE
         self.help_text = 'The time range to apply anomaly detection'
         self.style = {'template': 'vadetisweb/parts/input/select_input.html'}
 
 
 class MaximizeScoreChoiceField(serializers.ChoiceField):
     def __init__(self, **kwargs):
-        super(MaximizeScoreChoiceField, self).__init__(**kwargs)
+        super(MaximizeScoreChoiceField, self).__init__(choices=ANOMALY_DETECTION_SCORE_TYPES,**kwargs)
         self.label = 'Maximize Score'
-        self.choices = ANOMALY_DETECTION_SCORE_TYPES
         self.help_text = 'Define which score you want to maximize for the results. In order to achive the best score out of this selection, the most appropiate threshold value will be selected. You can further change the threshold after computation.'
         self.style = {'template': 'vadetisweb/parts/input/select_input.html'}
+
