@@ -1,8 +1,8 @@
 import numpy as np
 from django.urls import reverse
 
+from .date_utils import unix_time_millis_from_dt
 from vadetisweb.library import df_zscore
-from vadetisweb.utils import unix_time_millis_from_dt
 from vadetisweb.parameters import REAL_WORLD
 
 def datatable_dataset_rows(data, datasets):
