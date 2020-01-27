@@ -8,9 +8,9 @@ def datatable_dataset_rows(data, datasets):
         row = []
 
         if dataset.type == REAL_WORLD:
-            link = reverse('vadetisweb:view_dataset_real_world', args=[dataset.id])
+            link = reverse('vadetisweb:dataset_real_world', args=[dataset.id])
         else:
-            link = reverse('vadetisweb:view_dataset_synthetic', args=[dataset.id])
+            link = reverse('vadetisweb:dataset_synthetic', args=[dataset.id])
 
         np_num_values = dataset.dataframe.count().sum()
 

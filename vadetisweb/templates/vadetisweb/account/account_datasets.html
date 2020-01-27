@@ -49,7 +49,7 @@
 {% block additional_bottom_js %}
     {{ block.super }}
     <script src="{% static 'js/lib/datatables/datatables.min.js' %}" type="text/javascript"></script>
-    <script src="{% static 'js/lib/datatables/datatables.init.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/datatables.init.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
         jQuery(document).ready(function () {
             VadetisDatatables.init("table_account_datasets", "{% url 'vadetisweb:account_datasets' %}");
