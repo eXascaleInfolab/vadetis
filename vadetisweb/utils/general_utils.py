@@ -1,5 +1,5 @@
-
 from vadetisweb.parameters import *
+from vadetisweb.models import UserSettings
 
 def get_cookie_settings_dict(request):
     """
@@ -19,3 +19,33 @@ def get_cookie_settings_dict(request):
     settings_dict['round_digits'] = int(request.COOKIES.get('round_digits', DEFAULT_ROUND_DIGITS))
 
     return settings_dict
+
+
+def strToBool(v):
+    s = str(v).lower()
+    if s in ('true', 'yes', '1'):
+         return True
+    elif s in ('false', 'no', '0'):
+         return False
+    else:
+         raise ValueError
+
+
+def get_settings(request):
+    user = request.user
+    settings = dict(DEFAULT_SETTINGS) # default settings
+    if user.is_authenticated: # use settings
+        try:
+            user_settings = UserSettings.objects.get(user_id=user.id)  # profile holds settings for GUI
+            # update settings dict from user settings
+            for key in settings.keys():
+                settings[key] = getattr(user_settings, key)
+
+        except UserSettings.DoesNotExist:
+            print('User has no settings, fallback to cookies!')
+            settings = get_cookie_settings_dict(request)
+
+    else: # use cookies
+        settings = get_cookie_settings_dict(request)
+
+    return settings

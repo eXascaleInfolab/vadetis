@@ -8,7 +8,7 @@ from rest_framework.response import Response
 
 from vadetisweb.serializers import AlgorithmSerializer
 from vadetisweb.models import DataSet
-from vadetisweb.utils import datatable_dataset_rows
+from vadetisweb.utils import datatable_dataset_rows, strToBool, get_settings, get_dataset_with_marker_json
 from vadetisweb.parameters import REAL_WORLD, SYNTHETIC
 
 
@@ -84,3 +84,22 @@ class RealWorldDataset(APIView):
 
     def get(self, request, dataset_id):
         return Response(status=status.HTTP_200_OK)
+
+
+class DatasetJson(APIView):
+    """
+    Request a dataset
+    """
+    renderer_classes = [JSONRenderer]
+
+    def get(self, request, dataset_id):
+        data = []
+        # handle query params
+        show_anomalies = strToBool(request.query_params.get('show_anomalies', 'true'))
+        data = {}
+        settings = get_settings(request)
+        dataset = DataSet.objects.get(id=dataset_id)
+
+        data['series'] = get_dataset_with_marker_json(dataset, type, show_anomalies, settings)
+
+        return Response(data)
