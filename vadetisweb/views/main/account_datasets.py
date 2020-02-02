@@ -1,6 +1,6 @@
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.renderers import  TemplateHTMLRenderer
+from rest_framework.renderers import  TemplateHTMLRenderer, JSONRenderer
 from rest_framework.parsers import MultiPartParser
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -33,7 +33,6 @@ class AccountUploadDataset(APIView):
         user = request.user
         serializer = DatasetSerializer(data=request.data, context={"request": self.request,})
         if serializer.is_valid():
-
             # handle dataset file
             dataset_file_raw = serializer.validated_data['csv_file']
             print("Dataset file received: ", dataset_file_raw.name)
@@ -62,11 +61,17 @@ class AccountUploadDataset(APIView):
                 user_tasks.apply_async(TaskImportData, args=[user.username, dataset_file.name, title,
                                                              type, spatial_data], task_id=task_uuid)
 
+            return Response({
+                'status': 'Success',
+                'message': 'Importing Dataset: Task (%s) created' % task_uuid,
+            }, status=status.HTTP_201_CREATED)
+
         else:
             print(serializer.errors)
             # return redirect('vadetisweb:account_datasets_upload')
             emessage = serializer.errors
             return Response({
+                'serializer': serializer,
                 'status': 'Bad request',
                 'message': emessage,
             }, status=status.HTTP_400_BAD_REQUEST)
