@@ -21,7 +21,7 @@
                         <h3 class="kt-portlet__head-title">Add dataset</h3>
                     </div>
                 </div>
-                {% url 'vadetisweb:dataset_upload' as fromurl %}
+                {% url 'vadetisweb:account_datasets_upload' as fromurl %}
                 {% include 'vadetisweb/parts/forms/serializer_form.html' with formid="dataset_upload_form" url=fromurl %}
             </div>
         </div>
@@ -45,5 +45,5 @@
 {% endblock %}
 
 {% block additional_bottom_js %}
-    {% include "vadetisweb/parts/ajax_form_js.html" with formid="dataset_upload_form" %}
+    {% include "vadetisweb/parts/ajax_form_js.html" with formid="dataset_upload_form" format="json" %}
 {% endblock %}

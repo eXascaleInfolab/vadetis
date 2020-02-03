@@ -3,7 +3,7 @@
     $('#{{ formid }}').on('submit', function (event) {
         event.preventDefault();
         $.post({
-            url: $(this).attr('action'),
+            url: $(this).attr('action'){% if format %}+'?format={{ format }}'{% endif %},
             data: new FormData(this),
             type: $(this).attr('method'),
             enctype: $(this).attr('enctype'),

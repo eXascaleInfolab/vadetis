@@ -21,17 +21,20 @@ class AccountUploadDataset(APIView):
     """
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
-    renderer_classes = [TemplateHTMLRenderer]
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
     parser_classes = [MultiPartParser]
     template_name = 'vadetisweb/account/account_datasets_upload.html'
 
-    def get(self, request):
+    def get(self, request, format=None):
         serializer = DatasetSerializer(context={"request": self.request,})
         return Response({'serializer': serializer}, status=status.HTTP_200_OK)
 
-    def post(self, request):
+    def post(self, request, format=None):
         user = request.user
+        print("request.accepted_renderer.format ", request.accepted_renderer.format)
+
         serializer = DatasetSerializer(data=request.data, context={"request": self.request,})
+
         if serializer.is_valid():
             # handle dataset file
             dataset_file_raw = serializer.validated_data['csv_file']
@@ -61,20 +64,32 @@ class AccountUploadDataset(APIView):
                 user_tasks.apply_async(TaskImportData, args=[user.username, dataset_file.name, title,
                                                              type, spatial_data], task_id=task_uuid)
 
-            return Response({
-                'status': 'Success',
-                'message': 'Importing Dataset: Task (%s) created' % task_uuid,
-            }, status=status.HTTP_201_CREATED)
+            if request.accepted_renderer.format == 'json':  # requested format is json
+                return Response({
+                    'status': 'Success',
+                    'message': 'Importing Dataset: Task (%s) created' % task_uuid,
+                }, status=status.HTTP_201_CREATED)
 
+            else: # or render html template
+                return Response({
+                    'serializer' : serializer,
+                    'status': 'Success',
+                    'message': 'Importing Dataset: Task (%s) created' % task_uuid,
+                }, status=status.HTTP_201_CREATED)
         else:
-            print(serializer.errors)
-            # return redirect('vadetisweb:account_datasets_upload')
             emessage = serializer.errors
-            return Response({
-                'serializer': serializer,
-                'status': 'Bad request',
-                'message': emessage,
-            }, status=status.HTTP_400_BAD_REQUEST)
+            if request.accepted_renderer.format == 'json':  # requested format is json
+                return Response({
+                    'status': 'Bad request',
+                    'message': emessage,
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+            else : # or render html template
+                return Response({
+                    'serializer': serializer,
+                    'status': 'Bad request',
+                    'message': emessage,
+                }, status=status.HTTP_400_BAD_REQUEST)
 
 
 class AccountUploadTrainingDataset(APIView):
@@ -83,15 +98,15 @@ class AccountUploadTrainingDataset(APIView):
     """
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
-    renderer_classes = [TemplateHTMLRenderer]
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
     parser_classes = [MultiPartParser]
     template_name = 'vadetisweb/account/account_training_datasets_upload.html'
 
-    def get(self, request):
+    def get(self, request, format=None):
         serializer = TrainingDatasetSerializer(context={"request": self.request,})
         return Response({'serializer': serializer}, status=status.HTTP_200_OK)
 
-    def post(self, request):
+    def post(self, request, format=None):
         user = request.user
         serializer = TrainingDatasetSerializer(data=request.data, context={"request": self.request, })
 
@@ -101,11 +116,8 @@ class AccountUploadTrainingDataset(APIView):
             original_dataset = serializer.validated_data['original_dataset']
             training_dataset_file_raw = serializer.validated_data['csv_file']
 
-            # check if somebody tries to insert for another user
-            if owner != request.user or original_dataset.owner != request.user:
-                return redirect('vadetisweb:account_training_datasets_upload')
-
-            else: # user is ok
+            # check if user is ok
+            if owner == request.user and original_dataset.owner == request.user:
                 print("Training dataset file received: ", training_dataset_file_raw.name)
                 training_dataset_file = write_to_tempfile(training_dataset_file_raw)
 
@@ -117,11 +129,32 @@ class AccountUploadTrainingDataset(APIView):
                                        args=[user.username, original_dataset.id, training_dataset_file.name,
                                              title], task_id=task_uuid)
 
+                if request.accepted_renderer.format == 'json':  # requested format is json
+                    return Response({
+                        'status': 'Success',
+                        'message': 'Importing Training Dataset: Task (%s) created' % task_uuid,
+                    }, status=status.HTTP_201_CREATED)
+
+                else:  # or render html template
+                    return Response({
+                        'serializer': serializer,
+                        'status': 'Success',
+                        'message': 'Importing Training Dataset: Task (%s) created' % task_uuid,
+                    }, status=status.HTTP_201_CREATED)
+            else:
+                emessage = "Bad data"
         else:
-            print(serializer.errors)
-            # return redirect('vadetisweb:account_datasets_upload')
             emessage = serializer.errors
+
+        if request.accepted_renderer.format == 'json':  # requested format is json
             return Response({
+                'status': 'Bad request',
+                'message': emessage,
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        else : # or render html template
+            return Response({
+                'serializer': serializer,
                 'status': 'Bad request',
                 'message': emessage,
             }, status=status.HTTP_400_BAD_REQUEST)

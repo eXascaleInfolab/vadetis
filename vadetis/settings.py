@@ -129,7 +129,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 REST_FRAMEWORK = {
-    # TODO hande permissions with allauth
     # Use Django's standard 'django.contrib.auth' permissions,
     # or allow read-only access for unauthenticated users.
 

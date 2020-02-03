@@ -1,14 +1,20 @@
 from django.urls import path
+from rest_framework.urlpatterns import format_suffix_patterns
+
 from vadetisweb import views
 
 app_name = 'vadetisweb'
 
 """
+    format patterns: provide either rendered view or json, depending if ajax is used, we do not use format_suffix_patterns as we use query parameter
     api paths: provide data as json
     other paths: provide rendered views
 """
 
 urlpatterns = [
+
+    path('account/datasets/upload/', views.AccountUploadDataset.as_view(), name='account_datasets_upload'),
+    path('account/training-datasets/upload/', views.AccountUploadTrainingDataset.as_view(), name='account_training_datasets_upload'),
 
     path('api/account/datasets/', views.AccountDatasetsJson.as_view(), name='account_datasets_json'),
     path('api/account/training-datasets/', views.AccountTrainingDatasetsJson.as_view(), name='account_training_datasets_json'),
@@ -23,11 +29,8 @@ urlpatterns = [
 
     path('account/application-settings/', views.ApplicationSettings.as_view(), name='application_settings'),
     path('account/datasets/', views.account_datasets, name='account_datasets'),
-    path('account/datasets/upload/', views.AccountUploadDataset.as_view(), name='account_datasets_upload'),
     path('account/training-datasets/', views.account_training_datasets, name='account_training_datasets'),
-    path('account/training-datasets/upload/', views.AccountUploadTrainingDataset.as_view(), name='account_training_datasets_upload'),
     path('account/', views.account, name='account'),
 
     path('', views.index, name='index'),
-
 ]
