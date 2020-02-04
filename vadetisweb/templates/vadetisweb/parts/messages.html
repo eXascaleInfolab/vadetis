@@ -1,7 +1,4 @@
-{% if messages %}
-
-{% regroup messages|dictsort:"level_tag" by level_tag as message_list  %}
-
+{% if messages %}{% regroup messages|dictsort:"level_tag" by level_tag as message_list  %}
 {% for level in message_list %}
 <div class="messages messages-{{ level.grouper }}">
     {% if level.list|length > 1 %}

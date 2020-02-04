@@ -6,11 +6,12 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.shortcuts import redirect
+from django.contrib import messages
 from celery.utils import uuid
 
 from vadetisweb.models import UserTasks
 from vadetisweb.serializers import DatasetSerializer, TrainingDatasetSerializer
-from vadetisweb.utils import write_to_tempfile
+from vadetisweb.utils import write_to_tempfile, json_message_utils
 from vadetisweb.tasks import TaskImportData, TaskImportTrainingData
 from vadetisweb.parameters import SPATIAL
 
@@ -64,31 +65,36 @@ class AccountUploadDataset(APIView):
                 user_tasks.apply_async(TaskImportData, args=[user.username, dataset_file.name, title,
                                                              type, spatial_data], task_id=task_uuid)
 
+            message = "Importing Dataset Task (%s) created" % task_uuid
+
             if request.accepted_renderer.format == 'json':  # requested format is json
+                json_messages = []
+                json_message_utils.success(json_messages, message)
                 return Response({
-                    'status': 'Success',
-                    'message': 'Importing Dataset: Task (%s) created' % task_uuid,
+                    'status': 'success',
+                    'messages': json_messages,
                 }, status=status.HTTP_201_CREATED)
 
             else: # or render html template
+                messages.success(request, message)
                 return Response({
                     'serializer' : serializer,
-                    'status': 'Success',
-                    'message': 'Importing Dataset: Task (%s) created' % task_uuid,
                 }, status=status.HTTP_201_CREATED)
         else:
+            message = "Form was invalid"
             emessage = serializer.errors
             if request.accepted_renderer.format == 'json':  # requested format is json
+                json_messages = []
+                json_message_utils.error(json_messages, emessage)
                 return Response({
-                    'status': 'Bad request',
-                    'message': emessage,
+                    'status': 'error',
+                    'messages': json_messages,
                 }, status=status.HTTP_400_BAD_REQUEST)
 
             else : # or render html template
+                messages.error(request, message)
                 return Response({
                     'serializer': serializer,
-                    'status': 'Bad request',
-                    'message': emessage,
                 }, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -131,14 +137,14 @@ class AccountUploadTrainingDataset(APIView):
 
                 if request.accepted_renderer.format == 'json':  # requested format is json
                     return Response({
-                        'status': 'Success',
+                        'status': 'success',
                         'message': 'Importing Training Dataset: Task (%s) created' % task_uuid,
                     }, status=status.HTTP_201_CREATED)
 
                 else:  # or render html template
                     return Response({
                         'serializer': serializer,
-                        'status': 'Success',
+                        'status': 'success',
                         'message': 'Importing Training Dataset: Task (%s) created' % task_uuid,
                     }, status=status.HTTP_201_CREATED)
             else:
@@ -148,13 +154,13 @@ class AccountUploadTrainingDataset(APIView):
 
         if request.accepted_renderer.format == 'json':  # requested format is json
             return Response({
-                'status': 'Bad request',
+                'status': 'error',
                 'message': emessage,
             }, status=status.HTTP_400_BAD_REQUEST)
 
         else : # or render html template
             return Response({
                 'serializer': serializer,
-                'status': 'Bad request',
+                'status': 'error',
                 'message': emessage,
             }, status=status.HTTP_400_BAD_REQUEST)
