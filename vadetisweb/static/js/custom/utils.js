@@ -15,3 +15,11 @@ function loadImage(html_id, url, post_data){
         }
     });
 }
+
+function clear_messages() {
+    $('#message-container').empty();
+}
+
+function print_messages(messages) {
+
+}

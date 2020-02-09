@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from django.shortcuts import redirect
 from django.contrib import messages
 from celery.utils import uuid
+import json
 
 from vadetisweb.models import UserTasks
 from vadetisweb.serializers import DatasetSerializer, TrainingDatasetSerializer
@@ -86,6 +87,7 @@ class AccountUploadDataset(APIView):
             if request.accepted_renderer.format == 'json':  # requested format is json
                 json_messages = []
                 json_message_utils.error(json_messages, emessage)
+                json_message_utils.error(json_messages, message)
                 return Response({
                     'status': 'error',
                     'messages': json_messages,
