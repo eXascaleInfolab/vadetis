@@ -19,6 +19,12 @@ function clear_messages() {
     $('#message-container').empty();
 }
 
+function clear_form_errors(formid) {
+    form = $("#"+formid);
+    form.find(".validated").removeClass("validated");
+    form.find(".invalid-feedback").remove();
+}
+
 function groupBy(list, keyGetter) {
     const map = new Map();
     list.forEach((item) => {
@@ -61,4 +67,13 @@ function html_messages(tag, messages) {
     }
     html += "</div>";
     return html;
+}
+
+function print_form_errors(form_errors) {
+    for (const [key, val] of Object.entries(form_errors)) {
+        input_element = $("[name="+key+"]" );
+        html = "<div class=\"invalid-feedback\">" + val[0] + "</div>";
+        input_element.parent().addClass("validated");
+        input_element.after(html);
+    }
 }

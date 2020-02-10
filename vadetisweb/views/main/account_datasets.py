@@ -83,14 +83,12 @@ class AccountUploadDataset(APIView):
                 }, status=status.HTTP_201_CREATED)
         else:
             message = "Form was invalid"
-            emessage = serializer.errors
             if request.accepted_renderer.format == 'json':  # requested format is json
                 json_messages = []
-                #json_message_utils.error(json_messages, emessage)
                 json_message_utils.error(json_messages, message)
                 return Response({
-                    'status': 'error',
                     'messages': MessageSerializer(json_messages, many=True).data,
+                    'form_errors': serializer.errors
                 }, status=status.HTTP_400_BAD_REQUEST)
 
             else : # or render html template
@@ -137,32 +135,34 @@ class AccountUploadTrainingDataset(APIView):
                                        args=[user.username, original_dataset.id, training_dataset_file.name,
                                              title], task_id=task_uuid)
 
+                message = 'Importing Training Dataset: Task (%s) created' % task_uuid
                 if request.accepted_renderer.format == 'json':  # requested format is json
+                    json_messages = []
+                    json_message_utils.success(json_messages, message)
                     return Response({
                         'status': 'success',
-                        'message': 'Importing Training Dataset: Task (%s) created' % task_uuid,
+                        'message': MessageSerializer(json_messages, many=True).data,
                     }, status=status.HTTP_201_CREATED)
 
                 else:  # or render html template
+                    messages.error(request, message)
                     return Response({
                         'serializer': serializer,
-                        'status': 'success',
-                        'message': 'Importing Training Dataset: Task (%s) created' % task_uuid,
                     }, status=status.HTTP_201_CREATED)
             else:
-                emessage = "Bad data"
+                message = "Form was invalid"
         else:
-            emessage = serializer.errors
+            message = "Form was invalid"
 
         if request.accepted_renderer.format == 'json':  # requested format is json
+            json_messages = []
+            json_message_utils.error(json_messages, message)
             return Response({
-                'status': 'error',
-                'message': emessage,
+                'messages': MessageSerializer(json_messages, many=True).data,
+                'form_errors': serializer.errors,
             }, status=status.HTTP_400_BAD_REQUEST)
 
         else : # or render html template
             return Response({
                 'serializer': serializer,
-                'status': 'error',
-                'message': emessage,
             }, status=status.HTTP_400_BAD_REQUEST)

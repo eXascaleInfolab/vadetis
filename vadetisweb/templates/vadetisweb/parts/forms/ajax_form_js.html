@@ -9,19 +9,26 @@
             enctype: $(this).attr('enctype'),
             processData: false,
             contentType: false,
-            success: function (data, status, xhr) {
+            success: function(data, status, xhr) {
+                clear_form_errors("{{ formid }}");
+                clear_messages();
+
                 if (data.location) {
                     window.location = data.location;
-                }
-                if(data.messages) {
-                    console.log(data.messages);
+
+                } else if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
+                    print_messages(data.responseJSON.messages);
                 }
             },
-            error: function (data, status, xhr) {
+            error: function(data, status, xhr) {
                 console.error("Sending asynchronous failed");
+                clear_form_errors("{{ formid }}");
+                clear_messages();
                 if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                    clear_messages();
                     print_messages(data.responseJSON.messages);
+                }
+                if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('form_errors')) {
+                    print_form_errors(data.responseJSON.form_errors);
                 }
             }
         });
