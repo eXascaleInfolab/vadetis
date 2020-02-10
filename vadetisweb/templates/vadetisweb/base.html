@@ -294,7 +294,9 @@
 
                             <!-- begin:: Content -->
                             <div class="kt-content kt-grid__item kt-grid__item--fluid" id="kt_content">
-                                {% include 'vadetisweb/parts/messages.html' %}
+                                <div id="message-container">
+                                    {% include 'vadetisweb/parts/messages.html' %}
+                                </div>
                                 <!--Begin::Main Content -->
                                 {% block content %}{% endblock %}
                                 <!--End::Main Content -->

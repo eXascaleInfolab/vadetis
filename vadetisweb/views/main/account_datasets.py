@@ -12,7 +12,7 @@ import json
 
 from vadetisweb.models import UserTasks
 from vadetisweb.serializers import DatasetSerializer, TrainingDatasetSerializer
-from vadetisweb.utils import write_to_tempfile, json_message_utils
+from vadetisweb.utils import write_to_tempfile, json_message_utils, MessageSerializer
 from vadetisweb.tasks import TaskImportData, TaskImportTrainingData
 from vadetisweb.parameters import SPATIAL
 
@@ -86,11 +86,11 @@ class AccountUploadDataset(APIView):
             emessage = serializer.errors
             if request.accepted_renderer.format == 'json':  # requested format is json
                 json_messages = []
-                json_message_utils.error(json_messages, emessage)
+                #json_message_utils.error(json_messages, emessage)
                 json_message_utils.error(json_messages, message)
                 return Response({
                     'status': 'error',
-                    'messages': json_messages,
+                    'messages': MessageSerializer(json_messages, many=True).data,
                 }, status=status.HTTP_400_BAD_REQUEST)
 
             else : # or render html template

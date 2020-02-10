@@ -19,9 +19,10 @@
             },
             error: function (data, status, xhr) {
                 console.error("Sending asynchronous failed");
-                console.log(data);
-                console.log(status);
-                //console.log(JSON.parse(data))
+                if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
+                    clear_messages();
+                    print_messages(data.responseJSON.messages);
+                }
             }
         });
     });
