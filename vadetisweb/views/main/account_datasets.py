@@ -73,7 +73,7 @@ class AccountUploadDataset(APIView):
                 json_message_utils.success(json_messages, message)
                 return Response({
                     'status': 'success',
-                    'messages': json_messages,
+                    'messages':  MessageSerializer(json_messages, many=True).data,
                 }, status=status.HTTP_201_CREATED)
 
             else: # or render html template
