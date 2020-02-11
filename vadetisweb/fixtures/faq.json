@@ -1,0 +1,275 @@
+[
+{
+    "model": "vadetisweb.category",
+    "pk": 1,
+    "fields": {
+        "name": "General",
+        "order": 1
+    }
+},
+{
+    "model": "vadetisweb.category",
+    "pk": 2,
+    "fields": {
+        "name": "User",
+        "order": 2
+    }
+},
+{
+    "model": "vadetisweb.category",
+    "pk": 3,
+    "fields": {
+        "name": "Dataset",
+        "order": 3
+    }
+},
+{
+    "model": "vadetisweb.category",
+    "pk": 4,
+    "fields": {
+        "name": "Files",
+        "order": 4
+    }
+},
+{
+    "model": "vadetisweb.category",
+    "pk": 5,
+    "fields": {
+        "name": "Anomaly Detection",
+        "order": 5
+    }
+},
+{
+    "model": "vadetisweb.category",
+    "pk": 6,
+    "fields": {
+        "name": "Algorithm",
+        "order": 6
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 1,
+    "fields": {
+        "category": 1,
+        "question": "What is Vadetis?",
+        "answer": "Vadetis is a tool to perform anomaly detection in time series datasets using different detection algorithms with various settings."
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 2,
+    "fields": {
+        "category": 1,
+        "question": "I performed anomaly detection but no results show up. Why?",
+        "answer": "Depending on the algorithm, detection of anomalies is a computational intensive operation. If the dataset contains a large amount of values it is possible that your browser encounters an HTTP Request Timeout before the computation finishes. In this case you can create a task to process your configuration on the server. Your results are available permanently after the task completes."
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 3,
+    "fields": {
+        "category": 1,
+        "question": "How is anomaly detection performed in general?",
+        "answer": "TBA"
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 4,
+    "fields": {
+        "category": 2,
+        "question": "Can I connect or disconnect a social account, such as a Google account to my already exisiting Vadetis account?",
+        "answer": "You can connect or disconnect your social account anytime in the account settings section of your profile."
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 5,
+    "fields": {
+        "category": 2,
+        "question": "I removed my account. Is it possible to reenable it?",
+        "answer": "No, once you deleted your account, all linked information including datasets and preprocessed results have been removed from the database."
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 6,
+    "fields": {
+        "category": 3,
+        "question": "What is the difference between real-world and synthetic datasets?",
+        "answer": "The datasets are devided into these two categories in order to define whether they are based on real data or if they are artifically created by an algorithm."
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 7,
+    "fields": {
+        "category": 3,
+        "question": "What is the difference between spatial and non spatial datasets?",
+        "answer": "Spatial datasets require additional geographic information about the recording location of each time series. If spatial data is available you can perform LISA algorithm using spatial distances as weights between the time series."
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 8,
+    "fields": {
+        "category": 3,
+        "question": "Is it possible to modify my dataset?",
+        "answer": "No, altering datasets would invalidate all preprocessed and saved anomaly detection results. If something is wrong with your data remove your dataset and add your corrected data as new dataset."
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 9,
+    "fields": {
+        "category": 3,
+        "question": "I have unsupervised data, can I import them?",
+        "answer": "Although models are trained in a semi-supervised fashion, Vadetis is a validator for anomaly detection in time series. In order to calculate F1, precision and recall scores it requires you to add only supervised datasets."
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 10,
+    "fields": {
+        "category": 3,
+        "question": "How many training datasets can I add to my dataset?",
+        "answer": "You can add as many as you want."
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 11,
+    "fields": {
+        "category": 3,
+        "question": "Can I add training data to datasets I do not own?",
+        "answer": "No, only the owner of the dataset can add training data."
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 12,
+    "fields": {
+        "category": 3,
+        "question": "I have missing values in my datasets. Is this a problem?",
+        "answer": "Yes, if a value is missing at a certain timestamp some algorithms cannot compute a detection result at this timestamp and therefor it is required to have no gaps in the data. There exist several techniques to recover missing values such as <a href=\\\"http://revival.exascale.info/\\\" target=\\\"_blank\\\">centroid decomposition</a>."
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 13,
+    "fields": {
+        "category": 3,
+        "question": "What is the impact if the time series in a dataset recorded attributes in different domains?",
+        "answer": "If time series recorded different related domains, e.g. temperature and radiation, the values are transformed into z-scores and the anomaly detection algorithm will perform on these z-score values and not the raw data."
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 14,
+    "fields": {
+        "category": 3,
+        "question": "Which frequencies are supported?",
+        "answer": "TBA"
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 15,
+    "fields": {
+        "category": 3,
+        "question": "How does a CSV of a dataset must be formatted?",
+        "answer": "The CSV file of supervised data must include a <strong>ts_name;time;unit;value;class</strong> header where 'ts_name' is the name of the time series, 'time' the timestamp in UTC, 'unit' the unit of the values and value' the value of the measurement. The 'class' field is a boolean that indicates if the current value at a given timestamp is considered an anomaly (1) or not (0). The file must use semicolons as delimiter and all time series of your dataset must be contained in this single file. Of course, the time series names must be distinct within the same dataset. Further, the timestamps between series must be aligned."
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 16,
+    "fields": {
+        "category": 4,
+        "question": "Is there an example of a dataset CSV?",
+        "answer": "ts_name;time;unit;value;class<br/>\r\nSeries1;201606010000;Celsius;35;0<br/>\r\nSeries1;201606010010;Celsius;36;1<br/>\r\n.....<br/>\r\nSeries2;201606010000;Celsius;26;0<br/>\r\nSeries2;201606010010;Celsius;25;0<br/>"
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 17,
+    "fields": {
+        "category": 4,
+        "question": "How does a CSV of spatial information for a dataset must be formatted?",
+        "answer": "The locations file must include a <strong>ts_name;l_name;lon;lat;ch1903_e;ch1903_n;height</strong> header. The 'ts_name' is the name of the time series, 'l_name' is the recording location name, lat' the latitude and 'lon' the longitude in decimal degrees of the location. The ch1903 values are based on Swiss coordinate system and expect values in meters. 'Height' indicates meters over sea level at the recording location."
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 18,
+    "fields": {
+        "category": 4,
+        "question": "Are CH1903 coordinates required for spatial information?",
+        "answer": "You can leave them empty if your locations are outside Switzerland or not available."
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 19,
+    "fields": {
+        "category": 4,
+        "question": "Is there an example of a CSV with spatial information?",
+        "answer": "ts_name;l_name;lon;lat;ch1903_e;ch1903_n;height<br/>\r\nSeries1;Adelboden;7.56042;46.49226;609350;149001;1326<br/>\r\nSeries2;Thun;7.58521;46.74985;611200;177640;570<br/>\r\n..."
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 20,
+    "fields": {
+        "category": 5,
+        "question": "I performed the same configuration for anomaly detection multiple times, but I get different results. Why?",
+        "answer": "It depends on the selected training data when Vadetis is evaluating the model for outlier detection. If you don't define a random seed, training data is selected in a full random fashion out of the training dataset. \r\nThis may lead to different results. Vadetis will select the same training data for a given random seed."
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 21,
+    "fields": {
+        "category": 6,
+        "question": "What is LISA based anomaly detection and how does it work?",
+        "answer": "TBA"
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 22,
+    "fields": {
+        "category": 6,
+        "question": "What is Histogram based anomaly detection and how does it work?",
+        "answer": "TBA"
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 23,
+    "fields": {
+        "category": 6,
+        "question": "What is Cluster (Gaussiamn mixture) based anomaly detection and how does it work?",
+        "answer": "TBA"
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 24,
+    "fields": {
+        "category": 6,
+        "question": "What is SVM (Support Vector Machine) anomaly detection and how does it work?",
+        "answer": "TBA"
+    }
+},
+{
+    "model": "vadetisweb.frequentlyaskedquestion",
+    "pk": 25,
+    "fields": {
+        "category": 6,
+        "question": "What is Isolation Forest anomaly detection and how does it work?",
+        "answer": "TBA"
+    }
+}
+]
