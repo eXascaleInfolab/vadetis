@@ -49,8 +49,9 @@ class TaskImportData(Task):
             # get flatten df
             df_read = pd.read_csv(file_csv,
                                   sep=';',
-                                  index_col='time',
-                                  parse_dates=True)
+                                  parse_dates=['time'],
+                                  infer_datetime_format=True,
+                                  index_col='time')
 
             # check each series must have same unit
             group_by_ts_name = df_read.groupby('ts_name')
@@ -70,6 +71,8 @@ class TaskImportData(Task):
 
             # unflatten dataframe
             df = df_read.pivot(columns='ts_name', values='value')
+
+            print(df)
 
             # check if same frequency => pandas can infer a frequency
             freq = df.index.inferred_freq
@@ -204,8 +207,9 @@ class TaskImportTrainingData(Task):
             # get flatten df
             df_read = pd.read_csv(file_csv,
                                   sep=';',
-                                  index_col='time',
-                                  parse_dates=True)
+                                  parse_dates=['time'],
+                                  infer_datetime_format=True,
+                                  index_col='time')
 
             # check each series must have same unit
             group_by_ts_name = df_read.groupby('ts_name')
