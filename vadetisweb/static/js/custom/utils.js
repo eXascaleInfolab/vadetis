@@ -42,13 +42,17 @@ function groupBy(list, keyGetter) {
 function print_messages(messages) {
     grouped_messages = groupBy(messages, message => message.level_tag);
     console.log(grouped_messages);
-    grouped_messages.forEach((value, key) => {
-        $('#message-container').append(html_messages(key, value));
+    grouped_messages.forEach((value, tag) => {
+        message_container = $('#message-container');
+        html = "<div class=\"messages messages-" + tag + "\">";
+        html += html_messages(value);
+        html += "</div>";
+        message_container.append(html);
     });
 }
 
 function html_messages_list(messages) {
-    html += "<ul class=\"messages_list\">";
+    html = "<ul class=\"messages_list\">";
     messages.forEach(error => {
         html += "<li class=\"messages_item\">";
         html += error.message;
@@ -58,15 +62,13 @@ function html_messages_list(messages) {
     return html;
 }
 
-function html_messages(tag, messages) {
-    html = "<div class=\"messages messages-" + tag + "\">";
+function html_messages(messages) {
     if (messages.length > 1) {
-        html += html_messages_list(messages);
+        return html_messages_list(messages);
     } else if (messages.length === 1) {
-        html += messages[0].message;
+        return messages[0].message;
     }
-    html += "</div>";
-    return html;
+    return "";
 }
 
 function print_form_errors(form_errors) {

@@ -83,7 +83,7 @@ class UserOriginalDatasetField(serializers.PrimaryKeyRelatedField):
         return DataSet.objects.filter(owner=user, is_training_data=False)
 
     def display_value(self, instance):
-        return instance.name
+        return instance.title
 
 
 class TrainingDatasetSerializer(serializers.Serializer):

@@ -5,6 +5,8 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.settings import api_settings
+
 from django.shortcuts import redirect
 from django.contrib import messages
 from celery.utils import uuid
@@ -86,6 +88,12 @@ class AccountUploadDataset(APIView):
             if request.accepted_renderer.format == 'json':  # requested format is json
                 json_messages = []
                 json_message_utils.error(json_messages, message)
+
+                # append non field form errors to message errors
+                if(api_settings.NON_FIELD_ERRORS_KEY in serializer.errors):
+                    for non_field_error in serializer.errors[api_settings.NON_FIELD_ERRORS_KEY]:
+                        json_message_utils.error(json_messages, non_field_error)
+
                 return Response({
                     'messages': MessageSerializer(json_messages, many=True).data,
                     'form_errors': serializer.errors
@@ -157,6 +165,12 @@ class AccountUploadTrainingDataset(APIView):
         if request.accepted_renderer.format == 'json':  # requested format is json
             json_messages = []
             json_message_utils.error(json_messages, message)
+
+            # append non field form errors to message errors
+            if (api_settings.NON_FIELD_ERRORS_KEY in serializer.errors):
+                for non_field_error in serializer.errors[api_settings.NON_FIELD_ERRORS_KEY]:
+                    json_message_utils.error(json_messages, non_field_error)
+
             return Response({
                 'messages': MessageSerializer(json_messages, many=True).data,
                 'form_errors': serializer.errors,
