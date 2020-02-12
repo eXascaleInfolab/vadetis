@@ -2,6 +2,8 @@
 <script type="text/javascript">
     $('#{{ formid }}').on('submit', function (event) {
         event.preventDefault();
+        clear_form_errors("{{ formid }}");
+        clear_messages();
         $.post({
             url: $(this).attr('action'){% if format %}+'?format={{ format }}'{% endif %},
             data: new FormData(this),
@@ -10,9 +12,6 @@
             processData: false,
             contentType: false,
             success: function(data, status, xhr) {
-                clear_form_errors("{{ formid }}");
-                clear_messages();
-
                 if (data.location) {
                     window.location = data.location;
 
@@ -22,8 +21,6 @@
             },
             error: function(data, status, xhr) {
                 console.error("Sending asynchronous failed");
-                clear_form_errors("{{ formid }}");
-                clear_messages();
                 if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
                     print_messages(data.responseJSON.messages);
                 }

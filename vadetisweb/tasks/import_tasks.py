@@ -72,8 +72,6 @@ class TaskImportData(Task):
             # unflatten dataframe
             df = df_read.pivot(columns='ts_name', values='value')
 
-            print(df)
-
             # check if same frequency => pandas can infer a frequency
             freq = df.index.inferred_freq
             if freq is None:
@@ -176,7 +174,7 @@ class TaskImportData(Task):
                         location.save()
 
         execution_time = format_time(timezone.now() - start_time)
-        result = {'measurements_added': df.count().sum(), 'time_series_added:': len(df.columns),
+        result = {'measurements_added': int(df.count().sum()), 'time_series_added:': len(df.columns),
                   'execution_time': execution_time}
 
         return result
@@ -307,7 +305,7 @@ class TaskImportTrainingData(Task):
             training_dataset.save()
 
         execution_time = format_time(timezone.now() - start_time)
-        result = {'measurements_added': df.count().sum(), 'execution_time': execution_time }
+        result = {'measurements_added': int(df.count().sum()), 'execution_time': execution_time }
 
         return result
 
