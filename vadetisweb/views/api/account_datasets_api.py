@@ -18,7 +18,7 @@ class DatasetDataTableViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = self.queryset
-        query_set = queryset.filter(owner=self.request.user)
+        query_set = queryset.filter(owner=self.request.user, is_training_data=False)
         return query_set
 
     def get_permissions(self):
@@ -32,20 +32,25 @@ class DatasetDataTableViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
-class AccountTrainingDatasetsJson(APIView):
+class TrainingDatasetDataTableViewSet(viewsets.ModelViewSet):
     """
     Request information about datasets of current user
     """
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
-    permission_classes = [IsAuthenticated]
-    renderer_classes = [JSONRenderer]
+    queryset = DataSet.objects.all()
+    serializer_class = DatasetDataTablesSerializer
 
-    def get(self, request):
-        user = request.user
-        data = []
+    def get_queryset(self):
+        queryset = self.queryset
+        query_set = queryset.filter(owner=self.request.user, is_training_data=True)
+        return query_set
 
-        datasets = DataSet.objects.filter(owner=user, is_training_data=True)
-        data = datatable_dataset_rows(data, datasets)
-
-        return Response(data)
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if self.action == 'list':
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [IsAdminUser]
+        return [permission() for permission in permission_classes]
 
