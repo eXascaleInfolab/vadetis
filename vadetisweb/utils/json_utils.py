@@ -5,15 +5,19 @@ from .date_utils import unix_time_millis_from_dt
 from vadetisweb.library import df_zscore
 from vadetisweb.parameters import REAL_WORLD
 
-
+@DeprecationWarning
 def datatable_dataset_rows(data, datasets):
     for dataset in datasets:
         row = []
 
+        """
+        TODO
         if dataset.type == REAL_WORLD:
             link = reverse('vadetisweb:dataset_real_world', args=[dataset.id])
         else:
             link = reverse('vadetisweb:dataset_synthetic', args=[dataset.id])
+        """
+        link = ""
 
         np_num_values = dataset.dataframe.count().sum()
 

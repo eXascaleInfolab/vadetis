@@ -1,11 +1,10 @@
 from rest_framework import serializers
 from django.core.validators import FileExtensionValidator
 from rest_framework.validators import UniqueTogetherValidator
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import IsAuthenticated
+
 from vadetisweb.models import DataSet, User
 from vadetisweb.parameters import *
-
+from vadetisweb.fields import UserOriginalDatasetField
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -13,27 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('username',)
 
 
-# class DatasetTitleSerializer(serializers.ModelSerializer):
-#
-#     class Meta:
-#         model = DataSet
-#         fields = ('title',)
-#
-#
-# class UserDatasetViewSet(ModelViewSet):
-#     """
-#     This view returns a list of all main datasets
-#     for the currently authenticated user.
-#     """
-#     serializer_class = DatasetTitleSerializer
-#     permission_classes = [IsAuthenticated]
-#
-#     def get_queryset(self):
-#         user = self.request.user
-#         return DataSet.objects.filter(owner=user, is_training_data=False)
-
-
-class DatasetSerializer(serializers.Serializer):
+class DatasetImportSerializer(serializers.Serializer):
     title = serializers.CharField(required=True, max_length=128, help_text='Human readable title of the dataset',
                                   style={'template': 'vadetisweb/parts/input/text_input.html'})
 
@@ -76,17 +55,7 @@ class DatasetSerializer(serializers.Serializer):
         return data
 
 
-class UserOriginalDatasetField(serializers.PrimaryKeyRelatedField):
-    def get_queryset(self):
-        request = self.context.get('request', None)
-        user = request.user
-        return DataSet.objects.filter(owner=user, is_training_data=False)
-
-    def display_value(self, instance):
-        return instance.title
-
-
-class TrainingDatasetSerializer(serializers.Serializer):
+class TrainingDatasetImportSerializer(serializers.Serializer):
     title = serializers.CharField(required=True, max_length=128,
                                   help_text='Human readable title of the training dataset',
                                   style={'template': 'vadetisweb/parts/input/text_input.html'})
@@ -106,3 +75,13 @@ class TrainingDatasetSerializer(serializers.Serializer):
                 message='You already have a dataset with this title. Title and owner of a dataset must be distinct.'
             )
         ]
+
+
+class DatasetDataTablesSerializer(serializers.ModelSerializer):
+    title = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = DataSet
+        fields = (
+            'title',
+        )

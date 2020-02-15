@@ -8,12 +8,20 @@ var VadetisDatatables = function () {
         $.ajax({
             url: url,
             type: "GET",
-            success: function (result) {
+            success: function (data) {
+                var columns = [];
+                var columnNames = Object.keys(data.data[0]);
+                for (var i in columnNames) {
+                    columns.push({
+                        data: columnNames[i],
+                        title: capitalizeFirstLetter(columnNames[i])
+                    });
+                }
 
-                var oTable = table.DataTable({
+                table.DataTable({
 
                     // Internationalisation. For more info refer to http://datatables.net/manual/i18n
-                    "language": {
+                    language: {
                         "aria": {
                             "sortAscending": ": activate to sort column ascending",
                             "sortDescending": ": activate to sort column descending"
@@ -40,26 +48,29 @@ var VadetisDatatables = function () {
                         }
                     },
 
-                    "order": [
+                    order: [
                         [0, 'asc']
                     ],
 
                     searching: true,
 
-                    "lengthMenu": [
+                    lengthMenu: [
                         [10, 20, 30, 40, -1],
                         [10, 20, 30, 40, "All"] // change per page values here
                     ],
 
                     // set the initial value
-                    "pageLength": 20,
+                    pageLength: 20,
 
-                    data: result.data,
-                    columns: result.cols,
+                    data: data.data,
+		            columns: columns,
                     rowId: 'id',
 
-                    "dom": "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
+                    //dom: "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
                 });
+            },
+            error: function(data, status, xhr) {
+                console.error("Loading datatable data failed: " + xhr.responseText);
             }
         });
     };
@@ -67,7 +78,7 @@ var VadetisDatatables = function () {
     return {
         init: function (html_id, url) {
             console.log("datatable init");
-            initTable('#'+html_id, url);
+            initTable('#' + html_id, url);
         }
     };
 }();

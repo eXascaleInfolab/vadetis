@@ -7,13 +7,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 
-from django.shortcuts import redirect
 from django.contrib import messages
 from celery.utils import uuid
-import json
 
 from vadetisweb.models import UserTasks
-from vadetisweb.serializers import DatasetSerializer, TrainingDatasetSerializer
+from vadetisweb.serializers import DatasetImportSerializer, TrainingDatasetImportSerializer
 from vadetisweb.utils import write_to_tempfile, json_message_utils, MessageSerializer
 from vadetisweb.tasks import TaskImportData, TaskImportTrainingData
 from vadetisweb.parameters import SPATIAL
@@ -30,14 +28,14 @@ class AccountUploadDataset(APIView):
     template_name = 'vadetisweb/account/account_datasets_upload.html'
 
     def get(self, request, format=None):
-        serializer = DatasetSerializer(context={"request": self.request,})
+        serializer = DatasetImportSerializer(context={"request": self.request, })
         return Response({'serializer': serializer}, status=status.HTTP_200_OK)
 
     def post(self, request, format=None):
         user = request.user
         print("request.accepted_renderer.format ", request.accepted_renderer.format)
 
-        serializer = DatasetSerializer(data=request.data, context={"request": self.request,})
+        serializer = DatasetImportSerializer(data=request.data, context={"request": self.request, })
 
         if serializer.is_valid():
             # handle dataset file
@@ -117,12 +115,12 @@ class AccountUploadTrainingDataset(APIView):
     template_name = 'vadetisweb/account/account_training_datasets_upload.html'
 
     def get(self, request, format=None):
-        serializer = TrainingDatasetSerializer(context={"request": self.request,})
+        serializer = TrainingDatasetImportSerializer(context={"request": self.request, })
         return Response({'serializer': serializer}, status=status.HTTP_200_OK)
 
     def post(self, request, format=None):
         user = request.user
-        serializer = TrainingDatasetSerializer(data=request.data, context={"request": self.request, })
+        serializer = TrainingDatasetImportSerializer(data=request.data, context={"request": self.request, })
 
         if serializer.is_valid():
             title = serializer.validated_data['title']

@@ -15,6 +15,10 @@ function loadImage(html_id, url, post_data) {
     });
 }
 
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 function clear_messages() {
     $('#message-container').empty();
 }
@@ -41,7 +45,6 @@ function groupBy(list, keyGetter) {
 
 function print_messages(messages) {
     grouped_messages = groupBy(messages, message => message.level_tag);
-    console.log(grouped_messages);
     grouped_messages.forEach((value, tag) => {
         message_container = $('#message-container');
         html = "<div class=\"messages messages-" + tag + "\">";
