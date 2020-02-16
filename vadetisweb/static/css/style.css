@@ -19222,19 +19222,19 @@ strong {
     flex-wrap: wrap; }
     .kt-datatable.kt-datatable--default > .kt-datatable__pager.kt-datatable__pager--top {
       margin-bottom: 20px; }
-    .kt-datatable.kt-datatable--default > .kt-datatable__pager > .kt-datatable__pager-nav {
+    .kt-datatable.kt-datatable--default > .kt-datatable__pager .kt-datatable__pager-nav {
       margin: 0;
       padding: 0;
       display: -webkit-box;
       display: -ms-flexbox;
       display: flex; }
-      .kt-datatable.kt-datatable--default > .kt-datatable__pager > .kt-datatable__pager-nav > li {
+      .kt-datatable.kt-datatable--default > .kt-datatable__pager .kt-datatable__pager-nav li {
         padding: 0;
         margin-right: 5px;
         display: inline-block; }
-        .kt-datatable.kt-datatable--default > .kt-datatable__pager > .kt-datatable__pager-nav > li:last-child {
+        .kt-datatable.kt-datatable--default > .kt-datatable__pager .kt-datatable__pager-nav li:last-child {
           margin-right: 0; }
-        .kt-datatable.kt-datatable--default > .kt-datatable__pager > .kt-datatable__pager-nav > li > .kt-datatable__pager-link {
+        .kt-datatable.kt-datatable--default > .kt-datatable__pager .kt-datatable__pager-nav li > a {
           cursor: pointer;
           display: -webkit-box;
           display: -ms-flexbox;
@@ -19253,13 +19253,13 @@ strong {
           font-size: 1rem;
           line-height: 1rem;
           font-weight: 500; }
-          .kt-datatable.kt-datatable--default > .kt-datatable__pager > .kt-datatable__pager-nav > li > .kt-datatable__pager-link > i {
+          .kt-datatable.kt-datatable--default > .kt-datatable__pager .kt-datatable__pager-nav li > a > i {
             font-size: 0.6rem;
             text-align: center;
             display: inline-block; }
-          .kt-datatable.kt-datatable--default > .kt-datatable__pager > .kt-datatable__pager-nav > li > .kt-datatable__pager-link.kt-datatable__pager-link--more-prev, .kt-datatable.kt-datatable--default > .kt-datatable__pager > .kt-datatable__pager-nav > li > .kt-datatable__pager-link.kt-datatable__pager-link--more-next {
+          .kt-datatable.kt-datatable--default > .kt-datatable__pager .kt-datatable__pager-nav li > .kt-datatable__pager-link.kt-datatable__pager-link--more-prev, .kt-datatable.kt-datatable--default > .kt-datatable__pager .kt-datatable__pager-nav > li > .kt-datatable__pager-link.kt-datatable__pager-link--more-next {
             font-weight: 600; }
-        .kt-datatable.kt-datatable--default > .kt-datatable__pager > .kt-datatable__pager-nav > li > .kt-pager-input {
+        .kt-datatable.kt-datatable--default > .kt-datatable__pager .kt-datatable__pager-nav li > .kt-pager-input {
           height: 2.25rem;
           width: 3.5rem;
           text-align: center;
@@ -19388,34 +19388,34 @@ strong {
   .kt-datatable > .kt-datatable__table > .kt-datatable__head .kt-datatable__row > .kt-datatable__cell > span > i {
     color: #591df1; }
 
-.kt-datatable > .kt-datatable__pager > .kt-datatable__pager-nav > li > .kt-datatable__pager-link {
+.kt-datatable > .kt-datatable__pager .kt-datatable__pager-nav li > a {
   color: #93a2dd;
   -webkit-transition: all 0.3s;
   transition: all 0.3s; }
-  .kt-datatable > .kt-datatable__pager > .kt-datatable__pager-nav > li > .kt-datatable__pager-link.kt-datatable__pager-link--first, .kt-datatable > .kt-datatable__pager > .kt-datatable__pager-nav > li > .kt-datatable__pager-link.kt-datatable__pager-link--prev, .kt-datatable > .kt-datatable__pager > .kt-datatable__pager-nav > li > .kt-datatable__pager-link.kt-datatable__pager-link--next, .kt-datatable > .kt-datatable__pager > .kt-datatable__pager-nav > li > .kt-datatable__pager-link.kt-datatable__pager-link--last {
+  .kt-datatable > .kt-datatable__pager .kt-datatable__pager-nav li > .kt-datatable__pager-link.kt-datatable__pager-link--first, .kt-datatable > .kt-datatable__pager .kt-datatable__pager-nav > li > .kt-datatable__pager-link.kt-datatable__pager-link--prev, .kt-datatable > .kt-datatable__pager .kt-datatable__pager-nav > li > .kt-datatable__pager-link.kt-datatable__pager-link--next, .kt-datatable > .kt-datatable__pager .kt-datatable__pager-nav > li > .kt-datatable__pager-link.kt-datatable__pager-link--last {
     background: #f0f3ff; }
-    .kt-datatable > .kt-datatable__pager > .kt-datatable__pager-nav > li > .kt-datatable__pager-link.kt-datatable__pager-link--first:hover, .kt-datatable > .kt-datatable__pager > .kt-datatable__pager-nav > li > .kt-datatable__pager-link.kt-datatable__pager-link--prev:hover, .kt-datatable > .kt-datatable__pager > .kt-datatable__pager-nav > li > .kt-datatable__pager-link.kt-datatable__pager-link--next:hover, .kt-datatable > .kt-datatable__pager > .kt-datatable__pager-nav > li > .kt-datatable__pager-link.kt-datatable__pager-link--last:hover {
+    .kt-datatable > .kt-datatable__pager .kt-datatable__pager-nav li > .kt-datatable__pager-link.kt-datatable__pager-link--first:hover, .kt-datatable > .kt-datatable__pager .kt-datatable__pager-nav > li > .kt-datatable__pager-link.kt-datatable__pager-link--prev:hover, .kt-datatable > .kt-datatable__pager .kt-datatable__pager-nav > li > .kt-datatable__pager-link.kt-datatable__pager-link--next:hover, .kt-datatable > .kt-datatable__pager .kt-datatable__pager-nav > li > .kt-datatable__pager-link.kt-datatable__pager-link--last:hover {
       background: #591df1;
       color: #ffffff; }
-  .kt-datatable > .kt-datatable__pager > .kt-datatable__pager-nav > li > .kt-datatable__pager-link:hover {
+  .kt-datatable > .kt-datatable__pager .kt-datatable__pager-nav li:not(.disabled) > a:hover {
     -webkit-transition: all 0.3s;
     transition: all 0.3s;
     background: #591df1;
     color: #ffffff; }
-  .kt-datatable > .kt-datatable__pager > .kt-datatable__pager-nav > li > .kt-datatable__pager-link.kt-datatable__pager-link--active {
+  .kt-datatable > .kt-datatable__pager .kt-datatable__pager-nav li > .kt-datatable__pager-link.kt-datatable__pager-link--active {
     background: #591df1;
     color: #ffffff; }
-  .kt-datatable > .kt-datatable__pager > .kt-datatable__pager-nav > li > .kt-datatable__pager-link.kt-datatable__pager-link--disabled, .kt-datatable > .kt-datatable__pager > .kt-datatable__pager-nav > li > .kt-datatable__pager-link.kt-datatable__pager-link--disabled:hover {
+  .kt-datatable > .kt-datatable__pager .kt-datatable__pager-nav li > .kt-datatable__pager-link.kt-datatable__pager-link--disabled, .kt-datatable > .kt-datatable__pager .kt-datatable__pager-nav > li > .kt-datatable__pager-link.kt-datatable__pager-link--disabled:hover {
     color: #93a2dd;
     background: #f0f3ff;
     opacity: 0.3; }
 
-.kt-datatable > .kt-datatable__pager > .kt-datatable__pager-nav > li > .kt-pager-input {
+.kt-datatable > .kt-datatable__pager .kt-datatable__pager-nav li > .kt-pager-input {
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
   background: #f0f3ff;
   border-color: #f0f3ff; }
-  .kt-datatable > .kt-datatable__pager > .kt-datatable__pager-nav > li > .kt-pager-input:focus {
+  .kt-datatable > .kt-datatable__pager .kt-datatable__pager-nav li > .kt-pager-input:focus {
     -webkit-transition: all 0.3s;
     transition: all 0.3s;
     background: #591df1;
