@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.core.validators import FileExtensionValidator
 from rest_framework.validators import UniqueTogetherValidator
+import numpy as np
 
 from vadetisweb.models import DataSet, User
 from vadetisweb.parameters import *
@@ -79,9 +80,49 @@ class TrainingDatasetImportSerializer(serializers.Serializer):
 
 class DatasetDataTablesSerializer(serializers.ModelSerializer):
     title = serializers.CharField(read_only=True)
+    owner = serializers.CharField(read_only=True)
+    timeseries = serializers.SerializerMethodField()
+    values = serializers.SerializerMethodField()
+    frequency = serializers.CharField(read_only=True)
+    type_of_data = serializers.CharField(read_only=True)
+    spatial_data = serializers.BooleanField(read_only=True)
+    training_datasets = serializers.SerializerMethodField()
+
+    def get_timeseries(self, obj):
+        return obj.timeseries_set.count()
+
+    def get_values(self, obj):
+        np_num_values = obj.dataframe.count().sum()
+        return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
+
+    def get_training_datasets(self, obj):
+        return obj.training_dataset.count()
 
     class Meta:
         model = DataSet
         fields = (
-            'title',
+            'title', 'owner', 'timeseries', 'values', 'frequency', 'type_of_data', 'spatial_data', 'training_datasets'
+        )
+
+
+class TrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
+    title = serializers.CharField(read_only=True)
+    owner = serializers.CharField(read_only=True)
+    timeseries = serializers.SerializerMethodField()
+    values = serializers.SerializerMethodField()
+    frequency = serializers.CharField(read_only=True)
+    type_of_data = serializers.CharField(read_only=True)
+    spatial_data = serializers.BooleanField(read_only=True)
+
+    def get_timeseries(self, obj):
+        return obj.timeseries_set.count()
+
+    def get_values(self, obj):
+        np_num_values = obj.dataframe.count().sum()
+        return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
+
+    class Meta:
+        model = DataSet
+        fields = (
+            'title', 'owner', 'timeseries', 'values', 'frequency', 'type_of_data', 'spatial_data',
         )

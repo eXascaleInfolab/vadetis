@@ -7,7 +7,7 @@ from rest_framework import viewsets
 
 from vadetisweb.models import DataSet
 from vadetisweb.utils import datatable_dataset_rows
-from vadetisweb.serializers import DatasetDataTablesSerializer
+from vadetisweb.serializers import DatasetDataTablesSerializer, TrainingDatasetDataTablesSerializer
 
 class DatasetDataTableViewSet(viewsets.ModelViewSet):
     """
@@ -37,7 +37,7 @@ class TrainingDatasetDataTableViewSet(viewsets.ModelViewSet):
     Request information about datasets of current user
     """
     queryset = DataSet.objects.all()
-    serializer_class = DatasetDataTablesSerializer
+    serializer_class = TrainingDatasetDataTablesSerializer
 
     def get_queryset(self):
         queryset = self.queryset
