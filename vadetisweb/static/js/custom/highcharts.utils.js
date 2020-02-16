@@ -9,7 +9,7 @@ function setSeriesData(highchart, series_data_json) {
 
 function getDatasetSeriesFromJsonValues(series_data) {
     var dataset_series = [];
-    series_data.series.forEach(function (series) {
+    series_data.forEach(function (series) {
         dataset_series.push({
             type: 'line',
             visible: true,

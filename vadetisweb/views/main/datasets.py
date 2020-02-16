@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 
+from vadetisweb.models import DataSet
 
 class SyntheticDatasets(APIView):
     """
@@ -34,7 +35,11 @@ class SyntheticDataset(APIView):
     template_name = 'vadetisweb/datasets/synthetic/dataset.html'
 
     def get(self, request, dataset_id):
-        return Response(status=status.HTTP_200_OK)
+        dataset = DataSet.objects.get(id=dataset_id)
+
+        return Response({
+            'dataset' : dataset,
+            }, status=status.HTTP_200_OK)
 
 
 class RealWorldDataset(APIView):
@@ -45,4 +50,8 @@ class RealWorldDataset(APIView):
     template_name = 'vadetisweb/datasets/real-world/dataset.html'
 
     def get(self, request, dataset_id):
-        return Response(status=status.HTTP_200_OK)
+        dataset = DataSet.objects.get(id=dataset_id)
+
+        return Response({
+            'dataset' : dataset,
+            }, status=status.HTTP_200_OK)

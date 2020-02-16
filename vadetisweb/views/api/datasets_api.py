@@ -44,9 +44,10 @@ class DatasetJson(APIView):
     renderer_classes = [JSONRenderer]
 
     def get(self, request, dataset_id):
-        data = []
         # handle query params
+        type = request.GET.get('type', 'raw')
         show_anomalies = strToBool(request.query_params.get('show_anomalies', 'true'))
+
         data = {}
         settings = get_settings(request)
         dataset = DataSet.objects.get(id=dataset_id)

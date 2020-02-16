@@ -2,7 +2,7 @@
 
 var VadetisHighcharts = function () {
 
-    var init = function (html_id, url) {
+    var initHighcharts = function (html_id, url) {
         var shows_anomalies = true;
         var current_type = 'raw';
         var dataset_series = [];
@@ -135,9 +135,14 @@ var VadetisHighcharts = function () {
         $.getJSON(url + '?type=raw&show_anomalies=true', function (data) {
             $('#loading_screen').hide();
             $('#results_screen').show();
-            var series_data = data[0];
+            var series_data = data['series'];
             dataset_series = getDatasetSeriesFromJsonValues(series_data);
             loadSeries(highchart, dataset_series);
         });
-    }
-};
+    };
+    return {
+        init: function (html_id, url) {
+            initHighcharts(html_id, url);
+        }
+    };
+}();

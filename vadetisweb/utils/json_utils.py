@@ -5,6 +5,7 @@ from .date_utils import unix_time_millis_from_dt
 from vadetisweb.library import df_zscore
 from vadetisweb.parameters import REAL_WORLD
 
+
 @DeprecationWarning
 def datatable_dataset_rows(data, datasets):
     for dataset in datasets:
@@ -49,14 +50,15 @@ def get_dataset_with_marker_json(dataset, type, show_anomaly, settings):
 
     for ts in time_series:
         measurements = []
-        for index, value in df.loc[:, ts.id].iteritems():
+        print(df)
+        for index, value in df.loc[:, ts.name].iteritems():
             if not show_anomaly:
                 measurements.append({'x': unix_time_millis_from_dt(index), 'y': value})
             else:
                 df_class = dataset.dataframe_class
                 outlier_color = settings['color_outliers']
 
-                if df_class.loc[index, ts.id] == False:
+                if df_class.loc[index, ts.name] == False:
                     measurements.append({'x': unix_time_millis_from_dt(index), 'y': value})
                 else:
                     measurements.append({'x': unix_time_millis_from_dt(index), 'y': value,

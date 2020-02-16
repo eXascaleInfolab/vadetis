@@ -103,8 +103,6 @@ class TaskImportData(Task):
                 print("New time series: {0} added".format(idx))
                 ts.datasets.add(dataset)
                 ts.save()
-                # replace column in dataframe by time series database id
-                df.rename(columns={idx: ts.id})
 
             # check if different units
             units = []
