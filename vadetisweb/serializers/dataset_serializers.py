@@ -1,7 +1,9 @@
-from rest_framework import serializers
-from django.core.validators import FileExtensionValidator
-from rest_framework.validators import UniqueTogetherValidator
 import numpy as np
+from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
+
+from django.core.validators import FileExtensionValidator
+from django.urls import reverse
 
 from vadetisweb.models import DataSet, User
 from vadetisweb.parameters import *
@@ -87,6 +89,7 @@ class DatasetDataTablesSerializer(serializers.ModelSerializer):
     type_of_data = serializers.CharField(read_only=True)
     spatial_data = serializers.BooleanField(read_only=True)
     training_datasets = serializers.SerializerMethodField()
+    actions = serializers.SerializerMethodField()
 
     def get_timeseries(self, obj):
         return obj.timeseries_set.count()
@@ -98,10 +101,17 @@ class DatasetDataTablesSerializer(serializers.ModelSerializer):
     def get_training_datasets(self, obj):
         return obj.training_dataset.count()
 
+    def get_actions(self, obj):
+        if obj.type == REAL_WORLD:
+            link = reverse('vadetisweb:real_world_dataset', args=[obj.id])
+        else:
+            link = reverse('vadetisweb:synthetic_dataset', args=[obj.id])
+        return '<a href="%s">View</a>' % (link)
+
     class Meta:
         model = DataSet
         fields = (
-            'title', 'owner', 'timeseries', 'values', 'frequency', 'type_of_data', 'spatial_data', 'training_datasets'
+            'title', 'owner', 'timeseries', 'values', 'frequency', 'type_of_data', 'spatial_data', 'training_datasets', 'actions'
         )
 
 

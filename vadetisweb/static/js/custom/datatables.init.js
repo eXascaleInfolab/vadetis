@@ -21,7 +21,6 @@ var VadetisDatatables = function () {
                 //$.fn.dataTableExt.oStdClasses.sPaging = "kt-datatable__pager kt-datatable--paging-loaded";
                 $.fn.dataTableExt.oStdClasses.sInfo = "kt-datatable__pager-detail";
 
-
                 var datatable = table.DataTable({
 
                     // Internationalisation. For more info refer to http://datatables.net/manual/i18n
@@ -84,17 +83,14 @@ var VadetisDatatables = function () {
                     columns: columns,
                     rowId: 'id',
 
-                    dom: //'<"kt-form kt-form--label-right kt-margin-t-20 kt-margin-b-10"fr>' +
-                        't' +
-                        '<"kt-datatable__pager kt-datatable--paging-loaded"li <"kt-datatable__pager-nav"p>>'
+                    dom: 't' +
+                         '<"kt-datatable__pager kt-datatable--paging-loaded"li <"kt-datatable__pager-nav"p>>'
                 });
 
-                $(datatable.table().header())
-                    .addClass('kt-datatable__head');
+                $(datatable.table().header()).addClass('kt-datatable__head');
                 $(datatable.table().header()).find('tr').addClass('kt-datatable__row');
 
-                $(datatable.table().body())
-                    .addClass('kt-datatable__body');
+                $(datatable.table().body()).addClass('kt-datatable__body');
             },
             error: function (data, status, xhr) {
                 console.error("Loading datatable data failed: " + xhr.responseText);
