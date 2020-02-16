@@ -6,7 +6,6 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 
 from vadetisweb.models import DataSet
-from vadetisweb.utils import datatable_dataset_rows
 from vadetisweb.serializers import DatasetDataTablesSerializer, TrainingDatasetDataTablesSerializer
 
 class DatasetDataTableViewSet(viewsets.ModelViewSet):

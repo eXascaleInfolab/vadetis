@@ -1,41 +1,5 @@
-import numpy as np
-from django.urls import reverse
-
 from .date_utils import unix_time_millis_from_dt
 from vadetisweb.library import df_zscore
-from vadetisweb.parameters import REAL_WORLD
-
-
-@DeprecationWarning
-def datatable_dataset_rows(data, datasets):
-    for dataset in datasets:
-        row = []
-
-        """
-        TODO
-        if dataset.type == REAL_WORLD:
-            link = reverse('vadetisweb:dataset_real_world', args=[dataset.id])
-        else:
-            link = reverse('vadetisweb:dataset_synthetic', args=[dataset.id])
-        """
-        link = ""
-
-        np_num_values = dataset.dataframe.count().sum()
-
-        dataset_link = '<a href="%s">%s (%s)</a>' % (link, dataset.title, dataset.id)
-        row.append(dataset_link)
-        row.append(dataset.owner.username)
-        row.append(dataset.timeseries_set.count())
-        row.append(int(np_num_values) if isinstance(np_num_values,
-                                                    np.integer) else np_num_values)  # numpy int32/64 is not json serializable
-        row.append(dataset.frequency)
-        row.append(dataset.type_of_data)
-        row.append(dataset.spatial_data)
-        row.append(dataset.training_dataset.count())
-
-        data.append(row)
-
-    return data
 
 
 def get_dataset_with_marker_json(dataset, type, show_anomaly, settings):
@@ -50,7 +14,6 @@ def get_dataset_with_marker_json(dataset, type, show_anomaly, settings):
 
     for ts in time_series:
         measurements = []
-        print(df)
         for index, value in df.loc[:, ts.name].iteritems():
             if not show_anomaly:
                 measurements.append({'x': unix_time_millis_from_dt(index), 'y': value})
