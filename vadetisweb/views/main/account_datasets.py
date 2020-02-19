@@ -124,7 +124,7 @@ class AccountUploadTrainingDataset(APIView):
 
         if serializer.is_valid():
             title = serializer.validated_data['title']
-            owner = serializer.validated_data['original_dataset'].user
+            owner = serializer.validated_data['original_dataset'].owner
             original_dataset = serializer.validated_data['original_dataset']
             training_dataset_file_raw = serializer.validated_data['csv_file']
 

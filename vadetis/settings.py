@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',  # required for django-allauth
+    'django_extensions', # needed for jupyter notebooks
     'vadetisweb',
     'django_celery_results',
     'allauth',

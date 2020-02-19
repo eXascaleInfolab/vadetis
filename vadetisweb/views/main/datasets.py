@@ -1,9 +1,10 @@
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
 
 from vadetisweb.models import DataSet
+from vadetisweb.serializers import AlgorithmSerializer
 
 class SyntheticDatasets(APIView):
     """
@@ -37,8 +38,15 @@ class SyntheticDataset(APIView):
     def get(self, request, dataset_id):
         dataset = DataSet.objects.get(id=dataset_id)
 
+        #algorithm = AlgorithmAnomalyDetection(dataset.id, 'Histogram')
+        #serializer = AlgorithmSerializer(algorithm, many=False)
+        #print(JSONRenderer().render(serializer.data))
+
+        serializer = AlgorithmSerializer()
+
         return Response({
             'dataset' : dataset,
+            'serializer' : serializer,
             }, status=status.HTTP_200_OK)
 
 

@@ -19,13 +19,13 @@ router.register(r'account/training-datasets', views.TrainingDatasetDataTableView
 router.register(r'datasets/synthetic/', views.SyntheticDatasetDataTableViewSet, base_name='synthetic_datasets_datatable')
 router.register(r'datasets/real-world/', views.RealWorldDatasetDataTableViewSet, base_name='real_world_datasets_datatable')
 
-
 urlpatterns = [
 
     path('account/datasets/upload/', views.AccountUploadDataset.as_view(), name='account_datasets_upload'),
     path('account/training-datasets/upload/', views.AccountUploadTrainingDataset.as_view(), name='account_training_datasets_upload'),
 
     path('api/', include((router.urls))),
+    path('api/anomaly-detection/<int:dataset_id>/', views.AnomalyDetectionFormView.as_view(), name='anomaly_detection_form'),
     path('api/dataset/<int:dataset_id>/', views.DatasetJson.as_view(), name='dataset_json'),
 
     path('datasets/real-world/', views.RealWorldDatasets.as_view(), name='real_world_datasets'),
@@ -40,4 +40,3 @@ urlpatterns = [
 
     path('', views.index, name='index'),
 ]
-print(urlpatterns)

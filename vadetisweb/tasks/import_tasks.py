@@ -217,9 +217,9 @@ class TaskImportTrainingData(Task):
                     raise ValueError(err_msg)
 
             # check if all time series from original dataset provided, and not more or less
-            ts_names_from_original = TimeSeries.objects.filter(datasets__id=original_dataset_id).values('name')
+            ts_names_from_original = TimeSeries.objects.filter(datasets__id=original_dataset_id).values_list('name', flat=True)
             compare = lambda x, y: collections.Counter(x) == collections.Counter(y)
-            if compare(ts_names_from_original, df_ts_unit.index.tolist()):
+            if not compare(list(ts_names_from_original), df_ts_unit.index.tolist()):
                 err_msg = "Either some series are missing or some series are provided that are not in the original dataset."
                 raise ValueError(err_msg)
 
