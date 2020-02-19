@@ -47,18 +47,14 @@ class AlgorithmSerializer(serializers.Serializer):
     empty_choice = ('', '----')
     ANOMALY_DETECTION_ALGORITHMS_EMPTY = (empty_choice,) + ANOMALY_DETECTION_ALGORITHMS
 
-    modified = serializers.ReadOnlyField(default=timezone.now)
-    dataset_selected = serializers.HiddenField(default=None)
     algorithm = serializers.ChoiceField(choices=ANOMALY_DETECTION_ALGORITHMS_EMPTY,
                                         required=True,
                                         source='get_algorithm',
-                                        help_text='The type of anomaly detection algorithm')
+                                        help_text='The type of anomaly detection algorithm',
+                                        style={'template': 'vadetisweb/parts/input/select_input.html'})
 
     def __init__(self, *args, **kwargs):
-        # Don't pass the 'fields' arg up to the superclass
-        loaded_dataset = kwargs.pop('dataset', None)
         super(AlgorithmSerializer, self).__init__(*args, **kwargs)
-        self.fields['modified'].initial = "ABC"
 
 
 class HistogramSerializer(AlgorithmSerializer):
