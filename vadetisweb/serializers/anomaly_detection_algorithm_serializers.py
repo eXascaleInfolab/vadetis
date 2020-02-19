@@ -63,6 +63,7 @@ class AlgorithmSerializer(serializers.Serializer):
 
 class HistogramSerializer(AlgorithmSerializer):
     td_selected = TrainingDatasetField(label='Training Dataset',
+                                       required=True,
                                        queryset=DataSet.objects.none())
     train_size = TrainSizeFloatField(min_value=0.001, max_value=0.999, required=True)
     random_seed = RandomSeedIntegerField(required=False)
@@ -74,23 +75,12 @@ class HistogramSerializer(AlgorithmSerializer):
                                          style={'template': 'vadetisweb/parts/input/hidden_input.html'})
 
     def __init__(self, *args, **kwargs):
-        #post_data = args[0]
         super(HistogramSerializer, self).__init__(*args, **kwargs)
-        #training_datasets = DataSet.objects.filter(original_dataset__id=post_data['dataset_selected'],
-         #                                          is_training_data=True)
-        #self.fields['td_selected'].queryset = training_datasets
-
-    def validate_td_selected(self):
-        data = self.validated_data.get('td_selected', None)
-        if not data:
-            raise serializers.ValidationError('This field is required.')
-        else:
-            data = data.id
-        return data
 
 
 class ClusterSerializer(AlgorithmSerializer):
     td_selected = TrainingDatasetField(label='Training Dataset',
+                                       required=True,
                                        queryset=DataSet.objects.none())
     n_components = serializers.IntegerField(label='Number of Components', min_value=1, required=True,
                                             help_text='The number of mixture components.',
@@ -108,24 +98,12 @@ class ClusterSerializer(AlgorithmSerializer):
                                          style={'template': 'vadetisweb/parts/input/hidden_input.html'})
 
     def __init__(self, *args, **kwargs):
-        #post_data = args[0]
         super(ClusterSerializer, self).__init__(*args, **kwargs)
-
-        #training_datasets = DataSet.objects.filter(original_dataset__id=post_data['dataset_selected'],
-        #                                           is_training_data=True)
-        #self.fields['td_selected'].queryset = training_datasets
-
-    def validate_td_selected(self):
-        data = self.validated_data.get('td_selected', None)
-        if not data:
-            raise serializers.ValidationError('This field is required.')
-        else:
-            data = data.id
-        return data
 
 
 class SVMSerializer(AlgorithmSerializer):
     td_selected = TrainingDatasetField(label='Training Dataset',
+                                       required=True,
                                        queryset=DataSet.objects.none())
     kernel = serializers.ChoiceField(label='Kernel', choices=SVM_KERNELS, required=True,
                                      help_text='The kernel for the SVM.',
@@ -146,25 +124,13 @@ class SVMSerializer(AlgorithmSerializer):
                                          style={'template': 'vadetisweb/parts/input/hidden_input.html'})
 
     def __init__(self, *args, **kwargs):
-        #post_data = args[0]
         super(SVMSerializer, self).__init__(*args, **kwargs)
-
-        #training_datasets = DataSet.objects.filter(original_dataset__id=post_data['dataset_selected'],
-        #                                           is_training_data=True)
-        #self.fields['td_selected'].queryset = training_datasets
-
-    def validate_td_selected(self):
-        data = self.validated_data.get('td_selected', None)
-        if not data:
-            raise serializers.ValidationError('This field is required.')
-        else:
-            data = data.id
-        return data
 
 
 class IsolationForestSerializer(AlgorithmSerializer):
 
     td_selected = TrainingDatasetField(label='Training Dataset',
+                                       required=True,
                                        queryset=DataSet.objects.none())
     bootstrap = serializers.BooleanField(label='Bootstrap', required=False,
                                          help_text='If True, individual trees are fit on random subsets of the training data sampled with replacement. If False, sampling without replacement is performed.',
@@ -182,19 +148,7 @@ class IsolationForestSerializer(AlgorithmSerializer):
                                          style={'template': 'vadetisweb/parts/input/hidden_input.html'})
 
     def __init__(self, *args, **kwargs):
-        #post_data = args[0]
         super(IsolationForestSerializer, self).__init__(*args, **kwargs)
-        #training_datasets = DataSet.objects.filter(original_dataset__id=post_data['dataset_selected'],
-        #                                           is_training_data=True)
-        #self.fields['td_selected'].queryset = training_datasets
-
-    def validate_td_selected(self):
-        data = self.validated_data.get('td_selected', None)
-        if not data:
-            raise serializers.ValidationError('This field is required.')
-        else:
-            data = data.id
-        return data
 
 
 class TSSerializer(AlgorithmSerializer):

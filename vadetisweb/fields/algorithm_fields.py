@@ -5,14 +5,21 @@ from vadetisweb.models import DataSet, TimeSeries
 
 class TrainingDatasetField(serializers.PrimaryKeyRelatedField):
     def get_queryset(self):
+        dataset_selected = self.context.get('dataset_selected', None)
+        if dataset_selected is not None:
+            return DataSet.objects.filter(original_dataset__id=dataset_selected, is_training_data=True)
         return DataSet.objects.none()
 
     def display_value(self, instance):
-        return instance.name
+        return instance.title
 
 
 class TimeSeriesField(serializers.PrimaryKeyRelatedField):
     def get_queryset(self):
+        timeseries_selected = self.context.get('timeseries_selected', None)
+        if timeseries_selected is not None:
+            return TimeSeries.objects.none() # TODO
+            #return TimeSeries.objects.filter(original_dataset__id=timeseries_selected, is_training_data=True)
         return TimeSeries.objects.none()
 
     def display_value(self, instance):

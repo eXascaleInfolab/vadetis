@@ -35,16 +35,16 @@ class AnomalyDetectionFormView(APIView):
                     print("LISA")
 
                 elif algorithm == HISTOGRAM:
-                    serializer = HistogramSerializer(data=request.data)
+                    serializer = HistogramSerializer(data=request.data, context={'dataset_selected': dataset_id, })
 
                 elif algorithm == CLUSTER_GAUSSIAN_MIXTURE:
-                    serializer = ClusterSerializer(data=request.data)
+                    serializer = ClusterSerializer(data=request.data, context={'dataset_selected': dataset_id, })
 
                 elif algorithm == SVM:
-                    serializer = SVMSerializer(data=request.data)
+                    serializer = SVMSerializer(data=request.data, context={'dataset_selected': dataset_id, })
 
                 elif algorithm == ISOLATION_FOREST:
-                    serializer = IsolationForestSerializer(data=request.data)
+                    serializer = IsolationForestSerializer(data=request.data, context={'dataset_selected': dataset_id, })
 
                 else:
                     serializer = AlgorithmSerializer()
