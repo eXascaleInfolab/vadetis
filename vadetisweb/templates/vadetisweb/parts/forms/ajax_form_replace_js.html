@@ -12,8 +12,8 @@
             processData: false,
             contentType: false,
             success: function(data, status, xhr) {
-                if (data.location) {
-                    window.location = data.location;
+                if (xhr.getResponseHeader('Location')) {
+                    window.location = xhr.getResponseHeader('Location');
                 }
                 var new_form_inner =  $(data).filter('#{{ formid }}').html();
 			    $('#{{ formid }}').html(new_form_inner);

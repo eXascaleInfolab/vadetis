@@ -32,6 +32,7 @@ urlpatterns = [
     path('datasets/real-world/<int:dataset_id>/', views.RealWorldDataset.as_view(), name='real_world_dataset'),
     path('datasets/synthetic/', views.SyntheticDatasets.as_view(), name='synthetic_datasets'),
     path('datasets/synthetic/<int:dataset_id>/', views.SyntheticDataset.as_view(), name='synthetic_dataset'),
+    path('datasets/synthetic/<int:dataset_id>/perform', views.SyntheticDatasetPerformAnomalyDetection.as_view(), name='synthetic_dataset_perform'),
 
     path('account/application-settings/', views.ApplicationSettings.as_view(), name='application_settings'),
     path('account/datasets/', views.account_datasets, name='account_datasets'),

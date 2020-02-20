@@ -37,16 +37,28 @@ class SyntheticDataset(APIView):
 
     def get(self, request, dataset_id):
         dataset = DataSet.objects.get(id=dataset_id)
-
-        #algorithm = AlgorithmAnomalyDetection(dataset.id, 'Histogram')
-        #serializer = AlgorithmSerializer(algorithm, many=False)
-        #print(JSONRenderer().render(serializer.data))
-
         serializer = AlgorithmSerializer()
 
         return Response({
             'dataset' : dataset,
             'serializer' : serializer,
+            }, status=status.HTTP_200_OK)
+
+
+class SyntheticDatasetPerformAnomalyDetection(APIView):
+    """
+    View for performed anomaly detection on a single synthetic dataset
+    """
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'vadetisweb/datasets/synthetic/dataset_perform.html'
+
+    def get(self, request, dataset_id):
+        dataset = DataSet.objects.get(id=dataset_id)
+        #serializer = AlgorithmSerializer()
+
+        return Response({
+            'dataset' : dataset,
+            #'serializer' : serializer,
             }, status=status.HTTP_200_OK)
 
 

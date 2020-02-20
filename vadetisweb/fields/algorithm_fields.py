@@ -31,7 +31,6 @@ class TrainSizeFloatField(serializers.FloatField):
         super(TrainSizeFloatField, self).__init__(**kwargs)
         self.label = 'Train Size'
         self.help_text = 'Represent the proportion of the training dataset to use for model training. The rest of the data will be used to validate the model. Should be in the interval (0, 1).'
-        # note for firefox we currently have to set input_type text to allow decimal numbers
         self.style = {'template': 'vadetisweb/parts/input/text_input.html', 'placeholder': 'e.g. 0.5', 'step': 'any', 'min': self.min_value, 'max': self.max_value }
 
 

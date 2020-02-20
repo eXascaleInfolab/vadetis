@@ -1,8 +1,10 @@
+import urllib
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
 
+from django.shortcuts import redirect
 from django.urls import reverse
 
 from vadetisweb.serializers import AlgorithmSerializer, HistogramSerializer, ClusterSerializer, SVMSerializer, IsolationForestSerializer
@@ -13,7 +15,7 @@ class AnomalyDetectionFormView(APIView):
     """
     Request anomaly detection form
     """
-    renderer_classes = [TemplateHTMLRenderer]
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
     template_name = 'vadetisweb/parts/forms/anomaly_detection_serializer_form.html'
 
     def post(self, request, dataset_id):
@@ -47,6 +49,12 @@ class AnomalyDetectionFormView(APIView):
                 if serializer.is_valid():
                     print("form was valid")
                     print(serializer.data)
+                    url = "%s?%s" % (reverse('vadetisweb:dataset_synthetic_perform', args=(dataset_id,)),
+                                     urllib.parse.urlencode(serializer.data))
+                    response = Response({'serializer': serializer, })
+                    response['Location'] = url
+                    return response
+
                 else:
                     print('Form was not valid')
 
