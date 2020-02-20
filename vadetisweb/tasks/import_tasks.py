@@ -298,7 +298,7 @@ class TaskImportTrainingData(Task):
                     training_dataset.type_of_data = SAME_UNITS
 
             # check if both datasets have same type of data
-            if not training_dataset.type_of_data != original_dataset.type_of_data:
+            if training_dataset.type_of_data != original_dataset.type_of_data:
                 err_msg = "Training dataset does not have the same type of data as the original: {0} / {1}".format(
                     training_dataset.type_of_data, original_dataset.type_of_data)
                 raise ValueError(err_msg)
