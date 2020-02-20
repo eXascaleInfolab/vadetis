@@ -1,0 +1,35 @@
+<!-- BEGIN AJAX FORM JS -->
+<script type="text/javascript">
+function ajaxSubmit(form, formid) {
+    clear_form_errors(formid);
+    clear_messages();
+    $.post({
+        url: $(form).attr('action'),
+        data: new FormData(form),
+        type: $(this).attr('method'),
+        enctype: $(this).attr('enctype'),
+        processData: false,
+        contentType: false,
+        success: function (data, status, xhr) {
+            if (data.location) {
+                window.location = data.location;
+            }
+            var new_form_inner = $(data).filter('#'+formid).html();
+            $('#'+formid).html(new_form_inner);
+            if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
+                print_messages(data.responseJSON.messages);
+            }
+        },
+        error: function (data, status, xhr) {
+            console.error("Sending asynchronous failed");
+            if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
+                print_messages(data.responseJSON.messages);
+            }
+            if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('form_errors')) {
+                print_form_errors(data.responseJSON.form_errors);
+            }
+        }
+    });
+}
+</script>
+<!-- END AJAX FORM JS -->

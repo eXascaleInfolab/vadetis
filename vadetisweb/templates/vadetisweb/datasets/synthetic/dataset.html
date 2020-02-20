@@ -9,6 +9,11 @@
     {% breadcrumb dataset.title "vadetisweb:dataset_synthetic" dataset_id=dataset.id %}
 {% endblock %}
 
+{% block head_js %}
+    {{ block.super }}
+    {% include 'vadetisweb/parts/forms/ajax_form_replace_function_js.html' %}
+{% endblock %}
+
 {% block page_title %}
     <h3 class="kt-subheader__title">{{ dataset.title }}</h3>
 {% endblock %}

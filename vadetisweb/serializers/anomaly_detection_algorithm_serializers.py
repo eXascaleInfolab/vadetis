@@ -51,7 +51,7 @@ class AlgorithmSerializer(serializers.Serializer):
                                         required=True,
                                         source='get_algorithm',
                                         help_text='The type of anomaly detection algorithm',
-                                        style={'template': 'vadetisweb/parts/input/select_input.html'})
+                                        style={'template': 'vadetisweb/parts/input/select_input_onchange_submit.html'})
 
     def __init__(self, *args, **kwargs):
         super(AlgorithmSerializer, self).__init__(*args, **kwargs)
