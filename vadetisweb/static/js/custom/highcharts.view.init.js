@@ -139,52 +139,6 @@ var VadetisHighcharts = function () {
             dataset_series = getDatasetSeriesFromJsonValues(series_data);
             loadSeries(highchart, dataset_series);
         });
-
-        var anomaly_detection_form = $('#anomaly_detection_form');
-        anomaly_detection_form.submit(function (event) {
-            if ($("#id_time_range").length > 0) {
-                //var chart = $('#container').highcharts();
-                var time_range = $('#id_time_range').val();
-                var extremes_x = highchart.xAxis[0].getExtremes();
-                var range = {};
-
-                if (time_range == 'as selected in chart') {
-                    range.min = Math.round(extremes_x.min);
-                    range.max = Math.round(extremes_x.max);
-                } else {
-                    range.min = Math.round(extremes_x.dataMin);
-                    range.max = Math.round(extremes_x.dataMax);
-                }
-
-                if ($("#rangeStart").length > 0) {
-                    $("#rangeStart").replaceWith(
-                        $('<input />').attr('type', 'hidden')
-                            .attr('id', "id_range_start")
-                            .attr('name', "range_start")
-                            .attr('value', range.min));
-                } else {
-                    $('<input />').attr('type', 'hidden')
-                        .attr('id', "id_range_start")
-                        .attr('name', "range_start")
-                        .attr('value', range.min)
-                        .appendTo('#anomaly_detection_form');
-                }
-
-                if ($("#rangeEnd").length > 0) {
-                    $("#rangeEnd").replaceWith(
-                        $('<input />').attr('type', 'hidden')
-                            .attr('id', "id_range_end")
-                            .attr('name', "range_end")
-                            .attr('value', range.max));
-                } else {
-                    $('<input />').attr('type', 'hidden')
-                        .attr('id', "id_range_end")
-                        .attr('name', "range_end")
-                        .attr('value', range.max)
-                        .appendTo('#anomaly_detection_form');
-                }
-            }
-        });
     };
     return {
         init: function (html_id, url, selectedButton) {

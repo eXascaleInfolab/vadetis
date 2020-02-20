@@ -6,8 +6,7 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    {% breadcrumb dataset.title "vadetisweb:dataset_synthetic" dataset_id=dataset.id %}
-    {% breadcrumb "Perform" "vadetisweb:dataset_synthetic_perform" dataset_id=dataset.id %}
+    {% breadcrumb "Perform" "vadetisweb:synthetic_dataset_perform" dataset_id=dataset.id %}
 {% endblock %}
 
 {% block page_title %}

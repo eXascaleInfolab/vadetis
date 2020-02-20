@@ -49,7 +49,7 @@ class AnomalyDetectionFormView(APIView):
                 if serializer.is_valid():
                     print("form was valid")
                     print(serializer.data)
-                    url = "%s?%s" % (reverse('vadetisweb:dataset_synthetic_perform', args=(dataset_id,)),
+                    url = "%s?%s" % (reverse('vadetisweb:synthetic_dataset_perform', args=(dataset_id,)),
                                      urllib.parse.urlencode(serializer.data))
                     response = Response({'serializer': serializer, })
                     response['Location'] = url
@@ -57,6 +57,7 @@ class AnomalyDetectionFormView(APIView):
 
                 else:
                     print('Form was not valid')
+                    print(serializer.errors)
 
             else:
                 serializer = AlgorithmSerializer()
