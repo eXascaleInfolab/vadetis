@@ -10,7 +10,7 @@ from django.contrib import messages
 from vadetisweb.models import DataSet
 from vadetisweb.serializers import AlgorithmSerializer, ThresholdSerializer
 from vadetisweb.utils import get_settings, get_highcharts_range_button_preselector, get_conf, is_valid_conf
-
+from vadetisweb.parameters import SYNTHETIC, REAL_WORLD
 
 class SyntheticDatasets(APIView):
     """
@@ -42,18 +42,29 @@ class SyntheticDataset(APIView):
     template_name = 'vadetisweb/datasets/synthetic/dataset.html'
 
     def get(self, request, dataset_id):
-        dataset = DataSet.objects.get(id=dataset_id)
-        serializer = AlgorithmSerializer()
+        try:
+            dataset = DataSet.objects.get(id=dataset_id)
+            if dataset.type != SYNTHETIC:
+                return redirect('vadetisweb:synthetic_datasets')
 
-        return Response({
-            'dataset': dataset,
-            'serializer': serializer,
-        }, status=status.HTTP_200_OK)
+            selected_button = get_highcharts_range_button_preselector(dataset.frequency)
+            settings = get_settings(request)
+            serializer = AlgorithmSerializer()
+
+            return Response({
+                'dataset': dataset,
+                'selected_button': selected_button,
+                'settings' : settings,
+                'serializer': serializer,
+            }, status=status.HTTP_200_OK)
+
+        except DataSet.DoesNotExist:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SyntheticDatasetPerformAnomalyDetection(APIView):
     """
-    View for performed anomaly detection on a single synthetic dataset
+    View for performed anomaly detection on a synthetic dataset
     """
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'vadetisweb/datasets/synthetic/dataset_perform.html'

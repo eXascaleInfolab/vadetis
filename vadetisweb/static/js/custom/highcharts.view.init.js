@@ -2,7 +2,7 @@
 
 var VadetisHighcharts = function () {
 
-    var initHighcharts = function (html_id, url) {
+    var initHighcharts = function (html_id, url, selectedButton) {
         var shows_anomalies = true;
         var current_type = 'raw';
         var dataset_series = [];
@@ -95,7 +95,7 @@ var VadetisHighcharts = function () {
                     text: 'All'
                 }],
                 inputEnabled: false, // as it supports only days
-                //selected: {{selected_button}}, TODO selected button
+                selected: selectedButton,
             },
 
             yAxis: [{
@@ -108,8 +108,8 @@ var VadetisHighcharts = function () {
             plotOptions: {
                 series: {
                     connectNulls: false,
-                    turboThreshold: 0, //enables to display unlimited number of points
-                    marker : {
+                    turboThreshold: 0, // enables to display unlimited number of points
+                    marker: {
                         radius: null,
                     }
                 },
@@ -118,7 +118,7 @@ var VadetisHighcharts = function () {
             exporting: {
                 enabled: false
             },
-            series : dataset_series,
+            series: dataset_series,
         });
 
         //TODO place into utils
@@ -139,10 +139,56 @@ var VadetisHighcharts = function () {
             dataset_series = getDatasetSeriesFromJsonValues(series_data);
             loadSeries(highchart, dataset_series);
         });
+
+        var anomaly_detection_form = $('#anomaly_detection_form');
+        anomaly_detection_form.submit(function (event) {
+            if ($("#id_time_range").length > 0) {
+                //var chart = $('#container').highcharts();
+                var time_range = $('#id_time_range').val();
+                var extremes_x = highchart.xAxis[0].getExtremes();
+                var range = {};
+
+                if (time_range == 'as selected in chart') {
+                    range.min = Math.round(extremes_x.min);
+                    range.max = Math.round(extremes_x.max);
+                } else {
+                    range.min = Math.round(extremes_x.dataMin);
+                    range.max = Math.round(extremes_x.dataMax);
+                }
+
+                if ($("#rangeStart").length > 0) {
+                    $("#rangeStart").replaceWith(
+                        $('<input />').attr('type', 'hidden')
+                            .attr('id', "id_range_start")
+                            .attr('name', "range_start")
+                            .attr('value', range.min));
+                } else {
+                    $('<input />').attr('type', 'hidden')
+                        .attr('id', "id_range_start")
+                        .attr('name', "range_start")
+                        .attr('value', range.min)
+                        .appendTo('#anomaly_detection_form');
+                }
+
+                if ($("#rangeEnd").length > 0) {
+                    $("#rangeEnd").replaceWith(
+                        $('<input />').attr('type', 'hidden')
+                            .attr('id', "id_range_end")
+                            .attr('name', "range_end")
+                            .attr('value', range.max));
+                } else {
+                    $('<input />').attr('type', 'hidden')
+                        .attr('id', "id_range_end")
+                        .attr('name', "range_end")
+                        .attr('value', range.max)
+                        .appendTo('#anomaly_detection_form');
+                }
+            }
+        });
     };
     return {
-        init: function (html_id, url) {
-            initHighcharts(html_id, url);
+        init: function (html_id, url, selectedButton) {
+            initHighcharts(html_id, url, selectedButton);
         }
     };
 }();

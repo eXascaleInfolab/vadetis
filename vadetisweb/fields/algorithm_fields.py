@@ -47,7 +47,7 @@ class TimeRangeChoiceField(serializers.ChoiceField):
         super(TimeRangeChoiceField, self).__init__(choices=TIME_RANGE, **kwargs)
         self.label = 'Time Range'
         self.help_text = 'The time range to apply anomaly detection'
-        self.style = {'template': 'vadetisweb/parts/input/select_input.html'}
+        self.style = {'template': 'vadetisweb/parts/input/select_input.html', 'id': 'id_time_range' }
 
 
 class MaximizeScoreChoiceField(serializers.ChoiceField):

@@ -2,7 +2,7 @@
 {% if field.errors %}
     <div class="form-group error {{ style.class }}">
         <label>{{ field.label }}</label>
-        <select class="form-control {{ style.input_class }}" name="{{ field.name }}">
+        <select{% if style.id %} id="{{ style.id }}" {% endif %} class="form-control {{ style.input_class }}" name="{{ field.name }}">
             {% if field.allow_null or field.allow_blank %}
                 <option value="" {% if not field.value %}selected{% endif %}>--------</option>
             {% endif %}
@@ -28,7 +28,7 @@
 {% else %}
     <div class="form-group {{ style.class }}">
         <label>{{ field.label }}</label>
-        <select class="form-control {{ style.input_class }}" name="{{ field.name }}">
+        <select{% if style.id %} id="{{ style.id }}" {% endif %} class="form-control {{ style.input_class }}" name="{{ field.name }}">
             {% if field.allow_null or field.allow_blank %}
                 <option value="" {% if not field.value %}selected{% endif %}>--------</option>
             {% endif %}

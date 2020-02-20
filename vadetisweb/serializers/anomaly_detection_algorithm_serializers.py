@@ -25,9 +25,9 @@ class HistogramSerializer(AlgorithmSerializer):
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
     range_start = serializers.IntegerField(required=True, min_value=0,
-                                           style={'template': 'vadetisweb/parts/input/hidden_input.html'})
+                                           style={'template': 'vadetisweb/parts/input/hidden_input.html', 'id' : 'rangeStart'})
     range_end = serializers.IntegerField(required=True, min_value=0,
-                                         style={'template': 'vadetisweb/parts/input/hidden_input.html'})
+                                         style={'template': 'vadetisweb/parts/input/hidden_input.html', 'id' : 'rangeEnd'})
 
     def __init__(self, *args, **kwargs):
         super(HistogramSerializer, self).__init__(*args, **kwargs)
@@ -48,9 +48,9 @@ class ClusterSerializer(AlgorithmSerializer):
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
     range_start = serializers.IntegerField(required=True, min_value=0,
-                                           style={'template': 'vadetisweb/parts/input/hidden_input.html'})
+                                           style={'template': 'vadetisweb/parts/input/hidden_input.html', 'id' : 'rangeStart'})
     range_end = serializers.IntegerField(required=True, min_value=0,
-                                         style={'template': 'vadetisweb/parts/input/hidden_input.html'})
+                                         style={'template': 'vadetisweb/parts/input/hidden_input.html', 'id' : 'rangeEnd'})
 
     def __init__(self, *args, **kwargs):
         super(ClusterSerializer, self).__init__(*args, **kwargs)
@@ -74,9 +74,9 @@ class SVMSerializer(AlgorithmSerializer):
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
     range_start = serializers.IntegerField(required=True, min_value=0,
-                                           style={'template': 'vadetisweb/parts/input/hidden_input.html'})
+                                           style={'template': 'vadetisweb/parts/input/hidden_input.html', 'id' : 'rangeStart'})
     range_end = serializers.IntegerField(required=True, min_value=0,
-                                         style={'template': 'vadetisweb/parts/input/hidden_input.html'})
+                                         style={'template': 'vadetisweb/parts/input/hidden_input.html', 'id' : 'rangeEnd'})
 
     def __init__(self, *args, **kwargs):
         super(SVMSerializer, self).__init__(*args, **kwargs)
@@ -98,9 +98,9 @@ class IsolationForestSerializer(AlgorithmSerializer):
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
     range_start = serializers.IntegerField(required=True, min_value=0,
-                                           style={'template': 'vadetisweb/parts/input/hidden_input.html'})
+                                           style={'template': 'vadetisweb/parts/input/hidden_input.html', 'id' : 'rangeStart'})
     range_end = serializers.IntegerField(required=True, min_value=0,
-                                         style={'template': 'vadetisweb/parts/input/hidden_input.html'})
+                                         style={'template': 'vadetisweb/parts/input/hidden_input.html', 'id' : 'rangeEnd'})
 
     def __init__(self, *args, **kwargs):
         super(IsolationForestSerializer, self).__init__(*args, **kwargs)
@@ -174,9 +174,9 @@ class PearsonSerializer(CorrelationSerializer):
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
     range_start = serializers.IntegerField(required=True, min_value=0,
-                                           style={'template': 'vadetisweb/parts/input/hidden_input.html'})
+                                           style={'template': 'vadetisweb/parts/input/hidden_input.html', 'id' : 'rangeStart'})
     range_end = serializers.IntegerField(required=True, min_value=0,
-                                         style={'template': 'vadetisweb/parts/input/hidden_input.html'})
+                                         style={'template': 'vadetisweb/parts/input/hidden_input.html', 'id' : 'rangeEnd'})
 
 
 class DTWPearsonSerializer(CorrelationSerializer):
@@ -196,9 +196,9 @@ class DTWPearsonSerializer(CorrelationSerializer):
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
     range_start = serializers.IntegerField(required=True, min_value=0,
-                                           style={'template': 'vadetisweb/parts/input/hidden_input.html'})
+                                           style={'template': 'vadetisweb/parts/input/hidden_input.html', 'id' : 'rangeStart'})
     range_end = serializers.IntegerField(required=True, min_value=0,
-                                         style={'template': 'vadetisweb/parts/input/hidden_input.html'})
+                                         style={'template': 'vadetisweb/parts/input/hidden_input.html', 'id' : 'rangeEnd'})
 
 
 class GeographicDistanceSerializer(CorrelationSerializer):
@@ -216,9 +216,9 @@ class GeographicDistanceSerializer(CorrelationSerializer):
                                              help_text='Define which score you want to maximize for the results. In order to achive the best score out of this selection, the most appropiate threshold value will be selected. You can further change the threshold after computation.',
                                              style={'template': 'vadetisweb/parts/input/select_input.html'})
     range_start = serializers.IntegerField(required=True, min_value=0,
-                                           style={'template': 'vadetisweb/parts/input/hidden_input.html'})
+                                           style={'template': 'vadetisweb/parts/input/hidden_input.html', 'id' : 'rangeStart'})
     range_end = serializers.IntegerField(required=True, min_value=0,
-                                         style={'template': 'vadetisweb/parts/input/hidden_input.html'})
+                                         style={'template': 'vadetisweb/parts/input/hidden_input.html', 'id' : 'rangeEnd'})
 
     def __init__(self, *args, **kwargs):
         #post_data = args[0]
