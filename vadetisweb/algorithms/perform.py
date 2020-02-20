@@ -8,28 +8,28 @@ from .isolation_forest import isolation_forest
 
 def perform_lisa_person(df, df_class, conf, ts_selected_id, dataset, settings):
     scores, y_hat_results, df_with_class_instances, info = lisa_pearson(df, df_class, conf, ts_selected_id)
-    data = get_anomaly_detection_single_ts_results_json(dataset, ts_selected_id,
+    data_series = get_anomaly_detection_single_ts_results_json(dataset, ts_selected_id,
                                                         df_with_class_instances, y_hat_results,
                                                         settings)
-    return data, info
+    return data_series, info
 
 
 def perform_lisa_dtw(df, df_class, conf, ts_selected_id, dataset, settings):
     scores, y_hat_results, df_with_class_instances, info = lisa_dtw(df, df_class, conf, ts_selected_id)
-    data = get_anomaly_detection_single_ts_results_json(dataset, ts_selected_id,
+    data_series = get_anomaly_detection_single_ts_results_json(dataset, ts_selected_id,
                                                         df_with_class_instances, y_hat_results,
                                                         settings)
-    return data, info
+    return data_series, info
 
 
 def perform_lisa_geo(df, df_class, conf, ts_selected_id, dataset, settings):
 
     scores, y_hat_results, df_with_class_instances, info = lisa_geo(df, df_class, conf,
                                                                     ts_selected_id)
-    data = get_anomaly_detection_single_ts_results_json(dataset, ts_selected_id,
+    data_series = get_anomaly_detection_single_ts_results_json(dataset, ts_selected_id,
                                                         df_with_class_instances,
                                                         y_hat_results, settings)
-    return data, info
+    return data_series, info
 
 
 def perform_histogram(df, df_class, conf, training_dataset, dataset, settings):
@@ -41,9 +41,9 @@ def perform_histogram(df, df_class, conf, training_dataset, dataset, settings):
                                                                      train_size=conf['train_size'],
                                                                      random_seed=conf['random_seed'])
 
-    data = get_anomaly_detection_ts_results_json(dataset, df_with_class_instances, scores, y_hat_results,
+    data_series = get_anomaly_detection_ts_results_json(dataset, df_with_class_instances, scores, y_hat_results,
                                                  settings)
-    return data, info
+    return data_series, info
 
 
 def perform_cluster(df, df_class, conf, training_dataset, dataset, settings):
@@ -61,8 +61,8 @@ def perform_cluster(df, df_class, conf, training_dataset, dataset, settings):
                                                                                         'train_size'],
                                                                                     random_seed=conf[
                                                                                         'random_seed'])
-    data = get_anomaly_detection_ts_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings)
-    return data, info
+    data_series = get_anomaly_detection_ts_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings)
+    return data_series, info
 
 
 def perform_svm(df, df_class, conf, training_dataset, dataset, settings):
@@ -76,9 +76,9 @@ def perform_svm(df, df_class, conf, training_dataset, dataset, settings):
                                                                kernel=conf['kernel'],
                                                                train_size=conf['train_size'],
                                                                random_seed=conf['random_seed'])
-    data = get_anomaly_detection_ts_results_json(dataset, df_with_class_instances, scores, y_hat_results,
+    data_series = get_anomaly_detection_ts_results_json(dataset, df_with_class_instances, scores, y_hat_results,
                                                  settings)
-    return data, info
+    return data_series, info
 
 
 def perform_isolation_forest(df, df_class, conf, training_dataset, dataset, settings):
@@ -96,6 +96,6 @@ def perform_isolation_forest(df, df_class, conf, training_dataset, dataset, sett
                                                                             train_size=conf['train_size'],
                                                                             random_seed=conf['random_seed'])
 
-    data = get_anomaly_detection_ts_results_json(dataset, df_with_class_instances, scores, y_hat_results,
+    data_series = get_anomaly_detection_ts_results_json(dataset, df_with_class_instances, scores, y_hat_results,
                                                  settings)
-    return data, info
+    return data_series, info

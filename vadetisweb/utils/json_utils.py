@@ -131,6 +131,4 @@ def get_anomaly_detection_ts_results_json(dataset, df_with_class_instances, scor
 
         data_series.append(dict_series)
 
-    data['series'] = data_series
-
-    return data
+    return data_series

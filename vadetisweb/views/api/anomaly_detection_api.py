@@ -84,6 +84,7 @@ class DatasetPerformAnomalyDetectionJson(APIView):
         try:
             dataset = DataSet.objects.get(id=dataset_id)
             data = {}
+            data_series = {}
             info = {}
 
             # todo
@@ -101,13 +102,13 @@ class DatasetPerformAnomalyDetectionJson(APIView):
             if conf['algorithm'] == LISA:
                 ts_selected_id = conf['ts_selected']
                 if conf['correlation_algorithm'] == PEARSON:
-                    data, info = perform_lisa_person(df, df_class, conf, ts_selected_id, dataset, settings)
+                    data_series, info = perform_lisa_person(df, df_class, conf, ts_selected_id, dataset, settings)
 
                 if conf['correlation_algorithm'] == DTW:
-                    data, info = perform_lisa_dtw(df, df_class, conf, ts_selected_id, dataset, settings)
+                    data_series, info = perform_lisa_dtw(df, df_class, conf, ts_selected_id, dataset, settings)
 
                 if conf['correlation_algorithm'] == GEO:
-                    data, info = perform_lisa_geo(df, df_class, conf, ts_selected_id, dataset, settings)
+                    data_series, info = perform_lisa_geo(df, df_class, conf, ts_selected_id, dataset, settings)
 
 
             elif conf['algorithm'] == HISTOGRAM:
@@ -115,7 +116,7 @@ class DatasetPerformAnomalyDetectionJson(APIView):
                 training_data_id = conf['td_selected']
                 try:
                     training_dataset = DataSet.objects.get(id=training_data_id)
-                    data, info = perform_histogram(df, df_class, conf, training_dataset, dataset, settings)
+                    data_series, info = perform_histogram(df, df_class, conf, training_dataset, dataset, settings)
 
                 except DataSet.DoesNotExist:
                     return Response({}, status=status.HTTP_400_BAD_REQUEST)
@@ -126,7 +127,7 @@ class DatasetPerformAnomalyDetectionJson(APIView):
                 training_data_id = conf['td_selected']
                 try:
                     training_dataset = DataSet.objects.get(id=training_data_id)
-                    data, info = perform_cluster(df, df_class, conf, training_dataset, dataset, settings)
+                    data_series, info = perform_cluster(df, df_class, conf, training_dataset, dataset, settings)
 
                 except DataSet.DoesNotExist:
                     return Response({}, status=status.HTTP_400_BAD_REQUEST)
@@ -137,7 +138,7 @@ class DatasetPerformAnomalyDetectionJson(APIView):
                 training_data_id = conf['td_selected']
                 try:
                     training_dataset = DataSet.objects.get(id=training_data_id)
-                    data, info = perform_svm(df, df_class, conf, training_dataset, dataset, settings)
+                    data_series, info = perform_svm(df, df_class, conf, training_dataset, dataset, settings)
                 except DataSet.DoesNotExist:
                     return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -147,11 +148,12 @@ class DatasetPerformAnomalyDetectionJson(APIView):
                 training_data_id = conf['td_selected']
                 try:
                     training_dataset = DataSet.objects.get(id=training_data_id)
-                    data, info = perform_isolation_forest(df, df_class, conf, training_dataset, dataset, settings)
+                    data_series, info = perform_isolation_forest(df, df_class, conf, training_dataset, dataset, settings)
                 except DataSet.DoesNotExist:
                     return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
-            return [data, info]
+            data['series'] = data_series
+            return Response(data)
 
         except DataSet.DoesNotExist:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
