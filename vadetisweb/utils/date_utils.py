@@ -29,3 +29,28 @@ def unix_time_millis_from_dt(dt):
     time = dt.replace(tzinfo=pytz.utc)
 
     return (time - epoch).total_seconds() * 1000.0
+
+
+def unix_time_millis_to_dt_str(unix_millis):
+    """
+    Converts a given unix time into a string representation
+
+    :param unix_millis: the unix time
+    :return: a string representation of the unix time
+    """
+    value_sec = float(unix_millis) / 1000
+    dt = datetime.datetime.fromtimestamp(value_sec).strftime('%Y-%m-%d %H:%M:%S')
+    return dt
+
+
+def unix_time_millis_to_dt(unix_millis):
+    """
+    Converts a unix time to a datetime object
+
+    :param unix_millis: the unix time
+    :return: a datetime object
+    """
+
+    value_sec = float(unix_millis) / 1000
+    dt = datetime.datetime.fromtimestamp(value_sec)
+    return dt

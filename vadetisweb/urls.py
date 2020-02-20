@@ -27,6 +27,8 @@ urlpatterns = [
     path('api/', include((router.urls))),
     path('api/anomaly-detection/<int:dataset_id>/', views.AnomalyDetectionFormView.as_view(), name='anomaly_detection_form'),
     path('api/dataset/<int:dataset_id>/', views.DatasetJson.as_view(), name='dataset_json'),
+    path('api/datasets/<int:dataset_id>/perform/', views.DatasetPerformAnomalyDetectionJson.as_view(),
+         name='dataset_perform_anomaly_detection_json'),
 
     path('datasets/real-world/', views.RealWorldDatasets.as_view(), name='real_world_datasets'),
     path('datasets/real-world/<int:dataset_id>/', views.RealWorldDataset.as_view(), name='real_world_dataset'),
