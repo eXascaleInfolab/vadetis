@@ -1,10 +1,16 @@
+import urllib
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
+from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 
+from django.shortcuts import redirect, reverse
+from django.contrib import messages
+
 from vadetisweb.models import DataSet
-from vadetisweb.serializers import AlgorithmSerializer
+from vadetisweb.serializers import AlgorithmSerializer, ThresholdSerializer
+from vadetisweb.utils import get_settings, get_highcharts_range_button_preselector, get_conf, is_valid_conf
+
 
 class SyntheticDatasets(APIView):
     """
@@ -40,9 +46,9 @@ class SyntheticDataset(APIView):
         serializer = AlgorithmSerializer()
 
         return Response({
-            'dataset' : dataset,
-            'serializer' : serializer,
-            }, status=status.HTTP_200_OK)
+            'dataset': dataset,
+            'serializer': serializer,
+        }, status=status.HTTP_200_OK)
 
 
 class SyntheticDatasetPerformAnomalyDetection(APIView):
@@ -53,13 +59,28 @@ class SyntheticDatasetPerformAnomalyDetection(APIView):
     template_name = 'vadetisweb/datasets/synthetic/dataset_perform.html'
 
     def get(self, request, dataset_id):
-        dataset = DataSet.objects.get(id=dataset_id)
-        #serializer = AlgorithmSerializer()
+        try:
+            dataset = DataSet.objects.get(id=dataset_id)
+            settings = get_settings(request)
+            selected_button = get_highcharts_range_button_preselector(dataset.frequency)
+            conf = get_conf(request)
 
-        return Response({
-            'dataset' : dataset,
-            #'serializer' : serializer,
-            }, status=status.HTTP_200_OK)
+            if not is_valid_conf(conf):
+                message = 'Invalid configuration supplied!'
+                messages.error(request, message)
+                return redirect(reverse('vadetisweb:synthetic_dataset', args=[dataset.id]))
+
+            else:
+                conf_params = urllib.parse.urlencode(conf)
+                serializer = ThresholdSerializer()
+                return Response({'is_synthetic': True, 'conf_params': conf_params, 'conf': conf,
+                                 'dataset': dataset,
+                                 'settings': settings,
+                                 'selected_button': selected_button,
+                                 'serializer': serializer}, status=status.HTTP_200_OK)
+
+        except DataSet.DoesNotExist:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class RealWorldDataset(APIView):
@@ -73,5 +94,5 @@ class RealWorldDataset(APIView):
         dataset = DataSet.objects.get(id=dataset_id)
 
         return Response({
-            'dataset' : dataset,
-            }, status=status.HTTP_200_OK)
+            'dataset': dataset,
+        }, status=status.HTTP_200_OK)

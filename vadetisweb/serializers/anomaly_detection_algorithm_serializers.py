@@ -1,47 +1,6 @@
-from rest_framework import serializers
-from vadetisweb.parameters import *
 from vadetisweb.models import *
 from vadetisweb.fields import *
-from vadetisweb.parameters import HISTOGRAM, FULL
-from django.utils import timezone
 
-"""
-class AlgorithmAnomalyDetection(object):
-
-    def get_algorithm(self):
-        return self.algorithm
-
-    def __init__(self, dataset_selected, algorithm, *args, **kwargs):
-        self.dataset_selected = int(dataset_selected)
-        self.algorithm = algorithm
-
-
-class HistogramAnomalyDetection(AlgorithmAnomalyDetection):
-
-    def __init__(self, *args, **kwargs):
-        super(AlgorithmAnomalyDetection, self).__init__(*args, **kwargs)
-        self.train_size = kwargs.pop('train_size', None)
-        self.random_seed = kwargs.pop('random_seed', None)
-        self.time_range = kwargs.pop('time_range', FULL)
-        self.maximize_score = kwargs.pop('maximize_score', F1_SCORE)
-        self.range_start = kwargs.pop('range_start', 0)
-        self.range_end = kwargs.pop('range_end', 0)
-        
-        
-class ClusterAnomalyDetection(AlgorithmAnomalyDetection):
-    
-    def __init__(self, *args, **kwargs):
-        super(AlgorithmAnomalyDetection, self).__init__(*args, **kwargs)
-        self.td_selected = kwargs.pop('td_selected', None)
-        self.n_components = kwargs.pop('n_components', None)
-        self.n_init = kwargs.pop('n_init', None)
-        self.train_size = kwargs.pop('train_size', None)
-        self.random_seed = kwargs.pop('random_seed', None)
-        self.time_range = kwargs.pop('time_range', FULL)
-        self.maximize_score = kwargs.pop('maximize_score', F1_SCORE)
-        self.range_start = kwargs.pop('range_start', 0)
-        self.range_end = kwargs.pop('range_end', 0)
-"""
 
 class AlgorithmSerializer(serializers.Serializer):
     empty_choice = ('', '----')
@@ -278,3 +237,11 @@ class GeographicDistanceSerializer(CorrelationSerializer):
             self.fields['geo_distance_function'].choices = ((HAVERSINE, HAVERSINE),)
         elif not all_have_height:
             self.fields['geo_distance_function'].choices = ((CH1903, CH1903), (HAVERSINE, HAVERSINE),)"""
+
+
+class ThresholdSerializer(serializers.Serializer):
+    threshold = serializers.FloatField(label='New Threshold',
+                                       required=True,
+                                       style = {'template': 'vadetisweb/parts/input/text_input.html', 'step': 'any'},
+                                       help_text='You can set a new threshold from most suitable value range with the slider or through text input. '
+                                          'If you manually set a value out of range, the slider will adapt to the new range.')
