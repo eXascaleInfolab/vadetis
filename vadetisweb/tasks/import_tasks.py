@@ -103,6 +103,8 @@ class TaskImportData(Task):
                 print("New time series: {0} added".format(idx))
                 ts.datasets.add(dataset)
                 ts.save()
+                # replace column in dataframe by time series database id
+                df = df.rename(columns={idx: ts.id})
 
             # check if different units
             units = []
@@ -120,6 +122,13 @@ class TaskImportData(Task):
             # localize to UTC
             df.index.tz_localize('UTC')
             df_class.tz_localize('UTC')
+
+            # rename df class before assign
+            for idx, row in df_ts_unit.items():
+                ts = TimeSeries.objects.get(name=idx,
+                                            datasets__id=dataset.id)
+                # replace column in dataframe by time series database id
+                df_class = df_class.rename(columns={idx: ts.id})
 
             # set dfs
             dataset.dataframe = df
@@ -170,6 +179,8 @@ class TaskImportData(Task):
                         ts.is_spatial = True
                         ts.save()
                         location.save()
+
+        print(df)
 
         execution_time = format_time(timezone.now() - start_time)
         result = {'measurements_added': int(df.count().sum()), 'time_series_added:': len(df.columns),
@@ -271,7 +282,7 @@ class TaskImportTrainingData(Task):
                 ts.datasets.add(training_dataset)
                 ts.save()
                 # replace column in dataframe by time series database id
-                df.rename(columns={idx : ts.id})
+                df = df.rename(columns={idx : ts.id})
 
             # check if different units
             units = []
@@ -295,6 +306,13 @@ class TaskImportTrainingData(Task):
             # localize to UTC
             df.index.tz_localize('UTC')
             df_class.tz_localize('UTC')
+
+            # rename df class before assign
+            for idx, row in df_ts_unit.items():
+                ts = TimeSeries.objects.get(name=idx,
+                                            datasets__id=original_dataset.id)
+                # replace column in dataframe by time series database id
+                df_class = df_class.rename(columns={idx: ts.id})
 
             # set dfs
             training_dataset.dataframe = df

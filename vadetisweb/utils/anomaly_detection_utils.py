@@ -3,10 +3,9 @@ from pandas.tseries.frequencies import to_offset
 from vadetisweb.parameters import GEO, HISTOGRAM, CLUSTER_GAUSSIAN_MIXTURE, SVM, ISOLATION_FOREST, \
     DTW_DISTANCE_FUNCTION, GEO_DISTANCE, TIME_RANGE, ANOMALY_DETECTION_SCORE_TYPES, WINDOW_SIZE_ABSOLUTE, \
     WINDOW_SIZE_PERCENT, SELECTION, DTW, PEARSON, LISA
-from vadetisweb.utils import unix_time_millis_to_dt
 
+from .date_utils import unix_time_millis_to_dt
 from .helper_function_utils import *
-
 
 def is_valid_conf(conf):
     if 'algorithm' in conf:

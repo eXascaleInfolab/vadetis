@@ -128,8 +128,8 @@ DATASET_SPATIAL_DATA  = (
     (SPATIAL, SPATIAL),
 )
 
-SAME_UNITS = 'Same Units'
-DIFFERENT_UNITS = 'Different Units'
+SAME_UNITS = 'Same units'
+DIFFERENT_UNITS = 'Different units'
 
 DATASET_TYPE_OF_DATA = (
     (SAME_UNITS, SAME_UNITS),

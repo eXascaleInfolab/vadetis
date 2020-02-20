@@ -2,6 +2,8 @@ from .date_utils import unix_time_millis_from_dt
 
 from vadetisweb.models import TimeSeries
 
+from .anomaly_detection_utils import df_zscore
+
 def get_dataset_with_marker_json(dataset, type, show_anomaly, settings):
     data_series = []
     time_series = dataset.timeseries_set.all()
@@ -14,14 +16,14 @@ def get_dataset_with_marker_json(dataset, type, show_anomaly, settings):
 
     for ts in time_series:
         measurements = []
-        for index, value in df.loc[:, ts.name].iteritems():
+        for index, value in df.loc[:, ts.id].iteritems():
             if not show_anomaly:
                 measurements.append({'x': unix_time_millis_from_dt(index), 'y': value})
             else:
                 df_class = dataset.dataframe_class
                 outlier_color = settings['color_outliers']
 
-                if df_class.loc[index, ts.name] == False:
+                if df_class.loc[index, ts.id] == False:
                     measurements.append({'x': unix_time_millis_from_dt(index), 'y': value})
                 else:
                     measurements.append({'x': unix_time_millis_from_dt(index), 'y': value,
