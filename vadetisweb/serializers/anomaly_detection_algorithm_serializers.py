@@ -39,7 +39,7 @@ class ClusterSerializer(AlgorithmSerializer):
                                        queryset=DataSet.objects.none())
     n_components = serializers.IntegerField(label='Number of Components', min_value=1, required=True,
                                             help_text='The number of mixture components.',
-                                            style={'template': 'vadetisweb/parts/input/text_input.html'})
+                                            style={'template': 'vadetisweb/parts/input/text_input.html', 'step': 'any', 'min': 1})
     n_init = serializers.IntegerField(label='Number of Inits', min_value=1, required=True,
                                       help_text='The number of initializations to perform. The best results are kept.',
                                       style={'template': 'vadetisweb/parts/input/text_input.html'})
@@ -65,10 +65,10 @@ class SVMSerializer(AlgorithmSerializer):
                                      style={'template': 'vadetisweb/parts/input/select_input.html'})
     gamma = serializers.FloatField(label='Gamma', min_value=0.00000001, max_value=1, required=False,
                                    help_text='Kernel coefficient for \'rbf\', \'poly\' and \'sigmoid\'; ignored for \'linear\' kernel. The optimal value depends entirely on the data. If gamma is \'None\' then (1 / Number of features) will be used instead.',
-                                   style={'template': 'vadetisweb/parts/input/text_input.html'})
+                                   style={'template': 'vadetisweb/parts/input/text_input.html', 'step': 'any', 'min': 0.000001, 'max': 1})
     nu = serializers.FloatField(label='Nu', min_value=0.000001, max_value=1, required=False,
                                 help_text='An upper bound on the fraction of training errors and a lower bound of the fraction of support vectors. Should be in the interval (0, 1]. If none, the default value 0.5 will be used.',
-                                style={'template': 'vadetisweb/parts/input/text_input.html'})
+                                style={'template': 'vadetisweb/parts/input/text_input.html', 'step': 'any', 'min': 0.000001, 'max': 1})
     train_size = TrainSizeFloatField(min_value=0.001, max_value=0.999, required=True)
     random_seed = RandomSeedIntegerField(required=False)
     time_range = TimeRangeChoiceField(required=True)
@@ -93,7 +93,9 @@ class IsolationForestSerializer(AlgorithmSerializer):
     n_estimators = serializers.IntegerField(label='Number of Estimators', min_value=1, required=True,
                                             help_text='The number of base estimators in the ensemble.',
                                             style={'template': 'vadetisweb/parts/input/text_input.html'})
-    train_size = TrainSizeFloatField(min_value=0.001, max_value=0.999, required=True)
+    train_size = TrainSizeFloatField(min_value=0.001, max_value=0.999, required=True,
+                                     style={'template': 'vadetisweb/parts/input/text_input.html', 'step': 'any', 'min': 0.000001, 'max': 1})
+
     random_seed = RandomSeedIntegerField(required=False)
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
