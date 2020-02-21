@@ -2,10 +2,13 @@
 
 var VadetisHighcharts = function () {
 
-    var initHighcharts = function (html_id, url, selectedButton) {
+    var initHighcharts = function (html_id, url, url_update_threshold, selectedButton, algorithm, csrf_token, round_digits) {
         var shows_anomalies = true;
         var current_type = 'raw';
         var dataset_series = [];
+        var dataset_series_json;
+        var info;
+        var url_threshold_update_json = url_update_threshold;
 
         Highcharts.setOptions({
             global: {
@@ -136,13 +139,46 @@ var VadetisHighcharts = function () {
             $('#loading_screen').hide();
             $('#results_screen').show();
             var series_data = data['series'];
+            dataset_series_json = data['series'];
+            info = data['info'];
             dataset_series = getDatasetSeriesFromJsonValues(series_data);
             loadSeries(highchart, dataset_series);
         });
+
+        $('#threshold_form').on('submit', function(event){
+            event.preventDefault();
+            //highchart.showLoading('<img alt="" src="{% static 'img/loading.gif' %}" />');
+            var dataset_series_without_marker_json = getDatasetSeriesWithoutMarkerJson(dataset_series_json); //reduce post size
+            var post_data = { threshold : JSON.stringify($('#selected_threshold_value').val()), dataset_series_json : JSON.stringify(dataset_series_without_marker_json), info : JSON.stringify(info), algorithm : JSON.stringify(algorithm), csrfmiddlewaretoken : csrf_token, };
+                updateHighchartsSeriesForThreshold(highchart, url_threshold_update_json, post_data, function (new_dataset_series_json, info) {
+                dataset_series_json = new_dataset_series_json;
+
+                var cnf_data = { data : JSON.stringify(info.cnf_matrix), csrfmiddlewaretoken : csrf_token, };
+                loadImage("cnf_matrix", url_cnf_img, cnf_data);
+
+                var current_threshold = info.selected_threshold;
+                $('#current_threshold').html(info.selected_threshold.toFixed(round_digits));
+
+                RoundSliders.updateValue("#roundslider_accuracy", info.accuracy.toFixed(round_digits));
+                RoundSliders.updateValue("#roundslider_f1", info.f1_score.toFixed(round_digits));
+                RoundSliders.updateValue("#roundslider_precision", info.precision.toFixed(round_digits));
+                RoundSliders.updateValue("#roundslider_recall", info.recall.toFixed(round_digits));
+
+                var min = Number(info.thresholds[0].toFixed(round_digits));
+                var max = Number(info.thresholds[info.thresholds.length-1].toFixed(round_digits));
+
+                threshold_slider.noUiSlider.updateOptions({
+                    range: {
+                        'min': min,
+                        'max': max
+                    },
+                });
+            });
+        });
     };
     return {
-        init: function (html_id, url, selectedButton) {
-            initHighcharts(html_id, url, selectedButton);
+        init: function (html_id, url, selectedButton, algorithm, csrf_token, round_digits) {
+            initHighcharts(html_id, url, selectedButton, algorithm, csrf_token, round_digits);
         }
     };
 }();

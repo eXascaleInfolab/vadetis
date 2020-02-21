@@ -1,5 +1,7 @@
 from sklearn.svm import OneClassSVM
 
+from vadetisweb.utils import get_info
+
 from .helper_functions import *
 
 #########################################################

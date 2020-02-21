@@ -1,6 +1,6 @@
 import datetime
 
-from vadetisweb.utils import get_window_size, df_zscore
+from vadetisweb.utils import get_window_size, df_zscore, get_info
 
 from .helper_functions import *
 from .correleation.pearson import pearson, dtw_pearson

@@ -1,4 +1,5 @@
 import urllib
+import json
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
@@ -10,7 +11,7 @@ from django.urls import reverse
 from vadetisweb.serializers import AlgorithmSerializer, HistogramSerializer, ClusterSerializer, SVMSerializer, IsolationForestSerializer
 from vadetisweb.models import DataSet
 from vadetisweb.parameters import LISA, HISTOGRAM, CLUSTER_GAUSSIAN_MIXTURE, SVM, ISOLATION_FOREST, DIFFERENT_UNITS, PEARSON, DTW, GEO
-from vadetisweb.utils import get_conf, get_settings, is_valid_conf, get_dataframes_for_ranges
+from vadetisweb.utils import get_conf, get_settings, is_valid_conf, get_dataframes_for_ranges, get_updated_dataset_series_for_threshold_with_marker_json
 from vadetisweb.algorithms import perform_lisa_person, perform_lisa_dtw, perform_lisa_geo, perform_histogram, perform_cluster, perform_svm, perform_isolation_forest
 
 class AnomalyDetectionFormView(APIView):
@@ -153,7 +154,40 @@ class DatasetPerformAnomalyDetectionJson(APIView):
                     return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
             data['series'] = data_series
+            data['info'] = info
             return Response(data)
 
         except DataSet.DoesNotExist:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DatasetThresholdUpdateJson(APIView):
+    """
+    Request anomaly detection dataset with new threshold
+    """
+    renderer_classes = [JSONRenderer]
+
+    def post(self, request):
+
+        data = {}
+        new_info = {}
+
+        threshold_post = request.POST['threshold']
+        dataset_series_json_post = request.POST['dataset_series_json']
+        info_post = request.POST['info']
+        algorithm_post = request.POST['algorithm']
+
+        threshold_str = json.loads(threshold_post)
+        algorithm = json.loads(algorithm_post)
+        threshold = float(threshold_str)
+        dataset_series = json.loads(dataset_series_json_post)
+        info = json.loads(info_post)
+
+        settings = get_settings(request)
+
+        data_series, new_info = get_updated_dataset_series_for_threshold_with_marker_json(threshold, dataset_series, info, algorithm, settings)
+
+        data['series'] = data_series
+        data['info'] = new_info
+
+        return Response(data)

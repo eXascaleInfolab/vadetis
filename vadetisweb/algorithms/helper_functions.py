@@ -81,32 +81,6 @@ def get_threshold_scores(thresholds, y_scores, valid):
     return np.array(scores)
 
 
-def get_info(selected_threshold, y_hat_results, y_truth):
-    info = {}
-
-    accuracy = accuracy_score(y_pred=y_hat_results, y_true=y_truth)
-    recall = recall_score(y_pred=y_hat_results, y_true=y_truth)
-    precision = precision_score(y_pred=y_hat_results, y_true=y_truth)
-    f1_score = fbeta_score(y_pred=y_hat_results, y_true=y_truth, beta=1)
-
-    cnf_matrix = confusion_matrix(y_truth, y_hat_results)
-    info['cnf_matrix'] = cnf_matrix.tolist()
-
-    info['selected_threshold'] = selected_threshold
-    info['accuracy'] = accuracy
-    info['recall'] = recall
-    info['precision'] = precision
-    info['f1_score'] = f1_score
-
-    print('Selected threshold: %.3f' % selected_threshold)
-    print('Accuracy Score: %.3f' % accuracy)
-    print('Recall Score: %.3f' % recall)
-    print('Precision Score: %.3f' % precision)
-    print('F1 Score: %.3f' % f1_score)
-
-    return info
-
-
 def get_max_score_index_for_score_type(threshold_scores, score_type):
     if score_type == F1_SCORE:
         return threshold_scores[:, 2].argmax()

@@ -1,8 +1,11 @@
-from .date_utils import unix_time_millis_from_dt
+import numpy as np
 
 from vadetisweb.models import TimeSeries
+from vadetisweb.parameters import LISA
 
 from .anomaly_detection_utils import df_zscore
+from .date_utils import unix_time_millis_from_dt
+from .anomaly_detection_utils import get_info
 
 def get_dataset_with_marker_json(dataset, type, show_anomaly, settings):
     data_series = []
@@ -132,3 +135,48 @@ def get_anomaly_detection_ts_results_json(dataset, df_with_class_instances, scor
         data_series.append(dict_series)
 
     return data_series
+
+
+def _set_marker_for_threshold(measurement, threshold, settings):
+    if measurement['class'] == 1 and measurement['score'] < threshold: #true positive
+        measurement['marker'] = {'fillColor': settings['color_true_positive'], 'radius': 3}
+    elif measurement['class'] == 1 and measurement['score'] >= threshold: #false negative
+        measurement['marker'] = {'fillColor': settings['color_false_negative'], 'radius': 3}
+    elif measurement['class'] == 0 and measurement['score'] < threshold:  #false positive
+        measurement['marker'] = {'fillColor': settings['color_false_positive'], 'radius': 3}
+    elif measurement['class'] == 0 and measurement['score'] >= threshold:  # true negative
+        measurement['marker'] = {'enabled': False }
+        """
+        if 'marker' in measurement:
+            del measurement['marker']"""
+
+
+def _get_scores_and_truth_from_series_measurements(series_measurements):
+    scores = []
+    truth = []
+    for measurement in series_measurements:
+        scores.append(measurement['score'])
+        truth.append(measurement['class'])
+
+    return np.array(scores), np.array(truth)
+
+
+def get_updated_dataset_series_for_threshold_with_marker_json(threshold, dataset_series, info, algorithm, settings):
+
+    for series in dataset_series:
+        for measurement in series['measurements']:
+            _set_marker_for_threshold(measurement, threshold, settings)
+
+    if algorithm != LISA: #todo if not lisa we detected anomalous instance not point, so points at the same timestamp have the same truth and score
+        series_first = dataset_series[0]
+        series_first_measurements = series_first['measurements']
+        scores, truth = _get_scores_and_truth_from_series_measurements(series_first_measurements)
+        y_hat_results = (scores < threshold).astype(int)
+        new_info = get_info(threshold, y_hat_results, truth)
+        new_info['thresholds'] = info['thresholds']
+        new_info['threshold_scores'] = info['threshold_scores']
+    else:
+        #todo
+        info = {}
+
+    return dataset_series, new_info

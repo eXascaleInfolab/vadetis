@@ -1,3 +1,4 @@
+from vadetisweb.utils import get_info
 from .helper_functions import *
 
 #########################################################

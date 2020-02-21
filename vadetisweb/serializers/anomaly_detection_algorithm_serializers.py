@@ -242,6 +242,6 @@ class GeographicDistanceSerializer(CorrelationSerializer):
 class ThresholdSerializer(serializers.Serializer):
     threshold = serializers.FloatField(label='New Threshold',
                                        required=True,
-                                       style = {'template': 'vadetisweb/parts/input/text_input.html', 'step': 'any'},
+                                       style = {'template': 'vadetisweb/parts/input/text_input.html', 'step': 'any', 'id':'selected_threshold_value'},
                                        help_text='You can set a new threshold from most suitable value range with the slider or through text input. '
                                           'If you manually set a value out of range, the slider will adapt to the new range.')

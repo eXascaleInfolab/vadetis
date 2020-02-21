@@ -33,11 +33,15 @@
             <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title">Anomaly Detection</h3>
+                        <h3 class="kt-portlet__head-title">Threshold</h3>
                     </div>
                 </div>
                 <div class="kt-portlet__body kt-portlet__body--fit">
-
+                    <p>
+                        Current Threshold: <span id="current_threshold"></span><br />
+                    </p>
+                    {% url 'vadetisweb:anomaly_detection_form' dataset_id=dataset.id as fromurl %}
+                    {% include 'vadetisweb/parts/forms/anomaly_detection_serializer_form.html' with formid="threshold_form" url=fromurl %}
                 </div>
             </div>
         </div>
@@ -50,7 +54,7 @@
     <script src="{% static 'js/custom/highcharts.perform.init.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
         jQuery(document).ready(function () {
-            VadetisHighcharts.init("highcharts_container", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_perform_anomaly_detection_json' dataset_id=dataset.id %}?{{ conf_params }}", {{ selected_button }});
+            VadetisHighcharts.init("highcharts_container", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_perform_anomaly_detection_json' dataset_id=dataset.id %}?{{ conf_params }}", "{% get_host_url request=request %}{% url 'vadetisweb:threshold_update_json' %}",{{ selected_button }}, "{{ conf|get_item:'algorithm' }}", "{{ csrf_token }}", {{ settings|get_item:'round_digits' }});
         });
     </script>
 {% endblock %}
