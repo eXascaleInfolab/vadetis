@@ -6,7 +6,7 @@ function loadImage(html_id, url, post_data) {
         cache: false,
 
         success: function (response) {
-            $("#" + html_id).html('<img src="data:image/png;base64,' + response + '" />');
+            $("#" + html_id).html('<img src="data:image/png;base64,' + response + '" style="max-width: 100%;"/>');
             var html_portlet = $("#" + html_id + "_portlet");
             if (!(html_portlet.is(":visible"))) {
                 html_portlet.show();

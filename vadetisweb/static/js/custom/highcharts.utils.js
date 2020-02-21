@@ -13,10 +13,8 @@ function updateHighchartsSeriesForThreshold(highchart, url, post_data, callback)
             if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
                 print_messages(data.responseJSON.messages);
             }
-
-            var dataset_series_new_json = data[0];
-            var new_info = data[1];
-
+            var dataset_series_new_json = data['series'];
+            var new_info = data['info'];
             //dataset_series_data = generateSeriesFromJson(dataset_series_json, "{{ conf|get_item:'algorithm' }}", "{{ conf|get_item:'ts_selected' }}");
             //loadSeries(highchart, dataset_series_data);
 
@@ -131,7 +129,7 @@ function generateSeriesFromJson(dataset_series_json, algorithm, ts_selected) {
 }
 
 function setSeriesData(highchart, series_data_json) {
-    series_data_json.series.forEach(function (series) {
+    series_data_json.forEach(function (series) {
         highchart.get(series.id).setData(series.measurements, false, true);
     });
     highchart.redraw();

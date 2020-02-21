@@ -126,7 +126,7 @@ var VadetisHighcharts = function () {
             current_type = type;
             //TODO show loading img highchart.showLoading('<img alt="" src="{% static 'img/loading.gif' %}" />');
             $.getJSON(url + '?type=' + type + '&show_anomalies=' + shows_anomalies, function (data) {
-                var series_data_json = data[0];
+                var series_data_json = data['series'];
                 setSeriesData(highchart, series_data_json);
                 highchart.hideLoading();
             });

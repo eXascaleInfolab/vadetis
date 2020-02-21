@@ -1,5 +1,5 @@
-import urllib
-import json
+import urllib, json, base64
+import numpy as np
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
@@ -7,11 +7,13 @@ from rest_framework.response import Response
 
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.core.files.temp import NamedTemporaryFile
+from django.http import HttpResponse
 
 from vadetisweb.serializers import AlgorithmSerializer, HistogramSerializer, ClusterSerializer, SVMSerializer, IsolationForestSerializer
 from vadetisweb.models import DataSet
 from vadetisweb.parameters import LISA, HISTOGRAM, CLUSTER_GAUSSIAN_MIXTURE, SVM, ISOLATION_FOREST, DIFFERENT_UNITS, PEARSON, DTW, GEO
-from vadetisweb.utils import get_conf, get_settings, is_valid_conf, get_dataframes_for_ranges, get_updated_dataset_series_for_threshold_with_marker_json
+from vadetisweb.utils import plot_confusion_matrix, get_conf, get_settings, is_valid_conf, get_dataframes_for_ranges, get_updated_dataset_series_for_threshold_with_marker_json
 from vadetisweb.algorithms import perform_lisa_person, perform_lisa_dtw, perform_lisa_geo, perform_histogram, perform_cluster, perform_svm, perform_isolation_forest
 
 class AnomalyDetectionFormView(APIView):
@@ -191,3 +193,21 @@ class DatasetThresholdUpdateJson(APIView):
         data['info'] = new_info
 
         return Response(data)
+
+
+class CnfImage(APIView):
+    """
+    Request cnf matrix
+    """
+
+    def post(self, request):
+        data = request.POST['data']
+        cnf_matrix = np.array(json.loads(data))
+
+        temp_image = NamedTemporaryFile(suffix='.png')
+        plot_confusion_matrix(temp_image.name, cnf_matrix, classes=['Normal', 'Anomaly'], title='')
+
+        open_tempfile = open(temp_image.name, 'rb')
+        cnf_matrix_base64 = base64.b64encode(open_tempfile.read())
+        return HttpResponse(cnf_matrix_base64, content_type="image/png")
+

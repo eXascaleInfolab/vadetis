@@ -30,6 +30,7 @@ urlpatterns = [
     path('api/datasets/<int:dataset_id>/perform/', views.DatasetPerformAnomalyDetectionJson.as_view(),
          name='dataset_perform_anomaly_detection_json'),
     path('api/threshold-update', views.DatasetThresholdUpdateJson.as_view(), name='threshold_update_json'),
+    path('api/image/cnf/', views.CnfImage.as_view(), name='cnf_image'),
 
     path('datasets/real-world/', views.RealWorldDatasets.as_view(), name='real_world_datasets'),
     path('datasets/real-world/<int:dataset_id>/', views.RealWorldDataset.as_view(), name='real_world_dataset'),
