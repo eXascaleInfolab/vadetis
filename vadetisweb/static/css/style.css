@@ -10,6 +10,9 @@
 .noUi-horizontal {
     margin: 1em 25px 0;
 }
+.rs-readonly {
+    z-index: 50 !important;
+}
 
 :root {
   --blue: #007bff;

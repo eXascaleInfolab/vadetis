@@ -13,7 +13,7 @@ from django.http import HttpResponse
 from vadetisweb.serializers import AlgorithmSerializer, HistogramSerializer, ClusterSerializer, SVMSerializer, IsolationForestSerializer
 from vadetisweb.models import DataSet
 from vadetisweb.parameters import LISA, HISTOGRAM, CLUSTER_GAUSSIAN_MIXTURE, SVM, ISOLATION_FOREST, DIFFERENT_UNITS, PEARSON, DTW, GEO
-from vadetisweb.utils import plot_confusion_matrix, get_conf, get_settings, is_valid_conf, get_dataframes_for_ranges, get_updated_dataset_series_for_threshold_with_marker_json
+from vadetisweb.utils import plot_thresholds_scores, plot_confusion_matrix, get_conf, get_settings, is_valid_conf, get_dataframes_for_ranges, get_updated_dataset_series_for_threshold_with_marker_json
 from vadetisweb.algorithms import perform_lisa_person, perform_lisa_dtw, perform_lisa_geo, perform_histogram, perform_cluster, perform_svm, perform_isolation_forest
 
 class AnomalyDetectionFormView(APIView):
@@ -211,3 +211,21 @@ class CnfImage(APIView):
         cnf_matrix_base64 = base64.b64encode(open_tempfile.read())
         return HttpResponse(cnf_matrix_base64, content_type="image/png")
 
+class ThresholdsScoresImage(APIView):
+    """
+    Request threshold scores image
+    """
+
+    def post(self, request):
+        thresholds = request.POST['thresholds']
+        thresholds = np.array(json.loads(thresholds))
+
+        scores = request.POST['scores']
+        scores = np.array(json.loads(scores))
+
+        temp_image = NamedTemporaryFile(suffix='.png')
+        plot_thresholds_scores(temp_image.name, thresholds, scores)
+
+        open_tempfile = open(temp_image.name, 'rb')
+        image_base64 = base64.b64encode(open_tempfile.read())
+        return HttpResponse(image_base64, content_type="image/png")

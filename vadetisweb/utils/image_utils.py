@@ -7,6 +7,7 @@ matplotlib.use("agg")
 import matplotlib.pyplot as plt
 plt.style.use('ggplot')
 
+
 def plot_confusion_matrix(full_path, cm, classes, title='Confusion Matrix', cmap=plt.cm.binary, dpi=300):
     """
     This method makes the plot of the confusion matrix.
@@ -43,4 +44,18 @@ def plot_confusion_matrix(full_path, cm, classes, title='Confusion Matrix', cmap
     ax.set_ylabel('True Class')
     ax.set_xlabel('Predicted Class')
     fig.savefig(full_path, format="png", dpi=dpi)
+    plt.close(fig)
+
+
+def plot_thresholds_scores(full_path, thresholds, scores, dpi=300):
+    fig = plt.figure(random.randint(0,1000000))
+    ax = fig.add_subplot(111)
+    ax.plot(thresholds, scores[:, 0], label='$Recall$')
+    ax.plot(thresholds, scores[:, 1], label='$Precision$')
+    ax.plot(thresholds, scores[:, 2], label='$F_1-Score$')
+    ax.plot(thresholds, scores[:, 3], label='$Accuracy$')
+    ax.set_ylabel('Score')
+    ax.set_xlabel('Threshold')
+    ax.legend(loc='best')
+    fig.savefig(full_path, format="png", dpi=300)
     plt.close(fig)

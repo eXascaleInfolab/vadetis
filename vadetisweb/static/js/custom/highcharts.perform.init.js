@@ -2,7 +2,7 @@
 
 var VadetisHighcharts = function () {
 
-    var initHighcharts = function (html_id, url, url_update_threshold, url_cnf, selectedButton, algorithm, csrf_token, round_digits) {
+    var initHighcharts = function (html_id, url, url_update_threshold, url_cnf, url_threshold_score, selectedButton, algorithm, csrf_token, round_digits) {
         var shows_anomalies = true;
         var current_type = 'raw';
         var dataset_series = [];
@@ -148,12 +148,41 @@ var VadetisHighcharts = function () {
 
         $.getJSON(url + '?type=raw&show_anomalies=true', function (data) {
             $('#loading_screen').hide();
-            $('#results_screen').show();
+            $('#results_highcharts').show();
+            $('#threshold_sidebar').show();
+            $('#configuration_sidebar').show();
             var series_data = data['series'];
             dataset_series_json = data['series'];
             info = data['info'];
             dataset_series = getDatasetSeriesFromJsonValues(series_data);
             loadSeries(highchart, dataset_series);
+            
+            //when data received trigger GUI update
+            var cnf_data = { data : JSON.stringify(info.cnf_matrix), csrfmiddlewaretoken : csrf_token, };
+            var ts_data = { thresholds : JSON.stringify(info.thresholds), scores : JSON.stringify(info.threshold_scores), csrfmiddlewaretoken : csrf_token, };
+    
+            loadImage("cnf_matrix", url_cnf_img, cnf_data);
+            loadImage("thresholds_scores", url_threshold_score, ts_data);
+    
+            current_threshold = info.selected_threshold;
+            $('#current_threshold').html(info.selected_threshold.toFixed(round_digits));
+    
+            RoundSliders.updateValue("#roundslider_accuracy", info.accuracy.toFixed(round_digits));
+            RoundSliders.updateValue("#roundslider_f1", info.f1_score.toFixed(round_digits));
+            RoundSliders.updateValue("#roundslider_precision", info.precision.toFixed(round_digits));
+            RoundSliders.updateValue("#roundslider_recall", info.recall.toFixed(round_digits));
+    
+            var min = Number(info.thresholds[0].toFixed(round_digits));
+            var max = Number(info.thresholds[info.thresholds.length-1].toFixed(round_digits));
+    
+            threshold_slider.noUiSlider.updateOptions({
+                range: {
+                    'min': min,
+                    'max': max
+                },
+            });
+            threshold_slider.noUiSlider.set(current_threshold);
+            
         });
 
         $('#threshold_form').on('submit', function(event){
@@ -187,8 +216,8 @@ var VadetisHighcharts = function () {
         });
     };
     return {
-        init: function (html_id, url, url_threshold, url_cnf, selectedButton, algorithm, csrf_token, round_digits) {
-            initHighcharts(html_id, url, url_threshold, url_cnf, selectedButton, algorithm, csrf_token, round_digits);
+        init: function (html_id, url, url_threshold, url_cnf, threshold_score_img, selectedButton, algorithm, csrf_token, round_digits) {
+            initHighcharts(html_id, url, url_threshold, url_cnf, threshold_score_img, selectedButton, algorithm, csrf_token, round_digits);
         }
     };
 }();
