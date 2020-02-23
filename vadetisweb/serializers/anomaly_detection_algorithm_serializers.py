@@ -88,8 +88,7 @@ class IsolationForestSerializer(AlgorithmSerializer):
                                        required=True,
                                        queryset=DataSet.objects.none())
     bootstrap = serializers.BooleanField(label='Bootstrap', required=False,
-                                         help_text='If True, individual trees are fit on random subsets of the training data sampled with replacement. If False, sampling without replacement is performed.',
-                                         style={'template': 'vadetisweb/parts/input/select_input.html'})
+                                         help_text='If True, individual trees are fit on random subsets of the training data sampled with replacement. If False, sampling without replacement is performed.')
     n_estimators = serializers.IntegerField(label='Number of Estimators', min_value=1, required=True,
                                             help_text='The number of base estimators in the ensemble.',
                                             style={'template': 'vadetisweb/parts/input/text_input.html'})

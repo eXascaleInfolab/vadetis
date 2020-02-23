@@ -146,7 +146,7 @@ var VadetisHighcharts = function () {
             });
         }
 
-        $.getJSON(url + '?type=raw&show_anomalies=true', function (data) {
+        $.getJSON(url + '&type=raw&show_anomalies=true', function (data) {
             $('#loading_screen').hide();
             $('#results_highcharts').show();
             $('#threshold_sidebar').show();

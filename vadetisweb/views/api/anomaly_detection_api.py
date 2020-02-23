@@ -90,7 +90,7 @@ class DatasetPerformAnomalyDetectionJson(APIView):
             data_series = {}
             info = {}
 
-            # todo
+            # TODO
             perform_on_zscore = True if dataset.type_of_data == DIFFERENT_UNITS else False
 
             conf = get_conf(request)
@@ -104,6 +104,7 @@ class DatasetPerformAnomalyDetectionJson(APIView):
 
             if conf['algorithm'] == LISA:
                 ts_selected_id = conf['ts_selected']
+
                 if conf['correlation_algorithm'] == PEARSON:
                     data_series, info = perform_lisa_person(df, df_class, conf, ts_selected_id, dataset, settings)
 
@@ -147,11 +148,11 @@ class DatasetPerformAnomalyDetectionJson(APIView):
 
 
             elif conf['algorithm'] == ISOLATION_FOREST:
-
                 training_data_id = conf['td_selected']
                 try:
                     training_dataset = DataSet.objects.get(id=training_data_id)
                     data_series, info = perform_isolation_forest(df, df_class, conf, training_dataset, dataset, settings)
+
                 except DataSet.DoesNotExist:
                     return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -210,6 +211,7 @@ class CnfImage(APIView):
         open_tempfile = open(temp_image.name, 'rb')
         cnf_matrix_base64 = base64.b64encode(open_tempfile.read())
         return HttpResponse(cnf_matrix_base64, content_type="image/png")
+
 
 class ThresholdsScoresImage(APIView):
     """
