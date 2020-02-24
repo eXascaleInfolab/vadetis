@@ -54,6 +54,7 @@ SVM_KERNELS = (
 # Units for the datasets
 #########################################################
 
+VALUE = 'Value'
 QUANTITY = 'Quantity'
 BOOLEAN = 'Boolean'
 KG = 'Kilogram'
@@ -81,6 +82,7 @@ WATTS_PER_M2 = 'Watts per m2'
 CENTIMETERS = 'Centimeters'
 
 UNITS = (
+    (VALUE, VALUE),
     (QUANTITY, QUANTITY),
     (BOOLEAN, BOOLEAN),
     (KG, KG),
@@ -126,14 +128,6 @@ SPATIAL = 'Spatial'
 DATASET_SPATIAL_DATA  = (
     (NON_SPATIAL, NON_SPATIAL),
     (SPATIAL, SPATIAL),
-)
-
-SAME_UNITS = 'Same units'
-DIFFERENT_UNITS = 'Different units'
-
-DATASET_TYPE_OF_DATA = (
-    (SAME_UNITS, SAME_UNITS),
-    (DIFFERENT_UNITS, DIFFERENT_UNITS),
 )
 
 #########################################################

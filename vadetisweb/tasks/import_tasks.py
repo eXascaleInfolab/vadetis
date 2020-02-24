@@ -87,7 +87,17 @@ class TaskImportData(Task):
                 err_msg = "Some values are missing"
                 raise ValueError(err_msg)
 
-            # creates (and saves) dataset
+            # check if different units
+            units = []
+            for idx, row in df_ts_unit.items():
+                unit = row[0]
+                if unit not in units:
+                    units.append(unit)
+
+            if len(units) > 1:
+                raise ValueError('Different types of values provided')
+
+                    # creates (and saves) dataset
             dataset = DataSet.objects.create(title=title,
                                              owner=user,
                                              type=type,
@@ -105,19 +115,6 @@ class TaskImportData(Task):
                 ts.save()
                 # replace column in dataframe by time series database id
                 df = df.rename(columns={idx: ts.id})
-
-            # check if different units
-            units = []
-            for idx, row in df_ts_unit.items():
-                unit = row[0]
-                if unit not in units:
-                    units.append(unit)
-
-            if len(units):
-                if len(units) > 1:
-                    dataset.type_of_data = DIFFERENT_UNITS
-                else:
-                    dataset.type_of_data = SAME_UNITS
 
             # localize to UTC
             df.index.tz_localize('UTC')
@@ -179,8 +176,6 @@ class TaskImportData(Task):
                         ts.is_spatial = True
                         ts.save()
                         location.save()
-
-        print(df)
 
         execution_time = format_time(timezone.now() - start_time)
         result = {'measurements_added': int(df.count().sum()), 'time_series_added:': len(df.columns),
@@ -259,13 +254,22 @@ class TaskImportTrainingData(Task):
                 err_msg = "Some values are missing"
                 raise ValueError(err_msg)
 
+            # check if different units
+            units = []
+            for idx, row in df_ts_unit.items():
+                unit = row[0]
+                if unit not in units:
+                    units.append(unit)
+
+            if len(units) > 1:
+                raise ValueError('Different types of values provided')
+
             original_dataset = DataSet.objects.get(id=original_dataset_id)
 
             # create (and saves) training dataset
             training_dataset = DataSet.objects.create(title=title,
                                                       owner=user,
                                                       type=original_dataset.type,
-                                                      type_of_data=original_dataset.type_of_data,
                                                       spatial_data=original_dataset.spatial_data,
                                                       frequency=freq,
                                                       is_training_data=True,
@@ -283,25 +287,6 @@ class TaskImportTrainingData(Task):
                 ts.save()
                 # replace column in dataframe by time series database id
                 df = df.rename(columns={idx : ts.id})
-
-            # check if different units
-            units = []
-            for idx, row in df_ts_unit.items():
-                unit = row[0]
-                if unit not in units:
-                    units.append(unit)
-
-            if len(units):
-                if len(units) > 1:
-                    training_dataset.type_of_data = DIFFERENT_UNITS
-                else:
-                    training_dataset.type_of_data = SAME_UNITS
-
-            # check if both datasets have same type of data
-            if training_dataset.type_of_data != original_dataset.type_of_data:
-                err_msg = "Training dataset does not have the same type of data as the original: {0} / {1}".format(
-                    training_dataset.type_of_data, original_dataset.type_of_data)
-                raise ValueError(err_msg)
 
             # localize to UTC
             df.index.tz_localize('UTC')

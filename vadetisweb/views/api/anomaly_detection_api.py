@@ -12,7 +12,7 @@ from django.http import HttpResponse
 
 from vadetisweb.serializers import AlgorithmSerializer, HistogramSerializer, ClusterSerializer, SVMSerializer, IsolationForestSerializer
 from vadetisweb.models import DataSet
-from vadetisweb.parameters import LISA, HISTOGRAM, CLUSTER_GAUSSIAN_MIXTURE, SVM, ISOLATION_FOREST, DIFFERENT_UNITS, PEARSON, DTW, GEO
+from vadetisweb.parameters import LISA, HISTOGRAM, CLUSTER_GAUSSIAN_MIXTURE, SVM, ISOLATION_FOREST, PEARSON, DTW, GEO
 from vadetisweb.utils import plot_thresholds_scores, plot_confusion_matrix, get_conf, get_settings, is_valid_conf, get_dataframes_for_ranges, get_updated_dataset_series_for_threshold_with_marker_json
 from vadetisweb.algorithms import perform_lisa_person, perform_lisa_dtw, perform_lisa_geo, perform_histogram, perform_cluster, perform_svm, perform_isolation_forest
 
@@ -89,9 +89,6 @@ class DatasetPerformAnomalyDetectionJson(APIView):
             data = {}
             data_series = {}
             info = {}
-
-            # TODO
-            perform_on_zscore = True if dataset.type_of_data == DIFFERENT_UNITS else False
 
             conf = get_conf(request)
             settings = get_settings(request)

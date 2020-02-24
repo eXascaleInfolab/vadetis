@@ -155,10 +155,6 @@ class DataSet(models.Model):
     type = models.CharField(null=False, max_length=32, choices=DATASET_TYPE, default=REAL_WORLD,
                             help_text='Determines whether this dataset is real world or synthetic data.')
 
-    # same unit or different units
-    type_of_data = models.CharField(null=True, max_length=32, choices=DATASET_TYPE_OF_DATA, default=SAME_UNITS,
-                                    help_text='Same units means that all time series recorded the same unit of values. Choose different units if your features measured in different units.')
-
     # flag if this set contains spatial time series
     spatial_data = models.CharField(null=False, max_length=32, choices=DATASET_SPATIAL_DATA, default=NON_SPATIAL,
                                     help_text='Determines whether this dataset is spatial or not. Spatial data requires geographic information about the time series recording location.')

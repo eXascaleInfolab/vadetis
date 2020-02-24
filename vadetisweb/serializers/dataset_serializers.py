@@ -86,7 +86,6 @@ class DatasetDataTablesSerializer(serializers.ModelSerializer):
     timeseries = serializers.SerializerMethodField()
     values = serializers.SerializerMethodField()
     frequency = serializers.CharField(read_only=True)
-    type_of_data = serializers.CharField(read_only=True)
     spatial_data = serializers.BooleanField(read_only=True)
     training_datasets = serializers.SerializerMethodField()
     actions = serializers.SerializerMethodField()
@@ -111,7 +110,7 @@ class DatasetDataTablesSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataSet
         fields = (
-            'title', 'owner', 'timeseries', 'values', 'frequency', 'type_of_data', 'spatial_data', 'training_datasets', 'actions'
+            'title', 'owner', 'timeseries', 'values', 'frequency', 'spatial_data', 'training_datasets', 'actions'
         )
 
 
@@ -121,7 +120,6 @@ class TrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
     timeseries = serializers.SerializerMethodField()
     values = serializers.SerializerMethodField()
     frequency = serializers.CharField(read_only=True)
-    type_of_data = serializers.CharField(read_only=True)
     spatial_data = serializers.BooleanField(read_only=True)
 
     def get_timeseries(self, obj):
@@ -134,5 +132,5 @@ class TrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataSet
         fields = (
-            'title', 'owner', 'timeseries', 'values', 'frequency', 'type_of_data', 'spatial_data',
+            'title', 'owner', 'timeseries', 'values', 'frequency', 'spatial_data',
         )
