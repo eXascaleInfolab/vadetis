@@ -16,7 +16,6 @@ from datetime import timedelta
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -28,8 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-#MAX POST SIZE INCREASED FOR LARGE DATASETS
-DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600 #100MB
+# MAX POST SIZE INCREASED FOR LARGE DATASETS
+DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600  # 100MB
 
 # Application definition
 
@@ -41,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',  # required for django-allauth
-    'django_extensions', # needed for jupyter notebooks
+    'django_extensions',  # needed for jupyter notebooks
     'vadetisweb',
     'django_celery_results',
     'allauth',
@@ -51,8 +50,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_datatables',
 ]
-
-SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -70,9 +67,9 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates'), # global templates, e.g. admin backend
-            os.path.join(BASE_DIR, 'vadetisweb', 'templates'), # vadetisweb site templates
-            os.path.join(BASE_DIR, 'vadetisweb', 'templates', 'allauth') # vadetisweb allauth templates
+            os.path.join(BASE_DIR, 'templates'),  # global templates, e.g. admin backend
+            os.path.join(BASE_DIR, 'vadetisweb', 'templates'),  # vadetisweb site templates
+            os.path.join(BASE_DIR, 'vadetisweb', 'templates', 'allauth')  # vadetisweb allauth templates
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -82,7 +79,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
-                'django.template.context_processors.request', # required for django-allauth
+                'django.template.context_processors.request',  # required for django-allauth
             ],
         },
     },
@@ -134,7 +131,7 @@ REST_FRAMEWORK = {
     # Use Django's standard 'django.contrib.auth' permissions,
     # or allow read-only access for unauthenticated users.
 
-    'DEFAULT_AUTHENTICATION_CLASSES' : (
+    'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
@@ -148,7 +145,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework_datatables.pagination.DatatablesPageNumberPagination',
     'PAGE_SIZE': 50,
-    'DEFAULT_PERMISSION_CLASSES' : (
+    'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.AllowAny',
     ),
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
@@ -165,9 +162,9 @@ ACCOUNT_USERNAME_MIN_LENGTH = 5
 ACCOUNT_USERNAME_VALIDATORS = 'vadetisweb.validators.username_validators'
 
 ACCOUNT_FORMS = {
-    'login' : 'vadetisweb.forms.AccountLoginForm',
-    'signup' : 'vadetisweb.forms.AccountSignUpForm',
-    'reset_password' : 'vadetisweb.forms.AccountResetPasswordForm',
+    'login': 'vadetisweb.forms.AccountLoginForm',
+    'signup': 'vadetisweb.forms.AccountSignUpForm',
+    'reset_password': 'vadetisweb.forms.AccountResetPasswordForm',
     'reset_password_from_key': 'allauth.account.forms.ResetPasswordKeyForm',
     'change_password': 'vadetisweb.forms.AccountChangePasswordForm',
     'set_password': 'vadetisweb.forms.AccountSetPasswordForm',
@@ -180,16 +177,26 @@ SOCIALACCOUNT_FORMS = {
 }
 
 SOCIALACCOUNT_PROVIDERS = {
-     'google': {
+    'google': {
         'SCOPE': [
             'profile',
             'email',
         ],
         'AUTH_PARAMS': {
             'access_type': 'online',
+        },
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client credentials, or list them here:
+        # ATTENTION: there might be a bug in allauth, add this info in admin backend under socialapplications
+        'APP': {
+            'client_id': '844915385364-2aeu7mjtg4s9v1beb1gp8lmqjpr2lpi5.apps.googleusercontent.com',
+            'secret': 'SQ7jfMEvIBGNHiDfVpyI6OMr',
+            'key': 'AIzaSyCWVgicKlJ9mnTyjSnY9Mb-yGO96RnMDeA'
         }
     }
 }
+
+SITE_ID = 1
 
 # MAILING - CHANGE MAIL SETTINGS WHEN GOING PRODUCTION!
 EMAIL_HOST = 'smtp.gmail.com'
@@ -207,6 +214,11 @@ TIME_ZONE = 'UTC'
 USE_I18N = False
 USE_L10N = True
 USE_TZ = True
+
+# Django Registration Redux
+ACCOUNT_ACTIVATION_DAYS = 7  # One-week activation window
+REGISTRATION_OPEN = True  # set to False to disable User registration
+REGISTRATION_SALT = 'encoded_username:timestamp:signature'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
