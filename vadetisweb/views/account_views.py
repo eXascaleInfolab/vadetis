@@ -6,7 +6,6 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 
 from vadetisweb.forms.account_forms import *
-from vadetisweb.models import UserSettings
 
 
 #########################################################
@@ -23,6 +22,7 @@ def account_training_datasets(request):
     return render(request, 'vadetisweb/account/account_training_datasets.html')
 
 
+#TODO
 @login_required
 def account(request):
     current_user = request.user

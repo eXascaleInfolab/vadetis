@@ -1,19 +1,16 @@
-from rest_framework.views import APIView
-from rest_framework.renderers import JSONRenderer
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from rest_framework.response import Response
 from rest_framework import viewsets
 
 from vadetisweb.models import DataSet
-from vadetisweb.serializers import DatasetDataTablesSerializer, TrainingDatasetDataTablesSerializer
+from vadetisweb.serializers import AccountDatasetDataTablesSerializer, AccountTrainingDatasetDataTablesSerializer
+
 
 class DatasetDataTableViewSet(viewsets.ModelViewSet):
     """
     Request information about datasets of current user
     """
     queryset = DataSet.objects.all()
-    serializer_class = DatasetDataTablesSerializer
+    serializer_class = AccountDatasetDataTablesSerializer
 
     def get_queryset(self):
         queryset = self.queryset
@@ -36,7 +33,7 @@ class TrainingDatasetDataTableViewSet(viewsets.ModelViewSet):
     Request information about datasets of current user
     """
     queryset = DataSet.objects.all()
-    serializer_class = TrainingDatasetDataTablesSerializer
+    serializer_class = AccountTrainingDatasetDataTablesSerializer
 
     def get_queryset(self):
         queryset = self.queryset

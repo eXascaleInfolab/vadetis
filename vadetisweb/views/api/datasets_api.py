@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework import viewsets
-from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
+from rest_framework.permissions import AllowAny, IsAdminUser
 
 from vadetisweb.models import DataSet
 from vadetisweb.utils import strToBool, get_settings, get_dataset_with_marker_json
@@ -19,7 +19,7 @@ class SyntheticDatasetDataTableViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = self.queryset
-        query_set = queryset.filter(type=SYNTHETIC, is_training_data=False)
+        query_set = queryset.filter(type=SYNTHETIC, is_public=True, is_training_data=False)
         return query_set
 
     def get_permissions(self):
@@ -42,7 +42,7 @@ class RealWorldDatasetDataTableViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = self.queryset
-        query_set = queryset.filter(type=REAL_WORLD, is_training_data=False)
+        query_set = queryset.filter(type=REAL_WORLD, is_public=True, is_training_data=False)
         return query_set
 
     def get_permissions(self):

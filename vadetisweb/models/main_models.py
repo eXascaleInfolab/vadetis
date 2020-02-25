@@ -169,6 +169,8 @@ class DataSet(models.Model):
     frequency = models.CharField(null=True, max_length=16,
                                  help_text='The frequency of the series in this dataset.')
 
+    is_public = models.BooleanField(default=True, help_text='Determines if this dataset is public available.')
+
     # test data
     is_training_data = models.BooleanField(default=False)
     original_dataset = models.ForeignKey('self', null=True, on_delete=models.CASCADE, related_name='training_dataset')
