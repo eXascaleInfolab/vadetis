@@ -177,7 +177,7 @@ def lisa_pearson(df, df_class, conf, time_series_id):
     df_class_copy = df_class_copy.rename(columns={time_series_id: 'Class'})
     df_with_class_instances = df.join(df_class_copy['Class'])
 
-    window_size = get_window_size(conf['window_size'], df)
+    window_size = get_window_size(conf['window_size_value'], conf['window_size_unit'], df)
 
     df_correlation, correlation_time_elapsed = pearson(df, time_series_id, window_size=window_size)
 
@@ -223,7 +223,7 @@ def lisa_dtw(df, df_class, conf, time_series_id):
     # get Z-Score values
     df_z = df_zscore(df)
 
-    window_size = get_window_size(conf['window_size'], df)
+    window_size = get_window_size(conf['window_size_value'], conf['window_size_unit'], df)
 
     df_correlation, correlation_time_elapsed = dtw_pearson(df_z, time_series_id, conf['dtw_distance_function'],
                                                            window_size=window_size)

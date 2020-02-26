@@ -15,17 +15,16 @@ def is_valid_conf(conf):
 
             if conf['correlation_algorithm'] == PEARSON:
 
-                if isNone(conf['window_size']):
+                if isNone(conf['window_size_value']):
                     return False
+                elif isNone(conf['window_size_unit']):
+                    return False
+
                 else:
-                    window_size_list = decompress_window_size(conf['window_size'])
-                    if not len(window_size_list) == 2:
+                    if not isPositiveInteger(conf['window_size_value']):
                         return False
 
-                    if not isPositiveInteger(window_size_list[0]):
-                        return False
-
-                    if not window_size_list[1] in [WINDOW_SIZE_ABSOLUTE, WINDOW_SIZE_PERCENT]:
+                    if not conf['window_size_unit'] in [WINDOW_SIZE_ABSOLUTE, WINDOW_SIZE_PERCENT]:
                         return False
 
                 if isinstance(conf['min_periods'], int):
@@ -58,17 +57,16 @@ def is_valid_conf(conf):
 
             elif conf['correlation_algorithm'] == DTW:
 
-                if isNone(conf['window_size']):
+                if isNone(conf['window_size_value']):
                     return False
+                elif isNone(conf['window_size_unit']):
+                    return False
+
                 else:
-                    window_size_list = decompress_window_size(conf['window_size'])
-                    if not len(window_size_list) == 2:
+                    if not isPositiveInteger(conf['window_size_value']):
                         return False
 
-                    if not isPositiveInteger(window_size_list[0]):
-                        return False
-
-                    if not window_size_list[1] in [WINDOW_SIZE_ABSOLUTE, WINDOW_SIZE_PERCENT]:
+                    if not conf['window_size_unit'] in [WINDOW_SIZE_ABSOLUTE, WINDOW_SIZE_PERCENT]:
                         return False
 
                 if not isValidSelection(conf['dtw_distance_function'], DTW_DISTANCE_FUNCTION):
@@ -306,26 +304,17 @@ def df_zscore(df, skipna=True):
     return df_zscore
 
 
-def decompress_window_size(value, int_conversion=True):
-    if value and int_conversion:
-        return [int(i) if i.isdigit() else i for i in value.split('_')]
-    elif value and not int_conversion:
-        return [i for i in value.split('_')]
-    return None
+def get_window_size(window_size_value, window_size_unit, df=None):
 
-
-def get_window_size(window_size_conf, df=None):
-    window_size_list = decompress_window_size(window_size_conf)
-
-    if window_size_conf[1] == WINDOW_SIZE_PERCENT and df is not None:
-        return get_window_size_for_percentage(df, window_size_list[0])
-    elif window_size_list[1] == WINDOW_SIZE_ABSOLUTE:
-        return window_size_list[0]
+    if window_size_unit == WINDOW_SIZE_PERCENT and df is not None:
+        return get_window_size_for_percentage(df, window_size_value)
+    elif window_size_unit == WINDOW_SIZE_ABSOLUTE:
+        return int(window_size_value)
     return 0
 
 
 def get_window_size_for_percentage(df, percentage):
-    return int(round((float(len(df.index)) / float(100)) * percentage))
+    return int(round((float(len(df.index)) / float(100)) * int(percentage)))
 
 
 def get_dataframes_for_ranges(dataset, conf):
@@ -342,7 +331,7 @@ def get_dataframes_for_ranges(dataset, conf):
 
     elif conf['algorithm'] == LISA:
         if conf['correlation_algorithm'] == PEARSON or conf['correlation_algorithm'] == DTW:
-            window_size = get_window_size(conf['window_size'], df)
+            window_size = get_window_size(conf['window_size_value'], conf['window_size_unit'], df)
 
             if range_start is not None and range_end is not None:
                 # todo instead of date, may locate by number of index steps?

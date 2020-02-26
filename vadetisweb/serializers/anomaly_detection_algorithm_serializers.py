@@ -152,26 +152,18 @@ class CorrelationSerializer(TSSerializer):
         #    self.fields['correlation_algorithm'].choices = CORRELATION_ALGORITHMS_NON_SPATIAL_EMPTY
 
 
-class WindowSizeSerializer(serializers.Serializer):
-    """
-    Helper Serializer for window size that combines 2 fields
-    """
-    window_size_value = serializers.IntegerField(min_value=1,
-                                                 style={'template': 'vadetisweb/parts/input/text_input.html'})
-    window_size_unit = serializers.ChoiceField(choices=WINDOW_SIZES, required=True,
-                                               style={'template': 'vadetisweb/parts/input/select_input.html'})
-
-
 class PearsonSerializer(CorrelationSerializer):
     """
     The serializer for the parameters for Pearson correlation algorithm
     """
 
-    window_size = WindowSizeSerializer(label='Window Size',
-                                       help_text='Select the moving window size as a percentage value relative to the length of the time series or as an absolute value range.')
+    window_size_value = serializers.IntegerField(min_value=1,
+                                                 help_text='Select the moving window size as a percentage value relative to the length of the time series or as an absolute value range.',
+                                                 style={'template': 'vadetisweb/parts/input/text_input.html'})
+    window_size_unit = serializers.ChoiceField(choices=WINDOW_SIZES, required=True,
+                                               style={'template': 'vadetisweb/parts/input/select_input.html'})
     row_standardized = serializers.BooleanField(initial=True, label='Apply Row Standardization', required=False,
-                                                help_text='Determines if row standardization is applied to the correlation values',
-                                                style={'template': 'vadetisweb/parts/input/text_input.html'})
+                                                help_text='Determines if row standardization is applied to the correlation values')
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
     range_start = serializers.IntegerField(required=True, min_value=0,
@@ -185,15 +177,17 @@ class DTWPearsonSerializer(CorrelationSerializer):
     The serializer for the parameters for DTW with Pearson correlation algorithm
     """
 
-    window_size = WindowSizeSerializer(label='Window Size',
-                                       help_text='Select the moving window size as a percentage value relative to the length of the time series or as an absolute value range.')
+    window_size_value = serializers.IntegerField(min_value=1,
+                                                 help_text='Select the moving window size as a percentage value relative to the length of the time series or as an absolute value range.',
+                                                 style={'template': 'vadetisweb/parts/input/text_input.html'})
+    window_size_unit = serializers.ChoiceField(choices=WINDOW_SIZES, required=True,
+                                               style={'template': 'vadetisweb/parts/input/select_input.html'})
     dtw_distance_function = serializers.ChoiceField(label='DTW Distance Function', choices=DTW_DISTANCE_FUNCTION,
                                                     required=True,
                                                     help_text='The distance function used to calculate the cost between values.',
                                                     style={'template': 'vadetisweb/parts/input/select_input.html'})
     row_standardized = serializers.BooleanField(initial=True, label='Apply Row Standardization', required=False,
-                                                help_text='Determines if row standardization is applied to the correlation values',
-                                                style={'template': 'vadetisweb/parts/input/text_input.html'})
+                                                help_text='Determines if row standardization is applied to the correlation values')
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
     range_start = serializers.IntegerField(required=True, min_value=0,
