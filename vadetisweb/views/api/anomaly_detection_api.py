@@ -13,7 +13,7 @@ from django.http import HttpResponse
 from vadetisweb.serializers import AlgorithmSerializer, HistogramSerializer, ClusterSerializer, SVMSerializer, IsolationForestSerializer
 from vadetisweb.models import DataSet
 from vadetisweb.parameters import LISA, HISTOGRAM, CLUSTER_GAUSSIAN_MIXTURE, SVM, ISOLATION_FOREST, PEARSON, DTW, GEO
-from vadetisweb.utils import plot_thresholds_scores, plot_confusion_matrix, get_conf, get_settings, is_valid_conf, get_dataframes_for_ranges, get_updated_dataset_series_for_threshold_with_marker_json
+from vadetisweb.utils import get_lisa_serializer, plot_thresholds_scores, plot_confusion_matrix, get_conf, get_settings, is_valid_conf, get_dataframes_for_ranges, get_updated_dataset_series_for_threshold_with_marker_json
 from vadetisweb.algorithms import perform_lisa_person, perform_lisa_dtw, perform_lisa_geo, perform_histogram, perform_cluster, perform_svm, perform_isolation_forest
 
 class AnomalyDetectionFormView(APIView):
@@ -32,8 +32,7 @@ class AnomalyDetectionFormView(APIView):
             if algorithm:
 
                 if algorithm == LISA:
-                    #form = formOutputForLISA(request)
-                    print("LISA")
+                    serializer = get_lisa_serializer(request.data, context={'dataset_selected': dataset_id, })
 
                 elif algorithm == HISTOGRAM:
                     serializer = HistogramSerializer(data=request.data, context={'dataset_selected': dataset_id, })

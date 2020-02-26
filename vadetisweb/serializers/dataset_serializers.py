@@ -6,6 +6,7 @@ from django.urls import reverse
 from vadetisweb.models import DataSet, User
 from vadetisweb.parameters import *
 
+
 class DatasetDataTablesSerializer(serializers.ModelSerializer):
     title = serializers.CharField(read_only=True)
     owner = serializers.CharField(read_only=True)

@@ -15,11 +15,17 @@ class TrainingDatasetField(serializers.PrimaryKeyRelatedField):
 
 
 class TimeSeriesField(serializers.PrimaryKeyRelatedField):
+
+    def __init__(self, **kwargs):
+        super(TimeSeriesField, self).__init__(**kwargs)
+        self.style = {'template': 'vadetisweb/parts/input/select_input_onchange_submit.html'}
+
+
     def get_queryset(self):
-        timeseries_selected = self.context.get('timeseries_selected', None)
-        if timeseries_selected is not None:
-            return TimeSeries.objects.none() # TODO
-            #return TimeSeries.objects.filter(original_dataset__id=timeseries_selected, is_training_data=True)
+        dataset_selected = self.context.get('dataset_selected', None)
+        #timeseries_selected = self.context.get('timeseries_selected', None)
+        if dataset_selected is not None:
+            return TimeSeries.objects.filter(datasets__in=[dataset_selected])
         return TimeSeries.objects.none()
 
     def display_value(self, instance):

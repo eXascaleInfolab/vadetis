@@ -119,7 +119,7 @@ class TSSerializer(AlgorithmSerializer):
         super(TSSerializer, self).__init__(*args, **kwargs)
         #time_series = TimeSeries.objects.filter(datasets__in=[post_data['dataset_selected']])
         #self.fields['ts_selected'].queryset = time_series
-
+    """
     def validate_ts_selected(self):
         data = self.validated_data.get('ts_selected', None)
         if not data:
@@ -127,7 +127,7 @@ class TSSerializer(AlgorithmSerializer):
         else:
             data = data.id
         return data
-
+    """
 
 class CorrelationSerializer(TSSerializer):
     """
@@ -139,7 +139,7 @@ class CorrelationSerializer(TSSerializer):
     correlation_algorithm = serializers.ChoiceField(label='Correlation Algorithm', choices=CORRELATION_ALGORITHMS_EMPTY,
                                                     required=True,
                                                     help_text='Algorithm used to calculate the correlation',
-                                                    style={'template': 'vadetisweb/parts/input/select_input.html'})
+                                                    style = {'template': 'vadetisweb/parts/input/select_input_onchange_submit.html'})
 
     def __init__(self, *args, **kwargs):
         #post_data = args[0]
