@@ -79,7 +79,7 @@ def get_data_series_measurements(id, df_with_class_instances, y_hat_results):
     return measurements
 
 
-def get_anomaly_detection_single_ts_results_json(dataset, ts_id, df_with_class_instances, y_hat_results, settings):
+def get_anomaly_detection_single_ts_results_json(dataset, ts_id, df_with_class_instances, scores, y_hat_results, settings):
     data = {}
     data_series = []
 
@@ -90,8 +90,8 @@ def get_anomaly_detection_single_ts_results_json(dataset, ts_id, df_with_class_i
     ts = TimeSeries.objects.get(id=ts_id)
 
     # ts
-    raw_measurements = get_predicted_dataset_with_marker_json(ts.id, df_with_class_instances, y_hat_results, settings)
-    z_measurements = get_predicted_dataset_with_marker_json(ts.id, df_z_with_class_instances, y_hat_results, settings)
+    raw_measurements = get_predicted_dataset_with_marker_json(ts.id, df_with_class_instances, scores, y_hat_results, settings)
+    z_measurements = get_predicted_dataset_with_marker_json(ts.id, df_z_with_class_instances, scores, y_hat_results, settings)
 
     dict_series = {'id': ts.id, 'name': ts.name, 'unit': ts.unit, 'is_spatial': ts.is_spatial,
                    'measurements': {'raw': raw_measurements, 'zscore': z_measurements}}
