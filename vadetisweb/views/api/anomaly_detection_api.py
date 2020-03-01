@@ -5,7 +5,6 @@ from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
 
-from django.shortcuts import redirect
 from django.urls import reverse
 from django.core.files.temp import NamedTemporaryFile
 from django.http import HttpResponse
