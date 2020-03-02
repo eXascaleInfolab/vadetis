@@ -1,5 +1,6 @@
 from vadetisweb.models import *
 from vadetisweb.fields import *
+from rest_framework.serializers import PrimaryKeyRelatedField
 
 
 class AlgorithmSerializer(serializers.Serializer):
@@ -111,8 +112,13 @@ class TSSerializer(AlgorithmSerializer):
     """
     Time series anomaly detection form
     """
-    ts_selected = TimeSeriesField(label='Perform anomaly detection for single time series',
-                                  queryset=TimeSeries.objects.none())
+    ts_selected = TimeSeriesField(label='Time Series',
+                                  queryset=TimeSeries.objects.none(),
+                                  required=True,
+                                  many=True,
+                                  allow_empty=False,
+                                  allow_null=False,
+                                  style={'template': 'vadetisweb/parts/input/checkbox_multiple_input.html', 'inline' : True})
 
     def __init__(self, *args, **kwargs):
         #post_data = args[0]
@@ -129,14 +135,13 @@ class TSSerializer(AlgorithmSerializer):
         return data
     """
 
+
 class CorrelationSerializer(TSSerializer):
     """
     The serializer for selection of a correlation algorithm
     """
 
-    empty_choice = ('', '----')
-    CORRELATION_ALGORITHMS_EMPTY = (empty_choice,) + CORRELATION_ALGORITHMS
-    correlation_algorithm = serializers.ChoiceField(label='Correlation Algorithm', choices=CORRELATION_ALGORITHMS_EMPTY,
+    correlation_algorithm = serializers.ChoiceField(label='Correlation Algorithm', choices=CORRELATION_ALGORITHMS,
                                                     required=True,
                                                     help_text='Algorithm used to calculate the correlation',
                                                     style = {'template': 'vadetisweb/parts/input/select_input_onchange_submit.html'})
@@ -157,7 +162,7 @@ class PearsonSerializer(CorrelationSerializer):
     The serializer for the parameters for Pearson correlation algorithm
     """
 
-    window_size_value = serializers.IntegerField(min_value=1,
+    window_size_value = serializers.IntegerField(initial=12, required=True, min_value=1,
                                                  help_text='Select the moving window size as a percentage value relative to the length of the time series or as an absolute value range.',
                                                  style={'template': 'vadetisweb/parts/input/text_input.html'})
     window_size_unit = serializers.ChoiceField(choices=WINDOW_SIZES, required=True,
@@ -177,7 +182,7 @@ class DTWPearsonSerializer(CorrelationSerializer):
     The serializer for the parameters for DTW with Pearson correlation algorithm
     """
 
-    window_size_value = serializers.IntegerField(min_value=1,
+    window_size_value = serializers.IntegerField(initial=12, required=True, min_value=1,
                                                  help_text='Select the moving window size as a percentage value relative to the length of the time series or as an absolute value range.',
                                                  style={'template': 'vadetisweb/parts/input/text_input.html'})
     window_size_unit = serializers.ChoiceField(choices=WINDOW_SIZES, required=True,

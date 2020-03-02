@@ -16,11 +16,6 @@ class TrainingDatasetField(serializers.PrimaryKeyRelatedField):
 
 class TimeSeriesField(serializers.PrimaryKeyRelatedField):
 
-    def __init__(self, **kwargs):
-        super(TimeSeriesField, self).__init__(**kwargs)
-        self.style = {'template': 'vadetisweb/parts/input/select_input_onchange_submit.html'}
-
-
     def get_queryset(self):
         dataset_selected = self.context.get('dataset_selected', None)
         #timeseries_selected = self.context.get('timeseries_selected', None)
