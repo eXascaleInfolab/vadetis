@@ -8,7 +8,7 @@ from .helper_functions import *
 # CLUSTER
 #########################################################
 
-def cluster_gaussian_mixture(df, df_class, df_train, df_train_class, maximize_score=F1_SCORE, n_components=3, n_init=4, train_size=0.5, random_seed=42):
+def cluster_gaussian_mixture(df, df_class, df_train, df_train_class, maximize_score=F1_SCORE, n_components=3, n_init=3, train_size=0.5, random_seed=10):
 
     df_train_class_instances = df_anomaly_instances(df_train_class)
     df_train = df_train.join(df_train_class_instances)

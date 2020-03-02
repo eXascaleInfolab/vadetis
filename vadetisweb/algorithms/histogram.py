@@ -36,7 +36,7 @@ class hist_model(object):
         return np.array(scores)
 
 
-def histogram(df, df_class, df_train, df_train_class, maximize_score=F1_SCORE, train_size=0.5, random_seed=42):
+def histogram(df, df_class, df_train, df_train_class, maximize_score=F1_SCORE, train_size=0.5, random_seed=10):
 
     df_train_class_instances = df_anomaly_instances(df_train_class)
     df_train = df_train.join(df_train_class_instances)

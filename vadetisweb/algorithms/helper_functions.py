@@ -124,7 +124,7 @@ def estimate_score_bound(lower, higher):
     return lower_bound, higher_bound
 
 
-def get_train_valid_test_sets(df_train, train_size=0.5, random_seed=42):
+def get_train_valid_test_sets(df_train, train_size=0.5, random_seed=10):
 
     normal = df_train[df_train['Class'] == False]
     anomaly = df_train[df_train['Class'] == True]

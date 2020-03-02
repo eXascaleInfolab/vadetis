@@ -6,7 +6,7 @@ from .helper_functions import *
 # ISOLATION FOREST
 #########################################################
 
-def isolation_forest(df, df_class, df_train, df_train_class, maximize_score=F1_SCORE, n_jobs=-1, bootstrap=True, n_estimators=50, train_size=0.5, random_seed=42):
+def isolation_forest(df, df_class, df_train, df_train_class, maximize_score=F1_SCORE, n_jobs=-1, bootstrap=True, n_estimators=40, train_size=0.5, random_seed=10):
 
     df_train_class_instances = df_anomaly_instances(df_train_class)
     df_train = df_train.join(df_train_class_instances)

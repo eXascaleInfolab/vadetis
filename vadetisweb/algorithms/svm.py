@@ -8,7 +8,7 @@ from .helper_functions import *
 # SVM
 #########################################################
 
-def svm(df, df_class, df_train, df_train_class, maximize_score=F1_SCORE, gamma=0.000562, nu=0.5, kernel='rbf', train_size=0.5, random_seed=42):
+def svm(df, df_class, df_train, df_train_class, maximize_score=F1_SCORE, gamma=0.000562, nu=0.5, kernel='rbf', train_size=0.5, random_seed=10):
 
     df_train_class_instances = df_anomaly_instances(df_train_class)
     df_train = df_train.join(df_train_class_instances)
