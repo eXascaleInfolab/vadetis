@@ -108,53 +108,29 @@ class IsolationForestSerializer(AlgorithmSerializer):
         super(IsolationForestSerializer, self).__init__(*args, **kwargs)
 
 
-class TSSerializer(AlgorithmSerializer):
+class CorrelationSerializer(AlgorithmSerializer):
     """
-    Time series anomaly detection form
+    The serializer for selection of a correlation algorithm
     """
+
     ts_selected = TimeSeriesField(label='Time Series',
                                   queryset=TimeSeries.objects.none(),
                                   required=True,
                                   many=True,
                                   allow_empty=False,
                                   allow_null=False,
-                                  style={'template': 'vadetisweb/parts/input/checkbox_multiple_input.html', 'inline' : True})
+                                  style={'template': 'vadetisweb/parts/input/checkbox_multiple_input.html',
+                                         'inline': True})
 
-    def __init__(self, *args, **kwargs):
-        #post_data = args[0]
-        super(TSSerializer, self).__init__(*args, **kwargs)
-        #time_series = TimeSeries.objects.filter(datasets__in=[post_data['dataset_selected']])
-        #self.fields['ts_selected'].queryset = time_series
-    """
-    def validate_ts_selected(self):
-        data = self.validated_data.get('ts_selected', None)
-        if not data:
-            raise serializers.ValidationError('This field is required.')
-        else:
-            data = data.id
-        return data
-    """
-
-
-class CorrelationSerializer(TSSerializer):
-    """
-    The serializer for selection of a correlation algorithm
-    """
-
-    correlation_algorithm = serializers.ChoiceField(label='Correlation Algorithm', choices=CORRELATION_ALGORITHMS,
-                                                    required=True,
+    correlation_algorithm = serializers.ChoiceField(default=PEARSON, label='Correlation Algorithm', choices=CORRELATION_ALGORITHMS,
+                                                    required=False,
+                                                    allow_null=False,
+                                                    allow_blank=False,
                                                     help_text='Algorithm used to calculate the correlation',
                                                     style = {'template': 'vadetisweb/parts/input/select_input_onchange_submit.html'})
 
     def __init__(self, *args, **kwargs):
-        #post_data = args[0]
         super(CorrelationSerializer, self).__init__(*args, **kwargs)
-
-        #dataset = DataSet.objects.get(id=post_data['dataset_selected'])
-        #if not dataset.spatial_data == SPATIAL:
-        #    empty_choice = ('', '----')
-        #    CORRELATION_ALGORITHMS_NON_SPATIAL_EMPTY = (empty_choice,) + CORRELATION_ALGORITHMS_NON_SPATIAL
-        #    self.fields['correlation_algorithm'].choices = CORRELATION_ALGORITHMS_NON_SPATIAL_EMPTY
 
 
 class PearsonSerializer(CorrelationSerializer):
