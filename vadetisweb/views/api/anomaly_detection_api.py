@@ -15,6 +15,7 @@ from vadetisweb.parameters import LISA, HISTOGRAM, CLUSTER_GAUSSIAN_MIXTURE, SVM
 from vadetisweb.utils import get_lisa_serializer, plot_thresholds_scores, plot_confusion_matrix, get_conf, get_settings, is_valid_conf, get_dataframes_for_ranges, get_updated_dataset_series_for_threshold_with_marker_json
 from vadetisweb.algorithms import perform_lisa_person, perform_lisa_dtw, perform_lisa_geo, perform_histogram, perform_cluster, perform_svm, perform_isolation_forest
 
+
 class AnomalyDetectionFormView(APIView):
     """
     Request anomaly detection form
@@ -25,54 +26,57 @@ class AnomalyDetectionFormView(APIView):
     def post(self, request, dataset_id):
 
         dataset = DataSet.objects.get(id=dataset_id)
+        try:
+            if 'algorithm' in request.POST:
+                algorithm = request.POST['algorithm']
+                if algorithm:
 
-        if 'algorithm' in request.POST:
-            algorithm = request.POST['algorithm']
-            if algorithm:
+                    if algorithm == LISA:
+                        serializer = get_lisa_serializer(request.data, context={'dataset_selected': dataset_id, })
 
-                if algorithm == LISA:
-                    serializer = get_lisa_serializer(request.data, context={'dataset_selected': dataset_id, })
+                    elif algorithm == HISTOGRAM:
+                        serializer = HistogramSerializer(data=request.data, context={'dataset_selected': dataset_id, })
 
-                elif algorithm == HISTOGRAM:
-                    serializer = HistogramSerializer(data=request.data, context={'dataset_selected': dataset_id, })
+                    elif algorithm == CLUSTER_GAUSSIAN_MIXTURE:
+                        serializer = ClusterSerializer(data=request.data, context={'dataset_selected': dataset_id, })
 
-                elif algorithm == CLUSTER_GAUSSIAN_MIXTURE:
-                    serializer = ClusterSerializer(data=request.data, context={'dataset_selected': dataset_id, })
+                    elif algorithm == SVM:
+                        serializer = SVMSerializer(data=request.data, context={'dataset_selected': dataset_id, })
 
-                elif algorithm == SVM:
-                    serializer = SVMSerializer(data=request.data, context={'dataset_selected': dataset_id, })
+                    elif algorithm == ISOLATION_FOREST:
+                        serializer = IsolationForestSerializer(data=request.data, context={'dataset_selected': dataset_id, })
 
-                elif algorithm == ISOLATION_FOREST:
-                    serializer = IsolationForestSerializer(data=request.data, context={'dataset_selected': dataset_id, })
+                    else:
+                        serializer = AlgorithmSerializer()
+
+                    # check if a valid form has been submitted
+                    if serializer.is_valid():
+                        print("form was valid")
+                        print(serializer.data)
+                        url = "%s?%s" % (reverse('vadetisweb:synthetic_dataset_perform', args=(dataset_id,)),
+                                         urllib.parse.urlencode(serializer.data))
+                        response = Response({'serializer': serializer, })
+                        response['Location'] = url
+                        return response
+
+                    else:
+                        print('Form was not valid')
+                        print(serializer.errors)
 
                 else:
                     serializer = AlgorithmSerializer()
-
-                # check if a valid form has been submitted
-                if serializer.is_valid():
-                    print("form was valid")
-                    print(serializer.data)
-                    url = "%s?%s" % (reverse('vadetisweb:synthetic_dataset_perform', args=(dataset_id,)),
-                                     urllib.parse.urlencode(serializer.data))
-                    response = Response({'serializer': serializer, })
-                    response['Location'] = url
-                    return response
-
-                else:
-                    print('Form was not valid')
-                    print(serializer.errors)
-
             else:
                 serializer = AlgorithmSerializer()
-        else:
-            serializer = AlgorithmSerializer()
 
-        return Response({
-            'dataset' : dataset,
-            'formid' : 'anomaly_detection_form',
-            'url' : reverse('vadetisweb:anomaly_detection_form', args=[dataset_id]),
-            'serializer' : serializer,
-            }, status=status.HTTP_200_OK)
+            return Response({
+                'dataset' : dataset,
+                'formid' : 'anomaly_detection_form',
+                'url' : reverse('vadetisweb:anomaly_detection_form', args=[dataset_id]),
+                'serializer' : serializer,
+                }, status=status.HTTP_200_OK)
+
+        except DataSet.DoesNotExist:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class DatasetPerformAnomalyDetectionJson(APIView):
