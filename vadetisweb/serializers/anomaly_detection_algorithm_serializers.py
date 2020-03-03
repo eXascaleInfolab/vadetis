@@ -1,7 +1,7 @@
+from rest_framework import serializers
+
 from vadetisweb.models import *
 from vadetisweb.fields import *
-from rest_framework.serializers import PrimaryKeyRelatedField
-
 
 class AlgorithmSerializer(serializers.Serializer):
     empty_choice = ('', '----')
