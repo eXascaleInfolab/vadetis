@@ -8,7 +8,7 @@ from django.shortcuts import redirect, reverse
 from django.contrib import messages
 
 from vadetisweb.models import DataSet
-from vadetisweb.serializers import AlgorithmSerializer, ThresholdSerializer
+from vadetisweb.serializers import AlgorithmSerializer, ThresholdSerializer, AnomalyInjectionSerializer
 from vadetisweb.utils import get_settings, get_highcharts_range_button_preselector, get_conf, is_valid_conf
 from vadetisweb.parameters import SYNTHETIC, REAL_WORLD
 
@@ -49,13 +49,16 @@ class SyntheticDataset(APIView):
 
             selected_button = get_highcharts_range_button_preselector(dataset.frequency)
             settings = get_settings(request)
+
             serializer = AlgorithmSerializer()
+            injection_serializer = AnomalyInjectionSerializer()
 
             return Response({
                 'dataset': dataset,
                 'selected_button': selected_button,
                 'settings' : settings,
                 'serializer': serializer,
+                'injection_serializer' : injection_serializer,
             }, status=status.HTTP_200_OK)
 
         except DataSet.DoesNotExist:

@@ -35,7 +35,7 @@ class AnomalyInjectionSerializer(serializers.Serializer):
                                                                   'step': 'number', 'min': 1})
 
     probability = serializers.FloatField(initial=0.1, label='Probability', min_value=0.0000001, max_value=1, required=True,
-                                         help_text='An upper bound on the fraction of training errors and a lower bound of the fraction of support vectors. '
+                                         help_text='The probability for an anomaly during an anomalous event. '
                                                    'Should be in the interval (0, 1]. If none, the default value 0.1 will be used.',
                                          style={'template': 'vadetisweb/parts/input/text_input.html', 'step': 'any',
                                                 'min': 0.0000001, 'max': 1})
