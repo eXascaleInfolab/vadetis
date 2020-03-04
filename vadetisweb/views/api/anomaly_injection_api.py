@@ -7,6 +7,8 @@ from django.urls import reverse
 
 from vadetisweb.models import DataSet
 from vadetisweb.serializers import AnomalyInjectionSerializer
+from vadetisweb.algorithms import anomaly_injection
+
 
 class AnomalyInjectionFormView(APIView):
     """
@@ -22,8 +24,8 @@ class AnomalyInjectionFormView(APIView):
             serializer = AnomalyInjectionSerializer(data=request.data)
 
             if serializer.is_valid():
-                df = dataset.dataframe
-                df_class = dataset.dataframe_class
+                df_inject, df_inject_class = anomaly_injection(dataset, serializer.data)
+
 
 
             return Response({
