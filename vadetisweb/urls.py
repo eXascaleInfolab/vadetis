@@ -16,14 +16,10 @@ app_name = 'vadetisweb'
 router = routers.DefaultRouter()
 router.register(r'account/datasets', views.DatasetDataTableViewSet, base_name='account_datasets_datatable')
 router.register(r'account/training-datasets', views.TrainingDatasetDataTableViewSet, base_name='account_training_datasets_datatable')
-router.register(r'datasets/synthetic/', views.SyntheticDatasetDataTableViewSet, base_name='synthetic_datasets_datatable')
-router.register(r'datasets/real-world/', views.RealWorldDatasetDataTableViewSet, base_name='real_world_datasets_datatable')
+router.register(r'datasets/synthetic', views.SyntheticDatasetDataTableViewSet, base_name='synthetic_datasets_datatable')
+router.register(r'datasets/real-world', views.RealWorldDatasetDataTableViewSet, base_name='real_world_datasets_datatable')
 
-urlpatterns = [
-
-    path('account/datasets/upload/', views.AccountUploadDataset.as_view(), name='account_datasets_upload'),
-    path('account/training-datasets/upload/', views.AccountUploadTrainingDataset.as_view(), name='account_training_datasets_upload'),
-
+apipatterns = [
     path('api/', include((router.urls))),
     path('api/anomaly-detection/<int:dataset_id>/', views.AnomalyDetectionFormView.as_view(), name='anomaly_detection_form'),
     path('api/anomaly-injection/<int:dataset_id>/', views.AnomalyInjectionFormView.as_view(), name='anomaly_injection_form'),
@@ -33,6 +29,12 @@ urlpatterns = [
     path('api/threshold-update', views.DatasetThresholdUpdateJson.as_view(), name='threshold_update_json'),
     path('api/image/cnf/', views.CnfImage.as_view(), name='cnf_image'),
     path('api/image/thresholds-scores/', views.ThresholdsScoresImage.as_view(), name='thresholds_scores_image'),
+]
+
+urlpatterns = apipatterns + [
+
+    path('account/datasets/upload/', views.AccountUploadDataset.as_view(), name='account_datasets_upload'),
+    path('account/training-datasets/upload/', views.AccountUploadTrainingDataset.as_view(), name='account_training_datasets_upload'),
 
     path('datasets/real-world/', views.RealWorldDatasets.as_view(), name='real_world_datasets'),
     path('datasets/real-world/<int:dataset_id>/', views.RealWorldDataset.as_view(), name='real_world_dataset'),
