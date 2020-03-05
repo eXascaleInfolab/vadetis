@@ -1,7 +1,5 @@
-import json
-from rest_framework import serializers
-from django.contrib.messages import utils, constants
 
+from django.contrib.messages import utils, constants
 LEVEL_TAGS = utils.get_level_tags()
 
 
@@ -28,15 +26,6 @@ class JsonMessage:
     def tags(self):
         return ' '.join(tag for tag in [self.extra_tags, self.level_tag] if tag)
 
-
-class MessageSerializer(serializers.Serializer):
-    """
-        A message to be transferred with ajax as port of an JSON, similar to django's own message system
-    """
-    level = serializers.IntegerField()
-    level_tag = serializers.CharField()
-    message = serializers.CharField()
-    extra_tags = serializers.CharField()
 
 
 def debug(messages, message, extra_tags=''):

@@ -7,15 +7,16 @@ from .anomaly_detection_utils import df_zscore
 from .date_utils import unix_time_millis_from_dt
 from .anomaly_detection_utils import get_info
 
-def get_dataset_with_marker_json(dataset, type, show_anomaly, settings):
+
+def get_dataset_with_marker_json(dataset, df, df_class, type, show_anomaly, settings):
     data_series = []
     time_series = dataset.timeseries_set.all()
 
     # get dataframe of the series
     if type == 'zscore':
-        df = df_zscore(dataset.dataframe)  # z-score values
-    else:
-        df = dataset.dataframe  # raw data
+        df = df_zscore(df)  # z-score values
+    """else:
+        df = dataset.dataframe  # raw data""" #TODO
 
     for ts in time_series:
         measurements = []
@@ -23,7 +24,6 @@ def get_dataset_with_marker_json(dataset, type, show_anomaly, settings):
             if not show_anomaly:
                 measurements.append({'x': unix_time_millis_from_dt(index), 'y': value})
             else:
-                df_class = dataset.dataframe_class
                 outlier_color = settings['color_outliers']
 
                 if df_class.loc[index, ts.id] == False:

@@ -65,12 +65,12 @@ class DatasetJson(APIView):
     def get(self, request, dataset_id):
         # handle query params
         type = request.GET.get('type', 'raw')
-        show_anomalies = strToBool(request.query_params.get('show_anomalies', 'true'))
+        show_anomaly = strToBool(request.query_params.get('show_anomaly', 'true'))
 
         data = {}
         settings = get_settings(request)
         dataset = DataSet.objects.get(id=dataset_id)
 
-        data['series'] = get_dataset_with_marker_json(dataset, type, show_anomalies, settings)
+        data['series'] = get_dataset_with_marker_json(dataset, dataset.dataframe, dataset.dataframe_class, type, show_anomaly, settings)
 
         return Response(data)

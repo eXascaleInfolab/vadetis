@@ -7,7 +7,7 @@
             var extremes_x = highchart.xAxis[0].getExtremes();
             var range = {};
 
-            if (time_range == 'as selected in chart') {
+            if (time_range === 'as selected in chart') {
                 range.min = Math.round(extremes_x.min);
                 range.max = Math.round(extremes_x.max);
             } else {

@@ -138,7 +138,7 @@ var VadetisHighcharts = function () {
         function loadSeriesForType(type) {
             current_type = type;
             //TODO show loading img highchart.showLoading('<img alt="" src="{% static 'img/loading.gif' %}" />');
-            $.getJSON(url + '?type=' + type + '&show_anomalies=' + shows_anomalies, function (data) {
+            $.getJSON(url + '?type=' + type + '&show_anomaly=' + shows_anomalies, function (data) {
                 console.log(data);
                 var series_data_json = data['series'];
                 setSeriesData(highchart, series_data_json);
@@ -146,7 +146,7 @@ var VadetisHighcharts = function () {
             });
         }
 
-        $.getJSON(url + '&type=raw&show_anomalies=true', function (data) {
+        $.getJSON(url + '&type=raw&show_anomaly=true', function (data) {
             $('#loading_screen').hide();
             $('#results_highcharts').show();
             $('#threshold_sidebar').show();

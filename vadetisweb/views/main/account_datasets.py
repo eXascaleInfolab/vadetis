@@ -11,8 +11,8 @@ from django.contrib import messages
 from celery.utils import uuid
 
 from vadetisweb.models import UserTasks
-from vadetisweb.serializers import DatasetImportSerializer, TrainingDatasetImportSerializer
-from vadetisweb.utils import write_to_tempfile, json_message_utils, MessageSerializer
+from vadetisweb.serializers import DatasetImportSerializer, TrainingDatasetImportSerializer, MessageSerializer
+from vadetisweb.utils import write_to_tempfile, json_message_utils
 from vadetisweb.tasks import TaskImportData, TaskImportTrainingData
 from vadetisweb.parameters import SPATIAL
 

@@ -125,14 +125,14 @@ var VadetisHighcharts = function () {
         function loadSeriesForType(type) {
             current_type = type;
             //TODO show loading img highchart.showLoading('<img alt="" src="{% static 'img/loading.gif' %}" />');
-            $.getJSON(url + '?type=' + type + '&show_anomalies=' + shows_anomalies, function (data) {
+            $.getJSON(url + '?type=' + type + '&show_anomaly=' + shows_anomalies, function (data) {
                 var series_data_json = data['series'];
                 setSeriesData(highchart, series_data_json);
                 highchart.hideLoading();
             });
         }
 
-        $.getJSON(url + '?type=raw&show_anomalies=true', function (data) {
+        $.getJSON(url + '?type=raw&show_anomaly=true', function (data) {
             $('#loading_screen').hide();
             $('#results_screen').show();
             var series_data = data['series'];
