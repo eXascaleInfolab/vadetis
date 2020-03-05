@@ -167,3 +167,23 @@ function loadSeries(chart, data_series) {
         chart.addSeries(series);
     });
 }
+
+function initSeriesForType(highchart, url, type, show_anomaly) {
+    highchart.showLoading();
+    $.getJSON(url + '?type=' + type + '&show_anomaly=' + show_anomaly, function (data) {
+        var series_data = data['series'];
+        dataset_series = getDatasetSeriesFromJsonValues(series_data);
+        loadSeries(highchart, dataset_series);
+        highchart.hideLoading();
+    });
+}
+
+function loadSeriesForType(highchart, url, type, show_anomaly, callback) {
+    highchart.showLoading();
+    $.getJSON(url + '?type=' + type + '&show_anomaly=' + show_anomaly, function (data) {
+        var series_data_json = data['series'];
+        setSeriesData(highchart, series_data_json);
+        highchart.hideLoading();
+        callback();
+    });
+}
