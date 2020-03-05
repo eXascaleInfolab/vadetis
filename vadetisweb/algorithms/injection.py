@@ -32,22 +32,22 @@ def anomaly_injection(dataset, conf):
             normal_start_index += anomaly_start_index + anomaly_duration
 
             # check break
-            if len(df.index) > anomaly_start_index:
+            if len(df.index) < anomaly_start_index:
                 done = True
             else:
-                for index, value in df.iloc[anomaly_start_index:normal_start_index, ts.id].iteritems():
+                for index, value in df.loc[df.index[anomaly_start_index:normal_start_index], ts.id].iteritems(): # df.iloc[anomaly_start_index:normal_start_index, df.columns.get_loc(ts.id)].iteritems():
                     # respect probability
                     if random.uniform(0, 1) <= probability:
                         # check if normal data at index -> change required
-                        if df_class.iloc[index, ts.id] == False:
+                        if df_class.loc[index, ts.id] == False:
                             inject_correlated_std_deviation_anomaly(df, df_inject, df_inject_class, index, ts.id)
 
-    return df, df_class
+    return df_inject, df_inject_class
 
 
 def inject_correlated_std_deviation_anomaly(df, df_inject, df_inject_class, index, ts_id, multiplier=3):
-    df_inject_class.iloc[index, ts_id] = True
+    df_inject_class.at[index, ts_id] = True
     # ddof = 0: population standard deviation using n; ddof = 1: sample std deviation using n-1
-    std_deviation = df.iloc[index,:].std(axis=1, skipna=True, level=None, ddof=0)
+    std_deviation = df.loc[index,:].std(axis=0, skipna=True, level=None, ddof=0)
     anomaly = multiplier * std_deviation
-    df_inject.iat[index, ts_id] = anomaly
+    df_inject.at[index, ts_id] = anomaly
