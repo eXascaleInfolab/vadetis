@@ -10,13 +10,13 @@ class AnomalyInjectionSerializer(serializers.Serializer):
     probability is determined by a nominator and a denominator.
     """
 
-    normal_lowerbound_duration = serializers.IntegerField(initial=100, label='Normal lower bound', min_value=1,
+    normal_lowerbound_duration = serializers.IntegerField(initial=50, label='Normal lower bound', min_value=1,
                                                           required=True,
                                                           help_text='The lower bound for duration of a normal event.',
                                                           style={'template': 'vadetisweb/parts/input/text_input.html',
                                                                  'step': 'number', 'min': 1})
 
-    normal_upperbound_duration = serializers.IntegerField(initial=200, label='Normal upper bound', min_value=1,
+    normal_upperbound_duration = serializers.IntegerField(initial=500, label='Normal upper bound', min_value=1,
                                                           required=True,
                                                           help_text='The upper bound for duration of a normal event.',
                                                           style={'template': 'vadetisweb/parts/input/text_input.html',

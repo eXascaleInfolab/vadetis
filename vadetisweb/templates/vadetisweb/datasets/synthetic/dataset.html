@@ -9,6 +9,11 @@
     {% breadcrumb dataset.title "vadetisweb:synthetic_dataset" dataset_id=dataset.id %}
 {% endblock %}
 
+{% block css %}
+    {{ block.super }}
+    {% include 'vadetisweb/parts/includes/highcharts_css.html' %}
+{% endblock %}
+
 {% block head_js %}
     {{ block.super }}
     {% include 'vadetisweb/parts/forms/ajax_form_replace_function_js.html' %}

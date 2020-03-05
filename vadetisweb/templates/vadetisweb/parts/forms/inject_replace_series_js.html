@@ -4,6 +4,8 @@
         event.preventDefault();
         clear_form_errors("{{ formid }}");
         clear_messages();
+        var highchart = $('#highcharts_container').highcharts();
+        highchart.showLoading();
         $.post({
             url: $(this).attr('action'){% if format %}+'?format={{ format }}'{% endif %},
             data: new FormData(this),
@@ -12,12 +14,12 @@
             processData: false,
             contentType: false,
             success: function (data, status, xhr) {
+                highchart.hideLoading();
                 var series_data_json = data['series'];
-                var highchart = $('#highcharts_container').highcharts();
                 setSeriesData(highchart, series_data_json);
-                console.log(series_data_json);
             },
             error: function (data, status, xhr) {
+                highchart.hideLoading();
                 console.error("Sending asynchronous failed");
                 if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
                     print_messages(data.responseJSON.messages);
