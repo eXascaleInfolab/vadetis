@@ -12,8 +12,10 @@ from django.http import HttpResponse
 from vadetisweb.serializers import AlgorithmSerializer, HistogramSerializer, ClusterSerializer, SVMSerializer, IsolationForestSerializer
 from vadetisweb.models import DataSet
 from vadetisweb.parameters import LISA, HISTOGRAM, CLUSTER_GAUSSIAN_MIXTURE, SVM, ISOLATION_FOREST, PEARSON, DTW, GEO
-from vadetisweb.utils import get_lisa_serializer, plot_thresholds_scores, plot_confusion_matrix, get_conf, get_settings, is_valid_conf, get_dataframes_for_ranges, get_updated_dataset_series_for_threshold_with_marker_json
+from vadetisweb.utils import get_datasets_from_json, get_lisa_serializer, plot_thresholds_scores, plot_confusion_matrix, get_conf, get_settings, is_valid_conf, get_dataframes_for_ranges, get_updated_dataset_series_for_threshold_with_marker_json
 from vadetisweb.algorithms import perform_lisa_person, perform_lisa_dtw, perform_lisa_geo, perform_histogram, perform_cluster, perform_svm, perform_isolation_forest
+
+
 
 
 class AnomalyDetectionFormView(APIView):
@@ -79,6 +81,95 @@ class AnomalyDetectionFormView(APIView):
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
+class DatasetJsonPerformAnomalyDetectionJson(APIView):
+    """
+        Request anomaly detection from provided json
+    """
+    renderer_classes = [JSONRenderer]
+
+    def post(self, request, dataset_id):
+        try:
+            dataset = DataSet.objects.get(id=dataset_id)
+            data = {}
+            data_series = {}
+            info = {}
+
+            dataset_series_json_post = request.POST['dataset_series_json']
+            dataset_series = json.loads(dataset_series_json_post)
+            df_from_json, df_class_from_json = get_datasets_from_json(dataset_series)
+
+            conf = get_conf(request)
+            settings = get_settings(request)
+
+            # abort condition
+            if not is_valid_conf(conf):
+                return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+            df, df_class = get_dataframes_for_ranges(df_from_json, df_class_from_json, conf)
+
+            if conf['algorithm'] == LISA:
+                ts_selected_id = conf['ts_selected']
+
+                if conf['correlation_algorithm'] == PEARSON:
+                    data_series, info = perform_lisa_person(df, df_class, conf, ts_selected_id, dataset, settings)
+
+                if conf['correlation_algorithm'] == DTW:
+                    data_series, info = perform_lisa_dtw(df, df_class, conf, ts_selected_id, dataset, settings)
+
+                if conf['correlation_algorithm'] == GEO:
+                    data_series, info = perform_lisa_geo(df, df_class, conf, ts_selected_id, dataset, settings)
+
+
+            elif conf['algorithm'] == HISTOGRAM:
+
+                training_data_id = conf['td_selected']
+                try:
+                    training_dataset = DataSet.objects.get(id=training_data_id)
+                    data_series, info = perform_histogram(df, df_class, conf, training_dataset, dataset, settings)
+
+                except DataSet.DoesNotExist:
+                    return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+
+            elif conf['algorithm'] == CLUSTER_GAUSSIAN_MIXTURE:
+
+                training_data_id = conf['td_selected']
+                try:
+                    training_dataset = DataSet.objects.get(id=training_data_id)
+                    data_series, info = perform_cluster(df, df_class, conf, training_dataset, dataset, settings)
+
+                except DataSet.DoesNotExist:
+                    return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+
+            elif conf['algorithm'] == SVM:
+
+                training_data_id = conf['td_selected']
+                try:
+                    training_dataset = DataSet.objects.get(id=training_data_id)
+                    data_series, info = perform_svm(df, df_class, conf, training_dataset, dataset, settings)
+                except DataSet.DoesNotExist:
+                    return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+
+            elif conf['algorithm'] == ISOLATION_FOREST:
+                training_data_id = conf['td_selected']
+                try:
+                    training_dataset = DataSet.objects.get(id=training_data_id)
+                    data_series, info = perform_isolation_forest(df, df_class, conf, training_dataset, dataset,
+                                                                 settings)
+
+                except DataSet.DoesNotExist:
+                    return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+            data['series'] = data_series
+            data['info'] = info
+            return Response(data)
+
+        except DataSet.DoesNotExist:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+
 class DatasetPerformAnomalyDetectionJson(APIView):
     """
     Request anomaly detection dataset
@@ -99,7 +190,7 @@ class DatasetPerformAnomalyDetectionJson(APIView):
             if not is_valid_conf(conf):
                 return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
-            df, df_class = get_dataframes_for_ranges(dataset, conf)
+            df, df_class = get_dataframes_for_ranges(dataset.dataframe, dataset.dataframe_class, conf)
 
             if conf['algorithm'] == LISA:
                 ts_selected_id = conf['ts_selected']

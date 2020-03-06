@@ -22,6 +22,9 @@ router.register(r'datasets/real-world', views.RealWorldDatasetDataTableViewSet, 
 apipatterns = [
     path('api/', include((router.urls))),
     path('api/anomaly-detection/<int:dataset_id>/', views.AnomalyDetectionFormView.as_view(), name='anomaly_detection_form'),
+    path('api/anomaly-detection/<int:dataset_id>/json/', views.DatasetJsonPerformAnomalyDetectionJson.as_view(),
+         name='anomaly_detection_json'),
+
     path('api/anomaly-injection/<int:dataset_id>/', views.AnomalyInjectionFormView.as_view(), name='anomaly_injection_form'),
     path('api/dataset/<int:dataset_id>/', views.DatasetJson.as_view(), name='dataset_json'),
     path('api/datasets/<int:dataset_id>/perform/', views.DatasetPerformAnomalyDetectionJson.as_view(),

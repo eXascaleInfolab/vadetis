@@ -18,18 +18,23 @@ def get_dataset_with_marker_json(dataset, df, df_class, type, show_anomaly, sett
     """else:
         df = dataset.dataframe  # raw data""" #TODO
 
+    outlier_color = settings['color_outliers']
+
     for ts in time_series:
         measurements = []
         for index, value in df.loc[:, ts.id].iteritems():
-            if not show_anomaly:
-                measurements.append({'x': unix_time_millis_from_dt(index), 'y': value})
-            else:
-                outlier_color = settings['color_outliers']
+            anomaly_class = 1 if (df_class.loc[index, ts.id] == True) else 0
 
-                if df_class.loc[index, ts.id] == False:
-                    measurements.append({'x': unix_time_millis_from_dt(index), 'y': value})
+            if not show_anomaly:
+                if anomaly_class == 0:
+                    measurements.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class': anomaly_class})
                 else:
-                    measurements.append({'x': unix_time_millis_from_dt(index), 'y': value,
+                    measurements.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class': anomaly_class})
+            else:
+                if anomaly_class == 0:
+                    measurements.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class' : anomaly_class})
+                else:
+                    measurements.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class' : anomaly_class,
                                          'marker': {'fillColor': outlier_color, 'radius': 3}})
 
         dict_series = {'id': ts.id,
@@ -160,6 +165,18 @@ def _get_scores_and_truth_from_series_measurements(series_measurements):
 
     return np.array(scores), np.array(truth)
 
+
+def get_datasets_from_json(dataset_series):
+
+
+    print(dataset_series)
+
+    """for series in dataset_series:
+        for measurement in series['measurements']:"""
+
+
+
+    return None, None
 
 def get_updated_dataset_series_for_threshold_with_marker_json(threshold, dataset_series, info, algorithm, settings):
 

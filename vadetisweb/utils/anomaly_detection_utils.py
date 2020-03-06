@@ -317,9 +317,7 @@ def get_window_size_for_percentage(df, percentage):
     return int(round((float(len(df.index)) / float(100)) * int(percentage)))
 
 
-def get_dataframes_for_ranges(dataset, conf):
-    df = dataset.dataframe
-    df_class = dataset.dataframe_class
+def get_dataframes_for_ranges(df, df_class, conf):
 
     range_start = unix_time_millis_to_dt(conf['range_start']) if conf['time_range'] == SELECTION else None
     range_end = unix_time_millis_to_dt(conf['range_end']) if conf['time_range'] == SELECTION else None

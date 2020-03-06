@@ -17,6 +17,8 @@
                 highchart.hideLoading();
                 var series_data_json = data['series'];
                 setSeriesData(highchart, series_data_json);
+
+                console.log(data);
             },
             error: function (data, status, xhr) {
                 highchart.hideLoading();

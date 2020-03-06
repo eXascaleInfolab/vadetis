@@ -121,27 +121,8 @@ var VadetisHighcharts = function () {
             series: dataset_series,
         });
 
-        //TODO place into utils
-        /*function loadSeriesForType(type) {
-            current_type = type;
-            highchart.showLoading();
-            $.getJSON(url + '?type=' + type + '&show_anomaly=' + shows_anomalies, function (data) {
-                var series_data_json = data['series'];
-                setSeriesData(highchart, series_data_json);
-                highchart.hideLoading();
-            });
-        }*/
-
         // load chart
         initSeriesForType(highchart, url, "raw", true);
-
-        /*$.getJSON(url + '?type=raw&show_anomaly=true', function (data) {
-            $('#loading_screen').hide();
-            $('#results_screen').show();
-            var series_data = data['series'];
-            dataset_series = getDatasetSeriesFromJsonValues(series_data);
-            loadSeries(highchart, dataset_series);
-        });*/
     };
     return {
         init: function (html_id, url, selectedButton) {
