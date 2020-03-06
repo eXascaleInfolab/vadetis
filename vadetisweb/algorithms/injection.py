@@ -50,5 +50,5 @@ def inject_correlated_std_deviation_anomaly(df, df_inject, df_inject_class, inde
     # ddof = 0: population standard deviation using n; ddof = 1: sample std deviation using n-1
     std_deviation = df.loc[index,:].std(axis=0, skipna=True, level=None, ddof=0)
     multi = multiplier * -1 if random.randint(0,100) <= 50 else multiplier
-    anomaly = multi * std_deviation
+    anomaly = (multi * std_deviation) + df.at[index, ts_id]
     df_inject.at[index, ts_id] = anomaly

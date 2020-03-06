@@ -105,8 +105,24 @@ class RealWorldDataset(APIView):
     template_name = 'vadetisweb/datasets/real-world/dataset.html'
 
     def get(self, request, dataset_id):
-        dataset = DataSet.objects.get(id=dataset_id)
+        try:
+            dataset = DataSet.objects.get(id=dataset_id)
+            if dataset.type != REAL_WORLD:
+                return redirect('vadetisweb:real_world_datasets')
 
-        return Response({
-            'dataset': dataset,
-        }, status=status.HTTP_200_OK)
+            selected_button = get_highcharts_range_button_preselector(dataset.frequency)
+            settings = get_settings(request)
+
+            serializer = AlgorithmSerializer()
+            injection_serializer = AnomalyInjectionSerializer()
+
+            return Response({
+                'dataset': dataset,
+                'selected_button': selected_button,
+                'settings' : settings,
+                'serializer': serializer,
+                'injection_serializer' : injection_serializer,
+            }, status=status.HTTP_200_OK)
+
+        except DataSet.DoesNotExist:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
