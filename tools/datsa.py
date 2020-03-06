@@ -30,7 +30,7 @@ def transform(inputfile, outputfile):
     print('transforming')
     start_time = datetime.now().replace(year=2018, microsecond=0, second=0, minute=0)
     header = ['ts_name', 'time', 'unit', 'value', 'class']
-    read_header = ['label', 'time-stamp', 'moratta_sensor']
+    read_header = ['label', 'time-stamp', 'x']
     with open(inputfile, 'r') as file_input, open(outputfile, 'w') as file_output:
         reader = csv.reader(file_input, delimiter=',')
         next(reader, None)  # skip the headers
