@@ -2,7 +2,7 @@
 
 var VadetisHighcharts = function () {
 
-    var initHighcharts = function (html_id, url, selectedButton) {
+    var initHighcharts = function (html_id, url, settings, selectedButton) {
         var shows_anomalies = true;
         var current_type = 'raw';
         var dataset_series = [];
@@ -17,7 +17,7 @@ var VadetisHighcharts = function () {
         var highchart = new Highcharts.StockChart(html_id, {
             chart: {
                 zoomType: 'x',
-                height: 600, //TODO get from settings
+                height: settings.highcharts_height,
             },
 
             navigator: {
@@ -47,10 +47,9 @@ var VadetisHighcharts = function () {
                                 value_color = point.point.marker.fillColor;
                             }
                         }
-                        //TODO add round digits from settings
                         tooltip += '<tr>' +
                             '<td><span style="color:' + this.series.color + '">\u25CF</span> ' + this.series.name + ': </td>' +
-                            '<td style="text-align: right;"><strong style="color: ' + value_color + ';">' + this.y.toFixed(2) + '</strong></td>' +
+                            '<td style="text-align: right;"><strong style="color: ' + value_color + ';">' + this.y.toFixed(settings.round_digits) + '</strong></td>' +
                             '<td>' + this.series.tooltipOptions.valueSuffix + '</td>' +
                             '</tr>';
                     });
@@ -62,7 +61,7 @@ var VadetisHighcharts = function () {
             legend: {
                 enabled: true,
                 layout: 'horizontal',
-                maxHeight: 200, // TODO add from settings
+                maxHeight: settings.legend_height,
             },
 
             rangeSelector: {
@@ -125,8 +124,8 @@ var VadetisHighcharts = function () {
         initSeriesForType(highchart, url, "raw", true);
     };
     return {
-        init: function (html_id, url, selectedButton) {
-            initHighcharts(html_id, url, selectedButton);
+        init: function (html_id, url, settings, selectedButton) {
+            initHighcharts(html_id, url, settings, selectedButton);
         }
     };
 }();

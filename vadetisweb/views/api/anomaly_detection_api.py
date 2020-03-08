@@ -16,8 +16,6 @@ from vadetisweb.utils import get_datasets_from_json, get_lisa_serializer, plot_t
 from vadetisweb.algorithms import perform_lisa_person, perform_lisa_dtw, perform_lisa_geo, perform_histogram, perform_cluster, perform_svm, perform_isolation_forest
 
 
-
-
 class AnomalyDetectionFormView(APIView):
     """
     Request anomaly detection form

@@ -10,6 +10,7 @@ from django.contrib import messages
 from vadetisweb.models import DataSet
 from vadetisweb.serializers import AlgorithmSerializer, ThresholdSerializer, AnomalyInjectionSerializer
 from vadetisweb.utils import get_settings, get_highcharts_range_button_preselector, get_conf, is_valid_conf
+from vadetisweb.factory import dataset_not_found_msg
 from vadetisweb.parameters import SYNTHETIC, REAL_WORLD
 
 class SyntheticDatasets(APIView):
@@ -62,7 +63,8 @@ class SyntheticDataset(APIView):
             }, status=status.HTTP_200_OK)
 
         except DataSet.DoesNotExist:
-            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+            messages.error(request, dataset_not_found_msg(dataset_id))
+            return redirect('vadetisweb:synthetic_datasets')
 
 
 class SyntheticDatasetPerformAnomalyDetection(APIView):
@@ -94,7 +96,8 @@ class SyntheticDatasetPerformAnomalyDetection(APIView):
                                  'serializer': serializer}, status=status.HTTP_200_OK)
 
         except DataSet.DoesNotExist:
-            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+            messages.error(request, dataset_not_found_msg(dataset_id))
+            return redirect('vadetisweb:synthetic_datasets')
 
 
 class RealWorldDataset(APIView):
@@ -125,4 +128,5 @@ class RealWorldDataset(APIView):
             }, status=status.HTTP_200_OK)
 
         except DataSet.DoesNotExist:
-            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+            messages.error(request, dataset_not_found_msg(dataset_id))
+            return redirect('vadetisweb:real_world_datasets')

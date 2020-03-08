@@ -45,6 +45,7 @@ def anomaly_injection(dataset, conf):
     return df_inject, df_inject_class
 
 
+#TODO change function
 def inject_correlated_std_deviation_anomaly(df, df_inject, df_inject_class, index, ts_id, multiplier=3):
     df_inject_class.at[index, ts_id] = True
     # ddof = 0: population standard deviation using n; ddof = 1: sample std deviation using n-1

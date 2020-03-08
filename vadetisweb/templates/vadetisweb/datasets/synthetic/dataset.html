@@ -1,7 +1,7 @@
 {% extends 'vadetisweb/datasets/synthetic/datasets.html' %}
 {% load static %}
 {% load breadcrumbs %}
-{% load mytags %}
+{% load vadetistags %}
 {% load rest_framework %}
 
 {% block breadcrumbs %}
@@ -16,6 +16,7 @@
 
 {% block head_js %}
     {{ block.super }}
+    {{ settings|json_script:"settings" }}
     {% include 'vadetisweb/parts/forms/ajax_form_replace_function_js.html' %}
 {% endblock %}
 
@@ -90,7 +91,7 @@
     <script src="{% static 'js/custom/highcharts.actions.init.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
         jQuery(document).ready(function () {
-            VadetisHighcharts.init("highcharts_container", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", {{ selected_button }});
+            VadetisHighcharts.init("highcharts_container", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", JSON.parse(document.getElementById('settings').textContent), {{ selected_button }});
             VadetisHighchartsActionsReload.init("highcharts_container", "reload-chart-button", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}");
         });
     </script>

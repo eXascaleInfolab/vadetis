@@ -2,12 +2,13 @@ from __future__ import unicode_literals
 
 import re, datetime, time
 import kombu.five
-from django import template
+
 from django.urls import reverse, NoReverseMatch, resolve
 from django.utils.safestring import mark_safe
+from django.template import Library
 #from lisa.utils import decompress_window_size TODO
 
-register = template.Library()
+register = Library()
 
 @register.simple_tag(takes_context=False)
 def get_host_url(request):

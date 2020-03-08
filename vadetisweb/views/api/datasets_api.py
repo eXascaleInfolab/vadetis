@@ -64,7 +64,7 @@ class DatasetJson(APIView):
 
     def get(self, request, dataset_id):
         # handle query params
-        type = request.GET.get('type', 'raw')
+        type = request.query_params.get('type', 'raw')
         show_anomaly = strToBool(request.query_params.get('show_anomaly', 'true'))
 
         data = {}
