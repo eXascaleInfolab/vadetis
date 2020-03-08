@@ -1,1 +1,2 @@
+{% load rest_framework %}
 <input{% if style.id %} id="{{ style.id }}" {% endif %} name="{{ field.name }}" type="hidden" {% if field.value is not None %}value="{{ field.value }}"{% endif %}>

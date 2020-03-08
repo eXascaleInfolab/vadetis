@@ -31,7 +31,7 @@ class ApplicationSettings(APIView):
         else: # use cookies
             settings = UserSettings(**settings_dict)
 
-        serializer = UserSettingsSerializer(settings)
+        serializer = UserSettingsSerializer(instance=settings)
         return Response({'serializer': serializer}, status=status.HTTP_200_OK)
 
 
