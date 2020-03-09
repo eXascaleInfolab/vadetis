@@ -23,8 +23,8 @@ class AnomalyDetectionFormView(APIView):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
     template_name = 'vadetisweb/parts/forms/anomaly_detection_serializer_form.html'
 
-    def post(self, request, dataset_id):
 
+    def post(self, request, dataset_id):
         dataset = DataSet.objects.get(id=dataset_id)
         try:
             if 'algorithm' in request.POST:

@@ -4,13 +4,16 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
+from drf_yasg.utils import swagger_auto_schema
 
 from django.contrib import messages
+from django.shortcuts import redirect
 
 from vadetisweb.models import DataSet
 from vadetisweb.serializers import AnomalyInjectionSerializer, MessageSerializer
 from vadetisweb.algorithms import anomaly_injection
 from vadetisweb.utils import get_dataset_with_marker_json, strToBool, get_settings, json_message_utils
+from vadetisweb.factory import dataset_not_found_msg
 
 
 class AnomalyInjectionFormView(APIView):
@@ -21,6 +24,7 @@ class AnomalyInjectionFormView(APIView):
     parser_classes = [MultiPartParser]
     template_name = 'vadetisweb/parts/forms/anomaly_detection_serializer_form.html'
 
+    @swagger_auto_schema(request_body=AnomalyInjectionSerializer)
     def post(self, request, dataset_id, format=None):
 
         try:
@@ -60,4 +64,5 @@ class AnomalyInjectionFormView(APIView):
                     }, status=status.HTTP_400_BAD_REQUEST)
 
         except DataSet.DoesNotExist:
-            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+            messages.error(request, dataset_not_found_msg(dataset_id))
+            return redirect('vadetisweb:index')

@@ -141,6 +141,11 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.BrowsableAPIRenderer',
         'rest_framework_datatables.renderers.DatatablesRenderer',
     ),
+    'DEFAULT_PARSER_CLASSES': (
+          'rest_framework.parsers.FormParser',
+          'rest_framework.parsers.MultiPartParser',
+          'rest_framework.parsers.JSONParser',
+    ),
     'DEFAULT_FILTER_BACKENDS': (
         'rest_framework_datatables.filters.DatatablesFilterBackend',
     ),
@@ -150,6 +155,10 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ),
     #'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
+}
+
+SWAGGER_SETTINGS = {
+    'JSON_EDITOR': True,
 }
 
 # Login - Config
