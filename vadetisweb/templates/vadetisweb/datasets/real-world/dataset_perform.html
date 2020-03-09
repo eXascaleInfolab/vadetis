@@ -79,7 +79,7 @@
                         <div class="kt-portlet__body kt-portlet__body--fit">
                             <div id="threshold_slider"></div>
                             {% url 'vadetisweb:anomaly_detection_form' dataset_id=dataset.id as fromurl %}
-                            {% include 'vadetisweb/parts/forms/anomaly_detection_serializer_form.html' with formid="threshold_form" url=fromurl %}
+                            {% include 'vadetisweb/parts/forms/anomaly_detection_form.html' with formid="threshold_form" url=fromurl %}
                         </div>
                     </div>
                 </div>

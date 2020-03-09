@@ -16,7 +16,7 @@
 
 {% block head_js %}
     {{ block.super }}
-    {% include 'vadetisweb/parts/forms/ajax_form_replace_function_js.html' %}
+    {% include 'vadetisweb/parts/js/ajax_form_replace_js.html' %}
 {% endblock %}
 
 {% block page_title %}
@@ -60,7 +60,7 @@
                 </div>
                 <div class="kt-portlet__body kt-portlet__body--fit">
                     {% url 'vadetisweb:anomaly_detection_form' dataset_id=dataset.id as detection_url %}
-                    {% include 'vadetisweb/parts/forms/anomaly_detection_serializer_form.html' with formid="anomaly_detection_form" url=detection_url %}
+                    {% include 'vadetisweb/parts/forms/anomaly_detection_form.html' with formid="anomaly_detection_form" url=detection_url %}
                 </div>
             </div>
             <div class="kt-portlet kt-portlet--collapsed" data-ktportlet="true" id="kt_portlet_tools_2">
@@ -76,7 +76,7 @@
                 </div>
                 <div class="kt-portlet__body kt-portlet__body--fit">
                     {% url 'vadetisweb:anomaly_injection_form' dataset_id=dataset.id as injection_url %}
-                    {% include 'vadetisweb/parts/forms/anomaly_injection_serializer_form.html' with formid="anomaly_injection_form" url=injection_url %}
+                    {% include 'vadetisweb/parts/forms/anomaly_serializer_form.html' with formid="anomaly_injection_form" url=injection_url %}
                 </div>
             </div>
         </div>
@@ -94,6 +94,6 @@
             VadetisHighchartsActionsReload.init("highcharts_container", "reload-chart-button", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}");
         });
     </script>
-    {% include "vadetisweb/parts/forms/ajax_form_replace_js.html" with formid="anomaly_detection_form" %}
-    {% include 'vadetisweb/parts/forms/inject_replace_series_js.html' with formid="anomaly_injection_form" format="json" %}
+    {% include "vadetisweb/parts/js/ajax_form_replace_js.html" with formid="anomaly_detection_form" %}
+    {% include 'vadetisweb/parts/js/inject_replace_series_js.html' with formid="anomaly_injection_form" format="json" %}
 {% endblock %}

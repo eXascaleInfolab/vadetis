@@ -22,7 +22,7 @@
                     </div>
                 </div>
                 {% url 'vadetisweb:training_dataset_uploa' as fromurl %}
-                {% include 'vadetisweb/parts/forms/serializer_form.html' with formid="training_dataset_upload_form" url=fromurl %}
+                {% include 'vadetisweb/parts/forms/serializer_form.html' with formid="training_dataset_upload_form" url=fromurl submit_label="Save" %}
             </div>
         </div>
         <div class="col-md-6">
@@ -45,5 +45,5 @@
 {% endblock %}
 
 {% block additional_bottom_js %}
-    {% include "vadetisweb/parts/forms/ajax_form_js.html" with formid="training_dataset_upload_form" format="json" %}
+    {% include "vadetisweb/parts/js/ajax_form_js.html" with formid="training_dataset_upload_form" format="json" %}
 {% endblock %}

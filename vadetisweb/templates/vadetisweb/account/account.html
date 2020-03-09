@@ -74,8 +74,8 @@
 
 {% block additional_bottom_js %}
     {{ block.super }}
-    {% include "vadetisweb/parts/forms/ajax_form_js.html" with formid="user_form" %}
-    {% include "vadetisweb/parts/forms/ajax_form_js.html" with formid="password_change_form" %}
-    {% include "vadetisweb/parts/forms/ajax_form_js.html" with formid="social_disconnect_form" %}
-    {% include "vadetisweb/parts/forms/ajax_form_js.html" with formid="account_delete_form" %}
+    {% include "vadetisweb/parts/js/ajax_form_js.html" with formid="user_form" %}
+    {% include "vadetisweb/parts/js/ajax_form_js.html" with formid="password_change_form" %}
+    {% include "vadetisweb/parts/js/ajax_form_js.html" with formid="social_disconnect_form" %}
+    {% include "vadetisweb/parts/js/ajax_form_js.html" with formid="account_delete_form" %}
 {% endblock %}

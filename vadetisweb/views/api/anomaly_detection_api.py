@@ -6,23 +6,89 @@ from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
 
 from django.urls import reverse
+from django.shortcuts import redirect
 from django.core.files.temp import NamedTemporaryFile
 from django.http import HttpResponse
+from django.contrib import messages
 
 from vadetisweb.serializers import AlgorithmSerializer, HistogramSerializer, ClusterSerializer, SVMSerializer, IsolationForestSerializer
 from vadetisweb.models import DataSet
 from vadetisweb.parameters import LISA, HISTOGRAM, CLUSTER_GAUSSIAN_MIXTURE, SVM, ISOLATION_FOREST, PEARSON, DTW, GEO
 from vadetisweb.utils import get_datasets_from_json, get_lisa_serializer, plot_thresholds_scores, plot_confusion_matrix, get_conf, get_settings, is_valid_conf, get_dataframes_for_ranges, get_updated_dataset_series_for_threshold_with_marker_json
 from vadetisweb.algorithms import perform_lisa_person, perform_lisa_dtw, perform_lisa_geo, perform_histogram, perform_cluster, perform_svm, perform_isolation_forest
+from vadetisweb.factory import dataset_not_found_msg
 
 
-class AnomalyDetectionFormView(APIView):
+class AnomalyDetectionAlgorithmSelectionView(APIView):
     """
-    Request anomaly detection form
+    Request anomaly detection form based on selected algorithm
     """
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
-    template_name = 'vadetisweb/parts/forms/anomaly_detection_serializer_form.html'
+    template_name = 'vadetisweb/parts/forms/serializer_form.html'
 
+    def post(self, request, dataset_id):
+        try:
+            dataset = DataSet.objects.get(id=dataset_id)
+            serializer = AlgorithmSerializer(data=request.data)
+            if serializer.is_valid():
+                algorithm = serializer.validated_data['algorithm']
+                formid = 'anomaly_detection_form'
+
+                if algorithm == LISA:
+                    algorithm_serializer = get_lisa_serializer(context={'dataset_selected': dataset_id, })
+
+                elif algorithm == HISTOGRAM:
+                    return Response({
+                        'dataset': dataset,
+                        'formid': formid,
+                        'url': reverse('vadetisweb:anomaly_detection_histogram', args=[dataset_id]),
+                        'serializer': HistogramSerializer(context={'dataset_selected': dataset_id, }),
+                        'submit_label' : 'Run',
+                    }, status=status.HTTP_200_OK)
+
+                elif algorithm == CLUSTER_GAUSSIAN_MIXTURE:
+                    return Response({
+                        'dataset': dataset,
+                        'formid': formid,
+                        'url': reverse('vadetisweb:anomaly_detection_cluster', args=[dataset_id]),
+                        'serializer': ClusterSerializer(context={'dataset_selected': dataset_id, }),
+                        'submit_label': 'Run',
+                    }, status=status.HTTP_200_OK)
+
+                elif algorithm == SVM:
+                    return Response({
+                        'dataset': dataset,
+                        'formid': formid,
+                        'url': reverse('vadetisweb:anomaly_detection_svm', args=[dataset_id]),
+                        'serializer': SVMSerializer(context={'dataset_selected': dataset_id, }),
+                        'submit_label': 'Run',
+                    }, status=status.HTTP_200_OK)
+
+                elif algorithm == ISOLATION_FOREST:
+                    return Response({
+                        'dataset': dataset,
+                        'formid': formid,
+                        'url': reverse('vadetisweb:anomaly_detection_isolation_forest', args=[dataset_id]),
+                        'serializer': IsolationForestSerializer(context={'dataset_selected': dataset_id, }),
+                        'submit_label': 'Run',
+                    }, status=status.HTTP_200_OK)
+
+                else:
+                    return Response(template_name='vadetisweb/parts/forms/empty.html', status=status.HTTP_204_NO_CONTENT)
+            else:
+                print('Algorithm selection form was not valid')
+                return Response(template_name='vadetisweb/parts/forms/empty.html', status = status.HTTP_204_NO_CONTENT)
+
+        except DataSet.DoesNotExist:
+            messages.error(request, dataset_not_found_msg(dataset_id))
+            return redirect('vadetisweb:index')
+
+
+
+"""
+class AnomalyDetectionAlgorithmSelectionView(APIView):
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+    template_name = 'vadetisweb/parts/forms/anomaly_detection_form.html'
 
     def post(self, request, dataset_id):
         dataset = DataSet.objects.get(id=dataset_id)
@@ -77,6 +143,46 @@ class AnomalyDetectionFormView(APIView):
 
         except DataSet.DoesNotExist:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
+"""
+
+class AnomalyDetectionHistogram(APIView):
+    """
+        Request anomaly detection from provided json
+    """
+    renderer_classes = [JSONRenderer]
+
+    def post(self, request, dataset_id):
+        return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AnomalyDetectionCluster(APIView):
+    """
+        Request anomaly detection from provided json
+    """
+    renderer_classes = [JSONRenderer]
+
+    def post(self, request, dataset_id):
+        return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AnomalyDetectionSVM(APIView):
+    """
+        Request anomaly detection from provided json
+    """
+    renderer_classes = [JSONRenderer]
+
+    def post(self, request, dataset_id):
+        return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AnomalyDetectionIsolationForest(APIView):
+    """
+        Request anomaly detection from provided json
+    """
+    renderer_classes = [JSONRenderer]
+
+    def post(self, request, dataset_id):
+        return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class DatasetJsonPerformAnomalyDetectionJson(APIView):

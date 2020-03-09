@@ -1,11 +1,11 @@
 <!-- BEGIN AJAX FORM JS -->
 <script type="text/javascript">
-function ajaxSubmit(form, formid) {
+function ajaxSubmit(formData, formid) {
     clear_form_errors(formid);
     clear_messages();
     $.post({
-        url: $(form).attr('action'),
-        data: new FormData(form),
+        url: $(formid).attr('action'),
+        data: new FormData(formData),
         type: $(this).attr('method'),
         enctype: $(this).attr('enctype'),
         processData: false,

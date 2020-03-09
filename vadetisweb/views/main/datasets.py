@@ -13,6 +13,7 @@ from vadetisweb.utils import get_settings, get_highcharts_range_button_preselect
 from vadetisweb.factory import dataset_not_found_msg
 from vadetisweb.parameters import SYNTHETIC, REAL_WORLD
 
+
 class SyntheticDatasets(APIView):
     """
     View for synthetic datasets

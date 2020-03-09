@@ -9,7 +9,6 @@ class AlgorithmSerializer(serializers.Serializer):
 
     algorithm = serializers.ChoiceField(choices=ANOMALY_DETECTION_ALGORITHMS_EMPTY,
                                         required=True,
-                                        source='get_algorithm',
                                         help_text='The type of anomaly detection algorithm',
                                         style={'template': 'vadetisweb/parts/input/select_input_onchange_submit.html'})
 
@@ -17,7 +16,7 @@ class AlgorithmSerializer(serializers.Serializer):
         super(AlgorithmSerializer, self).__init__(*args, **kwargs)
 
 
-class HistogramSerializer(AlgorithmSerializer):
+class HistogramSerializer(serializers.Serializer):
     td_selected = TrainingDatasetField(label='Training Dataset',
                                        required=True,
                                        queryset=DataSet.objects.none())
@@ -34,7 +33,7 @@ class HistogramSerializer(AlgorithmSerializer):
         super(HistogramSerializer, self).__init__(*args, **kwargs)
 
 
-class ClusterSerializer(AlgorithmSerializer):
+class ClusterSerializer(serializers.Serializer):
     td_selected = TrainingDatasetField(label='Training Dataset',
                                        required=True,
                                        queryset=DataSet.objects.none())
@@ -57,7 +56,7 @@ class ClusterSerializer(AlgorithmSerializer):
         super(ClusterSerializer, self).__init__(*args, **kwargs)
 
 
-class SVMSerializer(AlgorithmSerializer):
+class SVMSerializer(serializers.Serializer):
     td_selected = TrainingDatasetField(label='Training Dataset',
                                        required=True,
                                        queryset=DataSet.objects.none())
@@ -83,7 +82,7 @@ class SVMSerializer(AlgorithmSerializer):
         super(SVMSerializer, self).__init__(*args, **kwargs)
 
 
-class IsolationForestSerializer(AlgorithmSerializer):
+class IsolationForestSerializer(serializers.Serializer):
 
     td_selected = TrainingDatasetField(label='Training Dataset',
                                        required=True,
@@ -108,7 +107,7 @@ class IsolationForestSerializer(AlgorithmSerializer):
         super(IsolationForestSerializer, self).__init__(*args, **kwargs)
 
 
-class CorrelationSerializer(AlgorithmSerializer):
+class CorrelationSerializer(serializers.Serializer):
     """
     The serializer for selection of a correlation algorithm
     """
