@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
+from drf_yasg.utils import swagger_auto_schema
 
 from django.urls import reverse
 from django.shortcuts import redirect
@@ -151,8 +152,18 @@ class AnomalyDetectionHistogram(APIView):
     """
     renderer_classes = [JSONRenderer]
 
+    @swagger_auto_schema(request_body=HistogramSerializer)
     def post(self, request, dataset_id):
-        return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+        dataset = DataSet.objects.get(id=dataset_id)
+        try:
+
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+
+        except DataSet.DoesNotExist:
+                messages.error(request, dataset_not_found_msg(dataset_id))
+                return redirect('vadetisweb:index')
 
 
 class AnomalyDetectionCluster(APIView):
@@ -185,6 +196,7 @@ class AnomalyDetectionIsolationForest(APIView):
         return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
+# TODO Deprecated
 class DatasetJsonPerformAnomalyDetectionJson(APIView):
     """
         Request anomaly detection from provided json

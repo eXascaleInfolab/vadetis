@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from drf_yasg import openapi
 from vadetisweb.models import *
 from vadetisweb.fields import *
 
@@ -17,6 +17,9 @@ class AlgorithmSerializer(serializers.Serializer):
 
 
 class HistogramSerializer(serializers.Serializer):
+
+    dataset_series_json = DatasetJsonField(False, None)
+
     td_selected = TrainingDatasetField(label='Training Dataset',
                                        required=True,
                                        queryset=DataSet.objects.none())
