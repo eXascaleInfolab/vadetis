@@ -97,7 +97,6 @@ class TaskImportData(Task):
             if len(units) > 1:
                 raise ValueError('Different types of values provided')
 
-                    # creates (and saves) dataset
             dataset = DataSet.objects.create(title=title,
                                              owner=user,
                                              type=type,
@@ -108,7 +107,7 @@ class TaskImportData(Task):
             # for each series create a time series object
             for idx, row in df_ts_unit.items():
                 ts = TimeSeries.objects.create(name=idx,
-                                               unit=row,
+                                               unit=row[0], # safe to get single element as previously checked for consistency
                                                is_spatial=True if spatial_data == SPATIAL else False)
                 print("New time series: {0} added".format(idx))
                 ts.datasets.add(dataset)

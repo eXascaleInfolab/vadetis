@@ -18,7 +18,8 @@ class AlgorithmSerializer(serializers.Serializer):
 
 class HistogramSerializer(serializers.Serializer):
 
-    dataset_series_json = DatasetJsonField(False, None)
+    dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
+                                           style={'template': 'vadetisweb/parts/input/hidden_input.html', 'id' : 'dataset_series_json'})
 
     td_selected = TrainingDatasetField(label='Training Dataset',
                                        required=True,

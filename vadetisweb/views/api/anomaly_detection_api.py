@@ -155,11 +155,20 @@ class AnomalyDetectionHistogram(APIView):
     @swagger_auto_schema(request_body=HistogramSerializer)
     def post(self, request, dataset_id):
 
-        dataset = DataSet.objects.get(id=dataset_id)
         try:
+            dataset = DataSet.objects.get(id=dataset_id)
+            serializer = HistogramSerializer(context={'dataset_selected': dataset_id, }, data=request.data)
 
-            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+            if serializer.is_valid():
+                data = {}
+                data_series = {}
+                info = {}
+                df_from_json, df_class_from_json = get_datasets_from_json(serializer.validated_data['dataset_series_json'])
+                settings = get_settings(request)
 
+                return Response({}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
         except DataSet.DoesNotExist:
                 messages.error(request, dataset_not_found_msg(dataset_id))

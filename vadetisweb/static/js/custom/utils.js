@@ -15,6 +15,45 @@ function loadImage(html_id, url, post_data) {
     });
 }
 
+function registerAnomalyDetectionForm(form_id) {
+    var html_id = '#' + form_id;
+    $(html_id).on('submit', function (event) {
+        event.preventDefault();
+        clear_form_errors(form_id);
+        clear_messages();
+
+        var highchart = $('#highcharts_container').highcharts();
+        updateTimeRange(highchart, form_id);
+
+        var formData = new FormData(this);
+        var dataset_series_json = getDatasetSeriesJson(highchart);
+        formData.append('dataset_series_json', JSON.stringify(dataset_series_json));
+
+        $.post({
+            url: $(this).attr('action'),
+            data: formData,
+            type: $(this).attr('method'),
+            enctype: $(this).attr('enctype'),
+            processData: false,
+            contentType: false,
+            success: function(data, status, xhr) {
+                if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
+                    print_messages(data.responseJSON.messages);
+                }
+            },
+            error: function(data, status, xhr) {
+                console.error("Sending asynchronous failed");
+                if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
+                    print_messages(data.responseJSON.messages);
+                }
+                if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('form_errors')) {
+                    print_form_errors(data.responseJSON.form_errors);
+                }
+            }
+        });
+    });
+}
+
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -24,9 +63,13 @@ function clear_messages() {
 }
 
 function clear_form_errors(formid) {
-    form = $("#"+formid);
+    form = $("#" + formid);
     form.find(".validated").removeClass("validated");
     form.find(".invalid-feedback").remove();
+}
+
+function containsObject(obj, list) {
+    return list.some(elem => elem === obj)
 }
 
 function groupBy(list, keyGetter) {
@@ -76,7 +119,7 @@ function html_messages(messages) {
 
 function print_form_errors(form_errors) {
     for (const [key, val] of Object.entries(form_errors)) {
-        input_element = $("[name="+key+"]" );
+        input_element = $("[name=" + key + "]");
         html = "<div class=\"invalid-feedback\">" + val[0] + "</div>";
         input_element.parent().addClass("validated");
         input_element.after(html);

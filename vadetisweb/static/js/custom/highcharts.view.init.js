@@ -21,6 +21,7 @@ var VadetisHighcharts = function () {
             },
 
             navigator: {
+                enabled: true,
                 adaptToUpdatedData: true,
             },
 
@@ -50,7 +51,7 @@ var VadetisHighcharts = function () {
                         tooltip += '<tr>' +
                             '<td><span style="color:' + this.series.color + '">\u25CF</span> ' + this.series.name + ': </td>' +
                             '<td style="text-align: right;"><strong style="color: ' + value_color + ';">' + this.y.toFixed(settings.round_digits) + '</strong></td>' +
-                            '<td>' + this.series.tooltipOptions.valueSuffix + '</td>' +
+                            //'<td>' + this.series.tooltipOptions.valueSuffix + '</td>' +
                             '</tr>';
                     });
                     tooltip += '</table>';
@@ -93,15 +94,20 @@ var VadetisHighcharts = function () {
                     type: 'all',
                     text: 'All'
                 }],
-                inputEnabled: false, // as it supports only days
+                inputEnabled: false, // because it supports only days
                 selected: selectedButton,
             },
 
             yAxis: [{
                 floor: -40,
                 title: {
-                    text: 'Value',
+                    text: '',
                 },
+                labels: {
+                    formatter: function () {
+                        return this.value;
+                    }
+                }
             }],
 
             plotOptions: {

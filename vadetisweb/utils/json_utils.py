@@ -21,20 +21,20 @@ def get_dataset_with_marker_json(dataset, df, df_class, type, show_anomaly, sett
     outlier_color = settings['color_outliers']
 
     for ts in time_series:
-        measurements = []
+        data = []
         for index, value in df.loc[:, ts.id].iteritems():
             anomaly_class = 1 if (df_class.loc[index, ts.id] == True) else 0
 
             if not show_anomaly:
                 if anomaly_class == 0:
-                    measurements.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class': anomaly_class})
+                    data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class': anomaly_class})
                 else:
-                    measurements.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class': anomaly_class})
+                    data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class': anomaly_class})
             else:
                 if anomaly_class == 0:
-                    measurements.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class' : anomaly_class})
+                    data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class' : anomaly_class})
                 else:
-                    measurements.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class' : anomaly_class,
+                    data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class' : anomaly_class,
                                          'marker': {'fillColor': outlier_color, 'radius': 3}})
 
         dict_series = {'id': ts.id,
@@ -42,7 +42,7 @@ def get_dataset_with_marker_json(dataset, df, df_class, type, show_anomaly, sett
                        'unit': ts.unit,
                        'is_spatial': ts.is_spatial,
                        'type': type,
-                       'measurements': measurements
+                       'data': data
                        }
         data_series.append(dict_series)
 

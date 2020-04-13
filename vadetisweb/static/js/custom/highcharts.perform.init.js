@@ -114,8 +114,13 @@ var VadetisHighcharts = function () {
             yAxis: [{
                 floor: -40,
                 title: {
-                    text: 'Value',
+                    text: '',
                 },
+                labels: {
+                    formatter: function () {
+                        return this.value;
+                    }
+                }
             }],
 
             plotOptions: {
@@ -155,7 +160,7 @@ var VadetisHighcharts = function () {
             var series_data = data['series'];
             dataset_series_json = data['series'];
             info = data['info'];
-            dataset_series = getDatasetSeriesFromJsonValues(series_data);
+            dataset_series = getDatasetSeriesFromJson(series_data);
             loadSeries(highchart, dataset_series);
             
             //when data received trigger GUI update
@@ -189,7 +194,7 @@ var VadetisHighcharts = function () {
         $('#threshold_form').on('submit', function(event){
             event.preventDefault();
             highchart.showLoading();
-            var dataset_series_without_marker_json = getDatasetSeriesWithoutMarkerJson(dataset_series_json); //reduce post size
+            var dataset_series_without_marker_json = getDatasetSeriesJson(dataset_series_json); //reduce post size
             var post_data = { threshold : JSON.stringify($('#selected_threshold_value').val()), dataset_series_json : JSON.stringify(dataset_series_without_marker_json), info : JSON.stringify(info), algorithm : JSON.stringify(algorithm), csrfmiddlewaretoken : csrf_token, };
                 updateHighchartsSeriesForThreshold(highchart, url_threshold_update_json, post_data, function (new_dataset_series_json, info) {
                     highchart.hideLoading();

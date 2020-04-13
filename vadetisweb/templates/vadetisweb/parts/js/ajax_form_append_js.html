@@ -1,38 +1,44 @@
 <!-- BEGIN AJAX FORM JS -->
 <script type="text/javascript">
-function ajaxSubmit(formData, formid) {
-    clear_form_errors(formid);
-    clear_messages();
-    var form_selector = "#"+formid;
-    $.post({
-        url: $(form_selector).attr('action'),
-        data: new FormData(formData),
-        type: $(form_selector).attr('method'),
-        enctype: $(form_selector).attr('enctype'),
-        processData: false,
-        contentType: false,
-        success: function (data, status, xhr) {
-            if(data !== undefined) {
-                var receivedForm = $(data);
-                $('#{{ form_append_container }}').html(receivedForm);
+    function ajaxSubmit(formData, formid) {
+        clear_form_errors(formid);
+        clear_messages();
+        var form_selector = "#" + formid;
+        $.post({
+            url: $(form_selector).attr('action'),
+            data: new FormData(formData),
+            type: $(form_selector).attr('method'),
+            enctype: $(form_selector).attr('enctype'),
+            processData: false,
+            contentType: false,
+            success: function (data, status, xhr) {
+                if (data !== undefined) {
+                    var receivedForm = $(data);
+                    var receivedFormId = $(receivedForm).filter('form').attr('id');
+
+                    $('#{{ form_append_container }}').empty();
+                    $('#{{ form_append_container }}').append(receivedForm);
+
+                    registerAnomalyDetectionForm(receivedFormId);
+
+                    if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
+                        print_messages(data.responseJSON.messages);
+                    }
+                } else {
+                    $('#{{ form_append_container }}').empty();
+                }
+            },
+            error: function (data, status, xhr) {
+                console.error("Sending asynchronous failed");
+                $('#{{ form_append_container }}').empty();
                 if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
                     print_messages(data.responseJSON.messages);
                 }
-            } else {
-                $('#{{ form_append_container }}').empty();
+                if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('form_errors')) {
+                    print_form_errors(data.responseJSON.form_errors);
+                }
             }
-        },
-        error: function (data, status, xhr) {
-            console.error("Sending asynchronous failed");
-            $('#{{ form_append_container }}').empty();
-            if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                print_messages(data.responseJSON.messages);
-            }
-            if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('form_errors')) {
-                print_form_errors(data.responseJSON.form_errors);
-            }
-        }
-    });
-}
+        });
+    }
 </script>
 <!-- END AJAX FORM JS -->
