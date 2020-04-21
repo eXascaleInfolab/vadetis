@@ -1,5 +1,7 @@
 import numpy as np
 
+from pandas.io.json import json_normalize
+
 from vadetisweb.models import TimeSeries
 from vadetisweb.parameters import LISA
 
@@ -168,12 +170,11 @@ def _get_scores_and_truth_from_series_measurements(series_measurements):
 
 def get_datasets_from_json(dataset_series):
 
-
     print(dataset_series)
 
-    """for series in dataset_series:
-        for measurement in series['measurements']:"""
+    df = json_normalize(dataset_series['series'], record_path=['data'])
 
+    print(df)
 
 
     return None, None
