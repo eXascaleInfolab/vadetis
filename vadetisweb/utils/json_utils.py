@@ -1,6 +1,4 @@
-import numpy as np
-
-from pandas.io.json import json_normalize
+import numpy as np, pandas as pd
 
 from vadetisweb.models import TimeSeries
 from vadetisweb.parameters import LISA
@@ -169,15 +167,17 @@ def _get_scores_and_truth_from_series_measurements(series_measurements):
 
 
 def get_datasets_from_json(dataset_series):
+    
+    df_raw = pd.json_normalize(dataset_series['series'], record_path=['data'], meta=['id', 'type'])
 
-    print(dataset_series)
+    # transform raw df into dataset df and class df
+    df = df_raw.pivot(index='x', columns='id', values='y').rename_axis('time', axis=0).rename_axis('ts_name', axis=1)
+    df.index = pd.to_datetime(df.index, unit='ms', infer_datetime_format=True)
 
-    df = json_normalize(dataset_series['series'], record_path=['data'])
+    df_class = df_raw.pivot(index='x', columns='id', values='class').rename_axis('time', axis=0).rename_axis('ts_name', axis=1)
+    df_class.index = pd.to_datetime(df_class.index, unit='ms', infer_datetime_format=True)
 
-    print(df)
-
-
-    return None, None
+    return df, df_class
 
 def get_updated_dataset_series_for_threshold_with_marker_json(threshold, dataset_series, info, algorithm, settings):
 
