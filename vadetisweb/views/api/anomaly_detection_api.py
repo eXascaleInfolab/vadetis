@@ -15,7 +15,7 @@ from django.contrib import messages
 from vadetisweb.serializers import AlgorithmSerializer, HistogramSerializer, ClusterSerializer, SVMSerializer, IsolationForestSerializer
 from vadetisweb.models import DataSet
 from vadetisweb.parameters import LISA, HISTOGRAM, CLUSTER_GAUSSIAN_MIXTURE, SVM, ISOLATION_FOREST, PEARSON, DTW, GEO
-from vadetisweb.utils import get_datasets_from_json, get_lisa_serializer, plot_thresholds_scores, plot_confusion_matrix, get_conf, get_settings, is_valid_conf, get_dataframes_for_ranges, get_updated_dataset_series_for_threshold_with_marker_json
+from vadetisweb.utils import *
 from vadetisweb.algorithms import perform_lisa_person, perform_lisa_dtw, perform_lisa_geo, perform_histogram, perform_cluster, perform_svm, perform_isolation_forest
 from vadetisweb.factory import dataset_not_found_msg
 
@@ -164,9 +164,18 @@ class AnomalyDetectionHistogram(APIView):
                 data_series = {}
                 info = {}
                 df_from_json, df_class_from_json = get_datasets_from_json(serializer.validated_data['dataset_series_json'])
-                settings = get_settings(request)
 
-                return Response({}, status=status.HTTP_400_BAD_REQUEST)
+                try:
+                    settings = get_settings(request)
+                    training_dataset = serializer.validated_data['training_dataset']
+                    """data_series, info = perform_histogram(df_from_json, df_class_from_json, serializer.validated_data, settings)
+
+                    data['series'] = data_series
+                    data['info'] = info"""
+                    return Response(data)
+
+                except DataSet.DoesNotExist:
+                    return Response({}, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -223,7 +232,7 @@ class DatasetJsonPerformAnomalyDetectionJson(APIView):
             dataset_series = json.loads(dataset_series_json_post)
             df_from_json, df_class_from_json = get_datasets_from_json(dataset_series)
 
-            conf = get_conf(request)
+            conf = get_conf_from_query_params(request)
             settings = get_settings(request)
 
             # abort condition
@@ -247,10 +256,10 @@ class DatasetJsonPerformAnomalyDetectionJson(APIView):
 
             elif conf['algorithm'] == HISTOGRAM:
 
-                training_data_id = conf['td_selected']
+                training_data_id = conf['training_dataset']
                 try:
                     training_dataset = DataSet.objects.get(id=training_data_id)
-                    data_series, info = perform_histogram(df, df_class, conf, training_dataset, dataset, settings)
+                    data_series, info = perform_histogram(df, df_class, conf, dataset, training_dataset, settings)
 
                 except DataSet.DoesNotExist:
                     return Response({}, status=status.HTTP_400_BAD_REQUEST)
@@ -258,7 +267,7 @@ class DatasetJsonPerformAnomalyDetectionJson(APIView):
 
             elif conf['algorithm'] == CLUSTER_GAUSSIAN_MIXTURE:
 
-                training_data_id = conf['td_selected']
+                training_data_id = conf['training_dataset']
                 try:
                     training_dataset = DataSet.objects.get(id=training_data_id)
                     data_series, info = perform_cluster(df, df_class, conf, training_dataset, dataset, settings)
@@ -269,7 +278,7 @@ class DatasetJsonPerformAnomalyDetectionJson(APIView):
 
             elif conf['algorithm'] == SVM:
 
-                training_data_id = conf['td_selected']
+                training_data_id = conf['training_dataset']
                 try:
                     training_dataset = DataSet.objects.get(id=training_data_id)
                     data_series, info = perform_svm(df, df_class, conf, training_dataset, dataset, settings)
@@ -278,7 +287,7 @@ class DatasetJsonPerformAnomalyDetectionJson(APIView):
 
 
             elif conf['algorithm'] == ISOLATION_FOREST:
-                training_data_id = conf['td_selected']
+                training_data_id = conf['training_dataset']
                 try:
                     training_dataset = DataSet.objects.get(id=training_data_id)
                     data_series, info = perform_isolation_forest(df, df_class, conf, training_dataset, dataset,
@@ -308,7 +317,7 @@ class DatasetPerformAnomalyDetectionJson(APIView):
             data_series = {}
             info = {}
 
-            conf = get_conf(request)
+            conf = get_conf_from_query_params(request)
             settings = get_settings(request)
 
             # abort condition
@@ -332,10 +341,10 @@ class DatasetPerformAnomalyDetectionJson(APIView):
 
             elif conf['algorithm'] == HISTOGRAM:
 
-                training_data_id = conf['td_selected']
+                training_data_id = conf['training_dataset']
                 try:
                     training_dataset = DataSet.objects.get(id=training_data_id)
-                    data_series, info = perform_histogram(df, df_class, conf, training_dataset, dataset, settings)
+                    data_series, info = perform_histogram(df, df_class, conf, dataset, training_dataset, settings)
 
                 except DataSet.DoesNotExist:
                     return Response({}, status=status.HTTP_400_BAD_REQUEST)
@@ -343,7 +352,7 @@ class DatasetPerformAnomalyDetectionJson(APIView):
 
             elif conf['algorithm'] == CLUSTER_GAUSSIAN_MIXTURE:
 
-                training_data_id = conf['td_selected']
+                training_data_id = conf['training_dataset']
                 try:
                     training_dataset = DataSet.objects.get(id=training_data_id)
                     data_series, info = perform_cluster(df, df_class, conf, training_dataset, dataset, settings)
@@ -354,7 +363,7 @@ class DatasetPerformAnomalyDetectionJson(APIView):
 
             elif conf['algorithm'] == SVM:
 
-                training_data_id = conf['td_selected']
+                training_data_id = conf['training_dataset']
                 try:
                     training_dataset = DataSet.objects.get(id=training_data_id)
                     data_series, info = perform_svm(df, df_class, conf, training_dataset, dataset, settings)
@@ -363,7 +372,7 @@ class DatasetPerformAnomalyDetectionJson(APIView):
 
 
             elif conf['algorithm'] == ISOLATION_FOREST:
-                training_data_id = conf['td_selected']
+                training_data_id = conf['training_dataset']
                 try:
                     training_dataset = DataSet.objects.get(id=training_data_id)
                     data_series, info = perform_isolation_forest(df, df_class, conf, training_dataset, dataset, settings)

@@ -117,7 +117,7 @@ def is_valid_conf(conf):
 
         elif conf['algorithm'] == HISTOGRAM:
 
-            if not isPositiveInteger(conf['td_selected']):
+            if not isPositiveInteger(conf['training_dataset']):
                 return False
 
             if not isFloatInRange(0, 1, conf['train_size']):
@@ -138,7 +138,7 @@ def is_valid_conf(conf):
 
         elif conf['algorithm'] == CLUSTER_GAUSSIAN_MIXTURE:
 
-            if not isPositiveInteger(conf['td_selected']):
+            if not isPositiveInteger(conf['training_dataset']):
                 return False
 
             if not isFloatInRange(0, 1, conf['train_size']):
@@ -165,7 +165,7 @@ def is_valid_conf(conf):
 
         elif conf['algorithm'] == SVM:
 
-            if not isPositiveInteger(conf['td_selected']):
+            if not isPositiveInteger(conf['training_dataset']):
                 return False
 
             if not isFloatInRange(0, 1, conf['train_size']):
@@ -196,7 +196,7 @@ def is_valid_conf(conf):
 
         elif conf['algorithm'] == ISOLATION_FOREST:
 
-            if not isPositiveInteger(conf['td_selected']):
+            if not isPositiveInteger(conf['training_dataset']):
                 return False
 
             if not isFloatInRange(0, 1, conf['train_size']):

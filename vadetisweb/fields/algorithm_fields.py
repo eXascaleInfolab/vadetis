@@ -3,6 +3,18 @@ from vadetisweb.parameters import TIME_RANGE, ANOMALY_DETECTION_SCORE_TYPES
 from vadetisweb.models import DataSet, TimeSeries
 
 
+class DatasetField(serializers.HiddenField):
+    """
+        Note: a HiddenField should normally not be used that way (overriding default value),
+        but its the most comfortable way to have a write only field that is excluded from frontend serializing
+    """
+    def get_value(self, dictionary):
+        dataset_selected = self.context.get('dataset_selected', None)
+        if dataset_selected is not None:
+            return DataSet.objects.filter(id=dataset_selected, is_training_data=False).first()
+        return None
+
+
 class TrainingDatasetField(serializers.PrimaryKeyRelatedField):
     def get_queryset(self):
         dataset_selected = self.context.get('dataset_selected', None)

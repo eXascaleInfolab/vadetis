@@ -32,7 +32,22 @@ def perform_lisa_geo(df, df_class, conf, ts_selected_id, dataset, settings):
     return data_series, info
 
 
-def perform_histogram(df, df_class, conf, training_dataset, dataset, settings):
+"""def perform_histogram(df, df_class, validated_data, settings):
+    df_train = training_dataset.dataframe
+    df_train_class = training_dataset.dataframe_class
+
+    scores, y_hat_results, df_with_class_instances, info = histogram(df, df_class, df_train, df_train_class,
+                                                                     maximize_score=validated_data['maximize_score'],
+                                                                     train_size=validated_data['train_size'],
+                                                                     random_seed=validated_data['random_seed'])
+
+    data_series = get_anomaly_detection_ts_results_json(dataset, df_with_class_instances, scores, y_hat_results,
+                                                        settings)
+    return data_series, info"""
+
+
+@DeprecationWarning
+def perform_histogram(df, df_class, conf, dataset, training_dataset, settings):
     df_train = training_dataset.dataframe
     df_train_class = training_dataset.dataframe_class
 

@@ -1,3 +1,4 @@
+from .helper_function_utils import *
 
 from vadetisweb.serializers import CorrelationSerializer, PearsonSerializer, DTWPearsonSerializer, GeographicDistanceSerializer
 from vadetisweb.parameters import PEARSON, DTW, GEO

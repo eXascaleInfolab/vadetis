@@ -9,7 +9,7 @@ from django.contrib import messages
 
 from vadetisweb.models import DataSet
 from vadetisweb.serializers import AlgorithmSerializer, ThresholdSerializer, AnomalyInjectionSerializer
-from vadetisweb.utils import get_settings, get_highcharts_range_button_preselector, get_conf, is_valid_conf
+from vadetisweb.utils import get_settings, get_highcharts_range_button_preselector, get_conf_from_query_params, is_valid_conf
 from vadetisweb.factory import dataset_not_found_msg
 from vadetisweb.parameters import SYNTHETIC, REAL_WORLD
 
@@ -80,7 +80,7 @@ class SyntheticDatasetPerformAnomalyDetection(APIView):
             dataset = DataSet.objects.get(id=dataset_id)
             settings = get_settings(request)
             selected_button = get_highcharts_range_button_preselector(dataset.frequency)
-            conf = get_conf(request)
+            conf = get_conf_from_query_params(request)
 
             if not is_valid_conf(conf):
                 message = 'Invalid configuration supplied!'

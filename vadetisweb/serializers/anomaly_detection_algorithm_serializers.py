@@ -17,11 +17,11 @@ class AlgorithmSerializer(serializers.Serializer):
 
 
 class HistogramSerializer(serializers.Serializer):
-
+    dataset = DatasetField(default='overridden')
     dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
                                            style={'template': 'vadetisweb/parts/input/hidden_input.html', 'id' : 'dataset_series_json'})
 
-    td_selected = TrainingDatasetField(label='Training Dataset',
+    training_dataset = TrainingDatasetField(label='Training Dataset',
                                        required=True,
                                        queryset=DataSet.objects.none())
     train_size = TrainSizeFloatField(initial=0.5, min_value=0.001, max_value=0.999, required=True)
@@ -38,7 +38,7 @@ class HistogramSerializer(serializers.Serializer):
 
 
 class ClusterSerializer(serializers.Serializer):
-    td_selected = TrainingDatasetField(label='Training Dataset',
+    training_dataset = TrainingDatasetField(label='Training Dataset',
                                        required=True,
                                        queryset=DataSet.objects.none())
     n_components = serializers.IntegerField(initial=3, label='Number of Components', min_value=1, required=True,
@@ -61,7 +61,7 @@ class ClusterSerializer(serializers.Serializer):
 
 
 class SVMSerializer(serializers.Serializer):
-    td_selected = TrainingDatasetField(label='Training Dataset',
+    training_dataset = TrainingDatasetField(label='Training Dataset',
                                        required=True,
                                        queryset=DataSet.objects.none())
     kernel = serializers.ChoiceField(label='Kernel', choices=SVM_KERNELS, required=True,
@@ -88,7 +88,7 @@ class SVMSerializer(serializers.Serializer):
 
 class IsolationForestSerializer(serializers.Serializer):
 
-    td_selected = TrainingDatasetField(label='Training Dataset',
+    training_dataset = TrainingDatasetField(label='Training Dataset',
                                        required=True,
                                        queryset=DataSet.objects.none())
     bootstrap = serializers.BooleanField(label='Bootstrap', required=False,
