@@ -123,9 +123,9 @@ def get_anomaly_detection_results_json(dataset, df_with_class_instances, scores,
         data_series = get_predicted_timeseries_with_marker_json(ts.id, df_with_class_instances, scores, y_hat_results, settings)
 
         dict_series = {'id' : ts.id,
-                       'name' : ts.name,
-                       'unit' : ts.unit,
-                       'is_spatial' : ts.is_spatial,
+                       'name' : ts.name, #todo
+                       'unit' : ts.unit, #todo
+                       'is_spatial' : ts.is_spatial, #todo
                        'type' : 'raw', #todo
                        'data' : data_series
                        }

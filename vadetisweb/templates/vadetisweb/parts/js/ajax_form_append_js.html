@@ -3,12 +3,12 @@
     function ajaxSubmit(formData, formid) {
         clear_form_errors(formid);
         clear_messages();
-        var form_selector = "#" + formid;
+        var form_selector = $("#" + formid);
         $.post({
-            url: $(form_selector).attr('action'),
+            url: form_selector.attr('action'),
             data: new FormData(formData),
-            type: $(form_selector).attr('method'),
-            enctype: $(form_selector).attr('enctype'),
+            type: form_selector.attr('method'),
+            enctype: form_selector.attr('enctype'),
             processData: false,
             contentType: false,
             success: function (data, status, xhr) {

@@ -17,6 +17,10 @@
 {% block head_js %}
     {{ block.super }}
     {{ settings|json_script:"settings" }}
+    <script type="text/javascript">
+        const cnf_url = "{% get_host_url request=request %}{% url 'vadetisweb:cnf_image' %}";
+        const plot_url = "{% get_host_url request=request %}{% url 'vadetisweb:thresholds_scores_image' %}";
+    </script>
 {% endblock %}
 
 {% block page_title %}
@@ -25,7 +29,7 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-lg-9 col-sm-9 col-xs-12">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
@@ -33,9 +37,7 @@
                     </div>
                     <div class="kt-portlet__head-toolbar">
                         <div class="kt-portlet__head-actions">
-                            <a id="reload-chart-button" href="#" class="btn btn-outline-brand btn-bold btn-sm">
-                                Reset
-                            </a>
+                            <a id="reload_chart_btn" href="#" class="btn btn-outline-brand btn-bold btn-sm">Reset</a>
                         </div>
                     </div>
                 </div>
@@ -45,8 +47,36 @@
                     <!--end: Highcharts -->
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                    <div id="cnf_portlet" class="kt-portlet" style="display:none;">
+                        <div class="kt-portlet__head">
+                            <div class="kt-portlet__head-label">
+                                <h3 class="kt-portlet__head-title">Confusion Matrix</h3>
+                            </div>
+                        </div>
+                        <div class="kt-portlet__body kt-portlet__body--fit">
+                            <div id="cnf_matrix_img"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                    <div id="plot_portlet" class="kt-portlet" style="display:none;">
+                        <div class="kt-portlet__head">
+                            <div class="kt-portlet__head-label">
+                                <h3 class="kt-portlet__head-title">Threshold / Score Plot</h3>
+                            </div>
+                        </div>
+                        <div class="kt-portlet__body kt-portlet__body--fit">
+                            <div id="plot_img"></div>
+                            <p>(*): These values are computed from the training data.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-lg-3 col-sm-3 col-xs-12">
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <div class="kt-portlet kt-portlet--collapsed" data-ktportlet="true" id="kt_portlet_tools_1">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
@@ -92,7 +122,7 @@
     <script type="text/javascript">
         jQuery(document).ready(function () {
             VadetisHighcharts.init("highcharts_container", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", JSON.parse(document.getElementById('settings').textContent), {{ selected_button }});
-            VadetisHighchartsActionsReload.init("highcharts_container", "reload-chart-button", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}");
+            VadetisHighchartsActionsReload.init("highcharts_container", "reload_chart_btn", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}");
         });
     </script>
     {% include 'vadetisweb/parts/js/ajax_form_append_js.html' with form_append_container="detection_form_container" %}

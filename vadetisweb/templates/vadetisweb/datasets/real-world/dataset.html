@@ -33,9 +33,7 @@
                     </div>
                     <div class="kt-portlet__head-toolbar">
                         <div class="kt-portlet__head-actions">
-                            <a id="reload-chart-button" href="#" class="btn btn-outline-brand btn-bold btn-sm">
-                                Reset
-                            </a>
+                            <a id="reload_chart_btn" href="#" class="btn btn-outline-brand btn-bold btn-sm">Reset</a>
                         </div>
                     </div>
                 </div>
@@ -91,7 +89,7 @@
     <script type="text/javascript">
         jQuery(document).ready(function () {
             VadetisHighcharts.init("highcharts_container", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", {{ selected_button }});
-            VadetisHighchartsActionsReload.init("highcharts_container", "reload-chart-button", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}");
+            VadetisHighchartsActionsReload.init("highcharts_container", "reload_chart_btn", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}");
         });
     </script>
     {% include "vadetisweb/parts/js/ajax_form_replace_js.html" with formid="anomaly_detection_form" %}

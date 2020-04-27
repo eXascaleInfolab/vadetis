@@ -1,16 +1,25 @@
-function loadImage(html_id, url, post_data) {
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+function loadImage(html_id, url, post_data, callback) {
+    // todo replace in other occurrences: get csrf from cookie
+    var csrftoken = Cookies.get('csrftoken');
     $.ajax({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        },
         type: "POST",
         url: url,
         data: post_data,
         cache: false,
-
         success: function (response) {
             $("#" + html_id).html('<img src="data:image/png;base64,' + response + '" style="max-width: 100%;"/>');
-            var html_portlet = $("#" + html_id + "_portlet");
-            if (!(html_portlet.is(":visible"))) {
-                html_portlet.show();
-            }
+            callback();
         }
     });
 }
@@ -19,6 +28,7 @@ function registerAnomalyDetectionForm(form_id) {
     var html_id = '#' + form_id;
     $(html_id).on('submit', function (event) {
         event.preventDefault();
+        $(":submit").attr("disabled", true);
         clear_form_errors(form_id);
         clear_messages();
 
@@ -29,6 +39,7 @@ function registerAnomalyDetectionForm(form_id) {
         var dataset_series_json = getDatasetSeriesJson(highchart);
         formData.append('dataset_series_json', JSON.stringify(dataset_series_json));
 
+        highchart.showLoading();
         $.post({
             url: $(this).attr('action'),
             data: formData,
@@ -40,6 +51,19 @@ function registerAnomalyDetectionForm(form_id) {
                 if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
                     print_messages(data.responseJSON.messages);
                 }
+                // update series
+                var series_data_json = data['series'];
+                setSeriesData(highchart, series_data_json);
+                highchart.hideLoading();
+
+                // cnf
+                var info_json = data['info'];
+                loadCnfMatrix("cnf_portlet", "cnf_matrix_img", info_json);
+
+                // plot
+                loadPlot("plot_portlet", "plot_img", info_json)
+
+                $(":submit").attr("disabled", false);
             },
             error: function(data, status, xhr) {
                 console.error("Sending asynchronous failed");
@@ -49,6 +73,12 @@ function registerAnomalyDetectionForm(form_id) {
                 if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('form_errors')) {
                     print_form_errors(data.responseJSON.form_errors);
                 }
+                highchart.hideLoading();
+
+                $('cnf_portlet').hide();
+                $('plot_portlet').hide();
+
+                $(":submit").attr("disabled", false);
             }
         });
     });
