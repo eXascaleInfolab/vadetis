@@ -16,7 +16,7 @@ from vadetisweb.serializers import AlgorithmSerializer, HistogramSerializer, Clu
 from vadetisweb.models import DataSet
 from vadetisweb.parameters import LISA, HISTOGRAM, CLUSTER_GAUSSIAN_MIXTURE, SVM, ISOLATION_FOREST, PEARSON, DTW, GEO
 from vadetisweb.utils import *
-from vadetisweb.algorithms import perform_lisa_person, perform_lisa_dtw, perform_lisa_geo, perform_histogram, perform_cluster, perform_svm, perform_isolation_forest
+from vadetisweb.algorithms import *
 from vadetisweb.factory import dataset_not_found_msg
 
 
@@ -156,25 +156,20 @@ class AnomalyDetectionHistogram(APIView):
     def post(self, request, dataset_id):
 
         try:
-            dataset = DataSet.objects.get(id=dataset_id)
             serializer = HistogramSerializer(context={'dataset_selected': dataset_id, }, data=request.data)
 
             if serializer.is_valid():
-                data = {}
-                data_series = {}
-                info = {}
                 df_from_json, df_class_from_json = get_datasets_from_json(serializer.validated_data['dataset_series_json'])
-
                 try:
+                    data = {}
                     settings = get_settings(request)
-                    training_dataset = serializer.validated_data['training_dataset']
-                    """data_series, info = perform_histogram(df_from_json, df_class_from_json, serializer.validated_data, settings)
+                    data_series, info = histogram_from_validated_data(df_from_json, df_class_from_json, serializer.validated_data, settings)
 
                     data['series'] = data_series
-                    data['info'] = info"""
+                    data['info'] = info
                     return Response(data)
 
-                except DataSet.DoesNotExist:
+                except:
                     return Response({}, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({}, status=status.HTTP_400_BAD_REQUEST)
@@ -259,7 +254,7 @@ class DatasetJsonPerformAnomalyDetectionJson(APIView):
                 training_data_id = conf['training_dataset']
                 try:
                     training_dataset = DataSet.objects.get(id=training_data_id)
-                    data_series, info = perform_histogram(df, df_class, conf, dataset, training_dataset, settings)
+                    data_series, info = histogram_from_url(df, df_class, conf, dataset, training_dataset, settings)
 
                 except DataSet.DoesNotExist:
                     return Response({}, status=status.HTTP_400_BAD_REQUEST)
@@ -344,7 +339,7 @@ class DatasetPerformAnomalyDetectionJson(APIView):
                 training_data_id = conf['training_dataset']
                 try:
                     training_dataset = DataSet.objects.get(id=training_data_id)
-                    data_series, info = perform_histogram(df, df_class, conf, dataset, training_dataset, settings)
+                    data_series, info = histogram_from_url(df, df_class, conf, dataset, training_dataset, settings)
 
                 except DataSet.DoesNotExist:
                     return Response({}, status=status.HTTP_400_BAD_REQUEST)

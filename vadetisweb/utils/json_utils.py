@@ -32,10 +32,9 @@ def get_dataset_with_marker_json(dataset, df, df_class, type, show_anomaly, sett
                     data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class': anomaly_class})
             else:
                 if anomaly_class == 0:
-                    data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class' : anomaly_class})
+                    data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class': anomaly_class})
                 else:
-                    data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class' : anomaly_class,
-                                         'marker': {'fillColor': outlier_color, 'radius': 3}})
+                    data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class': anomaly_class, 'marker': {'fillColor': outlier_color, 'radius': 3}})
 
         dict_series = {'id': ts.id,
                        'name': ts.name,
@@ -49,10 +48,10 @@ def get_dataset_with_marker_json(dataset, df, df_class, type, show_anomaly, sett
     return data_series
 
 
-def get_predicted_dataset_with_marker_json(id, df_with_class_instances, scores, y_hat_results, settings):
+def get_predicted_timeseries_with_marker_json(timeseries_id, df_with_class_instances, scores, y_hat_results, settings):
 
-    measurements = []
-    for index, value in df_with_class_instances.loc[:, id].iteritems():
+    data = []
+    for index, value in df_with_class_instances.loc[:, timeseries_id].iteritems():
 
         integer_index = df_with_class_instances.index.get_loc(index)
         predicted_result = y_hat_results[integer_index]
@@ -61,18 +60,18 @@ def get_predicted_dataset_with_marker_json(id, df_with_class_instances, scores, 
         anomaly_class = 1 if (df_with_class_instances.loc[index, 'Class'] == True) else 0
 
         if df_with_class_instances.loc[index, 'Class'] == True and predicted_result == True: #true positive
-            measurements.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': anomaly_class, 'marker': {'fillColor': settings['color_true_positive'], 'radius': 3}})
+            data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': anomaly_class, 'marker': {'fillColor': settings['color_true_positive'], 'radius': 3}})
 
         elif df_with_class_instances.loc[index, 'Class'] == True and predicted_result == False: #false negative
-            measurements.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': anomaly_class, 'marker': {'fillColor': settings['color_false_negative'], 'radius': 3}})
+            data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': anomaly_class, 'marker': {'fillColor': settings['color_false_negative'], 'radius': 3}})
 
         elif df_with_class_instances.loc[index, 'Class'] == False and predicted_result == True: #false positive
-            measurements.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': anomaly_class, 'marker': {'fillColor': settings['color_false_positive'], 'radius': 3}})
+            data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': anomaly_class, 'marker': {'fillColor': settings['color_false_positive'], 'radius': 3}})
 
         elif df_with_class_instances.loc[index, 'Class'] == False and predicted_result == False: #true negative
-            measurements.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': anomaly_class, 'marker': {'enabled': False } })
+            data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': anomaly_class, 'marker': {'enabled': False }})
 
-    return measurements
+    return data
 
 
 def get_data_series_measurements(id, df_with_class_instances, y_hat_results):
@@ -95,8 +94,8 @@ def get_anomaly_detection_single_ts_results_json(dataset, ts_id, df_with_class_i
     ts = TimeSeries.objects.get(id=ts_id)
 
     # ts
-    raw_measurements = get_predicted_dataset_with_marker_json(ts.id, df_with_class_instances, scores, y_hat_results, settings)
-    z_measurements = get_predicted_dataset_with_marker_json(ts.id, df_z_with_class_instances, scores, y_hat_results, settings)
+    raw_measurements = get_predicted_timeseries_with_marker_json(ts.id, df_with_class_instances, scores, y_hat_results, settings)
+    z_measurements = get_predicted_timeseries_with_marker_json(ts.id, df_z_with_class_instances, scores, y_hat_results, settings)
 
     dict_series = {'id': ts.id, 'name': ts.name, 'unit': ts.unit, 'is_spatial': ts.is_spatial,
                    'measurements': {'raw': raw_measurements, 'zscore': z_measurements}}
@@ -116,30 +115,24 @@ def get_anomaly_detection_single_ts_results_json(dataset, ts_id, df_with_class_i
     return data
 
 
-def get_anomaly_detection_ts_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings):
-    data = {}
-    data_series = []
+def get_anomaly_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings):
+    data = []
     time_series = dataset.timeseries_set.all()
 
-    #todo remove
-    #df_z = df_zscore(df_with_class_instances.drop('Class', axis=1))
-    #df_z_with_class_instances = df_z.join(df_with_class_instances['Class'])
-
     for ts in time_series:
-        raw_measurements = get_predicted_dataset_with_marker_json(ts.id, df_with_class_instances, scores, y_hat_results, settings)
-        #z_measurements = get_predicted_dataset_with_marker_json(ts.id, df_z_with_class_instances, scores, y_hat_results, settings)
+        data_series = get_predicted_timeseries_with_marker_json(ts.id, df_with_class_instances, scores, y_hat_results, settings)
 
         dict_series = {'id' : ts.id,
                        'name' : ts.name,
                        'unit' : ts.unit,
                        'is_spatial' : ts.is_spatial,
-                       'type' : 'raw',
-                       'measurements' : raw_measurements
+                       'type' : 'raw', #todo
+                       'data' : data_series
                        }
 
-        data_series.append(dict_series)
+        data.append(dict_series)
 
-    return data_series
+    return data
 
 
 def _set_marker_for_threshold(measurement, threshold, settings):
