@@ -12,6 +12,8 @@
 {% block css %}
     {{ block.super }}
     {% include 'vadetisweb/parts/includes/highcharts_css.html' %}
+    <link href="{% static 'css/lib/nouislider/nouislider.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/lib/roundslider/roundslider.min.css' %}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
 {% block head_js %}
@@ -47,8 +49,33 @@
                     <!--end: Highcharts -->
                 </div>
             </div>
-
+            <!--begin: Inner Row -->
             <div class="row">
+                <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                    <div id="scores_portlet" class="kt-portlet" style="display:none;">
+                        <div class="kt-portlet__head">
+                            <div class="kt-portlet__head-label">
+                                <h3 class="kt-portlet__head-title">Scores</h3>
+                            </div>
+                        </div>
+                        <div class="kt-portlet__body ">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                                    <div id="roundslider_accuracy" class="roundslider" title="Accuracy"></div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                                    <div id="roundslider_f1" class="roundslider" title="F1-Score"></div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                                    <div id="roundslider_precision" class="roundslider" title="Precision"></div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                                    <div id="roundslider_recall" class="roundslider" title="Recall"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                     <div id="cnf_portlet" class="kt-portlet" style="display:none;">
                         <div class="kt-portlet__head">
@@ -76,7 +103,23 @@
                 </div>
             </div>
         </div>
+        <!--end: Inner Row -->
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">Threshold</h3>
+                    </div>
+                </div>
+                <div class="kt-portlet__body">
+                    <div id="threshold_slider"></div>
+                    <p>
+                        Current Threshold: <span id="current_threshold"></span><br />
+                    </p>
+                    {% comment %}{% url 'vadetisweb:anomaly_detection_form' dataset_id=dataset.id as fromurl %}
+                    {% include 'vadetisweb/parts/forms/anomaly_detection_form.html' with formid="threshold_form" url=fromurl %}{% endcomment %}
+                </div>
+            </div>
             <div class="kt-portlet kt-portlet--collapsed" data-ktportlet="true" id="kt_portlet_tools_1">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
@@ -115,6 +158,8 @@
 {% endblock %}
 
 {% block additional_bottom_js %}
+    {% include 'vadetisweb/parts/includes/roundslider_js.html' %}
+    {% include 'vadetisweb/parts/includes/nouislider_js.html' %}
     <script src="{% static 'js/lib/highcharts/highstock.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/custom/highcharts.utils.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/custom/highcharts.view.init.js' %}" type="text/javascript"></script>

@@ -55,13 +55,20 @@ function registerAnomalyDetectionForm(form_id) {
                 var series_data_json = data['series'];
                 setSeriesData(highchart, series_data_json);
                 highchart.hideLoading();
+                var info = data['info'];
+
+                // scores
+                $('#scores_portlet').show();
+                updateScores(info);
+
+                // threshold
+                updateThreshold();
 
                 // cnf
-                var info_json = data['info'];
-                loadCnfMatrix("cnf_portlet", "cnf_matrix_img", info_json);
+                requestCnfMatrix("cnf_portlet", "cnf_matrix_img", info);
 
                 // plot
-                loadPlot("plot_portlet", "plot_img", info_json)
+                requestPlot("plot_portlet", "plot_img", info)
 
                 $(":submit").attr("disabled", false);
             },
@@ -75,6 +82,7 @@ function registerAnomalyDetectionForm(form_id) {
                 }
                 highchart.hideLoading();
 
+                $('scores_portlet').hide();
                 $('cnf_portlet').hide();
                 $('plot_portlet').hide();
 

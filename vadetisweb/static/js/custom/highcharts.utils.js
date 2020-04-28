@@ -257,7 +257,26 @@ function loadSeriesForType(highchart, url, type, show_anomaly, callback) {
     });
 }
 
-function loadCnfMatrix(portlet_id, img_container_id, info) {
+function updateScores(info) {
+    var settings = JSON.parse(document.getElementById('settings').textContent);
+    var round_digits = settings.round_digits;
+    RoundSliders.init(round_digits);
+    RoundSliders.updateValue("#roundslider_accuracy", info.accuracy.toFixed(round_digits));
+    RoundSliders.updateValue("#roundslider_f1", info.f1_score.toFixed(round_digits));
+    RoundSliders.updateValue("#roundslider_precision", info.precision.toFixed(round_digits));
+    RoundSliders.updateValue("#roundslider_recall", info.recall.toFixed(round_digits));
+}
+
+function updateThreshold() {
+    var settings = JSON.parse(document.getElementById('settings').textContent);
+    var round_digits = settings.round_digits;
+    //init NoUiSlider
+    var threshold_slider = $('#threshold_slider')[0]; //extracting the raw element from the jQuery object
+    var selected_threshold_value = $('#selected_threshold_value')[0];
+    NoUiSliders.init(threshold_slider, selected_threshold_value, round_digits);
+}
+
+function requestCnfMatrix(portlet_id, img_container_id, info) {
     // note: url is taken from global const
     var cnf_data = { data : JSON.stringify(info.cnf_matrix) };
     loadImage(img_container_id, cnf_url, cnf_data, function () {
@@ -265,7 +284,7 @@ function loadCnfMatrix(portlet_id, img_container_id, info) {
     });
 }
 
-function loadPlot(portlet_id, img_container_id, info) {
+function requestPlot(portlet_id, img_container_id, info) {
     // note: url is taken from global const
     var ts_data = { thresholds : JSON.stringify(info.thresholds), scores : JSON.stringify(info.threshold_scores) };
     loadImage(img_container_id, plot_url, ts_data, function () {

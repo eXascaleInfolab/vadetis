@@ -13,6 +13,12 @@
 .rs-readonly {
     z-index: 50 !important;
 }
+.rs-tooltip-text {
+    font-family: inherit !important;
+}
+.rs-control {
+    margin: 0 auto;
+}
 
 :root {
   --blue: #007bff;
