@@ -52,15 +52,17 @@ class SyntheticDataset(APIView):
             selected_button = get_highcharts_range_button_preselector(dataset.frequency)
             settings = get_settings(request)
 
-            serializer = AlgorithmSerializer()
+            detection_serializer = AlgorithmSerializer()
             injection_serializer = AnomalyInjectionSerializer()
+            threshold_serializer = ThresholdSerializer()
 
             return Response({
                 'dataset': dataset,
                 'selected_button': selected_button,
                 'settings' : settings,
-                'serializer': serializer,
+                'detection_serializer': detection_serializer,
                 'injection_serializer' : injection_serializer,
+                'threshold_serializer': threshold_serializer,
             }, status=status.HTTP_200_OK)
 
         except DataSet.DoesNotExist:

@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser
 from drf_yasg.utils import swagger_auto_schema
 
 from django.urls import reverse
@@ -12,7 +13,7 @@ from django.core.files.temp import NamedTemporaryFile
 from django.http import HttpResponse
 from django.contrib import messages
 
-from vadetisweb.serializers import AlgorithmSerializer, HistogramSerializer, ClusterSerializer, SVMSerializer, IsolationForestSerializer
+from vadetisweb.serializers import AlgorithmSerializer, HistogramSerializer, ClusterSerializer, SVMSerializer, IsolationForestSerializer, ThresholdSerializer
 from vadetisweb.models import DataSet
 from vadetisweb.parameters import LISA, HISTOGRAM, CLUSTER_GAUSSIAN_MIXTURE, SVM, ISOLATION_FOREST, PEARSON, DTW, GEO
 from vadetisweb.utils import *
@@ -385,10 +386,11 @@ class DatasetPerformAnomalyDetectionJson(APIView):
 
 class DatasetThresholdUpdateJson(APIView):
     """
-    Request anomaly detection dataset with new threshold
+    Request threshold form or anomaly detection dataset with new threshold
     """
     renderer_classes = [JSONRenderer]
 
+    @swagger_auto_schema(request_body=ThresholdSerializer)
     def post(self, request):
 
         data = {}

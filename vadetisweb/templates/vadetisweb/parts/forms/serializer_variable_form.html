@@ -3,11 +3,11 @@
 <form id="{{ formid }}" class="kt-form" method="POST" action="{{ url }}" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="kt-portlet__body">
-    {% render_form injection_serializer %}
+    {% render_form form_serializer %}
     </div>
     <div class="kt-portlet__foot">
         <div class="kt-form__actions">
-            <button type="submit" class="btn btn-primary">Inject</button>
+            <button {% if id %}id="{{ submit_button_id }}" {% endif %}type="submit" class="btn btn-primary">{{ submit_label }}</button>
         </div>
     </div>
 </form>

@@ -116,8 +116,8 @@
                     <p>
                         Current Threshold: <span id="current_threshold"></span><br />
                     </p>
-                    {% comment %}{% url 'vadetisweb:anomaly_detection_form' dataset_id=dataset.id as fromurl %}
-                    {% include 'vadetisweb/parts/forms/anomaly_detection_form.html' with formid="threshold_form" url=fromurl %}{% endcomment %}
+                    {% url 'vadetisweb:threshold_update_json' as threshold_url %}
+                    {% include 'vadetisweb/parts/forms/serializer_variable_form.html' with formid="threshold_form" url=threshold_url form_serializer=threshold_serializer submit_label="Update" %}
                 </div>
             </div>
             <div class="kt-portlet kt-portlet--collapsed" data-ktportlet="true" id="kt_portlet_tools_1">
@@ -133,7 +133,7 @@
                 </div>
                 <div class="kt-portlet__body kt-portlet__body--fit">
                     {% url 'vadetisweb:anomaly_detection_algorithm_selection' dataset_id=dataset.id as detection_url %}
-                    {% include 'vadetisweb/parts/forms/serializer_on_change_submit_form.html' with formid="anomaly_algorithm_form" url=detection_url %}
+                    {% include 'vadetisweb/parts/forms/serializer_on_change_submit_form.html' with formid="anomaly_algorithm_form" url=detection_url serializer=detection_serializer %}
                     <div id="detection_form_container"></div>
                 </div>
             </div>
@@ -150,7 +150,7 @@
                 </div>
                 <div class="kt-portlet__body kt-portlet__body--fit">
                     {% url 'vadetisweb:anomaly_injection_form' dataset_id=dataset.id as injection_url %}
-                    {% include 'vadetisweb/parts/forms/anomaly_injection_form.html' with formid="anomaly_injection_form" url=injection_url %}
+                    {% include 'vadetisweb/parts/forms/serializer_variable_form.html' with formid="anomaly_injection_form" url=injection_url form_serializer=injection_serializer submit_label="Inject" %}
                 </div>
             </div>
         </div>

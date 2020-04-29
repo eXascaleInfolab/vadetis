@@ -267,13 +267,19 @@ function updateScores(info) {
     RoundSliders.updateValue("#roundslider_recall", info.recall.toFixed(round_digits));
 }
 
-function updateThreshold() {
+function updateThreshold(value) {
     var settings = JSON.parse(document.getElementById('settings').textContent);
     var round_digits = settings.round_digits;
-    //init NoUiSlider
-    var threshold_slider = $('#threshold_slider')[0]; //extracting the raw element from the jQuery object
-    var selected_threshold_value = $('#selected_threshold_value')[0];
-    NoUiSliders.init(threshold_slider, selected_threshold_value, round_digits);
+
+    var slider_element = $('#threshold_slider')[0]; //extracting the raw element from the jQuery object
+    var selected_threshold_value = $('#threshold_value')[0];
+
+    // init NoUiSlider or update value
+    if(!slider_element.noUiSlider) {
+        NoUiSliders.init(slider_element, selected_threshold_value, round_digits);
+    } else {
+        slider_element.noUiSlider.set(value);
+    }
 }
 
 function requestCnfMatrix(portlet_id, img_container_id, info) {

@@ -20,9 +20,7 @@ class AnomalyInjectionFormView(APIView):
     """
     Request anomaly injection form
     """
-    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
-    parser_classes = [MultiPartParser]
-    template_name = 'vadetisweb/parts/forms/anomaly_serializer_form.html'
+    renderer_classes = [JSONRenderer]
 
     @swagger_auto_schema(request_body=AnomalyInjectionSerializer)
     def post(self, request, dataset_id, format=None):
