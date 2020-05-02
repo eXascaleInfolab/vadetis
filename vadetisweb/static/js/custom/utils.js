@@ -62,7 +62,7 @@ function registerAnomalyDetectionForm(form_id) {
                 updateScores(info);
 
                 // threshold
-                updateThreshold();
+                updateThreshold(info.threshold);
 
                 // cnf
                 requestCnfMatrix("cnf_portlet", "cnf_matrix_img", info);
@@ -82,9 +82,9 @@ function registerAnomalyDetectionForm(form_id) {
                 }
                 highchart.hideLoading();
 
-                $('scores_portlet').hide();
-                $('cnf_portlet').hide();
-                $('plot_portlet').hide();
+                $('#scores_portlet').hide();
+                $('#cnf_portlet').hide();
+                $('#plot_portlet').hide();
 
                 $(":submit").attr("disabled", false);
             }

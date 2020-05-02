@@ -347,7 +347,7 @@ def get_dataframes_for_ranges(df, df_class, conf):
     return df, df_class
 
 
-def get_info(selected_threshold, y_hat_results, y_truth):
+def get_info(threshold, y_hat_results, y_truth):
     info = {}
 
     accuracy = accuracy_score(y_pred=y_hat_results, y_true=y_truth)
@@ -358,13 +358,13 @@ def get_info(selected_threshold, y_hat_results, y_truth):
     cnf_matrix = confusion_matrix(y_truth, y_hat_results)
     info['cnf_matrix'] = cnf_matrix.tolist()
 
-    info['selected_threshold'] = selected_threshold
+    info['threshold'] = threshold
     info['accuracy'] = accuracy
     info['recall'] = recall
     info['precision'] = precision
     info['f1_score'] = f1_score
 
-    print('Selected threshold: %.3f' % selected_threshold)
+    print('Threshold: %.3f' % threshold)
     print('Accuracy Score: %.3f' % accuracy)
     print('Recall Score: %.3f' % recall)
     print('Precision Score: %.3f' % precision)

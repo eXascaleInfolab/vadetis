@@ -271,15 +271,16 @@ function updateThreshold(value) {
     var settings = JSON.parse(document.getElementById('settings').textContent);
     var round_digits = settings.round_digits;
 
-    var slider_element = $('#threshold_slider')[0]; //extracting the raw element from the jQuery object
-    var selected_threshold_value = $('#threshold_value')[0];
+    var slider_element = $('#threshold_slider')[0]; // extracting the raw element from the jQuery object
+    var threshold_input_selector = $('#threshold_value');
 
     // init NoUiSlider or update value
     if(!slider_element.noUiSlider) {
-        NoUiSliders.init(slider_element, selected_threshold_value, round_digits);
-    } else {
-        slider_element.noUiSlider.set(value);
+        NoUiSliders.init(slider_element, threshold_input_selector, round_digits);
     }
+
+    slider_element.noUiSlider.set(value);
+    $('#current_threshold').html(value.toFixed(round_digits));
 }
 
 function requestCnfMatrix(portlet_id, img_container_id, info) {

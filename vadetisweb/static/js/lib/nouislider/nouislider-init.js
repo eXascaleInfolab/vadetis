@@ -1,6 +1,6 @@
 var NoUiSliders = function() {
 
-    var thresholdSlider = function(slider_element, value_element, round_digits) {
+    var thresholdSlider = function(slider_element, value_input_selector, round_digits) {
 
         function updateRange(min, max, value) {
             slider_element.noUiSlider.updateOptions({
@@ -9,7 +9,7 @@ var NoUiSliders = function() {
                     'max': max
                 }
             });
-             slider_element.noUiSlider.set(value);
+            slider_element.noUiSlider.set(value);
         }
 
         noUiSlider.create(slider_element, {
@@ -24,11 +24,14 @@ var NoUiSliders = function() {
             })
         });
 
-        slider_element.noUiSlider.on('update', function(values, handle ) {
-            value_element.value = values[handle];
+        // slider updates text input
+        slider_element.noUiSlider.on('update', function(values, handle) {
+            value_input_selector.val(values[handle]);
         });
-        value_element.addEventListener('change', function(){
-            //check if range has to be adapted
+
+        // text input updates slider
+        value_input_selector.bind('change', function(){
+            // check if range has to be adapted
             var min = slider_element.noUiSlider.options.range.min;
             var max = slider_element.noUiSlider.options.range.max;
             var val = Number(this.value);
@@ -44,8 +47,8 @@ var NoUiSliders = function() {
 
     return {
         //initiate the slider
-        init: function(slider_element, value_element, round_digits) {
-            thresholdSlider(slider_element, value_element, round_digits);
+        init: function(slider_element, value_input_selector, round_digits) {
+            thresholdSlider(slider_element, value_input_selector, round_digits);
         }
     };
 
