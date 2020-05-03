@@ -9,6 +9,7 @@ from allauth.socialaccount.forms import SignupForm as AllauthSocialSignupForm, g
 from allauth.socialaccount.forms import DisconnectForm
 from allauth.account.utils import logout_on_password_change
 from allauth.account.models import EmailAddress
+from captcha.fields import ReCaptchaField
 
 #########################################################
 # CUSTOM FIELDS
@@ -30,6 +31,7 @@ class AccountLoginForm(LoginForm):
 
     password = AddonPasswordField(label="Password")
     remember = BooleanField(widget=IconCheckboxInput(default=True, label='Stay signed in'), required=False, label='Stay signed in')
+    captcha = ReCaptchaField()
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
@@ -77,13 +79,16 @@ class AccountSignUpForm(AllauthAccountSignupForm):
     email = EmailField(widget=UserTextInput('email', attrs={'type' : 'email',
                                                             'placeholder':  'E-mail address',
                                                             'autofocus': 'autofocus'}))
+    captcha = ReCaptchaField()
 
     def __init__(self, *args, **kwargs):
         super(AccountSignUpForm, self).__init__(*args, **kwargs)
         self.fields['password1'] = AddonPasswordField(label='Password')
         if app_settings.SIGNUP_PASSWORD_ENTER_TWICE:
-            self.fields['password2'] = AddonPasswordField(
-                label='Password (again)')
+            self.fields['password2'] = AddonPasswordField(label='Password (again)')
+            self.field_order =  ['username', 'email', 'password1', 'password2', 'captcha']
+        else:
+            self.field_order = ['username', 'email', 'password1', 'captcha']
 
         if hasattr(self, 'field_order'):
             set_form_field_order(self, self.field_order)
@@ -94,6 +99,8 @@ class AccountResetPasswordForm(ResetPasswordForm):
     email = EmailField(label='E-mail', required=True, widget=UserTextInput('email', attrs={'type' : 'email',
                                                                                            'size' : '30',
                                                                                            'placeholder': 'E-mail address',}))
+    captcha = ReCaptchaField()
+
     def __init__(self, *args, **kwargs):
         super(AccountResetPasswordForm, self).__init__(*args, **kwargs)
 

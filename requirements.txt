@@ -7,6 +7,7 @@ ipython==7.13.0
 jupyter==1.0.0
 django-celery-results==1.2.1
 django-picklefield==2.1.1
+    django-recaptcha==2.0.6
 mysqlclient==1.4.6
 pandas==1.0.3
 numpy==1.18.3

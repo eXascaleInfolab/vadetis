@@ -2,6 +2,8 @@
 <script type="text/javascript">
     $('#{{ formid }}').on('submit', function (event) {
         event.preventDefault();
+        clear_messages();
+
         $.post({
             url: $(this).attr('action'),
             data: $(this).serialize(),
@@ -13,6 +15,9 @@
             },
             error: function (data, status, xhr) {
                 console.error("Sending asynchronous failed");
+                {% if error_msg %}
+                print_messages(JSON.parse('[{ "message":"{{ error_msg }}", "level_tag":"error"}]'));
+                {% endif %}
             }
         });
     });

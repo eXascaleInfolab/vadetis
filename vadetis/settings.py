@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_datatables',
     'drf_yasg',
+    'captcha'
 ]
 
 MIDDLEWARE = [
@@ -207,6 +208,10 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 SITE_ID = 1
+
+# RECAPTCHA
+RECAPTCHA_PUBLIC_KEY = '6Lc452UUAAAAAFYADmbUZgYf7qBx3A8i-nnLUde2'
+RECAPTCHA_PRIVATE_KEY = '6Lc452UUAAAAAA-XsnkMfh7xA-HhzN8Oliq4dZED'
 
 # MAILING - CHANGE MAIL SETTINGS WHEN GOING PRODUCTION!
 EMAIL_HOST = 'smtp.gmail.com'

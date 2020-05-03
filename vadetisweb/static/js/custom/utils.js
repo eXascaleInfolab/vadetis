@@ -195,13 +195,15 @@ function groupBy(list, keyGetter) {
 
 function print_messages(messages) {
     grouped_messages = groupBy(messages, message => message.level_tag);
-    grouped_messages.forEach((value, tag) => {
-        message_container = $('#message-container');
-        html = "<div class=\"messages messages-" + tag + "\">";
-        html += html_messages(value);
-        html += "</div>";
-        message_container.append(html);
-    });
+    grouped_messages.forEach((value, tag) => print_str_message(value, tag));
+}
+
+function print_str_message(value, tag) {
+    message_container = $('#message-container');
+    html = "<div class=\"messages messages-" + tag + "\">";
+    html += html_messages(value);
+    html += "</div>";
+    message_container.append(html);
 }
 
 function html_messages_list(messages) {
