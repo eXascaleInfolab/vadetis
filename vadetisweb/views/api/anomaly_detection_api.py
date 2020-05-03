@@ -186,8 +186,31 @@ class AnomalyDetectionCluster(APIView):
     """
     renderer_classes = [JSONRenderer]
 
+    @swagger_auto_schema(request_body=ClusterSerializer)
     def post(self, request, dataset_id):
-        return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            serializer = ClusterSerializer(context={'dataset_selected': dataset_id, }, data=request.data)
+
+            if serializer.is_valid():
+                df_from_json, df_class_from_json = get_datasets_from_json(serializer.validated_data['dataset_series_json'])
+                try:
+                    data = {}
+                    settings = get_settings(request)
+                    data_series, info = cluster_from_validated_data(df_from_json, df_class_from_json, serializer.validated_data, settings)
+
+                    data['series'] = data_series
+                    data['info'] = info
+                    return Response(data)
+
+                except:
+                    return Response({}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+        except DataSet.DoesNotExist:
+                messages.error(request, dataset_not_found_msg(dataset_id))
+                return redirect('vadetisweb:index')
 
 
 class AnomalyDetectionSVM(APIView):
@@ -196,8 +219,31 @@ class AnomalyDetectionSVM(APIView):
     """
     renderer_classes = [JSONRenderer]
 
+    @swagger_auto_schema(request_body=SVMSerializer)
     def post(self, request, dataset_id):
-        return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            serializer = SVMSerializer(context={'dataset_selected': dataset_id, }, data=request.data)
+
+            if serializer.is_valid():
+                df_from_json, df_class_from_json = get_datasets_from_json(serializer.validated_data['dataset_series_json'])
+                try:
+                    data = {}
+                    settings = get_settings(request)
+                    data_series, info = svm_from_validated_data(df_from_json, df_class_from_json, serializer.validated_data, settings)
+
+                    data['series'] = data_series
+                    data['info'] = info
+                    return Response(data)
+
+                except:
+                    return Response({}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+        except DataSet.DoesNotExist:
+                messages.error(request, dataset_not_found_msg(dataset_id))
+                return redirect('vadetisweb:index')
 
 
 class AnomalyDetectionIsolationForest(APIView):
@@ -206,8 +252,31 @@ class AnomalyDetectionIsolationForest(APIView):
     """
     renderer_classes = [JSONRenderer]
 
+    @swagger_auto_schema(request_body=IsolationForestSerializer)
     def post(self, request, dataset_id):
-        return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            serializer = IsolationForestSerializer(context={'dataset_selected': dataset_id, }, data=request.data)
+
+            if serializer.is_valid():
+                df_from_json, df_class_from_json = get_datasets_from_json(serializer.validated_data['dataset_series_json'])
+                try:
+                    data = {}
+                    settings = get_settings(request)
+                    data_series, info = isolation_forest_from_validated_data(df_from_json, df_class_from_json, serializer.validated_data, settings)
+
+                    data['series'] = data_series
+                    data['info'] = info
+                    return Response(data)
+
+                except:
+                    return Response({}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+        except DataSet.DoesNotExist:
+                messages.error(request, dataset_not_found_msg(dataset_id))
+                return redirect('vadetisweb:index')
 
 
 # TODO Deprecated
@@ -266,7 +335,7 @@ class DatasetJsonPerformAnomalyDetectionJson(APIView):
                 training_data_id = conf['training_dataset']
                 try:
                     training_dataset = DataSet.objects.get(id=training_data_id)
-                    data_series, info = perform_cluster(df, df_class, conf, training_dataset, dataset, settings)
+                    data_series, info = cluster_from_url(df, df_class, conf, training_dataset, dataset, settings)
 
                 except DataSet.DoesNotExist:
                     return Response({}, status=status.HTTP_400_BAD_REQUEST)
@@ -277,7 +346,7 @@ class DatasetJsonPerformAnomalyDetectionJson(APIView):
                 training_data_id = conf['training_dataset']
                 try:
                     training_dataset = DataSet.objects.get(id=training_data_id)
-                    data_series, info = perform_svm(df, df_class, conf, training_dataset, dataset, settings)
+                    data_series, info = svm_from_url(df, df_class, conf, training_dataset, dataset, settings)
                 except DataSet.DoesNotExist:
                     return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -286,8 +355,8 @@ class DatasetJsonPerformAnomalyDetectionJson(APIView):
                 training_data_id = conf['training_dataset']
                 try:
                     training_dataset = DataSet.objects.get(id=training_data_id)
-                    data_series, info = perform_isolation_forest(df, df_class, conf, training_dataset, dataset,
-                                                                 settings)
+                    data_series, info = isolation_forest_from_url(df, df_class, conf, training_dataset, dataset,
+                                                                  settings)
 
                 except DataSet.DoesNotExist:
                     return Response({}, status=status.HTTP_400_BAD_REQUEST)
@@ -351,7 +420,7 @@ class DatasetPerformAnomalyDetectionJson(APIView):
                 training_data_id = conf['training_dataset']
                 try:
                     training_dataset = DataSet.objects.get(id=training_data_id)
-                    data_series, info = perform_cluster(df, df_class, conf, training_dataset, dataset, settings)
+                    data_series, info = cluster_from_url(df, df_class, conf, training_dataset, dataset, settings)
 
                 except DataSet.DoesNotExist:
                     return Response({}, status=status.HTTP_400_BAD_REQUEST)
@@ -362,7 +431,7 @@ class DatasetPerformAnomalyDetectionJson(APIView):
                 training_data_id = conf['training_dataset']
                 try:
                     training_dataset = DataSet.objects.get(id=training_data_id)
-                    data_series, info = perform_svm(df, df_class, conf, training_dataset, dataset, settings)
+                    data_series, info = svm_from_url(df, df_class, conf, training_dataset, dataset, settings)
                 except DataSet.DoesNotExist:
                     return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -371,7 +440,7 @@ class DatasetPerformAnomalyDetectionJson(APIView):
                 training_data_id = conf['training_dataset']
                 try:
                     training_dataset = DataSet.objects.get(id=training_data_id)
-                    data_series, info = perform_isolation_forest(df, df_class, conf, training_dataset, dataset, settings)
+                    data_series, info = isolation_forest_from_url(df, df_class, conf, training_dataset, dataset, settings)
 
                 except DataSet.DoesNotExist:
                     return Response({}, status=status.HTTP_400_BAD_REQUEST)

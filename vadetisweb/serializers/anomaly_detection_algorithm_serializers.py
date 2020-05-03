@@ -24,7 +24,7 @@ class HistogramSerializer(serializers.Serializer):
     training_dataset = TrainingDatasetField(label='Training Dataset',
                                        required=True,
                                        queryset=DataSet.objects.none())
-    train_size = TrainSizeFloatField(initial=0.5, min_value=0.001, max_value=0.999, required=True)
+    train_size = TrainSizeFloatField(initial=0.5, min_value=0.001, max_value=1, required=True)
     random_seed = RandomSeedIntegerField(initial=10, required=False)
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
@@ -38,6 +38,11 @@ class HistogramSerializer(serializers.Serializer):
 
 
 class ClusterSerializer(serializers.Serializer):
+    dataset = DatasetField(default='overridden')
+    dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
+                                           style={'template': 'vadetisweb/parts/input/hidden_input.html',
+                                                  'id': 'dataset_series_json'})
+
     training_dataset = TrainingDatasetField(label='Training Dataset',
                                        required=True,
                                        queryset=DataSet.objects.none())
@@ -47,7 +52,8 @@ class ClusterSerializer(serializers.Serializer):
     n_init = serializers.IntegerField(initial=3, label='Number of Inits', min_value=1, required=True,
                                       help_text='The number of initializations to perform. The best results are kept.',
                                       style={'template': 'vadetisweb/parts/input/text_input.html'})
-    train_size = TrainSizeFloatField(initial=0.5, min_value=0.001, max_value=0.999, required=True)
+
+    train_size = TrainSizeFloatField(initial=0.5, min_value=0.001, max_value=1, required=True)
     random_seed = RandomSeedIntegerField(initial=10, required=False)
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
@@ -61,6 +67,11 @@ class ClusterSerializer(serializers.Serializer):
 
 
 class SVMSerializer(serializers.Serializer):
+    dataset = DatasetField(default='overridden')
+    dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
+                                           style={'template': 'vadetisweb/parts/input/hidden_input.html',
+                                                  'id': 'dataset_series_json'})
+
     training_dataset = TrainingDatasetField(label='Training Dataset',
                                        required=True,
                                        queryset=DataSet.objects.none())
@@ -73,7 +84,8 @@ class SVMSerializer(serializers.Serializer):
     nu = serializers.FloatField(initial=0.95, label='Nu', min_value=0.000001, max_value=1, required=False,
                                 help_text='An upper bound on the fraction of training errors and a lower bound of the fraction of support vectors. Should be in the interval (0, 1]. If none, the default value 0.5 will be used.',
                                 style={'template': 'vadetisweb/parts/input/text_input.html', 'step': 'any', 'min': 0.000001, 'max': 1})
-    train_size = TrainSizeFloatField(initial=0.5, min_value=0.001, max_value=0.999, required=True)
+    train_size = TrainSizeFloatField(initial=0.5, min_value=0.001, max_value=1, required=True)
+
     random_seed = RandomSeedIntegerField(initial=10, required=False)
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
@@ -87,6 +99,10 @@ class SVMSerializer(serializers.Serializer):
 
 
 class IsolationForestSerializer(serializers.Serializer):
+    dataset = DatasetField(default='overridden')
+    dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
+                                           style={'template': 'vadetisweb/parts/input/hidden_input.html',
+                                                  'id': 'dataset_series_json'})
 
     training_dataset = TrainingDatasetField(label='Training Dataset',
                                        required=True,
@@ -96,7 +112,7 @@ class IsolationForestSerializer(serializers.Serializer):
     n_estimators = serializers.IntegerField(initial=40, label='Number of Estimators', min_value=1, required=True,
                                             help_text='The number of base estimators in the ensemble.',
                                             style={'template': 'vadetisweb/parts/input/text_input.html'})
-    train_size = TrainSizeFloatField(initial=0.5, min_value=0.001, max_value=0.999, required=True,
+    train_size = TrainSizeFloatField(initial=0.5, min_value=0.001, max_value=1, required=True,
                                      style={'template': 'vadetisweb/parts/input/text_input.html', 'step': 'any', 'min': 0.000001, 'max': 1})
 
     random_seed = RandomSeedIntegerField(initial=10, required=False)

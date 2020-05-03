@@ -61,7 +61,25 @@ def histogram_from_url(df, df_class, conf, dataset, training_dataset, settings):
     return data_series, info
 
 
-def perform_cluster(df, df_class, conf, training_dataset, dataset, settings):
+def cluster_from_validated_data(df, df_class, validated_data, settings):
+    dataset = validated_data['dataset']
+
+    training_dataset = validated_data['training_dataset']
+    df_train = training_dataset.dataframe
+    df_train_class = training_dataset.dataframe_class
+
+    scores, y_hat_results, df_with_class_instances, info = cluster_gaussian_mixture(df, df_class, df_train, df_train_class,
+                                                                                    maximize_score=validated_data['maximize_score'],
+                                                                                    n_components=validated_data['n_components'],
+                                                                                    n_init=validated_data['n_init'],
+                                                                                    train_size=validated_data['train_size'],
+                                                                                    random_seed=validated_data['random_seed'])
+
+    data_series = get_anomaly_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings)
+    return data_series, info
+
+
+def cluster_from_url(df, df_class, conf, training_dataset, dataset, settings):
     df_train = training_dataset.dataframe
     df_train_class = training_dataset.dataframe_class
 
@@ -81,7 +99,27 @@ def perform_cluster(df, df_class, conf, training_dataset, dataset, settings):
     return data_series, info
 
 
-def perform_svm(df, df_class, conf, training_dataset, dataset, settings):
+def svm_from_validated_data(df, df_class, validated_data, settings):
+    dataset = validated_data['dataset']
+
+    training_dataset = validated_data['training_dataset']
+    df_train = training_dataset.dataframe
+    df_train_class = training_dataset.dataframe_class
+
+    scores, y_hat_results, df_with_class_instances, info = svm(df, df_class, df_train, df_train_class,
+                                                               maximize_score=validated_data['maximize_score'],
+                                                               gamma=validated_data['gamma'],
+                                                               nu=validated_data['nu'],
+                                                               kernel=validated_data['kernel'],
+                                                               train_size=validated_data['train_size'],
+                                                               random_seed=validated_data['random_seed'])
+
+    data_series = get_anomaly_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results,
+                                                     settings)
+    return data_series, info
+
+
+def svm_from_url(df, df_class, conf, training_dataset, dataset, settings):
     df_train = training_dataset.dataframe
     df_train_class = training_dataset.dataframe_class
 
@@ -97,7 +135,28 @@ def perform_svm(df, df_class, conf, training_dataset, dataset, settings):
     return data_series, info
 
 
-def perform_isolation_forest(df, df_class, conf, training_dataset, dataset, settings):
+def isolation_forest_from_validated_data(df, df_class, validated_data, settings):
+    dataset = validated_data['dataset']
+
+    training_dataset = validated_data['training_dataset']
+    df_train = training_dataset.dataframe
+    df_train_class = training_dataset.dataframe_class
+
+    scores, y_hat_results, df_with_class_instances, info = isolation_forest(df, df_class, df_train,
+                                                                            df_train_class,
+                                                                            maximize_score=validated_data['maximize_score'],
+                                                                            n_jobs=-1,
+                                                                            bootstrap=validated_data['bootstrap'],
+                                                                            n_estimators=validated_data['n_estimators'],
+                                                                            train_size=validated_data['train_size'],
+                                                                            random_seed=validated_data['random_seed'])
+
+    data_series = get_anomaly_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results,
+                                                     settings)
+    return data_series, info
+
+
+def isolation_forest_from_url(df, df_class, conf, training_dataset, dataset, settings):
     df_train = training_dataset.dataframe
     df_train_class = training_dataset.dataframe_class
 
