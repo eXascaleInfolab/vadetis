@@ -51,5 +51,5 @@
 
 {% block additional_bottom_js %}
     {{ block.super }}
-    {% include "allauth/shared/parts/js/ajax_form_js.html" with formid="login_form" error_msg="Login failed" %}
+    {% include "allauth/shared/parts/js/ajax_form_js.html" with formid="login_form" error_msg="Login failed" hasCaptcha=True %}
 {% endblock %}

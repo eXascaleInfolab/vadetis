@@ -18,6 +18,9 @@
                 {% if error_msg %}
                 print_messages(JSON.parse('[{ "message":"{{ error_msg }}", "level_tag":"error"}]'));
                 {% endif %}
+                {% if hasCaptcha is True %}
+                grecaptcha.reset();
+                {% endif %}
             }
         });
     });
