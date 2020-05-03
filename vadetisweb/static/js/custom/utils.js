@@ -128,6 +128,8 @@ function registerAnomalyDetectionForm(form_id) {
                 updateScores(info);
 
                 // threshold
+                $('#threshold_portlet').show();
+                registerThresholdUpdateForm('threshold_form');
                 updateThreshold(info.threshold);
 
                 // cnf
@@ -148,6 +150,7 @@ function registerAnomalyDetectionForm(form_id) {
                 }
                 highchart.hideLoading();
 
+                $('#threshold_portlet').hide();
                 $('#scores_portlet').hide();
                 $('#cnf_portlet').hide();
                 $('#plot_portlet').hide();

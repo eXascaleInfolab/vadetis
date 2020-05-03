@@ -19,9 +19,6 @@
                     $('#{{ form_append_container }}').empty();
                     $('#{{ form_append_container }}').append(receivedForm);
 
-                    // todo move
-                    registerThresholdUpdateForm('threshold_form');
-
                     registerAnomalyDetectionForm(receivedFormId);
 
                     if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
