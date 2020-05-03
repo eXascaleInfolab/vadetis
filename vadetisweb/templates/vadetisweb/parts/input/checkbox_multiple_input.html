@@ -3,11 +3,12 @@
     <div class="form-group error validated {{ style.class }}">
         {% for key, text in field.choices|items %}
             <div class="{% if style.inline %}checkbox-inline{% else %}checkbox{% endif %}">
-                <label>
+                <label class="kt-checkbox">
                     <input{% if style.id %} id="{{ style.id }}" {% endif %}  type="checkbox" name="{{ field.name }}"
-                                            class="form-control {{ style.input_class }}" value="{{ key }}"
+                                            {% if style.input_class %}class="{{ style.input_class }}"{% endif %} value="{{ key }}"
                                             {% if key|as_string in field.value|as_list_of_strings %}checked{% endif %}>
                     {{ text }}
+                    <span></span>
                 </label>
             </div>
         {% endfor %}
@@ -22,11 +23,12 @@
     <div class="form-group {{ style.class }}">
         {% for key, text in field.choices|items %}
             <div class="{% if style.inline %}checkbox-inline{% else %}checkbox{% endif %}">
-                <label>
-                    <input{% if style.id %} id="{{ style.id }}" {% endif %}  type="checkbox" name="{{ field.name }}"
-                                            class="form-control {{ style.input_class }}" value="{{ key }}"
+                <label class="kt-checkbox">
+                    <input{% if style.id %} id="{{ style.id }}" {% endif %} type="checkbox" name="{{ field.name }}"
+                                            {% if style.input_class %}class="{{ style.input_class }}"{% endif %} value="{{ key }}"
                                             {% if key|as_string in field.value|as_list_of_strings %}checked{% endif %}>
                     {{ text }}
+                    <span></span>
                 </label>
             </div>
         {% endfor %}

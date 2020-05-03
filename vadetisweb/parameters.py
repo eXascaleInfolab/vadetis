@@ -3,14 +3,18 @@
 # Anomaly Detection Algorithms
 #########################################################
 
-LISA = 'LISA'
+LISA_PEARSON = 'LISA (Pearson)'
+LISA_DTW_PEARSON = 'LISA (DTW with Pearson)'
+LISA_GEO = 'LISA (Geographical)'
 HISTOGRAM = 'Histogram'
 CLUSTER_GAUSSIAN_MIXTURE = 'Cluster (Gaussian Mixture)'
 SVM = 'SVM'
 ISOLATION_FOREST = 'Isolation Forest'
 
 ANOMALY_DETECTION_ALGORITHMS = (
-    (LISA, LISA),
+    (LISA_PEARSON, LISA_PEARSON),
+    (LISA_DTW_PEARSON, LISA_DTW_PEARSON),
+    (LISA_GEO, LISA_GEO),
     (HISTOGRAM, HISTOGRAM),
     (CLUSTER_GAUSSIAN_MIXTURE, CLUSTER_GAUSSIAN_MIXTURE),
     (SVM, SVM),
@@ -138,6 +142,7 @@ PEARSON = 'Pearson'
 DTW = 'DTW with Pearson'
 GEO = 'Geographical'
 
+#TODO deprecated
 CORRELATION_ALGORITHMS = (
     (PEARSON, PEARSON),
     (DTW, DTW),

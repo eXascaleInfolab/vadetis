@@ -1,4 +1,4 @@
-from vadetisweb.parameters import LISA, PEARSON, DTW, GEO, HISTOGRAM, CLUSTER_GAUSSIAN_MIXTURE, SVM, ISOLATION_FOREST
+from vadetisweb.parameters import LISA_PEARSON, PEARSON, DTW, GEO, HISTOGRAM, CLUSTER_GAUSSIAN_MIXTURE, SVM, ISOLATION_FOREST
 from .helper_function_utils import *
 
 from vadetisweb.models import UserSettings
@@ -55,7 +55,7 @@ def get_conf_from_query_params(request):
     conf['range_end'] = convertToInt(request.GET.get("range_end", None))
     conf['maximize_score'] = request.GET.get("maximize_score", None)
 
-    if algorithm == LISA:
+    if algorithm == LISA_PEARSON:
 
         correlation_algorithm = request.GET.get('correlation_algorithm', None)
 

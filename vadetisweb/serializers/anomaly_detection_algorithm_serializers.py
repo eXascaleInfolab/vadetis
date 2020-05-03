@@ -127,10 +127,15 @@ class IsolationForestSerializer(serializers.Serializer):
         super(IsolationForestSerializer, self).__init__(*args, **kwargs)
 
 
-class CorrelationSerializer(serializers.Serializer):
+class LisaPearsonSerializer(serializers.Serializer):
     """
-    The serializer for selection of a correlation algorithm
+    The serializer for the parameters for Pearson correlation algorithm
     """
+
+    dataset = DatasetField(default='overridden')
+    dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
+                                           style={'template': 'vadetisweb/parts/input/hidden_input.html',
+                                                  'id': 'dataset_series_json'})
 
     ts_selected = TimeSeriesField(label='Time Series',
                                   queryset=TimeSeries.objects.none(),
@@ -141,22 +146,6 @@ class CorrelationSerializer(serializers.Serializer):
                                   style={'template': 'vadetisweb/parts/input/checkbox_multiple_input.html',
                                          'inline': True})
 
-    correlation_algorithm = serializers.ChoiceField(default=PEARSON, label='Correlation Algorithm', choices=CORRELATION_ALGORITHMS,
-                                                    required=False,
-                                                    allow_null=False,
-                                                    allow_blank=False,
-                                                    help_text='Algorithm used to calculate the correlation',
-                                                    style = {'template': 'vadetisweb/parts/input/select_input_onchange_submit.html'})
-
-    def __init__(self, *args, **kwargs):
-        super(CorrelationSerializer, self).__init__(*args, **kwargs)
-
-
-class PearsonSerializer(CorrelationSerializer):
-    """
-    The serializer for the parameters for Pearson correlation algorithm
-    """
-
     window_size_value = serializers.IntegerField(initial=12, required=True, min_value=1,
                                                  help_text='Select the moving window size as a percentage value relative to the length of the time series or as an absolute value range.',
                                                  style={'template': 'vadetisweb/parts/input/text_input.html'})
@@ -164,6 +153,7 @@ class PearsonSerializer(CorrelationSerializer):
                                                style={'template': 'vadetisweb/parts/input/select_input.html'})
     row_standardized = serializers.BooleanField(initial=True, label='Apply Row Standardization', required=False,
                                                 help_text='Determines if row standardization is applied to the correlation values')
+
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
     range_start = serializers.IntegerField(required=True, min_value=0,
@@ -172,10 +162,23 @@ class PearsonSerializer(CorrelationSerializer):
                                          style={'template': 'vadetisweb/parts/input/hidden_input.html', 'id' : 'rangeEnd'})
 
 
-class DTWPearsonSerializer(CorrelationSerializer):
+class LisaDtwPearsonSerializer(serializers.Serializer):
     """
     The serializer for the parameters for DTW with Pearson correlation algorithm
     """
+    dataset = DatasetField(default='overridden')
+    dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
+                                           style={'template': 'vadetisweb/parts/input/hidden_input.html',
+                                                  'id': 'dataset_series_json'})
+
+    ts_selected = TimeSeriesField(label='Time Series',
+                                  queryset=TimeSeries.objects.none(),
+                                  required=True,
+                                  many=True,
+                                  allow_empty=False,
+                                  allow_null=False,
+                                  style={'template': 'vadetisweb/parts/input/checkbox_multiple_input.html',
+                                         'inline': True})
 
     window_size_value = serializers.IntegerField(initial=12, required=True, min_value=1,
                                                  help_text='Select the moving window size as a percentage value relative to the length of the time series or as an absolute value range.',
@@ -188,6 +191,7 @@ class DTWPearsonSerializer(CorrelationSerializer):
                                                     style={'template': 'vadetisweb/parts/input/select_input.html'})
     row_standardized = serializers.BooleanField(initial=True, label='Apply Row Standardization', required=False,
                                                 help_text='Determines if row standardization is applied to the correlation values')
+
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
     range_start = serializers.IntegerField(required=True, min_value=0,
@@ -196,13 +200,28 @@ class DTWPearsonSerializer(CorrelationSerializer):
                                          style={'template': 'vadetisweb/parts/input/hidden_input.html', 'id' : 'rangeEnd'})
 
 
-class GeographicDistanceSerializer(CorrelationSerializer):
+class LisaGeoDistanceSerializer(serializers.Serializer):
     """
     The serializer for the parameters for geographical correlation algorithm
     """
+    dataset = DatasetField(default='overridden')
+    dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
+                                           style={'template': 'vadetisweb/parts/input/hidden_input.html',
+                                                  'id': 'dataset_series_json'})
+
+    ts_selected = TimeSeriesField(label='Time Series',
+                                  queryset=TimeSeries.objects.none(),
+                                  required=True,
+                                  many=True,
+                                  allow_empty=False,
+                                  allow_null=False,
+                                  style={'template': 'vadetisweb/parts/input/checkbox_multiple_input.html',
+                                         'inline': True})
+
     geo_distance_function = serializers.ChoiceField(choices=GEO_DISTANCE, required=True,
                                                     help_text='The geographic distance function used for the calculation.',
                                                     style={'template': 'vadetisweb/parts/input/select_input.html'})
+
     time_range = serializers.ChoiceField(label='Time Range', choices=TIME_RANGE, required=True,
                                          help_text='The time range to apply anomaly detection',
                                          style={'template': 'vadetisweb/parts/input/select_input.html'})
@@ -217,7 +236,7 @@ class GeographicDistanceSerializer(CorrelationSerializer):
 
     def __init__(self, *args, **kwargs):
         #post_data = args[0]
-        super(GeographicDistanceSerializer, self).__init__(*args, **kwargs)
+        super(LisaGeoDistanceSerializer, self).__init__(*args, **kwargs)
         """time_series = TimeSeries.objects.filter(datasets__in=[post_data['dataset_selected']])
 
         all_have_ch1903 = True

@@ -9,4 +9,3 @@ from .anomaly_detection_utils import *
 from .anomaly_injection_utils import *
 from .helper_function_utils import *
 from .image_utils import *
-from .serializer_utils import *

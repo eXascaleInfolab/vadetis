@@ -1,7 +1,7 @@
 import numpy as np, pandas as pd
 
 from vadetisweb.models import TimeSeries
-from vadetisweb.parameters import LISA
+from vadetisweb.parameters import LISA_PEARSON
 
 from .anomaly_detection_utils import df_zscore
 from .date_utils import unix_time_millis_from_dt
@@ -196,7 +196,7 @@ def get_updated_dataset_series_for_threshold_with_marker_json(threshold, dataset
         for measurement in series['measurements']:
             _set_marker_for_threshold(measurement, threshold, settings)
 
-    if algorithm != LISA: #todo if not lisa we detected anomalous instance not point, so points at the same timestamp have the same truth and score
+    if algorithm != LISA_PEARSON: #todo if not lisa we detected anomalous instance not point, so points at the same timestamp have the same truth and score
         series_first = dataset_series[0]
         series_first_measurements = series_first['measurements']
         scores, truth = _get_scores_and_truth_from_series_data(series_first_measurements)

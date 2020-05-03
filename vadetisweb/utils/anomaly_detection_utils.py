@@ -3,7 +3,7 @@ from pandas.tseries.frequencies import to_offset
 from sklearn.metrics import fbeta_score, precision_score, recall_score, accuracy_score, confusion_matrix
 from vadetisweb.parameters import GEO, HISTOGRAM, CLUSTER_GAUSSIAN_MIXTURE, SVM, ISOLATION_FOREST, \
     DTW_DISTANCE_FUNCTION, GEO_DISTANCE, TIME_RANGE, ANOMALY_DETECTION_SCORE_TYPES, WINDOW_SIZE_ABSOLUTE, \
-    WINDOW_SIZE_PERCENT, SELECTION, DTW, PEARSON, LISA
+    WINDOW_SIZE_PERCENT, SELECTION, DTW, PEARSON, LISA_PEARSON
 
 from .date_utils import unix_time_millis_to_dt
 from .helper_function_utils import *
@@ -11,7 +11,7 @@ from .helper_function_utils import *
 def is_valid_conf(conf):
     if 'algorithm' in conf:
 
-        if conf['algorithm'] == LISA:
+        if conf['algorithm'] == LISA_PEARSON: #TODO other lisa parameters
 
             if conf['correlation_algorithm'] == PEARSON:
 
@@ -323,11 +323,11 @@ def get_dataframes_for_ranges(df, df_class, conf):
     range_end = unix_time_millis_to_dt(conf['range_end']) if conf['time_range'] == SELECTION else None
 
     # get only needed area of dataframe
-    if range_start is not None and range_end is not None and conf['algorithm'] != LISA:
+    if range_start is not None and range_end is not None and conf['algorithm'] != LISA_PEARSON:
         df = df.loc[range_start:range_end]
         df_class = df_class[range_start:range_end]
 
-    elif conf['algorithm'] == LISA:
+    elif conf['algorithm'] == LISA_PEARSON:
         if conf['correlation_algorithm'] == PEARSON or conf['correlation_algorithm'] == DTW:
             window_size = get_window_size(conf['window_size_value'], conf['window_size_unit'], df)
 

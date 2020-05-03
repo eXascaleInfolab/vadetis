@@ -13,9 +13,9 @@ from django.core.files.temp import NamedTemporaryFile
 from django.http import HttpResponse
 from django.contrib import messages
 
-from vadetisweb.serializers import AlgorithmSerializer, HistogramSerializer, ClusterSerializer, SVMSerializer, IsolationForestSerializer, ThresholdSerializer
+from vadetisweb.serializers import AlgorithmSerializer, LisaPearsonSerializer, LisaDtwPearsonSerializer, LisaGeoDistanceSerializer, HistogramSerializer, ClusterSerializer, SVMSerializer, IsolationForestSerializer, ThresholdSerializer
 from vadetisweb.models import DataSet
-from vadetisweb.parameters import LISA, HISTOGRAM, CLUSTER_GAUSSIAN_MIXTURE, SVM, ISOLATION_FOREST, PEARSON, DTW, GEO
+from vadetisweb.parameters import LISA_PEARSON, HISTOGRAM, CLUSTER_GAUSSIAN_MIXTURE, SVM, ISOLATION_FOREST, PEARSON, DTW, GEO
 from vadetisweb.utils import *
 from vadetisweb.algorithms import *
 from vadetisweb.factory import dataset_not_found_msg
@@ -36,8 +36,32 @@ class AnomalyDetectionAlgorithmSelectionView(APIView):
                 algorithm = serializer.validated_data['algorithm']
                 formid = 'anomaly_detection_form'
 
-                if algorithm == LISA:
-                    algorithm_serializer = get_lisa_serializer(context={'dataset_selected': dataset_id, })
+                if algorithm == LISA_PEARSON:
+                    return Response({
+                        'dataset': dataset,
+                        'formid': formid,
+                        'url': reverse('vadetisweb:anomaly_detection_lisa_person', args=[dataset_id]),
+                        'serializer': LisaPearsonSerializer(context={'dataset_selected': dataset_id, }),
+                        'submit_label': 'Run',
+                    }, status=status.HTTP_200_OK)
+
+                elif algorithm == LISA_DTW_PEARSON:
+                    return Response({
+                        'dataset': dataset,
+                        'formid': formid,
+                        'url': reverse('vadetisweb:anomaly_detection_lisa_dtw_person', args=[dataset_id]),
+                        'serializer': LisaDtwPearsonSerializer(context={'dataset_selected': dataset_id, }),
+                        'submit_label' : 'Run',
+                    }, status=status.HTTP_200_OK)
+
+                elif algorithm == LISA_GEO:
+                    return Response({
+                        'dataset': dataset,
+                        'formid': formid,
+                        'url': reverse('vadetisweb:anomaly_detection_lisa_geo', args=[dataset_id]),
+                        'serializer': LisaGeoDistanceSerializer(context={'dataset_selected': dataset_id, }),
+                        'submit_label' : 'Run',
+                    }, status=status.HTTP_200_OK)
 
                 elif algorithm == HISTOGRAM:
                     return Response({
@@ -146,6 +170,105 @@ class AnomalyDetectionAlgorithmSelectionView(APIView):
         except DataSet.DoesNotExist:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
 """
+
+class AnomalyDetectionLisaPearson(APIView):
+    """
+        Request anomaly detection from provided json
+    """
+    renderer_classes = [JSONRenderer]
+
+    @swagger_auto_schema(request_body=LisaPearsonSerializer)
+    def post(self, request, dataset_id):
+
+        try:
+            serializer = LisaPearsonSerializer(context={'dataset_selected': dataset_id, }, data=request.data)
+
+            if serializer.is_valid():
+                df_from_json, df_class_from_json = get_datasets_from_json(serializer.validated_data['dataset_series_json'])
+                try:
+                    data = {}
+                    """settings = get_settings(request)
+                    data_series, info = histogram_from_validated_data(df_from_json, df_class_from_json, serializer.validated_data, settings)
+
+                    data['series'] = data_series
+                    data['info'] = info"""
+                    return Response(data)
+
+                except:
+                    return Response({}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+        except DataSet.DoesNotExist:
+                messages.error(request, dataset_not_found_msg(dataset_id))
+                return redirect('vadetisweb:index')
+
+
+class AnomalyDetectionLisaDtwPearson(APIView):
+    """
+        Request anomaly detection from provided json
+    """
+    renderer_classes = [JSONRenderer]
+
+    @swagger_auto_schema(request_body=LisaDtwPearsonSerializer)
+    def post(self, request, dataset_id):
+
+        try:
+            serializer = LisaDtwPearsonSerializer(context={'dataset_selected': dataset_id, }, data=request.data)
+
+            if serializer.is_valid():
+                df_from_json, df_class_from_json = get_datasets_from_json(serializer.validated_data['dataset_series_json'])
+                try:
+                    data = {}
+                    """settings = get_settings(request)
+                    data_series, info = histogram_from_validated_data(df_from_json, df_class_from_json, serializer.validated_data, settings)
+
+                    data['series'] = data_series
+                    data['info'] = info"""
+                    return Response(data)
+
+                except:
+                    return Response({}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+        except DataSet.DoesNotExist:
+                messages.error(request, dataset_not_found_msg(dataset_id))
+                return redirect('vadetisweb:index')
+
+
+class AnomalyDetectionLisaGeoDistance(APIView):
+    """
+        Request anomaly detection from provided json
+    """
+    renderer_classes = [JSONRenderer]
+
+    @swagger_auto_schema(request_body=LisaGeoDistanceSerializer)
+    def post(self, request, dataset_id):
+
+        try:
+            serializer = LisaGeoDistanceSerializer(context={'dataset_selected': dataset_id, }, data=request.data)
+
+            if serializer.is_valid():
+                df_from_json, df_class_from_json = get_datasets_from_json(serializer.validated_data['dataset_series_json'])
+                try:
+                    data = {}
+                    """settings = get_settings(request)
+                    data_series, info = histogram_from_validated_data(df_from_json, df_class_from_json, serializer.validated_data, settings)
+
+                    data['series'] = data_series
+                    data['info'] = info"""
+                    return Response(data)
+
+                except:
+                    return Response({}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+        except DataSet.DoesNotExist:
+                messages.error(request, dataset_not_found_msg(dataset_id))
+                return redirect('vadetisweb:index')
+
 
 class AnomalyDetectionHistogram(APIView):
     """
@@ -306,7 +429,7 @@ class DatasetJsonPerformAnomalyDetectionJson(APIView):
 
             df, df_class = get_dataframes_for_ranges(df_from_json, df_class_from_json, conf)
 
-            if conf['algorithm'] == LISA:
+            if conf['algorithm'] == LISA_PEARSON:
                 ts_selected_id = conf['ts_selected']
 
                 if conf['correlation_algorithm'] == PEARSON:
@@ -391,7 +514,7 @@ class DatasetPerformAnomalyDetectionJson(APIView):
 
             df, df_class = get_dataframes_for_ranges(dataset.dataframe, dataset.dataframe_class, conf)
 
-            if conf['algorithm'] == LISA:
+            if conf['algorithm'] == LISA_PEARSON:
                 ts_selected_id = conf['ts_selected']
 
                 if conf['correlation_algorithm'] == PEARSON:
