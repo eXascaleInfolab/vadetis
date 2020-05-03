@@ -48,10 +48,10 @@ def get_dataset_with_marker_json(dataset, df, df_class, type, show_anomaly, sett
     return data_series
 
 
-def get_predicted_timeseries_with_marker_json(timeseries_id, df_with_class_instances, scores, y_hat_results, settings):
+def get_predicted_series_data_json(series_id, df_with_class_instances, scores, y_hat_results, settings):
 
     data = []
-    for index, value in df_with_class_instances.loc[:, timeseries_id].iteritems():
+    for index, value in df_with_class_instances.loc[:, series_id].iteritems():
 
         integer_index = df_with_class_instances.index.get_loc(index)
         predicted_result = y_hat_results[integer_index]
@@ -94,8 +94,8 @@ def get_anomaly_detection_single_ts_results_json(dataset, ts_id, df_with_class_i
     ts = TimeSeries.objects.get(id=ts_id)
 
     # ts
-    raw_measurements = get_predicted_timeseries_with_marker_json(ts.id, df_with_class_instances, scores, y_hat_results, settings)
-    z_measurements = get_predicted_timeseries_with_marker_json(ts.id, df_z_with_class_instances, scores, y_hat_results, settings)
+    raw_measurements = get_predicted_series_data_json(ts.id, df_with_class_instances, scores, y_hat_results, settings)
+    z_measurements = get_predicted_series_data_json(ts.id, df_z_with_class_instances, scores, y_hat_results, settings)
 
     dict_series = {'id': ts.id, 'name': ts.name, 'unit': ts.unit, 'is_spatial': ts.is_spatial,
                    'measurements': {'raw': raw_measurements, 'zscore': z_measurements}}
@@ -120,7 +120,7 @@ def get_anomaly_detection_results_json(dataset, df_with_class_instances, scores,
     time_series = dataset.timeseries_set.all()
 
     for ts in time_series:
-        data_series = get_predicted_timeseries_with_marker_json(ts.id, df_with_class_instances, scores, y_hat_results, settings)
+        data_series = get_predicted_series_data_json(ts.id, df_with_class_instances, scores, y_hat_results, settings)
 
         dict_series = {'id' : ts.id,
                        'name' : ts.name, #todo
@@ -135,26 +135,26 @@ def get_anomaly_detection_results_json(dataset, df_with_class_instances, scores,
     return data
 
 
-def _set_marker_for_threshold(measurement, threshold, settings):
-    if measurement['class'] == 1 and measurement['score'] < threshold: #true positive
-        measurement['marker'] = {'fillColor': settings['color_true_positive'], 'radius': 3}
-    elif measurement['class'] == 1 and measurement['score'] >= threshold: #false negative
-        measurement['marker'] = {'fillColor': settings['color_false_negative'], 'radius': 3}
-    elif measurement['class'] == 0 and measurement['score'] < threshold:  #false positive
-        measurement['marker'] = {'fillColor': settings['color_false_positive'], 'radius': 3}
-    elif measurement['class'] == 0 and measurement['score'] >= threshold:  # true negative
-        measurement['marker'] = {'enabled': False }
+def _set_marker_for_threshold(point, threshold, settings):
+    if point['class'] == 1 and point['score'] < threshold: #true positive
+        point['marker'] = {'fillColor': settings['color_true_positive'], 'radius': 3}
+    elif point['class'] == 1 and point['score'] >= threshold: #false negative
+        point['marker'] = {'fillColor': settings['color_false_negative'], 'radius': 3}
+    elif point['class'] == 0 and point['score'] < threshold:  #false positive
+        point['marker'] = {'fillColor': settings['color_false_positive'], 'radius': 3}
+    elif point['class'] == 0 and point['score'] >= threshold:  # true negative
+        point['marker'] = {'enabled': False }
         """
         if 'marker' in measurement:
             del measurement['marker']"""
 
 
-def _get_scores_and_truth_from_series_measurements(series_measurements):
+def _get_scores_and_truth_from_series_data(series_data):
     scores = []
     truth = []
-    for measurement in series_measurements:
-        scores.append(measurement['score'])
-        truth.append(measurement['class'])
+    for point in series_data:
+        scores.append(point['score'])
+        truth.append(point['class'])
 
     return np.array(scores), np.array(truth)
 
@@ -172,6 +172,24 @@ def get_datasets_from_json(dataset_series):
 
     return df, df_class
 
+
+def get_updated_dataset_series_for_threshold_json(dataset_series, threshold, settings):
+
+    for series in dataset_series['series']:
+        for point in series['data']:
+            _set_marker_for_threshold(point, threshold, settings)
+
+    # todo if not lisa we detected anomalous instance not point, so points at the same timestamp have the same truth and score
+    series_first = dataset_series['series'][0]
+    series_first_data = series_first['data']
+    scores, truth = _get_scores_and_truth_from_series_data(series_first_data)
+    y_hat_results = (scores < threshold).astype(int)
+    info = get_info(threshold, y_hat_results, truth)
+
+    return dataset_series, info
+
+
+@DeprecationWarning
 def get_updated_dataset_series_for_threshold_with_marker_json(threshold, dataset_series, info, algorithm, settings):
 
     for series in dataset_series:
@@ -181,7 +199,7 @@ def get_updated_dataset_series_for_threshold_with_marker_json(threshold, dataset
     if algorithm != LISA: #todo if not lisa we detected anomalous instance not point, so points at the same timestamp have the same truth and score
         series_first = dataset_series[0]
         series_first_measurements = series_first['measurements']
-        scores, truth = _get_scores_and_truth_from_series_measurements(series_first_measurements)
+        scores, truth = _get_scores_and_truth_from_series_data(series_first_measurements)
         y_hat_results = (scores < threshold).astype(int)
         new_info = get_info(threshold, y_hat_results, truth)
         new_info['thresholds'] = info['thresholds']

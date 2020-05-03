@@ -393,28 +393,22 @@ class DatasetThresholdUpdateJson(APIView):
     @swagger_auto_schema(request_body=ThresholdSerializer)
     def post(self, request):
 
-        data = {}
-        new_info = {}
+        serializer = ThresholdSerializer(data=request.data)
 
-        threshold_post = request.POST['threshold']
-        dataset_series_json_post = request.POST['dataset_series_json']
-        info_post = request.POST['info']
-        algorithm_post = request.POST['algorithm']
+        if serializer.is_valid():
+            try:
+                data = {}
+                settings = get_settings(request)
 
-        threshold_str = json.loads(threshold_post)
-        algorithm = json.loads(algorithm_post)
-        threshold = float(threshold_str)
-        dataset_series = json.loads(dataset_series_json_post)
-        info = json.loads(info_post)
+                data_series, info = get_updated_dataset_series_for_threshold_json(serializer.validated_data['dataset_series_json'], serializer.validated_data['threshold'], settings)
+                data['series'] = data_series['series']
+                data['info'] = info
+                return Response(data)
 
-        settings = get_settings(request)
-
-        data_series, new_info = get_updated_dataset_series_for_threshold_with_marker_json(threshold, dataset_series, info, algorithm, settings)
-
-        data['series'] = data_series
-        data['info'] = new_info
-
-        return Response(data)
+            except:
+                return Response({}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CnfImage(APIView):
