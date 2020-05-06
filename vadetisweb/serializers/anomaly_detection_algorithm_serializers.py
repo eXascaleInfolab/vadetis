@@ -16,6 +16,31 @@ class AlgorithmSerializer(serializers.Serializer):
         super(AlgorithmSerializer, self).__init__(*args, **kwargs)
 
 
+class RPCAMEstimatorLossSerializer(serializers.Serializer):
+    dataset = DatasetField(default='overridden')
+    dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
+                                           style={'template': 'vadetisweb/parts/input/hidden_input.html', 'id' : 'dataset_series_json'})
+
+    delta = serializers.IntegerField(initial=1, label='Delta', min_value=1, required=True,
+                                            help_text='Delta for Huber Loss function',
+                                            style={'template': 'vadetisweb/parts/input/text_input.html', 'step': 'any', 'min': 1})
+
+    training_dataset = TrainingDatasetField(label='Training Dataset',
+                                       required=True,
+                                       queryset=DataSet.objects.none())
+    train_size = TrainSizeFloatField(initial=0.5, min_value=0.001, max_value=1, required=True)
+    random_seed = RandomSeedIntegerField(initial=10, required=False)
+    time_range = TimeRangeChoiceField(required=True)
+    maximize_score = MaximizeScoreChoiceField(required=True)
+    range_start = serializers.IntegerField(required=True, min_value=0,
+                                           style={'template': 'vadetisweb/parts/input/hidden_input.html', 'id' : 'rangeStart'})
+    range_end = serializers.IntegerField(required=True, min_value=0,
+                                         style={'template': 'vadetisweb/parts/input/hidden_input.html', 'id' : 'rangeEnd'})
+
+    def __init__(self, *args, **kwargs):
+        super(RPCAMEstimatorLossSerializer, self).__init__(*args, **kwargs)
+
+
 class HistogramSerializer(serializers.Serializer):
     dataset = DatasetField(default='overridden')
     dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,

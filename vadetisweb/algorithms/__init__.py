@@ -6,5 +6,6 @@ from .histogram import *
 from .cluster import *
 from .svm import *
 from .isolation_forest import *
+from .robust_pca import *
 from .perform import *
 from .injection import *

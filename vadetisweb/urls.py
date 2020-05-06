@@ -25,6 +25,7 @@ apipatterns = [
     path('api/anomaly-detection/<int:dataset_id>/lisa/pearson', views.AnomalyDetectionLisaPearson.as_view(), name='anomaly_detection_lisa_person'),
     path('api/anomaly-detection/<int:dataset_id>/lisa/dtw-pearson', views.AnomalyDetectionLisaDtwPearson.as_view(), name='anomaly_detection_lisa_dtw_person'),
     path('api/anomaly-detection/<int:dataset_id>/lisa/geo', views.AnomalyDetectionLisaGeoDistance.as_view(), name='anomaly_detection_lisa_geo'),
+    path('api/anomaly-detection/<int:dataset_id>/rpca/mestimator', views.AnomalyDetectionRPCAMEstimatorLoss.as_view(), name='anomaly_detection_rpca_mestimator'),
     path('api/anomaly-detection/<int:dataset_id>/histogram', views.AnomalyDetectionHistogram.as_view(), name='anomaly_detection_histogram'),
     path('api/anomaly-detection/<int:dataset_id>/cluster', views.AnomalyDetectionCluster.as_view(), name='anomaly_detection_cluster'),
     path('api/anomaly-detection/<int:dataset_id>/svm', views.AnomalyDetectionSVM.as_view(), name='anomaly_detection_svm'),

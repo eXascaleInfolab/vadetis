@@ -13,7 +13,7 @@ from django.core.files.temp import NamedTemporaryFile
 from django.http import HttpResponse
 from django.contrib import messages
 
-from vadetisweb.serializers import AlgorithmSerializer, LisaPearsonSerializer, LisaDtwPearsonSerializer, LisaGeoDistanceSerializer, HistogramSerializer, ClusterSerializer, SVMSerializer, IsolationForestSerializer, ThresholdSerializer
+from vadetisweb.serializers.anomaly_detection_algorithm_serializers import *
 from vadetisweb.models import DataSet
 from vadetisweb.parameters import LISA_PEARSON, HISTOGRAM, CLUSTER_GAUSSIAN_MIXTURE, SVM, ISOLATION_FOREST, PEARSON, DTW, GEO
 from vadetisweb.utils import *
@@ -63,6 +63,15 @@ class AnomalyDetectionAlgorithmSelectionView(APIView):
                         'submit_label' : 'Run',
                     }, status=status.HTTP_200_OK)
 
+                elif algorithm == RPCA:
+                    return Response({
+                        'dataset': dataset,
+                        'formid': formid,
+                        'url': reverse('vadetisweb:anomaly_detection_rpca_mestimator', args=[dataset_id]),
+                        'serializer': RPCAMEstimatorLossSerializer(context={'dataset_selected': dataset_id, }),
+                        'submit_label' : 'Run',
+                    }, status=status.HTTP_200_OK)
+
                 elif algorithm == HISTOGRAM:
                     return Response({
                         'dataset': dataset,
@@ -109,67 +118,6 @@ class AnomalyDetectionAlgorithmSelectionView(APIView):
             messages.error(request, dataset_not_found_msg(dataset_id))
             return redirect('vadetisweb:index')
 
-
-
-"""
-class AnomalyDetectionAlgorithmSelectionView(APIView):
-    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
-    template_name = 'vadetisweb/parts/forms/anomaly_detection_form.html'
-
-    def post(self, request, dataset_id):
-        dataset = DataSet.objects.get(id=dataset_id)
-        try:
-            if 'algorithm' in request.POST:
-                algorithm = request.POST['algorithm']
-                if algorithm:
-
-                    if algorithm == LISA:
-                        serializer = get_lisa_serializer(request.data, context={'dataset_selected': dataset_id, })
-
-                    elif algorithm == HISTOGRAM:
-                        serializer = HistogramSerializer(data=request.data, context={'dataset_selected': dataset_id, })
-
-                    elif algorithm == CLUSTER_GAUSSIAN_MIXTURE:
-                        serializer = ClusterSerializer(data=request.data, context={'dataset_selected': dataset_id, })
-
-                    elif algorithm == SVM:
-                        serializer = SVMSerializer(data=request.data, context={'dataset_selected': dataset_id, })
-
-                    elif algorithm == ISOLATION_FOREST:
-                        serializer = IsolationForestSerializer(data=request.data, context={'dataset_selected': dataset_id, })
-
-                    else:
-                        serializer = AlgorithmSerializer()
-
-                    # check if a valid form has been submitted
-                    if serializer.is_valid():
-                        print("form was valid")
-                        print(serializer.data)
-                        url = "%s?%s" % (reverse('vadetisweb:synthetic_dataset_perform', args=(dataset_id,)),
-                                         urllib.parse.urlencode(serializer.data))
-                        response = Response({'serializer': serializer, })
-                        response['Location'] = url
-                        return response
-
-                    else:
-                        print('Form was not valid')
-                        print(serializer.errors)
-
-                else:
-                    serializer = AlgorithmSerializer()
-            else:
-                serializer = AlgorithmSerializer()
-
-            return Response({
-                'dataset' : dataset,
-                'formid' : 'anomaly_detection_form',
-                'url' : reverse('vadetisweb:anomaly_detection_form', args=[dataset_id]),
-                'serializer' : serializer,
-                }, status=status.HTTP_200_OK)
-
-        except DataSet.DoesNotExist:
-            return Response({}, status=status.HTTP_400_BAD_REQUEST)
-"""
 
 class AnomalyDetectionLisaPearson(APIView):
     """
@@ -258,6 +206,39 @@ class AnomalyDetectionLisaGeoDistance(APIView):
 
                     data['series'] = data_series
                     data['info'] = info"""
+                    return Response(data)
+
+                except:
+                    return Response({}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+        except DataSet.DoesNotExist:
+                messages.error(request, dataset_not_found_msg(dataset_id))
+                return redirect('vadetisweb:index')
+
+
+class AnomalyDetectionRPCAMEstimatorLoss(APIView):
+    """
+        Request anomaly detection from provided json
+    """
+    renderer_classes = [JSONRenderer]
+
+    @swagger_auto_schema(request_body=RPCAMEstimatorLossSerializer)
+    def post(self, request, dataset_id):
+
+        try:
+            serializer = RPCAMEstimatorLossSerializer(context={'dataset_selected': dataset_id, }, data=request.data)
+
+            if serializer.is_valid():
+                df_from_json, df_class_from_json = get_datasets_from_json(serializer.validated_data['dataset_series_json'])
+                try:
+                    data = {}
+                    settings = get_settings(request)
+                    data_series, info = rpca_from_validated_data(df_from_json, df_class_from_json, serializer.validated_data, settings)
+
+                    data['series'] = data_series
+                    data['info'] = info
                     return Response(data)
 
                 except:
