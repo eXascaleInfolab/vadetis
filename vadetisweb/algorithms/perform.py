@@ -7,26 +7,40 @@ from .svm import svm
 from .isolation_forest import isolation_forest
 
 
-def perform_lisa_person(df, df_class, conf, ts_selected_id, dataset, settings):
-    scores, y_hat_results, df_with_class_instances, info = lisa_pearson(df, df_class, conf, ts_selected_id)
-    data_series = get_anomaly_detection_single_ts_results_json(dataset, ts_selected_id,
+def lisa_pearson_from_validated_data(df, df_class, validated_data, settings):
+    dataset = validated_data['dataset']
+
+    scores, y_hat_results, df_with_class_instances, info = lisa_pearson(df, df_class, validated_data)
+
+    """data_series = get_anomaly_detection_single_ts_results_json(dataset, time_series_id,
+                                                               df_with_class_instances, scores, y_hat_results,
+                                                               settings)"""
+
+    data_series = get_anomaly_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings)
+
+    return data_series, info
+
+
+def perform_lisa_person(df, df_class, conf, time_series_id, dataset, settings):
+    scores, y_hat_results, df_with_class_instances, info = lisa_pearson(df, df_class, conf, time_series_id)
+    data_series = get_anomaly_detection_single_ts_results_json(dataset, time_series_id,
                                                                df_with_class_instances, scores, y_hat_results,
                                                                settings)
     return data_series, info
 
 
-def perform_lisa_dtw(df, df_class, conf, ts_selected_id, dataset, settings):
-    scores, y_hat_results, df_with_class_instances, info = lisa_dtw(df, df_class, conf, ts_selected_id)
-    data_series = get_anomaly_detection_single_ts_results_json(dataset, ts_selected_id,
+def perform_lisa_dtw(df, df_class, conf, time_series_id, dataset, settings):
+    scores, y_hat_results, df_with_class_instances, info = lisa_dtw(df, df_class, conf, time_series_id)
+    data_series = get_anomaly_detection_single_ts_results_json(dataset, time_series_id,
                                                                df_with_class_instances, scores, y_hat_results,
                                                                settings)
     return data_series, info
 
 
-def perform_lisa_geo(df, df_class, conf, ts_selected_id, dataset, settings):
+def perform_lisa_geo(df, df_class, conf, time_series_id, dataset, settings):
     scores, y_hat_results, df_with_class_instances, info = lisa_geo(df, df_class, conf,
-                                                                    ts_selected_id)
-    data_series = get_anomaly_detection_single_ts_results_json(dataset, ts_selected_id,
+                                                                    time_series_id)
+    data_series = get_anomaly_detection_single_ts_results_json(dataset, time_series_id,
                                                                df_with_class_instances, scores,
                                                                y_hat_results, settings)
     return data_series, info

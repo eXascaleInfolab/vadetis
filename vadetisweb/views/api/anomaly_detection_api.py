@@ -187,11 +187,11 @@ class AnomalyDetectionLisaPearson(APIView):
                 df_from_json, df_class_from_json = get_datasets_from_json(serializer.validated_data['dataset_series_json'])
                 try:
                     data = {}
-                    """settings = get_settings(request)
-                    data_series, info = histogram_from_validated_data(df_from_json, df_class_from_json, serializer.validated_data, settings)
+                    settings = get_settings(request)
+                    data_series, info = lisa_pearson_from_validated_data(df_from_json, df_class_from_json, serializer.validated_data, settings)
 
                     data['series'] = data_series
-                    data['info'] = info"""
+                    data['info'] = info
                     return Response(data)
 
                 except:
@@ -430,16 +430,16 @@ class DatasetJsonPerformAnomalyDetectionJson(APIView):
             df, df_class = get_dataframes_for_ranges(df_from_json, df_class_from_json, conf)
 
             if conf['algorithm'] == LISA_PEARSON:
-                ts_selected_id = conf['ts_selected']
+                time_series_id = conf['time_series']
 
                 if conf['correlation_algorithm'] == PEARSON:
-                    data_series, info = perform_lisa_person(df, df_class, conf, ts_selected_id, dataset, settings)
+                    data_series, info = perform_lisa_person(df, df_class, conf, time_series_id, dataset, settings)
 
                 if conf['correlation_algorithm'] == DTW:
-                    data_series, info = perform_lisa_dtw(df, df_class, conf, ts_selected_id, dataset, settings)
+                    data_series, info = perform_lisa_dtw(df, df_class, conf, time_series_id, dataset, settings)
 
                 if conf['correlation_algorithm'] == GEO:
-                    data_series, info = perform_lisa_geo(df, df_class, conf, ts_selected_id, dataset, settings)
+                    data_series, info = perform_lisa_geo(df, df_class, conf, time_series_id, dataset, settings)
 
 
             elif conf['algorithm'] == HISTOGRAM:
@@ -515,16 +515,16 @@ class DatasetPerformAnomalyDetectionJson(APIView):
             df, df_class = get_dataframes_for_ranges(dataset.dataframe, dataset.dataframe_class, conf)
 
             if conf['algorithm'] == LISA_PEARSON:
-                ts_selected_id = conf['ts_selected']
+                time_series_id = conf['time_series']
 
                 if conf['correlation_algorithm'] == PEARSON:
-                    data_series, info = perform_lisa_person(df, df_class, conf, ts_selected_id, dataset, settings)
+                    data_series, info = perform_lisa_person(df, df_class, conf, time_series_id, dataset, settings)
 
                 if conf['correlation_algorithm'] == DTW:
-                    data_series, info = perform_lisa_dtw(df, df_class, conf, ts_selected_id, dataset, settings)
+                    data_series, info = perform_lisa_dtw(df, df_class, conf, time_series_id, dataset, settings)
 
                 if conf['correlation_algorithm'] == GEO:
-                    data_series, info = perform_lisa_geo(df, df_class, conf, ts_selected_id, dataset, settings)
+                    data_series, info = perform_lisa_geo(df, df_class, conf, time_series_id, dataset, settings)
 
 
             elif conf['algorithm'] == HISTOGRAM:

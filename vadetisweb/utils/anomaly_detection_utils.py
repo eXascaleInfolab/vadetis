@@ -15,13 +15,13 @@ def is_valid_conf(conf):
 
             if conf['correlation_algorithm'] == PEARSON:
 
-                if isNone(conf['window_size_value']):
+                if isNone(conf['window_size']):
                     return False
                 elif isNone(conf['window_size_unit']):
                     return False
 
                 else:
-                    if not isPositiveInteger(conf['window_size_value']):
+                    if not isPositiveInteger(conf['window_size']):
                         return False
 
                     if not conf['window_size_unit'] in [WINDOW_SIZE_ABSOLUTE, WINDOW_SIZE_PERCENT]:
@@ -57,13 +57,13 @@ def is_valid_conf(conf):
 
             elif conf['correlation_algorithm'] == DTW:
 
-                if isNone(conf['window_size_value']):
+                if isNone(conf['window_size']):
                     return False
                 elif isNone(conf['window_size_unit']):
                     return False
 
                 else:
-                    if not isPositiveInteger(conf['window_size_value']):
+                    if not isPositiveInteger(conf['window_size']):
                         return False
 
                     if not conf['window_size_unit'] in [WINDOW_SIZE_ABSOLUTE, WINDOW_SIZE_PERCENT]:
@@ -304,13 +304,15 @@ def df_zscore(df, skipna=True):
     return df_zscore
 
 
-def get_window_size(window_size_value, window_size_unit, df=None):
+def get_window_size(df,window_size, window_size_unit):
+    if window_size_unit == WINDOW_SIZE_PERCENT:
+        return get_window_size_for_percentage(df, window_size)
 
-    if window_size_unit == WINDOW_SIZE_PERCENT and df is not None:
-        return get_window_size_for_percentage(df, window_size_value)
     elif window_size_unit == WINDOW_SIZE_ABSOLUTE:
-        return int(window_size_value)
-    return 0
+        return int(window_size)
+
+    else:
+        raise ValueError
 
 
 def get_window_size_for_percentage(df, percentage):
@@ -329,7 +331,7 @@ def get_dataframes_for_ranges(df, df_class, conf):
 
     elif conf['algorithm'] == LISA_PEARSON:
         if conf['correlation_algorithm'] == PEARSON or conf['correlation_algorithm'] == DTW:
-            window_size = get_window_size(conf['window_size_value'], conf['window_size_unit'], df)
+            window_size = get_window_size(conf['window_size'], conf['window_size_unit'], df)
 
             if range_start is not None and range_end is not None:
                 # todo instead of date, may locate by number of index steps?

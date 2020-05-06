@@ -15,7 +15,7 @@ function updateHighchartsSeriesForThreshold(highchart, url, post_data, callback)
             }
             var dataset_series_new_json = data['series'];
             var new_info = data['info'];
-            //dataset_series_data = generateSeriesFromJson(dataset_series_json, "{{ conf|get_item:'algorithm' }}", "{{ conf|get_item:'ts_selected' }}");
+            //dataset_series_data = generateSeriesFromJson(dataset_series_json, "{{ conf|get_item:'algorithm' }}", "{{ conf|get_item:'time_series' }}");
             //loadSeries(highchart, dataset_series_data);
 
             setSeriesData(highchart, dataset_series_new_json);
@@ -126,7 +126,7 @@ function updateHighchartsSeriesForType(highchart, url, post_data, callback) {
         success: function (data) {
             var dataset_series_new_json = data[0];
 
-            //dataset_series_data = generateSeriesFromJson(dataset_series_json, "{{ conf|get_item:'algorithm' }}", "{{ conf|get_item:'ts_selected' }}");
+            //dataset_series_data = generateSeriesFromJson(dataset_series_json, "{{ conf|get_item:'algorithm' }}", "{{ conf|get_item:'time_series' }}");
             //loadSeries(highchart, dataset_series_data);
 
             setSeriesData(highchart, dataset_series_new_json);
@@ -136,13 +136,13 @@ function updateHighchartsSeriesForType(highchart, url, post_data, callback) {
     });
 }
 
-function generateSeriesFromJson(dataset_series_json, algorithm, ts_selected) {
+function generateSeriesFromJson(dataset_series_json, algorithm, time_series) {
     dataset_series_data = [];
 
     dataset_series_json.series.forEach(function (series) {
         if (algorithm === 'LISA') {
             var visible = false;
-            if (series.id === ts_selected) {
+            if (series.id === time_series) {
                 visible = true;
             }
             dataset_series_data.push({
@@ -162,7 +162,7 @@ function generateSeriesFromJson(dataset_series_json, algorithm, ts_selected) {
                 point: {
                     events: {
                         click: function (e) {
-                            if (this.series.options.id === ts_selected) {
+                            if (this.series.options.id === time_series) {
                                 getLISAComputation(e.point);
                             }
                         }

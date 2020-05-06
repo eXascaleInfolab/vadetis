@@ -1,6 +1,7 @@
 import datetime
 
 from vadetisweb.utils import get_window_size, df_zscore, get_info
+from vadetisweb.parameters import ANOMALY_TYPE_INDIVIDUAL
 
 from .helper_functions import *
 from .correleation.pearson import pearson, dtw_pearson
@@ -35,8 +36,8 @@ def lisa_for_df_row(df_part, time_series_id_p, time_series_ids, df_corr_part, sk
     Calculates a single LISA value
 
     :param df_part: the dataframe at time i, should be a single row resp. a single datetime index
-    :param time_series_id_p: the station id to calculate the lisa values for; refers to p parameter
-    :param time_series_ids: the station IDs of the dataframe
+    :param time_series_id_p: the time series id to calculate the lisa values for; refers to p parameter
+    :param time_series_ids: the time series ids of the dataframe
     :param df_corr_part: the datafram that holds the correlation values
     :param skipna: determines if the algorithm excludes NaN values; a mathematical operation with NaN results in NaN otherwise
     :return: a LISA value
@@ -99,12 +100,13 @@ def lisa_for_df_row(df_part, time_series_id_p, time_series_ids, df_corr_part, sk
     return lisa_value
 
 
-def df_lisa_time_series(time_series_id_p, df_val_mean, df_corr, global_correlation=False, skipna=True):
+def df_lisa_time_series(time_series_id_p, df_results, df_mean, df_corr, global_correlation=False, skipna=True):
     """
     Calculates the LISA values for a given time series id
 
     :param time_series_id_p: the time series id to calculate the lisa values for; refers to p parameter
-    :param df_val_mean: the dataframe with all values of the time series, must have a column with the mean values of each row
+    :param df_results: the dataframe to save the results into
+    :param df_mean: the dataframe with all values of the time series, must have a column with the mean values of each row
     :param df_corr: the correlation dataframe to use for the calculation
     :param global_correlation: determines if the correlation dataframe is global or time indexed
     :return: the dataframe (as series) holding all LISA values for station id p
@@ -114,46 +116,45 @@ def df_lisa_time_series(time_series_id_p, df_val_mean, df_corr, global_correlati
     start_time = datetime.datetime.now()
 
     # check if mean values already present, later used in lisa_for_df_row
-    if 'mean' not in df_val_mean.columns:
-        df_val_mean = df_copy_with_mean(df_val_mean)
+    if 'mean' not in df_mean.columns:
+        df_mean = df_copy_with_mean(df_mean)
 
     # empty lisa dataframe
-    df_lisa = pd.DataFrame(index=df_val_mean.index)
+    #df_results = pd.DataFrame(index=df_mean.index)
 
-    # prepopulate lisa values for station_id
-    lisa_column_name = time_series_id_p
-    df_lisa[lisa_column_name] = np.nan  # numpy NaN
+    # prepopulate lisa values for time_series_id
+    #lisa_column_name = time_series_id_p
+    #df_results[lisa_column_name] = np.nan  # numpy NaN
 
-    # get station ids and indexes
+    # get time series ids and indexes
     time_series_ids = list()
-    for column_name in df_val_mean.columns.values:
-        # add only the station ids not the string column names
+    for column_name in df_mean.columns.values:
+        # add only the time series ids without the mean column
         if not isinstance(column_name, str):
             time_series_ids.append(column_name)
 
     # all datetime indexes
-    index_dts = list(df_val_mean.index)  # values
+    index_dts = list(df_mean.index)
 
     for index_dt in index_dts:
         # converted_index_dt = pd.to_datetime(index_dt)
-
-        converted_index_dt = index_dt
+        # converted_index_dt = index_dt
 
         if global_correlation:
-            df_lisa.loc[index_dt, lisa_column_name] = lisa_for_df_row(df_val_mean.loc[converted_index_dt],
+            df_results.loc[index_dt, time_series_id_p] = lisa_for_df_row(df_mean.loc[index_dt],
                                                                       time_series_id_p,
                                                                       time_series_ids, df_corr.loc[time_series_id_p],
                                                                       skipna=skipna)
         else:
-            df_lisa.loc[index_dt, lisa_column_name] = lisa_for_df_row(df_val_mean.loc[converted_index_dt],
+            df_results.loc[index_dt, time_series_id_p] = lisa_for_df_row(df_mean.loc[index_dt],
                                                                       time_series_id_p,
-                                                                      time_series_ids, df_corr.loc[converted_index_dt],
+                                                                      time_series_ids, df_corr.loc[index_dt],
                                                                       skipna=skipna)
 
     time_elapsed = (datetime.datetime.now() - start_time).__str__()
     print("Execution time for lisa values:", time_elapsed)
 
-    return df_lisa, time_elapsed
+    return time_elapsed
 
 
 def get_df_corr_geo_distance(df, distance_function):
@@ -172,26 +173,65 @@ def get_df_corr_geo_distance(df, distance_function):
 # PEARSON
 #########################################################
 
-def lisa_pearson(df, df_class, conf, time_series_id):
-    df_class_copy = df_class.copy()
-    df_class_copy = df_class_copy.rename(columns={time_series_id: 'Class'})
-    df_with_class_instances = df.join(df_class_copy['Class'])
+def lisa_pearson(df, df_class, validated_data):
+    #df_class_copy = df_class.copy()
+    #df_class_copy = df_class_copy.rename(columns={time_series_id: 'class'})
+    #df_with_class_instances = df.join(df_class_copy['class'])
 
-    window_size = get_window_size(conf['window_size_value'], conf['window_size_unit'], df)
+    window_size = get_window_size(df, validated_data['window_size'], validated_data['window_size_unit'])
 
-    df_correlation, correlation_time_elapsed = pearson(df, time_series_id, window_size=window_size)
+    # mean values of each row of dataframe
+    df_mean = df_copy_with_mean(df)
 
-    # apply row standardization if needed
-    if conf['row_standardized']:
-        df_correlation = df_row_standardized(df_correlation)
+    # create a results dataframe
+    df_results = df_copy_empty(df)
+    # remove all columns that we do not calculate results for
+    df_results = df_results.drop(columns=[col for col in df_results if col not in [ts.id for ts in validated_data['time_series']]], axis=1)
 
-    # append mean values of each row to dataframe
-    df_val_mean = df_copy_with_mean(df)
+    for time_series in validated_data['time_series']:
+        df_correlation, _ = pearson(df, time_series.id, window_size=window_size)
 
-    # LISA Time Series
-    df_lisa_results, lisa_time_elapsed = df_lisa_time_series(time_series_id, df_val_mean, df_correlation)
+        # apply row standardization if needed
+        if validated_data['row_standardized']:
+            df_correlation = df_row_standardized(df_correlation)
 
-    # get highest and lowest lisa values
+        # perform LISA on Time Series
+        _ = df_lisa_time_series(time_series.id, df_results, df_mean, df_correlation)
+
+    # mark anomalies either individually for each time series or as anomalous instances
+    if(validated_data['anomaly_type'] == ANOMALY_TYPE_INDIVIDUAL):
+        print(df_results)
+
+    else: # instance
+        higher = df_results.max(axis=0).max()
+        lower = df_results.min(axis=0).min()
+        thresholds = np.linspace(lower, higher, 100)
+
+        df_class_instances = df_anomaly_instances(df_class)
+        threshold_scores = get_threshold_scores(thresholds, df_results.values, df_class_instances)
+
+        selected_index = get_max_score_index_for_score_type(threshold_scores, validated_data['maximize_score'])
+        selected_threshold = thresholds[selected_index]
+
+        scores = df_results.values
+
+        with np.errstate(invalid='ignore'):
+            y_hat_results = np.array(scores < selected_threshold).astype(int)
+
+        # check if multidim array
+        if y_hat_results.ndim > 1:
+            y_hat_results = np.apply_along_axis(arrElemContainsTrue, 1, y_hat_results)
+
+        y_truth = df_class_instances['class'].values.astype(int)
+
+        info = get_info(selected_threshold, y_hat_results, y_truth)
+        info['thresholds'] = thresholds.tolist()
+        info['threshold_scores'] = threshold_scores.tolist()
+
+        df_with_class_instances = df_anomaly_instances(df_class)
+
+    """
+    # highest and lowest lisa values
     higher = df_lisa_results.max()[time_series_id]
     lower = df_lisa_results.min()[time_series_id]
     thresholds = np.linspace(lower, higher, 100)
@@ -202,13 +242,14 @@ def lisa_pearson(df, df_class, conf, time_series_id):
 
     scores = df_lisa_results.values
     y_hat_results = (scores < selected_threshold).astype(int)
-    y_truth = df_class_copy['Class'].values.astype(int)
+    y_truth = df_class_copy['class'].values.astype(int)
     info = get_info(selected_threshold, y_hat_results, y_truth)
 
     info['thresholds'] = thresholds.tolist()
-    info['threshold_scores'] = threshold_scores.tolist()
+    info['threshold_scores'] = threshold_scores.tolist()"""
 
     return scores, y_hat_results, df_with_class_instances, info
+
 
 #########################################################
 # DTW
@@ -217,13 +258,13 @@ def lisa_pearson(df, df_class, conf, time_series_id):
 def lisa_dtw(df, df_class, conf, time_series_id):
 
     df_class_copy = df_class.copy()
-    df_class_copy = df_class_copy.rename(columns={time_series_id: 'Class'})
-    df_with_class_instances = df.join(df_class_copy['Class'])
+    df_class_copy = df_class_copy.rename(columns={time_series_id: 'class'})
+    df_with_class_instances = df.join(df_class_copy['class'])
 
     # get Z-Score values
     df_z = df_zscore(df)
 
-    window_size = get_window_size(conf['window_size_value'], conf['window_size_unit'], df)
+    window_size = get_window_size(conf['window_size'], conf['window_size_unit'], df)
 
     df_correlation, correlation_time_elapsed = dtw_pearson(df_z, time_series_id, conf['dtw_distance_function'],
                                                            window_size=window_size)
@@ -249,7 +290,7 @@ def lisa_dtw(df, df_class, conf, time_series_id):
 
     scores = df_lisa_results.values
     y_hat_results = (scores < selected_threshold).astype(int)
-    y_truth = df_class_copy['Class'].values.astype(int)
+    y_truth = df_class_copy['class'].values.astype(int)
     info = get_info(selected_threshold, y_hat_results, y_truth)
 
     info['thresholds'] = thresholds.tolist()
@@ -267,8 +308,8 @@ def lisa_geo(df, df_class, conf, time_series_id):
     df_corr_dist, _ = get_df_corr_geo_distance(df, conf['geo_distance_function'])
 
     df_class_copy = df_class.copy()
-    df_class_copy = df_class_copy.rename(columns={time_series_id: 'Class'})
-    df_with_class_instances = df.join(df_class_copy['Class'])
+    df_class_copy = df_class_copy.rename(columns={time_series_id: 'class'})
+    df_with_class_instances = df.join(df_class_copy['class'])
 
     # append mean values of each row to dataframe
     df_val_mean = df_copy_with_mean(df)
@@ -289,7 +330,7 @@ def lisa_geo(df, df_class, conf, time_series_id):
 
     scores = df_lisa_results.values
     y_hat_results = (scores < selected_threshold).astype(int)
-    y_truth = df_class_copy['Class'].values.astype(int)
+    y_truth = df_class_copy['class'].values.astype(int)
     info = get_info(selected_threshold, y_hat_results, y_truth)
 
     info['thresholds'] = thresholds.tolist()

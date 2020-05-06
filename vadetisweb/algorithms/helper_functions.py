@@ -48,6 +48,16 @@ def df_copy_with_mean(df, axis=1, skipna=True):
     return df_mean
 
 
+def df_copy_empty(df):
+    """
+    Returns an empty copy of a dataframe with same indexes and columns
+
+    :param df: the data frame to copy
+    :return: empty copy of the dataframe
+    """
+    return pd.DataFrame().reindex_like(df)
+
+
 def _df_remove_column(df, column_name):
     """
     Removes a column froma dataframe
@@ -69,16 +79,43 @@ def _sum_of_squares(values):
 
 
 def get_threshold_scores(thresholds, y_scores, valid):
+    """
+    Computes for each possible threshold the score for the performance metrics
+
+    :param thresholds: a list of possible thresholds
+    :param y_scores: the list of computed scores by the detection algorithm
+    :param valid: the true class values to run the performance metric against
+    :return: array of scores for each threshold for each performance metric
+    """
     scores = []
 
-    for threshold in thresholds:
-        y_hat = (y_scores < threshold).astype(int)
-        scores.append([recall_score(y_pred=y_hat, y_true=valid['Class'].values),
-                       precision_score(y_pred=y_hat, y_true=valid['Class'].values),
-                       fbeta_score(y_pred=y_hat, y_true=valid['Class'].values, beta=1),
-                       accuracy_score(y_pred=y_hat, y_true=valid['Class'].values)])
+    # its possible that y_scores is a multidim array containing NaN
+    # however, any comparison (other than !=) of a NaN to a non-NaN value will always return False,
+    # and therefore will not be detected as anomaly
+    with np.errstate(invalid='ignore'):
+
+        for threshold in thresholds:
+            y_hat = np.array(y_scores < threshold).astype(int)
+
+            # check if multidim array
+            if y_hat.ndim > 1:
+                y_hat = np.apply_along_axis(arrElemContainsTrue, 1, y_hat)
+
+            scores.append([recall_score(y_pred=y_hat, y_true=valid['class'].values),
+                           precision_score(y_pred=y_hat, y_true=valid['class'].values),
+                           fbeta_score(y_pred=y_hat, y_true=valid['class'].values, beta=1),
+                           accuracy_score(y_pred=y_hat, y_true=valid['class'].values)])
 
     return np.array(scores)
+
+
+def arrElemContainsTrue(x):
+    """
+    Helper method to check if a 1-dim arr contains 1
+    :param x: a 1-dim array
+    :return: 0 if it does not contain 1, 1 otherwise
+    """
+    return np.any(x == 1).astype(int)
 
 
 def get_max_score_index_for_score_type(threshold_scores, score_type):
@@ -90,12 +127,12 @@ def get_max_score_index_for_score_type(threshold_scores, score_type):
         return threshold_scores[:, 1].argmax()
     elif score_type == ACCURACY:
         return threshold_scores[:, 3].argmax()
-    return None
+    raise ValueError
 
 
 def df_anomaly_instances(df_class):
     df_class_instances = pd.DataFrame(index=df_class.index)
-    df_class_instances['Class'] = False
+    df_class_instances['class'] = False
 
     indexes = []
     for index, row in df_class.iterrows():
@@ -106,7 +143,7 @@ def df_anomaly_instances(df_class):
     print('Number of anomaly instances:', len(indexes))
 
     for index in indexes:
-        df_class_instances.loc[index, 'Class'] = True
+        df_class_instances.loc[index, 'class'] = True
 
     return df_class_instances
 
@@ -126,8 +163,8 @@ def estimate_score_bound(lower, higher):
 
 def get_train_valid_test_sets(df_train, train_size=0.5, random_seed=10):
 
-    normal = df_train[df_train['Class'] == False]
-    anomaly = df_train[df_train['Class'] == True]
+    normal = df_train[df_train['class'] == False]
+    anomaly = df_train[df_train['class'] == True]
 
     train, normal_test, _, _ = train_test_split(normal, normal,
                                                 train_size=train_size,
@@ -145,10 +182,10 @@ def get_train_valid_test_sets(df_train, train_size=0.5, random_seed=10):
     test = normal_test.append(anormal_test).sample(frac=1, random_state=random_seed)
 
     print('Train shape: ', train.shape)
-    print('Proportion of anomaly in training set: %.2f\n' % train['Class'].mean())
+    print('Proportion of anomaly in training set: %.2f\n' % train['class'].mean())
     print('Valid shape: ', valid.shape)
-    print('Proportion of anomaly in validation set: %.2f\n' % valid['Class'].mean())
+    print('Proportion of anomaly in validation set: %.2f\n' % valid['class'].mean())
     print('Test shape:, ', test.shape)
-    print('Proportion of anomaly in test set: %.2f\n' % test['Class'].mean())
+    print('Proportion of anomaly in test set: %.2f\n' % test['class'].mean())
 
     return train, valid, test

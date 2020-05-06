@@ -62,9 +62,9 @@ def get_conf_from_query_params(request):
         if correlation_algorithm == PEARSON:
             conf['algorithm'] = algorithm
             conf['correlation_algorithm'] = correlation_algorithm
-            conf['ts_selected'] = convertToInt(request.GET.get("ts_selected", ''))
+            conf['time_series'] = convertToInt(request.GET.get("time_series", ''))
 
-            conf['window_size_value'] = request.GET.get("window_size_value", None)
+            conf['window_size'] = request.GET.get("window_size", None)
             conf['window_size_unit'] = request.GET.get("window_size_unit", None)
 
             conf['min_periods'] = replaceEmptyStrWithNone(request.GET.get("min_periods", None))
@@ -73,9 +73,9 @@ def get_conf_from_query_params(request):
         elif correlation_algorithm == DTW:
             conf['algorithm'] = algorithm
             conf['correlation_algorithm'] = correlation_algorithm
-            conf['ts_selected'] = convertToInt(request.GET.get("ts_selected", ''))
+            conf['time_series'] = convertToInt(request.GET.get("time_series", ''))
 
-            conf['window_size_value'] = request.GET.get("window_size_value", None)
+            conf['window_size'] = request.GET.get("window_size", None)
             conf['window_size_unit'] = request.GET.get("window_size_unit", None)
 
             conf['dtw_distance_function'] = request.GET.get("dtw_distance_function", '')
@@ -84,7 +84,7 @@ def get_conf_from_query_params(request):
         elif correlation_algorithm == GEO:
             conf['algorithm'] = algorithm
             conf['correlation_algorithm'] = correlation_algorithm
-            conf['ts_selected'] = convertToInt(request.GET.get("ts_selected", ''))
+            conf['time_series'] = convertToInt(request.GET.get("time_series", ''))
             conf['geo_distance_function'] = request.GET.get("geo_distance_function", '')
             conf['row_standardized'] = convertStrToBoolean(request.GET.get("row_standardized", 'False'))
 

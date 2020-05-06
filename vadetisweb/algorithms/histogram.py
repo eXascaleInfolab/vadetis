@@ -52,22 +52,22 @@ def histogram(df, df_class, df_train, df_train_class, maximize_score=F1_SCORE, t
 
     # create and train model
     model = hist_model(bins=num_bins)
-    model.fit(train.drop('Class', axis=1).values)
+    model.fit(train.drop('class', axis=1).values)
 
     # get the scores for normality and abnormality in the validation set
-    higher = np.median(model.predict(valid[valid['Class'] == False].drop('Class', axis=1).values))
-    lower = np.median(model.predict(valid[valid['Class'] == True].drop('Class', axis=1).values))
+    higher = np.median(model.predict(valid[valid['class'] == False].drop('class', axis=1).values))
+    lower = np.median(model.predict(valid[valid['class'] == True].drop('class', axis=1).values))
     lower_bound, higher_bound = estimate_score_bound(lower, higher) if lower <= higher else estimate_score_bound(higher, lower)
 
     thresholds = np.linspace(lower_bound, higher_bound, 100)
-    y_scores = model.predict(valid.drop('Class', axis=1).values)
+    y_scores = model.predict(valid.drop('class', axis=1).values)
     threshold_scores = get_threshold_scores(thresholds, y_scores, valid)
     selected_index = get_max_score_index_for_score_type(threshold_scores, maximize_score)
     selected_threshold = thresholds[selected_index]
 
-    scores = model.predict(df_with_class_instances.drop('Class', axis=1).values)
+    scores = model.predict(df_with_class_instances.drop('class', axis=1).values)
     y_hat_results = (scores < selected_threshold).astype(int)
-    y_truth = df_with_class_instances['Class'].values.astype(int)
+    y_truth = df_with_class_instances['class'].values.astype(int)
     info = get_info(selected_threshold, y_hat_results, y_truth)
 
     info['thresholds'] = thresholds.tolist()

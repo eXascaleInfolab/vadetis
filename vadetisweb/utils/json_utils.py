@@ -57,18 +57,18 @@ def get_predicted_series_data_json(series_id, df_with_class_instances, scores, y
         predicted_result = y_hat_results[integer_index]
         score = scores[integer_index]
 
-        anomaly_class = 1 if (df_with_class_instances.loc[index, 'Class'] == True) else 0
+        anomaly_class = 1 if (df_with_class_instances.loc[index, 'class'] == True) else 0
 
-        if df_with_class_instances.loc[index, 'Class'] == True and predicted_result == True: #true positive
+        if df_with_class_instances.loc[index, 'class'] == True and predicted_result == True: #true positive
             data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': anomaly_class, 'marker': {'fillColor': settings['color_true_positive'], 'radius': 3}})
 
-        elif df_with_class_instances.loc[index, 'Class'] == True and predicted_result == False: #false negative
+        elif df_with_class_instances.loc[index, 'class'] == True and predicted_result == False: #false negative
             data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': anomaly_class, 'marker': {'fillColor': settings['color_false_negative'], 'radius': 3}})
 
-        elif df_with_class_instances.loc[index, 'Class'] == False and predicted_result == True: #false positive
+        elif df_with_class_instances.loc[index, 'class'] == False and predicted_result == True: #false positive
             data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': anomaly_class, 'marker': {'fillColor': settings['color_false_positive'], 'radius': 3}})
 
-        elif df_with_class_instances.loc[index, 'Class'] == False and predicted_result == False: #true negative
+        elif df_with_class_instances.loc[index, 'class'] == False and predicted_result == False: #true negative
             data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': anomaly_class, 'marker': {'enabled': False }})
 
     return data
@@ -87,8 +87,8 @@ def get_anomaly_detection_single_ts_results_json(dataset, ts_id, df_with_class_i
     data = {}
     data_series = []
 
-    df_z = df_zscore(df_with_class_instances.drop('Class', axis=1))
-    df_z_with_class_instances = df_z.join(df_with_class_instances['Class'])
+    df_z = df_zscore(df_with_class_instances.drop('class', axis=1))
+    df_z_with_class_instances = df_z.join(df_with_class_instances['class'])
 
     corr_time_series = dataset.timeseries_set.all().exclude(id=ts_id)
     ts = TimeSeries.objects.get(id=ts_id)
@@ -103,7 +103,7 @@ def get_anomaly_detection_single_ts_results_json(dataset, ts_id, df_with_class_i
 
     #correlated ts
     for corr_ts in corr_time_series:
-        raw_measurements = get_data_series_measurements(corr_ts.id, df_with_class_instances.drop('Class', axis=1), y_hat_results)
+        raw_measurements = get_data_series_measurements(corr_ts.id, df_with_class_instances.drop('class', axis=1), y_hat_results)
         z_measurements = get_data_series_measurements(corr_ts.id, df_z, y_hat_results)
 
         dict_series = {'id': corr_ts.id, 'name': corr_ts.name, 'unit': corr_ts.unit, 'is_spatial': corr_ts.is_spatial,

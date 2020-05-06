@@ -137,7 +137,7 @@ class LisaPearsonSerializer(serializers.Serializer):
                                            style={'template': 'vadetisweb/parts/input/hidden_input.html',
                                                   'id': 'dataset_series_json'})
 
-    ts_selected = TimeSeriesField(label='Time Series',
+    time_series = TimeSeriesField(label='Time Series',
                                   queryset=TimeSeries.objects.none(),
                                   required=True,
                                   many=True,
@@ -146,13 +146,17 @@ class LisaPearsonSerializer(serializers.Serializer):
                                   style={'template': 'vadetisweb/parts/input/checkbox_multiple_input.html',
                                          'inline': True})
 
-    window_size_value = serializers.IntegerField(initial=12, required=True, min_value=1,
+    window_size = serializers.IntegerField(initial=12, required=True, min_value=1,
                                                  help_text='Select the moving window size as a percentage value relative to the length of the time series or as an absolute value range.',
                                                  style={'template': 'vadetisweb/parts/input/text_input.html'})
     window_size_unit = serializers.ChoiceField(choices=WINDOW_SIZES, required=True,
                                                style={'template': 'vadetisweb/parts/input/select_input.html'})
     row_standardized = serializers.BooleanField(initial=True, label='Apply Row Standardization', required=False,
                                                 help_text='Determines if row standardization is applied to the correlation values')
+
+    anomaly_type = serializers.ChoiceField(choices=ANOMALY_TYPES, required=True,
+                                           help_text='Marks anomalies either individually for each time series or together as anomalous instances.',
+                                           style={'template': 'vadetisweb/parts/input/select_input.html'})
 
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
@@ -171,7 +175,7 @@ class LisaDtwPearsonSerializer(serializers.Serializer):
                                            style={'template': 'vadetisweb/parts/input/hidden_input.html',
                                                   'id': 'dataset_series_json'})
 
-    ts_selected = TimeSeriesField(label='Time Series',
+    time_series = TimeSeriesField(label='Time Series',
                                   queryset=TimeSeries.objects.none(),
                                   required=True,
                                   many=True,
@@ -180,7 +184,7 @@ class LisaDtwPearsonSerializer(serializers.Serializer):
                                   style={'template': 'vadetisweb/parts/input/checkbox_multiple_input.html',
                                          'inline': True})
 
-    window_size_value = serializers.IntegerField(initial=12, required=True, min_value=1,
+    window_size = serializers.IntegerField(initial=12, required=True, min_value=1,
                                                  help_text='Select the moving window size as a percentage value relative to the length of the time series or as an absolute value range.',
                                                  style={'template': 'vadetisweb/parts/input/text_input.html'})
     window_size_unit = serializers.ChoiceField(choices=WINDOW_SIZES, required=True,
@@ -191,6 +195,10 @@ class LisaDtwPearsonSerializer(serializers.Serializer):
                                                     style={'template': 'vadetisweb/parts/input/select_input.html'})
     row_standardized = serializers.BooleanField(initial=True, label='Apply Row Standardization', required=False,
                                                 help_text='Determines if row standardization is applied to the correlation values')
+
+    anomaly_type = serializers.ChoiceField(choices=ANOMALY_TYPES, required=True,
+                                           help_text='Marks anomalies either individually for each time series or together as anomalous instances.',
+                                           style={'template': 'vadetisweb/parts/input/select_input.html'})
 
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
@@ -209,7 +217,7 @@ class LisaGeoDistanceSerializer(serializers.Serializer):
                                            style={'template': 'vadetisweb/parts/input/hidden_input.html',
                                                   'id': 'dataset_series_json'})
 
-    ts_selected = TimeSeriesField(label='Time Series',
+    time_series = TimeSeriesField(label='Time Series',
                                   queryset=TimeSeries.objects.none(),
                                   required=True,
                                   many=True,
@@ -221,6 +229,10 @@ class LisaGeoDistanceSerializer(serializers.Serializer):
     geo_distance_function = serializers.ChoiceField(choices=GEO_DISTANCE, required=True,
                                                     help_text='The geographic distance function used for the calculation.',
                                                     style={'template': 'vadetisweb/parts/input/select_input.html'})
+
+    anomaly_type = serializers.ChoiceField(choices=ANOMALY_TYPES, required=True,
+                                           help_text='Marks anomalies either individually for each time series or together as anomalous instances.',
+                                           style={'template': 'vadetisweb/parts/input/select_input.html'})
 
     time_range = serializers.ChoiceField(label='Time Range', choices=TIME_RANGE, required=True,
                                          help_text='The time range to apply anomaly detection',
