@@ -173,6 +173,7 @@ def get_train_valid_test_sets(df_train, train_size=0.5, random_seed=10):
     normal_valid, normal_test, _, _ = train_test_split(normal_test, normal_test,
                                                        train_size=train_size,
                                                        random_state=random_seed)
+
     anormal_valid, anormal_test, _, _ = train_test_split(anomaly, anomaly,
                                                          train_size=train_size,
                                                          random_state=random_seed)

@@ -5,7 +5,7 @@ from .histogram import histogram
 from .cluster import cluster_gaussian_mixture
 from .svm import svm
 from .isolation_forest import isolation_forest
-from .robust_pca import robust_pca
+from .robust_pca import robust_pca_huber_loss
 
 
 def lisa_pearson_from_validated_data(df, df_class, validated_data, settings):
@@ -54,7 +54,12 @@ def rpca_from_validated_data(df, df_class, validated_data, settings):
     df_train = training_dataset.dataframe
     df_train_class = training_dataset.dataframe_class
 
-    scores, y_hat_results, df_with_class_instances, info = robust_pca(df, df_class, df_train, df_train_class, validated_data)
+    scores, y_hat_results, df_with_class_instances, info = robust_pca_huber_loss(df, df_class, df_train, df_train_class,
+                                                                                 delta=validated_data['delta'],
+                                                                                 n_components=validated_data['n_components'],
+                                                                                 maximize_score=validated_data['maximize_score'],
+                                                                                 train_size=validated_data['train_size'],
+                                                                                 random_seed=validated_data['random_seed']                                                                                 )
 
     data_series = get_anomaly_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings)
     return data_series, info
