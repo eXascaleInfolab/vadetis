@@ -205,6 +205,24 @@ class MRobustPCA(_BasePCA):
 
         self.errors_ = np.array(self.errors_[1:])
 
+    def transform(self, X):
+        """Apply dimensionality reduction to X.
+
+        X is projected on the first principal components previously extracted
+        from a training set.
+
+        Parameters
+        ----------
+        X : array-like, shape (n_samples, n_features)
+            New data, where n_samples is the number of samples
+            and n_features is the number of features.
+
+        Returns
+        -------
+        X_new : array-like, shape (n_samples, n_components)
+        """
+        return super(MRobustPCA, self).transform(X)
+
     def inverse_transform(self, X):
         """Transform data back to its original space.
 

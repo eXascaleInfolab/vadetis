@@ -163,7 +163,8 @@ def estimate_score_bound(lower, higher):
 
 def get_train_valid_test_sets(df_train, train_size=0.5, random_seed=10):
     """
-    Splits the training dataset into a train, validation and test set. Use this method for semi supervised techniques.
+    Splits the training dataset into a train, validation and test set. Use this method for semi supervised techniques
+    as those models should be trained with only normal data.
 
     :param df_train: training data set with normal and anomalous data, should contain a class column to indicate anomalies
     :param train_size: the proportion of the dataset to include in the train split
