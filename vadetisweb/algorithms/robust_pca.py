@@ -34,7 +34,7 @@ def robust_pca_huber_loss(df, df_class, df_train, df_train_class, delta=1, n_com
     X_test_reconstructed = pd.DataFrame(data=X_test_reconstructed, index=X_test.index)
 
     y_test_scores = normalized_anomaly_scores(X_test, X_test_reconstructed)
-    y_test_scores_class = y_test_scores.join(y_test)
+    y_test_scores_class = y_test_scores.to_frame().join(y_test)
 
     higher = y_test_scores_class[y_test_scores_class['class'] == False].drop('class', axis=1).values.mean()
     lower = y_test_scores_class[y_test_scores_class['class'] == True].drop('class', axis=1).values.mean()
@@ -47,12 +47,12 @@ def robust_pca_huber_loss(df, df_class, df_train, df_train_class, delta=1, n_com
     selected_threshold = thresholds[selected_index]
 
     # Run on Dataset
-    X_df = M_rpca.transform(df)
-    X_df_reduced = pd.DataFrame(data=X_df, index=df.index)
+    X_df_reduced = M_rpca.transform(df)
+    X_df_reduced = pd.DataFrame(data=X_df_reduced, index=df.index)
     X_df_reconstructed = M_rpca.inverse_transform(X_df_reduced)
     X_df_reconstructed = pd.DataFrame(data=X_df_reconstructed, index=df.index)
 
-    scores = normalized_anomaly_scores(X_df, X_df_reconstructed)
+    scores = normalized_anomaly_scores(df, X_df_reconstructed)
     y_hat_results = (scores < selected_threshold).astype(int)
     y_truth = df_class_instances.values.astype(int)
     info = get_info(selected_threshold, y_hat_results, y_truth)
