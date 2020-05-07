@@ -19,13 +19,8 @@ def robust_pca_huber_loss(df, df_class, df_train, df_train_class, delta=1, n_com
     huber_loss = loss.HuberLoss(delta=delta)
     M_rpca = MRobustPCA(n_components, huber_loss)
 
-    # R-PCA on Train Set
-    M_rpca.fit_transform(X_train)
-    """X_train_reduced = M_rpca.fit_transform(X_train)
-    X_train_reduced = pd.DataFrame(data=X_train_reduced, index=X_train_reduced.index)
-    X_train_reconstructed = M_rpca.inverse_transform(X_train_reduced)
-    X_train_reconstructed = pd.DataFrame(data=X_train_reconstructed, index=X_train_reconstructed.index)
-    train_scores = normalized_anomaly_scores(X_train, X_train_reconstructed)"""
+    # Fit R-PCA on Train Set
+    M_rpca.fit(X_train)
 
     # R-PCA on Test Set
     X_test_reduced = M_rpca.transform(X_test)
