@@ -25,6 +25,11 @@ class RPCAMEstimatorLossSerializer(serializers.Serializer):
                                             help_text='Delta for Huber Loss function',
                                             style={'template': 'vadetisweb/parts/input/text_input.html', 'step': 'any', 'min': 1})
 
+    n_components = serializers.IntegerField(initial=2, label='Number of components', min_value=2, required=True,
+                                     help_text='The number of components for dimensionality reduction.',
+                                     style={'template': 'vadetisweb/parts/input/text_input.html', 'step': 'any',
+                                            'min': 2})
+
     training_dataset = TrainingDatasetField(label='Training Dataset',
                                        required=True,
                                        queryset=DataSet.objects.none())

@@ -63,7 +63,7 @@ class AnomalyDetectionAlgorithmSelectionView(APIView):
                         'submit_label' : 'Run',
                     }, status=status.HTTP_200_OK)
 
-                elif algorithm == RPCA:
+                elif algorithm == RPCA_HUBER_LOSS:
                     return Response({
                         'dataset': dataset,
                         'formid': formid,

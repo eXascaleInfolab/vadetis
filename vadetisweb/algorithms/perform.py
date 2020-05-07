@@ -54,7 +54,7 @@ def rpca_from_validated_data(df, df_class, validated_data, settings):
     df_train = training_dataset.dataframe
     df_train_class = training_dataset.dataframe_class
 
-    scores, y_hat_results, df_with_class_instances, info = robust_pca(df, df_class, validated_data)
+    scores, y_hat_results, df_with_class_instances, info = robust_pca(df, df_class, df_train, df_train_class, validated_data)
 
     data_series = get_anomaly_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings)
     return data_series, info

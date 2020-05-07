@@ -204,3 +204,25 @@ class MRobustPCA(_BasePCA):
             explained_variance_ratio_[:n_components]
 
         self.errors_ = np.array(self.errors_[1:])
+
+    def inverse_transform(self, X):
+        """Transform data back to its original space.
+
+        In other words, return an input X_original whose transform would be X.
+
+        Parameters
+        ----------
+        X : array-like, shape (n_samples, n_components)
+            New data, where n_samples is the number of samples
+            and n_components is the number of components.
+
+        Returns
+        -------
+        X_original array-like, shape (n_samples, n_features)
+
+        Notes
+        -----
+        If whitening is enabled, inverse_transform will compute the
+        exact inverse operation, which includes reversing whitening.
+        """
+        return super(MRobustPCA, self).inverse_transform(X)
