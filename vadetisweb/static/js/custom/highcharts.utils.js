@@ -270,6 +270,7 @@ function updateScores(info) {
 function updateThreshold(value) {
     var settings = JSON.parse(document.getElementById('settings').textContent);
     var round_digits = settings.round_digits;
+    round_digits = 10;
 
     var slider_element = $('#threshold_slider')[0]; // extracting the raw element from the jQuery object
     var threshold_input_selector = $('#threshold_value');

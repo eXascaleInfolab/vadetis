@@ -31,13 +31,10 @@ def robust_pca_huber_loss(df, df_class, df_train, df_train_class, delta=1, n_com
     y_test_scores = normalized_anomaly_scores(X_test, X_test_reconstructed)
     y_test_scores_class = y_test_scores.to_frame().join(y_test)
 
-    """higher = y_test_scores_class[y_test_scores_class['class'] == False].drop('class', axis=1).values.mean()
-    lower = y_test_scores_class[y_test_scores_class['class'] == True].drop('class', axis=1).values.mean()"""
-
     lower = 0
     higher = np.minimum(y_test_scores_class[y_test_scores_class['class'] == True].drop('class', axis=1).values.mean(), 1)
 
-    lower_bound, higher_bound = estimate_score_bound(lower, higher) if lower <= higher else estimate_score_bound(higher, lower)
+    lower_bound, higher_bound = estimate_score_bound(lower, higher)
     thresholds = np.linspace(lower_bound, higher_bound, 100)
 
     threshold_scores = get_threshold_scores(thresholds, y_test_scores, y_test, upper_boundary=True)

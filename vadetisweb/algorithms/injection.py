@@ -53,3 +53,22 @@ def inject_correlated_std_deviation_anomaly(df, df_inject, df_inject_class, inde
     multi = multiplier * -1 if random.randint(0,100) <= 50 else multiplier
     anomaly = (multi * std_deviation) + df.at[index, ts_id]
     df_inject.at[index, ts_id] = anomaly
+
+
+class MultivariateExtremeOutlierGenerator():
+    def __init__(self, timestamps=None, factor=8):
+        self.timestamps = [] if timestamps is None else list(sum(timestamps, ()))
+        self.factor = factor
+
+    def get_value(self, current_timestamp, timeseries):
+        if current_timestamp in self.timestamps:
+            local_std = timeseries.iloc[max(0, current_timestamp - 10):current_timestamp + 10].std()
+            return np.random.choice([-1, 1]) * self.factor * local_std
+        else:
+            return 0
+
+    def add_outliers(self, timeseries):
+        additional_values = []
+        for timestamp_index in range(len(timeseries)):
+            additional_values.append(self.get_value(timestamp_index, timeseries))
+        return additional_values

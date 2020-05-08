@@ -19,9 +19,9 @@ var NoUiSliders = function() {
                 'min': [0],
                 'max': [1],
             },
-            format: wNumb({
+            /*format: wNumb({
                 decimals: round_digits,
-            })
+            })*/
         });
 
         // slider updates text input
