@@ -59,16 +59,16 @@ def get_predicted_series_data_json(series_id, df_with_class_instances, scores, y
 
         anomaly_class = 1 if (df_with_class_instances.loc[index, 'class'] == True) else 0
 
-        if df_with_class_instances.loc[index, 'class'] == True and predicted_result == True: #true positive
+        if df_with_class_instances.loc[index, 'class'] == True and predicted_result == True: # true positive
             data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': anomaly_class, 'marker': {'fillColor': settings['color_true_positive'], 'radius': 3}})
 
-        elif df_with_class_instances.loc[index, 'class'] == True and predicted_result == False: #false negative
+        elif df_with_class_instances.loc[index, 'class'] == True and predicted_result == False: # false negative
             data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': anomaly_class, 'marker': {'fillColor': settings['color_false_negative'], 'radius': 3}})
 
-        elif df_with_class_instances.loc[index, 'class'] == False and predicted_result == True: #false positive
+        elif df_with_class_instances.loc[index, 'class'] == False and predicted_result == True: # false positive
             data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': anomaly_class, 'marker': {'fillColor': settings['color_false_positive'], 'radius': 3}})
 
-        elif df_with_class_instances.loc[index, 'class'] == False and predicted_result == False: #true negative
+        elif df_with_class_instances.loc[index, 'class'] == False and predicted_result == False: # true negative
             data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': anomaly_class, 'marker': {'enabled': False }})
 
     return data
@@ -135,18 +135,33 @@ def get_anomaly_detection_results_json(dataset, df_with_class_instances, scores,
     return data
 
 
-def _set_marker_for_threshold(point, threshold, settings):
-    if point['class'] == 1 and point['score'] < threshold: #true positive
-        point['marker'] = {'fillColor': settings['color_true_positive'], 'radius': 3}
-    elif point['class'] == 1 and point['score'] >= threshold: #false negative
-        point['marker'] = {'fillColor': settings['color_false_negative'], 'radius': 3}
-    elif point['class'] == 0 and point['score'] < threshold:  #false positive
-        point['marker'] = {'fillColor': settings['color_false_positive'], 'radius': 3}
-    elif point['class'] == 0 and point['score'] >= threshold:  # true negative
-        point['marker'] = {'enabled': False }
-        """
-        if 'marker' in measurement:
-            del measurement['marker']"""
+def _set_marker_for_threshold(point, threshold, settings, upper_boundary=False):
+    """
+    :param point:
+    :param threshold:
+    :param settings:
+    :param upper_boundary: determines if score higher than thresholds are anomalies or not
+    """
+    if upper_boundary:
+        if point['class'] == 1 and point['score'] > threshold: #true positive
+            point['marker'] = {'fillColor': settings['color_true_positive'], 'radius': 3}
+        elif point['class'] == 1 and point['score'] <= threshold: #false negative
+            point['marker'] = {'fillColor': settings['color_false_negative'], 'radius': 3}
+        elif point['class'] == 0 and point['score'] > threshold:  #false positive
+            point['marker'] = {'fillColor': settings['color_false_positive'], 'radius': 3}
+        elif point['class'] == 0 and point['score'] <= threshold:  # true negative
+            point['marker'] = {'enabled': False }
+
+    else:
+        if point['class'] == 1 and point['score'] < threshold: #true positive
+            point['marker'] = {'fillColor': settings['color_true_positive'], 'radius': 3}
+        elif point['class'] == 1 and point['score'] >= threshold: #false negative
+            point['marker'] = {'fillColor': settings['color_false_negative'], 'radius': 3}
+        elif point['class'] == 0 and point['score'] < threshold:  #false positive
+            point['marker'] = {'fillColor': settings['color_false_positive'], 'radius': 3}
+        elif point['class'] == 0 and point['score'] >= threshold:  # true negative
+            point['marker'] = {'enabled': False }
+
 
 
 def _get_scores_and_truth_from_series_data(series_data):
