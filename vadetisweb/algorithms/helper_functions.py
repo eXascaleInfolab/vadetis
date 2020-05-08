@@ -78,13 +78,15 @@ def _sum_of_squares(values):
     return sum(n ** 2 for n in values)
 
 
-def get_threshold_scores(thresholds, y_scores, valid):
+def get_threshold_scores(thresholds, y_scores, valid, upper_boundary=False):
     """
     Computes for each possible threshold the score for the performance metrics
 
     :param thresholds: a list of possible thresholds
     :param y_scores: the list of computed scores by the detection algorithm
     :param valid: the true class values to run the performance metric against
+    :param upper_boundary: determines if score higher than thresholds are anomalies or not
+
     :return: array of scores for each threshold for each performance metric
     """
     scores = []
@@ -95,16 +97,16 @@ def get_threshold_scores(thresholds, y_scores, valid):
     with np.errstate(invalid='ignore'):
 
         for threshold in thresholds:
-            y_hat = np.array(y_scores < threshold).astype(int)
+            y_hat = np.array(y_scores < threshold).astype(int) if upper_boundary == False else np.array(y_scores > threshold).astype(int)
 
             # check if multidim array
             if y_hat.ndim > 1:
                 y_hat = np.apply_along_axis(arrElemContainsTrue, 1, y_hat)
 
-            scores.append([recall_score(y_pred=y_hat, y_true=valid['class'].values),
-                           precision_score(y_pred=y_hat, y_true=valid['class'].values),
-                           fbeta_score(y_pred=y_hat, y_true=valid['class'].values, beta=1),
-                           accuracy_score(y_pred=y_hat, y_true=valid['class'].values)])
+            scores.append([recall_score(y_true=valid['class'].values, y_pred=y_hat),
+                           precision_score(y_true=valid['class'].values, y_pred=y_hat),
+                           fbeta_score(y_true=valid['class'].values, y_pred=y_hat, beta=1),
+                           accuracy_score(y_true=valid['class'].values, y_pred=y_hat)])
 
     return np.array(scores)
 
