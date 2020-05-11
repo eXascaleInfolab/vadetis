@@ -16,9 +16,6 @@ var VadetisDatatables = function () {
                         title: capitalizeFirstLetter(columnNames[i])
                     });
                 }
-                //$.fn.dataTableExt.oStdClasses.sWrapper = "kt-datatable kt-datatable--default kt-datatable--brand kt-datatable--loaded";
-                //$.fn.dataTableExt.oStdClasses.sPaging = "kt-datatable__pager kt-datatable--paging-loaded";
-                //$.fn.dataTableExt.oStdClasses.sInfo = "kt-datatable__pager-detail";
 
                 var datatable = table.DataTable({
 
@@ -37,20 +34,6 @@ var VadetisDatatables = function () {
                         "zeroRecords": "No matching records found",
                         "loadingRecords": "Please wait - loading..."
                     },
-
-                    /*headerCallback: function (thead, data, start, end, display) {
-                        $(thead).find('th').addClass('kt-datatable__cell kt-datatable__cell--sort');
-                    },
-                    createdRow: function (row, data, dataIndex) {
-                        if (dataIndex > 0 && dataIndex % 2 == 0) {
-                            $(row).addClass('kt-datatable__row kt-datatable__row--even');
-                        } else {
-                            $(row).addClass('kt-datatable__row kt-datatable__row--odd');
-                        }
-                    },
-                    rowCallback: function (row, data) {
-                        $('td', row).addClass('kt-datatable__cell');
-                    },*/
 
                     // setup responsive extension: http://datatables.net/extensions/responsive/
                     responsive: true,
@@ -87,10 +70,9 @@ var VadetisDatatables = function () {
                     <'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'lp>>`,
                 });
 
-                /*$(datatable.table().header()).addClass('kt-datatable__head');
-                $(datatable.table().header()).find('tr').addClass('kt-datatable__row');
-
-                $(datatable.table().body()).addClass('kt-datatable__body');*/
+                table.on('change', 'tbody tr .kt-checkbox', function() {
+                    $(this).parents('tr').toggleClass('active');
+                });
             },
             error: function (data, status, xhr) {
                 console.error("Loading datatable data failed: " + xhr.responseText);
