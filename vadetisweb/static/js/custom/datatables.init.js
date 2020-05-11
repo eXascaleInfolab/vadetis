@@ -1,5 +1,4 @@
 "use strict";
-
 var VadetisDatatables = function () {
 
     var initTable = function (html_id, url) {
@@ -17,9 +16,9 @@ var VadetisDatatables = function () {
                         title: capitalizeFirstLetter(columnNames[i])
                     });
                 }
-                $.fn.dataTableExt.oStdClasses.sWrapper = "kt-datatable kt-datatable--default kt-datatable--brand kt-datatable--loaded";
+                //$.fn.dataTableExt.oStdClasses.sWrapper = "kt-datatable kt-datatable--default kt-datatable--brand kt-datatable--loaded";
                 //$.fn.dataTableExt.oStdClasses.sPaging = "kt-datatable__pager kt-datatable--paging-loaded";
-                $.fn.dataTableExt.oStdClasses.sInfo = "kt-datatable__pager-detail";
+                //$.fn.dataTableExt.oStdClasses.sInfo = "kt-datatable__pager-detail";
 
                 var datatable = table.DataTable({
 
@@ -39,7 +38,7 @@ var VadetisDatatables = function () {
                         "loadingRecords": "Please wait - loading..."
                     },
 
-                    headerCallback: function (thead, data, start, end, display) {
+                    /*headerCallback: function (thead, data, start, end, display) {
                         $(thead).find('th').addClass('kt-datatable__cell kt-datatable__cell--sort');
                     },
                     createdRow: function (row, data, dataIndex) {
@@ -51,7 +50,7 @@ var VadetisDatatables = function () {
                     },
                     rowCallback: function (row, data) {
                         $('td', row).addClass('kt-datatable__cell');
-                    },
+                    },*/
 
                     // setup responsive extension: http://datatables.net/extensions/responsive/
                     responsive: true,
@@ -83,14 +82,15 @@ var VadetisDatatables = function () {
                     columns: columns,
                     rowId: 'id',
 
-                    dom: 't' +
-                         '<"kt-datatable__pager kt-datatable--paging-loaded"li <"kt-datatable__pager-nav"p>>'
+                    // DOM Layout
+                    dom: `<'row'<'col-sm-12'tr>>
+                    <'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'lp>>`,
                 });
 
-                $(datatable.table().header()).addClass('kt-datatable__head');
+                /*$(datatable.table().header()).addClass('kt-datatable__head');
                 $(datatable.table().header()).find('tr').addClass('kt-datatable__row');
 
-                $(datatable.table().body()).addClass('kt-datatable__body');
+                $(datatable.table().body()).addClass('kt-datatable__body');*/
             },
             error: function (data, status, xhr) {
                 console.error("Loading datatable data failed: " + xhr.responseText);
