@@ -81,6 +81,7 @@ def _sum_of_squares(values):
 def get_threshold_scores(thresholds, y_scores, valid, upper_boundary=False):
     """
     Computes for each possible threshold the score for the performance metrics
+    TODO only compute the score we aim for??
 
     :param thresholds: a list of possible thresholds
     :param y_scores: the list of computed scores by the detection algorithm

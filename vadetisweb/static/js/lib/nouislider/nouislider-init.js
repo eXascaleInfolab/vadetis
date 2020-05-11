@@ -19,6 +19,7 @@ var NoUiSliders = function() {
                 'min': [0],
                 'max': [1],
             },
+            //TODO fix round digits for thresholds with large decimal parts
             /*format: wNumb({
                 decimals: round_digits,
             })*/
