@@ -16,6 +16,7 @@ def robust_pca_huber_loss(df, df_class, df_train, df_train_class, delta=1, n_com
     X_train, X_test, y_train, y_test = train_test_split(df_train, df_train_class_instances, train_size=train_size, random_state=random_seed, stratify=df_train_class_instances)
 
     # Dimensionality reduction with Robust PCA and Huber Loss Function
+    # TODO create new OBJECT on each call (!!)
     huber_loss = loss.HuberLoss(delta=delta)
     M_rpca = MRobustPCA(n_components, huber_loss)
 
@@ -31,7 +32,7 @@ def robust_pca_huber_loss(df, df_class, df_train, df_train_class, delta=1, n_com
     y_test_scores = normalized_anomaly_scores(X_test, X_test_reconstructed)
     y_test_scores_class = y_test_scores.to_frame().join(y_test)
 
-    lower = 0
+    lower = 0 #TODO range would get negative
     higher = np.minimum(y_test_scores_class[y_test_scores_class['class'] == True].drop('class', axis=1).values.mean(), 1)
 
     lower_bound, higher_bound = estimate_score_bound(lower, higher)

@@ -155,6 +155,7 @@ def estimate_score_bound(lower, higher):
     print('Threshold Normal', higher)
     print('Threshold Anomaly', lower)
 
+    #TODO higher-lower ???
     higher_bound = (higher + np.abs((higher / 100) * 20)) #.astype(int)
     lower_bound = (lower - np.abs((lower / 100) * 20)) #.astype(int)
 
