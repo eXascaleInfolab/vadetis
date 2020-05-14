@@ -53,7 +53,7 @@ class SyntheticDataset(APIView):
             settings = get_settings(request)
 
             detection_serializer = AlgorithmSerializer()
-            injection_serializer = AnomalyInjectionSerializer()
+            injection_serializer = AnomalyInjectionSerializer(context={'dataset_selected': dataset_id, })
             threshold_serializer = ThresholdSerializer()
 
             return Response({

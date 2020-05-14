@@ -18,6 +18,9 @@
 
                     $('#{{ form_append_container }}').empty();
                     $('#{{ form_append_container }}').append(receivedForm);
+                    $('#{{ form_append_container }} [data-toggle="kt-popover"]').each(function() {
+                        KTApp.initPopover($(this));
+                    });
 
                     registerAnomalyDetectionForm(receivedFormId);
 

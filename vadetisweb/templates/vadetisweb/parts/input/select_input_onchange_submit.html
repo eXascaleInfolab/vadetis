@@ -1,7 +1,7 @@
 {% load rest_framework %}
 {% if field.errors %}
     <div class="form-group error {{ style.class }}">
-        <label>{{ field.label }}</label>
+        <label>{{ field.label }}</label><label>{{ field.label }}{% if field.help_text and style.help_text_in_popover %}<a tabindex="0" class="btn" role="button" data-toggle="kt-popover" data-placement="top" data-trigger="focus" data-content="{{ field.help_text }}"><i class="mdi mdi-information-outline mdi-18px"></i></a>{% endif %}</label>
         <select{% if style.id %} id="{{ style.id }}" {% endif %} class="form-control {{ style.input_class }}" name="{{ field.name }}" onchange="ajaxSubmit(this.form, 'anomaly_algorithm_form');">
             {% if field.allow_null or field.allow_blank %}
                 <option value="" {% if not field.value %}selected{% endif %}>--------</option>
@@ -19,15 +19,15 @@
             {% endfor %}
         </select>
         <span class="help-inline">
-                    {% for error in field.errors %}{{ error }}{% endfor %}
+            {% for error in field.errors %}{{ error }}{% endfor %}
         </span>
-        {% if field.help_text %}
+        {% if field.help_text and not style.help_text_in_popover %}
             <span class="form-text text-muted">{{ field.help_text }}</span>
         {% endif %}
     </div>
 {% else %}
     <div class="form-group {{ style.class }}">
-        <label>{{ field.label }}</label>
+        <label>{{ field.label }}{% if field.help_text and style.help_text_in_popover %}<a tabindex="0" class="btn" role="button" data-toggle="kt-popover" data-placement="top" data-trigger="focus" data-content="{{ field.help_text }}"><i class="mdi mdi-information-outline mdi-18px"></i></a>{% endif %}</label>
         <select{% if style.id %} id="{{ style.id }}" {% endif %} class="form-control {{ style.input_class }}" name="{{ field.name }}" onchange="ajaxSubmit(this.form, 'anomaly_algorithm_form');">
             {% if field.allow_null or field.allow_blank %}
                 <option value="" {% if not field.value %}selected{% endif %}>--------</option>
@@ -43,8 +43,9 @@
                             {% if select.disabled %}disabled{% endif %}>{{ select.display_text }}</option>
                 {% endif %}
             {% endfor %}
-        </select>        {% if field.help_text %}
-        <span class="form-text text-muted">{{ field.help_text }}</span>
-    {% endif %}
+        </select>
+        {% if field.help_text and not style.help_text_in_popover %}
+            <span class="form-text text-muted">{{ field.help_text }}</span>
+        {% endif %}
     </div>
 {% endif %}

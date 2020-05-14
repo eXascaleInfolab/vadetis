@@ -1,20 +1,20 @@
 {% load rest_framework %}
 {% if field.errors %}
     <div class="form-group error validated {{ style.class }}">
-        <label>{{ field.label }}</label>
+       <label>{{ field.label }}{% if field.help_text and style.help_text_in_popover %}<a tabindex="0" class="btn" role="button" data-toggle="kt-popover" data-placement="top" data-trigger="focus" data-content="{{ field.help_text }}"><i class="mdi mdi-information-outline mdi-18px"></i></a>{% endif %}</label>
             <input{% if style.id %} id="{{ style.id }}" {% endif %} name="{{ field.name }}" {% if style.input_type != "file" %}class="form-control {{ style.input_class }}"{% endif %} type="{{ style.input_type }}" {% if style.placeholder %}placeholder="{{ style.placeholder }}"{% endif %} {% if field.value.strip or field.value is not None %}value="{{ field.value }}"{% elif field.initial is not None %}value="{{ field.initial }}"{% endif %} {% if style.autofocus and style.input_type != "hidden" %}autofocus{% endif %}{% if style.step %} step="{{ style.step }}"{% endif %}{% if style.min %} min="{{ style.min }}"{% endif %}{% if style.max %} max="{{ style.max }}"{% endif %}>
         <div class="invalid-feedback">
             {% for error in field.errors %}{{ error }}{% endfor %}
         </div>
-        {% if field.help_text %}
+        {% if field.help_text and not style.help_text_in_popover %}
             <span class="form-text text-muted">{{ field.help_text }}</span>
         {% endif %}
     </div>
 {% else %}
     <div class="form-group {{ style.class }}">
-        <label>{{ field.label }}</label>
+        <label>{{ field.label }}{% if field.help_text and style.help_text_in_popover %}<a tabindex="0" class="btn" role="button" data-toggle="kt-popover" data-placement="top" data-trigger="focus" data-content="{{ field.help_text }}"><i class="mdi mdi-information-outline mdi-18px"></i></a>{% endif %}</label>
             <input{% if style.id %} id="{{ style.id }}" {% endif %} name="{{ field.name }}" {% if style.input_type != "file" %}class="form-control {{ style.input_class }}"{% endif %} type="{{ style.input_type }}" {% if style.placeholder %}placeholder="{{ style.placeholder }}"{% endif %} {% if field.value.strip or field.value is not None %}value="{{ field.value }}"{% elif field.initial is not None %}value="{{ field.initial }}"{% endif %} {% if style.autofocus and style.input_type != "hidden" %}autofocus{% endif %}{% if style.step %} step="{{ style.step }}"{% endif %}{% if style.min %} min="{{ style.min }}"{% endif %}{% if style.max %} max="{{ style.max }}"{% endif %}>
-        {% if field.help_text %}
+        {% if field.help_text and not style.help_text_in_popover %}
             <span class="form-text text-muted">{{ field.help_text }}</span>
         {% endif %}
     </div>

@@ -27,7 +27,7 @@ class AnomalyInjectionFormView(APIView):
 
         try:
             dataset = DataSet.objects.get(id=dataset_id)
-            serializer = AnomalyInjectionSerializer(data=request.data)
+            serializer = AnomalyInjectionSerializer(context={'dataset_selected': dataset_id, }, data=request.data)
 
             if serializer.is_valid() and request.accepted_renderer.format == 'json':  # requested format is json
                 type = request.GET.get('type', 'raw')
