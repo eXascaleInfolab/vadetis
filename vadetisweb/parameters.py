@@ -40,6 +40,22 @@ ANOMALY_DETECTION_SCORE_TYPES = (
 )
 
 #########################################################
+# Anomaly Types
+#########################################################
+
+ANOMALY_TYPE_EXTREME = 'Extreme Value'
+ANOMALY_TYPE_LEVEL_SHIFT = 'Level Shift'
+ANOMALY_TYPE_TREND = 'Trend'
+ANOMALY_TYPE_VARIANCE = 'Variance'
+
+ANOMALY_INJECTION_TYPES = (
+    (ANOMALY_TYPE_EXTREME, ANOMALY_TYPE_EXTREME),
+    (ANOMALY_TYPE_LEVEL_SHIFT, ANOMALY_TYPE_LEVEL_SHIFT),
+    (ANOMALY_TYPE_TREND, ANOMALY_TYPE_TREND),
+    (ANOMALY_TYPE_VARIANCE, ANOMALY_TYPE_VARIANCE),
+)
+
+#########################################################
 # Supported SVM Kernels
 #########################################################
 

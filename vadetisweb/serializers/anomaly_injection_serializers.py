@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from vadetisweb.fields import *
+from vadetisweb.parameters import ANOMALY_INJECTION_TYPES
 
 
 class AnomalyInjectionSerializer(serializers.Serializer):
@@ -20,21 +21,35 @@ class AnomalyInjectionSerializer(serializers.Serializer):
                                   allow_null=False,
                                   help_text='The time series to inject anomalies.')
 
-    normal_lowerbound_duration = serializers.IntegerField(initial=50, label='Normal lower bound', min_value=1,
+    anomaly_type = serializers.ChoiceField(label='Anomaly Type',
+                                           required=True,
+                                           choices=ANOMALY_INJECTION_TYPES,
+                                           help_text='The type of anomalies for injection. Choose between extreme value outliers, a level or trend shift or increased variance in the data.',
+                                           style={'template': 'vadetisweb/parts/input/select_input.html',
+                                                  'help_text_in_popover': True})
+
+    anomaly_factor = serializers.IntegerField(label='Factor', initial=10, min_value=2,
+                                              required=True,
+                                              help_text='The factor that is used to define the deviation of the normal data.',
+                                              style={'template': 'vadetisweb/parts/input/text_input.html',
+                                                     'step': 'number', 'min': 2,
+                                                     'help_text_in_popover': True})
+
+    normal_lowerbound_duration = serializers.IntegerField(label='Normal lower bound', initial=50, min_value=1,
                                                           required=True,
                                                           help_text='The lower bound for duration of a normal event.',
                                                           style={'template': 'vadetisweb/parts/input/text_input.html',
                                                                  'step': 'number', 'min': 1,
                                                                  'help_text_in_popover': True})
 
-    normal_upperbound_duration = serializers.IntegerField(initial=500, label='Normal upper bound', min_value=1,
+    normal_upperbound_duration = serializers.IntegerField(label='Normal upper bound', initial=500, min_value=1,
                                                           required=True,
                                                           help_text='The upper bound for duration of a normal event.',
                                                           style={'template': 'vadetisweb/parts/input/text_input.html',
                                                                  'step': 'number', 'min': 1,
                                                                  'help_text_in_popover': True})
 
-    probability = serializers.FloatField(initial=0.1, label='Probability', min_value=0.0000001, max_value=1,
+    probability = serializers.FloatField(label='Probability', initial=0.1, min_value=0.0000001, max_value=1,
                                          required=True,
                                          help_text='The probability for an anomalous event. '
                                                    'Should be in the interval (0, 1].',
@@ -42,14 +57,14 @@ class AnomalyInjectionSerializer(serializers.Serializer):
                                                 'min': 0.0000001, 'max': 1,
                                                 'help_text_in_popover': True})
 
-    anomaly_lowerbound_duration = serializers.IntegerField(initial=5, label='Anomalous lower bound', min_value=1,
+    anomaly_lowerbound_duration = serializers.IntegerField(label='Anomalous lower bound', initial=5, min_value=1,
                                                            required=True,
                                                            help_text='The lower bound for duration of an anomalous event.',
                                                            style={'template': 'vadetisweb/parts/input/text_input.html',
                                                                   'step': 'number', 'min': 1,
                                                                   'help_text_in_popover': True})
 
-    anomaly_upperbound_duration = serializers.IntegerField(initial=10, label='Anomalous upper bound', min_value=1,
+    anomaly_upperbound_duration = serializers.IntegerField(label='Anomalous upper bound', initial=10, min_value=1,
                                                            required=True,
                                                            help_text='The upper bound for duration of an anomalous event.',
                                                            style={'template': 'vadetisweb/parts/input/text_input.html',
