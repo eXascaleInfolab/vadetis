@@ -8,6 +8,7 @@ class DatasetField(serializers.HiddenField):
         Note: a HiddenField should normally not be used that way (overriding default value),
         but its the most comfortable way to have a write only field that is excluded from frontend serializing
     """
+
     def get_value(self, dictionary):
         dataset_selected = self.context.get('dataset_selected', None)
         if dataset_selected is not None:
@@ -20,7 +21,7 @@ class TrainingDatasetField(serializers.PrimaryKeyRelatedField):
         super(TrainingDatasetField, self).__init__(**kwargs)
         self.help_text = "The dataset used to train the anomaly detection model."
         self.style = {'template': 'vadetisweb/parts/input/select_input.html',
-                      'help_text_in_popover' : True}
+                      'help_text_in_popover': True}
 
     def get_queryset(self):
         dataset_selected = self.context.get('dataset_selected', None)
@@ -36,11 +37,11 @@ class TimeSeriesField(serializers.PrimaryKeyRelatedField):
     def __init__(self, **kwargs):
         super(TimeSeriesField, self).__init__(**kwargs)
         self.style = {'template': 'vadetisweb/parts/input/select_input.html',
-                      'help_text_in_popover' : True}
+                      'help_text_in_popover': True}
 
     def get_queryset(self):
         dataset_selected = self.context.get('dataset_selected', None)
-        #timeseries_selected = self.context.get('timeseries_selected', None)
+        # timeseries_selected = self.context.get('timeseries_selected', None)
         if dataset_selected is not None:
             return TimeSeries.objects.filter(datasets__in=[dataset_selected])
         return TimeSeries.objects.none()
@@ -59,7 +60,7 @@ class TrainSizeFloatField(serializers.FloatField):
                       'step': 'any',
                       'min': self.min_value,
                       'max': self.max_value,
-                      'help_text_in_popover' : True}
+                      'help_text_in_popover': True}
 
 
 class RandomSeedIntegerField(serializers.IntegerField):
@@ -69,7 +70,7 @@ class RandomSeedIntegerField(serializers.IntegerField):
         self.help_text = 'The seed used by the random number generator when randomly selecting training and validation data. If you provide the same seed again in a later computation, you get the same selection of data.'
         self.style = {'template': 'vadetisweb/parts/input/text_input.html',
                       'placeholder': 'e.g. 42',
-                      'help_text_in_popover' : True}
+                      'help_text_in_popover': True}
 
 
 class TimeRangeChoiceField(serializers.ChoiceField):
@@ -79,30 +80,31 @@ class TimeRangeChoiceField(serializers.ChoiceField):
         self.help_text = 'The time range to apply anomaly detection'
         self.style = {'template': 'vadetisweb/parts/input/select_input.html',
                       'id': 'timeRange',
-                      'help_text_in_popover' : True}
+                      'help_text_in_popover': True}
 
 
 class MaximizeScoreChoiceField(serializers.ChoiceField):
     def __init__(self, **kwargs):
-        super(MaximizeScoreChoiceField, self).__init__(choices=ANOMALY_DETECTION_SCORE_TYPES,**kwargs)
+        super(MaximizeScoreChoiceField, self).__init__(choices=ANOMALY_DETECTION_SCORE_TYPES, **kwargs)
         self.label = 'Maximize Score'
         self.help_text = 'Define which score you want to maximize for the results. In order to achive the best score out of this selection, the most appropiate threshold value will be selected. You can further change the threshold after computation.'
         self.style = {'template': 'vadetisweb/parts/input/select_input.html',
-                      'help_text_in_popover' : True}
+                      'help_text_in_popover': True}
 
 
 class RangeStartHiddenIntegerField(serializers.IntegerField):
     def __init__(self, **kwargs):
         super(RangeStartHiddenIntegerField, self).__init__(**kwargs)
-        self.required=True
-        self.min_value=0
-        self.style={'template': 'vadetisweb/parts/input/hidden_input.html',
-                    'id': 'rangeStart'}
+        self.required = True
+        self.min_value = 0
+        self.style = {'template': 'vadetisweb/parts/input/hidden_input.html',
+                      'id': 'rangeStart'}
+
 
 class RangeEndHiddenIntegerField(serializers.IntegerField):
     def __init__(self, **kwargs):
         super(RangeEndHiddenIntegerField, self).__init__(**kwargs)
-        self.required=True
-        self.min_value=0
-        self.style={'template': 'vadetisweb/parts/input/hidden_input.html',
-                    'id': 'rangeEnd'}
+        self.required = True
+        self.min_value = 0
+        self.style = {'template': 'vadetisweb/parts/input/hidden_input.html',
+                      'id': 'rangeEnd'}
