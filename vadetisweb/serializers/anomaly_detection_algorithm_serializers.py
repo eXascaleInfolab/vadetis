@@ -26,7 +26,8 @@ class RPCAMEstimatorLossSerializer(serializers.Serializer):
                                                   'help_text_in_popover': True})
 
     delta = serializers.IntegerField(initial=1, label='Delta', min_value=1, required=True,
-                                     help_text='Delta for Huber Loss function',
+                                     help_text='Delta for Huber Loss function. The value of delta depends on the contamination level of the data. '
+                                               'The higher the contamination, the lower the threshold value should be chosen.',
                                      style={'template': 'vadetisweb/parts/input/text_input.html',
                                             'step': 'any', 'min': 1,
                                             'help_text_in_popover': True})
