@@ -9,12 +9,12 @@ from vadetisweb.serializers import UserSettingSerializer
 from django.shortcuts import redirect
 
 
-class ApplicationSettings(APIView):
+class ApplicationSetting(APIView):
     """
     Request applications settings on GET, or save them on POST
     """
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'vadetisweb/account/application_settings.html'
+    template_name = 'vadetisweb/account/application_setting.html'
 
     def get(self, request):
         user = request.user
@@ -56,4 +56,4 @@ class ApplicationSettings(APIView):
 
             return response
 
-        return redirect('vadetisweb:application_settings')
+        return redirect('vadetisweb:application_setting')

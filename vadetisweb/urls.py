@@ -54,7 +54,7 @@ urlpatterns = apipatterns + [
     path('datasets/synthetic/<int:dataset_id>/', views.SyntheticDataset.as_view(), name='synthetic_dataset'),
     path('datasets/synthetic/<int:dataset_id>/perform', views.SyntheticDatasetPerformAnomalyDetection.as_view(), name='synthetic_dataset_perform'),
 
-    path('account/application-settings/', views.ApplicationSettings.as_view(), name='application_settings'),
+    path('account/application-setting/', views.ApplicationSetting.as_view(), name='application_setting'),
     path('account/datasets/', views.account_datasets, name='account_datasets'),
     path('account/training-datasets/', views.account_training_datasets, name='account_training_datasets'),
     path('account/', views.account, name='account'),

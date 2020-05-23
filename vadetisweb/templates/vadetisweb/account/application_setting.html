@@ -9,11 +9,11 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    {% breadcrumb "Application Settings" "vadetisweb:application_settings" %}
+    {% breadcrumb "Application Setting" "vadetisweb:application_setting" %}
 {% endblock %}
 
 {% block page_title %}
-    <h3 class="kt-subheader__title">Application Settings</h3>
+    <h3 class="kt-subheader__title">Application Setting</h3>
 {% endblock %}
 
 {% block content %}
@@ -25,8 +25,8 @@
                         <h3 class="kt-portlet__head-title">Settings</h3>
                     </div>
                 </div>
-                {% url 'vadetisweb:application_settings' as fromurl %}
-                {% include 'vadetisweb/parts/forms/serializer_form.html' with formid="application_settings_form" url=fromurl submit_label="Save" %}
+                {% url 'vadetisweb:application_setting' as fromurl %}
+                {% include 'vadetisweb/parts/forms/serializer_form.html' with formid="application_setting_form" url=fromurl submit_label="Save" %}
             </div>
         </div>
     </div>
@@ -34,7 +34,7 @@
 
 {% block additional_bottom_js %}
     {{ block.super }}
-    {% include "vadetisweb/parts/js/ajax_form_js.html" with formid="application_settings_form" %}
+    {% include "vadetisweb/parts/js/ajax_form_js.html" with formid="application_setting_form" %}
 {% endblock %}
 
 {% block form_media_js %}
