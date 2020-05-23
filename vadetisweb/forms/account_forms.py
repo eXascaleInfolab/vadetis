@@ -4,7 +4,7 @@ from allauth.account.models import EmailAddress
 from allauth.account.forms import SignupForm as AllauthAccountSignupForm, get_adapter as get_account_adapter, LoginForm, ResetPasswordForm, ChangePasswordForm, SetPasswordForm, get_username_max_length, set_form_field_order, filter_users_by_email
 from allauth.socialaccount.forms import SignupForm as AllauthSocialSignupForm, DisconnectForm
 
-from vadetisweb.models import User, UserSettings
+from vadetisweb.models import User, UserSetting
 
 #########################################################
 # Account Forms

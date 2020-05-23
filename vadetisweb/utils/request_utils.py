@@ -1,7 +1,7 @@
 from vadetisweb.parameters import LISA_PEARSON, PEARSON, DTW, GEO, HISTOGRAM, CLUSTER_GAUSSIAN_MIXTURE, SVM, ISOLATION_FOREST
 from .helper_function_utils import *
 
-from vadetisweb.models import UserSettings
+from vadetisweb.models import UserSetting
 from vadetisweb.parameters import *
 
 
@@ -30,12 +30,12 @@ def get_settings(request):
     settings = dict(DEFAULT_SETTINGS) # default settings
     if user.is_authenticated: # use settings
         try:
-            user_settings = UserSettings.objects.get(user_id=user.id)  # profile holds settings for GUI
+            user_settings = UserSetting.objects.get(user_id=user.id)  # profile holds settings for GUI
             # update settings dict from user settings
             for key in settings.keys():
                 settings[key] = getattr(user_settings, key)
 
-        except UserSettings.DoesNotExist:
+        except UserSetting.DoesNotExist:
             print('User has no settings, fallback to cookies!')
             settings = get_cookie_settings_dict(request)
 

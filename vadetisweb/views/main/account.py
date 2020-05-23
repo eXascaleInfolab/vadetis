@@ -1,11 +1,11 @@
 from rest_framework import status
-from vadetisweb.models import UserSettings
+from vadetisweb.models import UserSetting
 from vadetisweb.utils import get_cookie_settings_dict
 
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from vadetisweb.serializers import UserSettingsSerializer
+from vadetisweb.serializers import UserSettingSerializer
 from django.shortcuts import redirect
 
 
@@ -21,7 +21,7 @@ class ApplicationSettings(APIView):
         settings_dict = get_cookie_settings_dict(request)
 
         if user.is_authenticated: # use profile
-            settings, created = UserSettings.objects.get_or_create(user=user)
+            settings, created = UserSetting.objects.get_or_create(user=user)
             if created:
                 # fill profile with values from cookies
                 # (e.g. user used app, then later made an account-> values from cookies should be inserted into profile)
@@ -29,9 +29,9 @@ class ApplicationSettings(APIView):
                     setattr(settings, key, value)
                 settings.save()
         else: # use cookies
-            settings = UserSettings(**settings_dict)
+            settings = UserSetting(**settings_dict)
 
-        serializer = UserSettingsSerializer(instance=settings)
+        serializer = UserSettingSerializer(instance=settings)
         return Response({'serializer': serializer}, status=status.HTTP_200_OK)
 
 
@@ -40,10 +40,10 @@ class ApplicationSettings(APIView):
         settings_dict = get_cookie_settings_dict(request)
 
         if user.is_authenticated:  # use profile
-            settings, _  = UserSettings.objects.get_or_create(user=user)
-            serializer = UserSettingsSerializer(instance=settings, data=request.data)
+            settings, _  = UserSetting.objects.get_or_create(user=user)
+            serializer = UserSettingSerializer(instance=settings, data=request.data)
         else:
-            serializer = UserSettingsSerializer(data=request.data)
+            serializer = UserSettingSerializer(data=request.data)
 
         if serializer.is_valid():
             if user.is_authenticated:  # use profile

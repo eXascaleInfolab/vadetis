@@ -5,7 +5,7 @@ from rest_framework.validators import UniqueTogetherValidator
 from django.core.validators import MaxLengthValidator, MaxValueValidator, MinValueValidator, RegexValidator, FileExtensionValidator
 from django.urls import reverse
 
-from vadetisweb.models import UserSettings, DataSet, User
+from vadetisweb.models import UserSetting, DataSet, User
 from vadetisweb.parameters import REAL_WORLD, DATASET_TYPE, DATASET_SPATIAL_DATA, NON_SPATIAL, SPATIAL
 from vadetisweb.fields import UserOriginalDatasetField
 
@@ -90,7 +90,7 @@ class TrainingDatasetImportSerializer(serializers.Serializer):
         ]
 
 
-class UserSettingsSerializer(serializers.ModelSerializer):
+class UserSettingSerializer(serializers.ModelSerializer):
     """
     The form for the settings of the user
     """
@@ -142,7 +142,7 @@ class UserSettingsSerializer(serializers.ModelSerializer):
                                                    'class': 'form-group-last'})
 
     class Meta:
-        model = UserSettings
+        model = UserSetting
         fields = ('highcharts_height', 'legend_height', 'color_outliers', 'color_clusters',
                   'color_true_positive', 'color_false_positive', 'color_false_negative', 'round_digits')
 

@@ -15,7 +15,7 @@ class UserTasks(TaskMixin, models.Model):
         return '%s' % (self.user.username)
 
 
-class UserSettings(models.Model):
+class UserSetting(models.Model):
     """
     The User Profile contains User settings for the application.
     """
