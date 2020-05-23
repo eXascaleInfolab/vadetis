@@ -1,0 +1,25 @@
+{% load rest_framework %}
+{% if field.errors %}
+    <div class="form-group error validated {{ style.class }}">
+        <label class="kt-checkbox">{{ field.label }}{% if field.help_text and style.help_text_in_popover %}<a tabindex="0" class="btn" role="button" data-toggle="kt-popover" data-placement="top" data-trigger="focus" data-content="{{ field.help_text }}"><i class="mdi mdi-information-outline mdi-18px"></i></a>{% endif %}
+            <input{% if style.id %} id="{{ style.id }}" {% endif %} name="{{ field.name }}" class="form-control {{ style.input_class }}" type="checkbox" value="true" {% if field.value %}checked{% endif %}>
+            <span></span>
+        </label>
+        <div class="invalid-feedback">
+            {% for error in field.errors %}{{ error }}{% endfor %}
+        </div>
+        {% if field.help_text and not style.help_text_in_popover %}
+            <span class="form-text text-muted">{{ field.help_text }}</span>
+        {% endif %}
+    </div>
+{% else %}
+    <div class="form-group {{ style.class }}">
+        <label class="kt-checkbox">{{ field.label }}{% if field.help_text and style.help_text_in_popover %}<a tabindex="0" class="btn" role="button" data-toggle="kt-popover" data-placement="top" data-trigger="focus" data-content="{{ field.help_text }}"><i class="mdi mdi-information-outline mdi-18px"></i></a>{% endif %}
+            <input{% if style.id %} id="{{ style.id }}" {% endif %} name="{{ field.name }}" class="form-control {{ style.input_class }}" type="checkbox" value="true" {% if field.value %}checked{% endif %}>
+            <span></span>
+        </label>
+        {% if field.help_text and not style.help_text_in_popover %}
+            <span class="form-text text-muted">{{ field.help_text }}</span>
+        {% endif %}
+    </div>
+{% endif %}

@@ -22,7 +22,7 @@ class DatasetImportSerializer(serializers.Serializer):
 
     csv_file = serializers.FileField(required=True, label='CSV File', help_text='The csv file of the dataset',
                                      validators=[FileExtensionValidator(allowed_extensions=['csv'])],
-                                     style={'template': 'vadetisweb/parts/input/text_input.html'})
+                                     style={'template': 'vadetisweb/parts/input/file_input.html'})
 
     owner = UserSerializer(read_only=True, default=serializers.CurrentUserDefault())
 
@@ -31,7 +31,8 @@ class DatasetImportSerializer(serializers.Serializer):
                                    style={'template': 'vadetisweb/parts/input/select_input.html'})
 
     is_public = serializers.BooleanField(default=True,
-                                         help_text='Determines if this dataset is available to other users')
+                                         help_text='Determines if this dataset is available to other users',
+                                         style={'template': 'vadetisweb/parts/input/checkbox_input.html'})
 
     spatial_data = serializers.ChoiceField(choices=DATASET_SPATIAL_DATA, default=NON_SPATIAL,
                                            help_text='Determines whether this dataset is spatial or not. Spatial data requires geographic information about the time series recording location.',
@@ -42,7 +43,7 @@ class DatasetImportSerializer(serializers.Serializer):
                                              allow_empty_file=True,
                                              help_text='The csv file of spatial information. It\'s only required if dataset is spatial.',
                                              validators=[FileExtensionValidator(allowed_extensions=['csv'])],
-                                             style={'template': 'vadetisweb/parts/input/text_input.html'})
+                                             style={'template': 'vadetisweb/parts/input/file_input.html'})
 
     class Meta:
         validators = [
@@ -69,13 +70,15 @@ class TrainingDatasetImportSerializer(serializers.Serializer):
 
     owner = UserSerializer(read_only=True, default=serializers.CurrentUserDefault())
 
-    original_dataset = UserOriginalDatasetField(label="Associated dataset", required=True)
+    original_dataset = UserOriginalDatasetField(label="Associated dataset", required=True,
+                                   style={'template': 'vadetisweb/parts/input/select_input.html'})
 
     is_public = serializers.BooleanField(default=True,
-                                         help_text='Determines if this dataset is available to other users')
+                                         help_text='Determines if this dataset is available to other users',
+                                         style={'template': 'vadetisweb/parts/input/checkbox_input.html'})
 
     csv_file = serializers.FileField(required=True, label='CSV File', help_text='The csv file of the dataset',
-                                     style={'template': 'vadetisweb/parts/input/text_input.html'})
+                                     style={'template': 'vadetisweb/parts/input/file_input.html'})
 
     class Meta:
         validators = [
