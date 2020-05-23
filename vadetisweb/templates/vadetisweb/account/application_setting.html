@@ -34,9 +34,5 @@
 
 {% block additional_bottom_js %}
     {{ block.super }}
-    {% include "vadetisweb/parts/js/ajax_form_js.html" with formid="application_setting_form" %}
-{% endblock %}
-
-{% block form_media_js %}
-    {{ block.super }}
+    {% include "vadetisweb/parts/js/ajax_form_js.html" with formid="application_setting_form" format="json" %}
 {% endblock %}

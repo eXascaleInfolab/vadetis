@@ -1,34 +1,32 @@
-from vadetisweb.parameters import LISA_PEARSON, PEARSON, DTW, GEO, HISTOGRAM, CLUSTER_GAUSSIAN_MIXTURE, SVM, ISOLATION_FOREST
+import logging
 from .helper_function_utils import *
 
 from vadetisweb.models import UserSetting
 from vadetisweb.parameters import *
 
 
-def get_cookie_settings_dict(request):
+def account_setting_cookie_dict(request):
     """
-    Returns a dict of the cookie values relevant for the settings (profile), returns default values if cookie is not available
+    Returns a dict of the cookie values relevant for the (account) settings, returns default values if cookie is not available
     :param request: the request of the view
     :return: a dict of cookie values
     """
-    settings_dict = {}
-
-    settings_dict['highcharts_height'] = int(request.COOKIES.get('highcharts_height', DEFAULT_HIGHCHARTS_HEIGHT))
-    settings_dict['legend_height'] = int(request.COOKIES.get('legend_height', DEFAULT_LEGEND_HEIGHT))
-    settings_dict['color_outliers'] = request.COOKIES.get('color_outliers', DEFAULT_COLOR_OUTLIERS)
-    settings_dict['color_clusters'] = request.COOKIES.get('color_clusters', DEFAULT_COLOR_CLUSTERS)
-    settings_dict['color_true_positive'] = request.COOKIES.get('color_true_positive', DEFAULT_COLOR_TRUE_POSITIVES)
-    settings_dict['color_false_positive'] = request.COOKIES.get('color_false_positive', DEFAULT_COLOR_FALSE_POSITIVES)
-    settings_dict['color_false_negative'] = request.COOKIES.get('color_false_negative', DEFAULT_COLOR_FALSE_NEGATIVES)
-    settings_dict['round_digits'] = int(request.COOKIES.get('round_digits', DEFAULT_ROUND_DIGITS))
-
-    return settings_dict
+    return {
+        'highcharts_height': int(request.COOKIES.get('highcharts_height', DEFAULT_HIGHCHARTS_HEIGHT)),
+        'legend_height': int(request.COOKIES.get('legend_height', DEFAULT_LEGEND_HEIGHT)),
+        'color_outliers': request.COOKIES.get('color_outliers', DEFAULT_COLOR_OUTLIERS),
+        'color_clusters': request.COOKIES.get('color_clusters', DEFAULT_COLOR_CLUSTERS),
+        'color_true_positive': request.COOKIES.get('color_true_positive', DEFAULT_COLOR_TRUE_POSITIVES),
+        'color_false_positive': request.COOKIES.get('color_false_positive', DEFAULT_COLOR_FALSE_POSITIVES),
+        'color_false_negative': request.COOKIES.get('color_false_negative', DEFAULT_COLOR_FALSE_NEGATIVES),
+        'round_digits': int(request.COOKIES.get('round_digits', DEFAULT_ROUND_DIGITS))
+    }
 
 
 def get_settings(request):
     user = request.user
-    settings = dict(DEFAULT_SETTINGS) # default settings
-    if user.is_authenticated: # use settings
+    settings = dict(DEFAULT_SETTINGS)  # default settings
+    if user.is_authenticated:  # use settings
         try:
             user_settings = UserSetting.objects.get(user_id=user.id)  # profile holds settings for GUI
             # update settings dict from user settings
@@ -36,13 +34,23 @@ def get_settings(request):
                 settings[key] = getattr(user_settings, key)
 
         except UserSetting.DoesNotExist:
-            print('User has no settings, fallback to cookies!')
-            settings = get_cookie_settings_dict(request)
+            logging.debug('User has no settings, fallback to cookies!')
+            settings = account_setting_cookie_dict(request)
 
-    else: # use cookies
-        settings = get_cookie_settings_dict(request)
+    else:  # use cookies
+        settings = account_setting_cookie_dict(request)
 
     return settings
+
+
+def update_setting_cookie(response, validated_data):
+    """
+    :param response: response object to set new cookie values
+    :param validated_data: validated serializer data of account settings
+    :return: an updated response, that will set the cookies on the client side
+    """
+    for key in validated_data.keys():
+        response.set_cookie(key=key, value=validated_data[key], samesite='Lax')
 
 
 def get_conf_from_query_params(request):

@@ -209,6 +209,17 @@ SOCIALACCOUNT_PROVIDERS = {
 
 SITE_ID = 1
 
+# Cookies
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = 'Lax'
+
+# CHANGE ON PRODUCTION (!!)
+"""
+Whether to use a secure cookie for the session cookie. If this is set to True, the cookie will be marked as “secure”, which means browsers may ensure that the cookie is only sent under an HTTPS connection.
+Leaving this setting off isn’t a good idea because an attacker could capture an unencrypted session cookie with a packet sniffer and use the cookie to hijack the user’s session.
+"""
+SESSION_COOKIE_SECURE = False
+
 # RECAPTCHA
 RECAPTCHA_PUBLIC_KEY = '6Lc452UUAAAAAFYADmbUZgYf7qBx3A8i-nnLUde2'
 RECAPTCHA_PRIVATE_KEY = '6Lc452UUAAAAAA-XsnkMfh7xA-HhzN8Oliq4dZED'
