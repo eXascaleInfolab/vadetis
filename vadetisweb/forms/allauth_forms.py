@@ -1,5 +1,5 @@
 from django.forms import CharField, PasswordInput, BooleanField, EmailField
-from vadetisweb.widgets import IconCheckboxInput, UserTextInput
+from vadetisweb.widgets import FormCheckboxInput, UserTextInput
 from allauth.account import app_settings
 from allauth.account.forms import LoginForm, ResetPasswordForm, ChangePasswordForm, SetPasswordForm, get_username_max_length, set_form_field_order, filter_users_by_email
 
@@ -30,7 +30,7 @@ class AddonPasswordField(CharField):
 class AccountLoginForm(LoginForm):
 
     password = AddonPasswordField(label="Password")
-    remember = BooleanField(widget=IconCheckboxInput(default=True, label='Stay signed in'), required=False, label='Stay signed in')
+    remember = BooleanField(widget=FormCheckboxInput(default=True, label='Stay signed in'), required=False, label='Stay signed in')
     captcha = ReCaptchaField()
 
     def __init__(self, *args, **kwargs):
