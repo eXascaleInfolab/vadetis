@@ -258,7 +258,7 @@ GEO_DISTANCE = (
 # Defaults for application settings
 #########################################################
 
-DEFAULT_HIGHCHARTS_HEIGHT = 500
+DEFAULT_HIGHCHARTS_HEIGHT = 750
 DEFAULT_LEGEND_HEIGHT = 100
 DEFAULT_COLOR_OUTLIERS = '#FF0000'
 DEFAULT_COLOR_CLUSTERS = '#0000FF'

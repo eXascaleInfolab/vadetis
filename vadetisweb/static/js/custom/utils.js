@@ -234,3 +234,29 @@ function print_form_errors(form_errors) {
         input_element.after(html);
     }
 }
+
+/**
+ * Get settings from Cookie, or set them with default value
+ */
+function settingsFromCookie() {
+    var settings = {};
+    _getSettingOrDefault(settings, 'highcharts_height', 750);
+    _getSettingOrDefault(settings, 'legend_height', 100);
+    _getSettingOrDefault(settings, 'color_outliers', '#FF0000');
+    _getSettingOrDefault(settings, 'color_clusters', '#0000FF');
+    _getSettingOrDefault(settings, 'color_true_positive', '#008800');
+    _getSettingOrDefault(settings, 'color_false_positive', '#FF0000');
+    _getSettingOrDefault(settings, 'color_false_negative', '#0000FF');
+    _getSettingOrDefault(settings, 'round_digits', 3);
+    return settings;
+}
+
+function _getSettingOrDefault(setting, cookieName, defaultValue) {
+    var cookieValue = Cookies.get(cookieName);
+    if(cookieValue === undefined) {
+        Cookies.set(cookieName, defaultValue, { sameSite: 'lax' });
+        setting[cookieName] = defaultValue
+    } else {
+        setting[cookieName] = cookieValue;
+    }
+}

@@ -50,7 +50,6 @@ class SyntheticDataset(APIView):
                 return redirect('vadetisweb:synthetic_datasets')
 
             selected_button = get_highcharts_range_button_preselector(dataset.frequency)
-            settings = get_settings(request)
 
             detection_serializer = AlgorithmSerializer()
             injection_serializer = AnomalyInjectionSerializer(context={'dataset_selected': dataset_id, })
@@ -59,7 +58,6 @@ class SyntheticDataset(APIView):
             return Response({
                 'dataset': dataset,
                 'selected_button': selected_button,
-                'settings' : settings,
                 'detection_serializer': detection_serializer,
                 'injection_serializer' : injection_serializer,
                 'threshold_serializer': threshold_serializer,
@@ -80,7 +78,6 @@ class SyntheticDatasetPerformAnomalyDetection(APIView):
     def get(self, request, dataset_id):
         try:
             dataset = DataSet.objects.get(id=dataset_id)
-            settings = get_settings(request)
             selected_button = get_highcharts_range_button_preselector(dataset.frequency)
             conf = get_conf_from_query_params(request)
 
@@ -94,7 +91,6 @@ class SyntheticDatasetPerformAnomalyDetection(APIView):
                 serializer = ThresholdSerializer()
                 return Response({'is_synthetic': True, 'conf_params': conf_params, 'conf': conf,
                                  'dataset': dataset,
-                                 'settings': settings,
                                  'selected_button': selected_button,
                                  'serializer': serializer}, status=status.HTTP_200_OK)
 
@@ -117,7 +113,6 @@ class RealWorldDataset(APIView):
                 return redirect('vadetisweb:real_world_datasets')
 
             selected_button = get_highcharts_range_button_preselector(dataset.frequency)
-            settings = get_settings(request)
 
             serializer = AlgorithmSerializer()
             injection_serializer = AnomalyInjectionSerializer()
@@ -125,7 +120,6 @@ class RealWorldDataset(APIView):
             return Response({
                 'dataset': dataset,
                 'selected_button': selected_button,
-                'settings' : settings,
                 'serializer': serializer,
                 'injection_serializer' : injection_serializer,
             }, status=status.HTTP_200_OK)

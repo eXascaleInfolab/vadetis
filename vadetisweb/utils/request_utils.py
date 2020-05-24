@@ -5,22 +5,45 @@ from vadetisweb.models import UserSetting
 from vadetisweb.parameters import *
 
 
-def account_setting_cookie_dict(request):
+def settings_from_request_or_default_dict(request):
     """
     Returns a dict of the cookie values relevant for the (account) settings, returns default values if cookie is not available
     :param request: the request of the view
-    :return: a dict of cookie values
+    :return: a dict of setting cookie values
     """
-    return {
-        'highcharts_height': int(request.COOKIES.get('highcharts_height', DEFAULT_HIGHCHARTS_HEIGHT)),
-        'legend_height': int(request.COOKIES.get('legend_height', DEFAULT_LEGEND_HEIGHT)),
-        'color_outliers': request.COOKIES.get('color_outliers', DEFAULT_COLOR_OUTLIERS),
-        'color_clusters': request.COOKIES.get('color_clusters', DEFAULT_COLOR_CLUSTERS),
-        'color_true_positive': request.COOKIES.get('color_true_positive', DEFAULT_COLOR_TRUE_POSITIVES),
-        'color_false_positive': request.COOKIES.get('color_false_positive', DEFAULT_COLOR_FALSE_POSITIVES),
-        'color_false_negative': request.COOKIES.get('color_false_negative', DEFAULT_COLOR_FALSE_NEGATIVES),
-        'round_digits': int(request.COOKIES.get('round_digits', DEFAULT_ROUND_DIGITS))
-    }
+    settings = {}
+    missing_keys = []
+
+    _get_int_setting_from_cookie(settings, missing_keys, request, 'highcharts_height', DEFAULT_HIGHCHARTS_HEIGHT)
+    _get_int_setting_from_cookie(settings, missing_keys, request, 'legend_height', DEFAULT_LEGEND_HEIGHT)
+
+    _get_str_setting_from_cookie(settings, missing_keys, request, 'color_outliers', DEFAULT_COLOR_OUTLIERS)
+    _get_str_setting_from_cookie(settings, missing_keys, request, 'color_clusters', DEFAULT_COLOR_CLUSTERS)
+    _get_str_setting_from_cookie(settings, missing_keys, request, 'color_true_positive', DEFAULT_COLOR_TRUE_POSITIVES)
+    _get_str_setting_from_cookie(settings, missing_keys, request, 'color_false_positive', DEFAULT_COLOR_FALSE_POSITIVES)
+    _get_str_setting_from_cookie(settings, missing_keys, request, 'color_false_negative', DEFAULT_COLOR_FALSE_NEGATIVES)
+
+    _get_int_setting_from_cookie(settings, missing_keys, request, 'round_digits', DEFAULT_ROUND_DIGITS)
+
+    return settings, missing_keys
+
+
+def _get_int_setting_from_cookie(settings, missing_keys, request, cookie_name, default_value):
+    cookie_value = request.COOKIES.get(cookie_name)
+    if cookie_value is None:
+        settings[cookie_name] = default_value
+        missing_keys.append(cookie_name)
+    else:
+        settings[cookie_name] = int(cookie_value)
+
+
+def _get_str_setting_from_cookie(settings, missing_keys, request, cookie_name, default_value):
+    cookie_value = request.COOKIES.get(cookie_name)
+    if cookie_value is None:
+        settings[cookie_name] = default_value
+        missing_keys.append(cookie_name)
+    else:
+        settings[cookie_name] = cookie_value
 
 
 def get_settings(request):
@@ -35,22 +58,25 @@ def get_settings(request):
 
         except UserSetting.DoesNotExist:
             logging.debug('User has no settings, fallback to cookies!')
-            settings = account_setting_cookie_dict(request)
+            settings, _ = settings_from_request_or_default_dict(request)
 
     else:  # use cookies
-        settings = account_setting_cookie_dict(request)
+        settings, _ = settings_from_request_or_default_dict(request)
 
     return settings
 
 
-def update_setting_cookie(response, validated_data):
+def update_setting_cookie(response, validated_data, previous_setting=None, missing_keys=None):
     """
     :param response: response object to set new cookie values
     :param validated_data: validated serializer data of account settings
+    :param previous_setting: (optional) previous setting to update only changed values
+    :param missing_keys: (optional) cookie keys that were not available from request
     :return: an updated response, that will set the cookies on the client side
     """
     for key in validated_data.keys():
-        response.set_cookie(key=key, value=validated_data[key], samesite='Lax')
+        if previous_setting is None or previous_setting[key] != validated_data[key] or (missing_keys is not None and key in missing_keys):
+            response.set_cookie(key=key, value=validated_data[key], samesite='Lax')
 
 
 def get_conf_from_query_params(request):

@@ -2,10 +2,11 @@
 
 var VadetisHighcharts = function () {
 
-    var initHighcharts = function (html_id, url, settings, selectedButton) {
+    var initHighcharts = function (html_id, url, selectedButton) {
         var shows_anomalies = true;
         var current_type = 'raw';
         var dataset_series = [];
+        var settings = settingsFromCookie();
 
         Highcharts.setOptions({
             global: {
@@ -130,8 +131,8 @@ var VadetisHighcharts = function () {
         initSeriesForType(highchart, url, "raw", true);
     };
     return {
-        init: function (html_id, url, settings, selectedButton) {
-            initHighcharts(html_id, url, settings, selectedButton);
+        init: function (html_id, url, selectedButton) {
+            initHighcharts(html_id, url, selectedButton);
         }
     };
 }();

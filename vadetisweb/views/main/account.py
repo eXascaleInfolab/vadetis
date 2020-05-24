@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.settings import api_settings
 
 from vadetisweb.models import UserSetting
-from vadetisweb.utils import account_setting_cookie_dict, json_message_utils, update_setting_cookie
+from vadetisweb.utils import settings_from_request_or_default_dict, json_message_utils, update_setting_cookie
 from vadetisweb.serializers import UserSettingSerializer, MessageSerializer
 
 
@@ -20,13 +20,13 @@ class ApplicationSetting(APIView):
 
     def get(self, request, format=None):
         user = request.user
-        settings_dict = account_setting_cookie_dict(request)
+        settings_dict, _ = settings_from_request_or_default_dict(request)
 
         if user.is_authenticated: # use profile
             settings, created = UserSetting.objects.get_or_create(user=user)
             if created:
                 # fill profile with values from cookies
-                # (e.g. user used app, then later made an account-> values from cookies should be inserted into profile)
+                # (e.g. user used app, then later made an account -> values from cookies should be inserted into profile)
                 for (key, value) in settings_dict.items():
                     setattr(settings, key, value)
                 settings.save()
@@ -57,7 +57,9 @@ class ApplicationSetting(APIView):
                     'status': 'success',
                     'messages': MessageSerializer(json_messages, many=True).data,
                 }, status=status.HTTP_200_OK)
-                update_setting_cookie(response, serializer.validated_data)
+                settings_from_request, missing_keys = settings_from_request_or_default_dict(request)
+                update_setting_cookie(response, serializer.validated_data, settings_from_request, missing_keys)
+
                 return response
 
             else:  # or render html template
@@ -65,7 +67,8 @@ class ApplicationSetting(APIView):
                 response = Response({
                     'serializer': serializer,
                 }, status=status.HTTP_201_CREATED)
-                update_setting_cookie(response, serializer.validated_data)
+                settings_from_request, missing_keys = settings_from_request_or_default_dict(request)
+                update_setting_cookie(response, serializer.validated_data, settings_from_request, missing_keys)
                 return response
 
         else: # invalid data provided
