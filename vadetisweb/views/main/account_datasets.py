@@ -33,7 +33,6 @@ class AccountUploadDataset(APIView):
 
     def post(self, request, format=None):
         user = request.user
-        print("request.accepted_renderer.format ", request.accepted_renderer.format)
 
         serializer = DatasetImportSerializer(data=request.data, context={"request": self.request, })
 

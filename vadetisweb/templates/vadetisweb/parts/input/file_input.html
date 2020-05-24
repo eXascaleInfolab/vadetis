@@ -1,0 +1,27 @@
+{% load rest_framework %}
+{% if field.errors %}
+    <div class="form-group error validated {{ style.class }}">
+        <label>{{ field.label }}{% if field.help_text and style.help_text_in_popover %}<a tabindex="0" class="btn" role="button" data-toggle="kt-popover" data-placement="top" data-trigger="focus" data-content="{{ field.help_text }}"><i class="mdi mdi-information-outline mdi-18px"></i></a>{% endif %}</label>
+        <div class="custom-file">
+            <input{% if style.id %} id="{{ style.id }}" {% endif %} name="{{ field.name }}" class="custom-file-input {{ style.input_class }}" type="file" {% if style.placeholder %}placeholder="{{ style.placeholder }}"{% endif %}>
+            <label class="custom-file-label" for="{% if style.id %}{{ style.id }}{% endif %}">Choose file</label>
+        </div>
+        <div class="invalid-feedback">
+            {% for error in field.errors %}{{ error }}{% endfor %}
+        </div>
+        {% if field.help_text and not style.help_text_in_popover %}
+            <span class="form-text text-muted">{{ field.help_text }}</span>
+        {% endif %}
+    </div>
+{% else %}
+    <div class="form-group {{ style.class }}">
+        <label>{{ field.label }}{% if field.help_text and style.help_text_in_popover %}<a tabindex="0" class="btn" role="button" data-toggle="kt-popover" data-placement="top" data-trigger="focus" data-content="{{ field.help_text }}"><i class="mdi mdi-information-outline mdi-18px"></i></a>{% endif %}</label>
+        <div class="custom-file">
+            <input{% if style.id %} id="{{ style.id }}" {% endif %} name="{{ field.name }}" class="custom-file-input {{ style.input_class }}" type="file" {% if style.placeholder %}placeholder="{{ style.placeholder }}"{% endif %}>
+            <label class="custom-file-label" for="{% if style.id %}{{ style.id }}{% endif %}">Choose file</label>
+        </div>
+        {% if field.help_text and not style.help_text_in_popover %}
+            <span class="form-text text-muted">{{ field.help_text }}</span>
+        {% endif %}
+    </div>
+{% endif %}

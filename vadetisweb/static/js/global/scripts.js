@@ -55,7 +55,7 @@ var KTApp = function() {
     var initFileInput = function() {
         // init bootstrap popover
         $('.custom-file-input').on('change', function() {
-            var fileName = $(this).val();
+            var fileName = $(this).val().replace("C:\\fakepath\\", "");
             $(this).next('.custom-file-label').addClass("selected").html(fileName);
         });
     }
@@ -3939,6 +3939,7 @@ var KTPortlet = function(elementId, options) {
             var toggle = KTUtil.find(the.head, '[data-ktportlet-tool=toggle]');
             if (toggle && KTUtil.data(toggle).has('tooltip')) {
                 KTUtil.data(toggle).get('tooltip').updateTitleContent(the.options.tools.toggle.expand);
+                toggle.innerHTML = "<i class=\"mdi mdi-chevron-down mdi-18px\"></i>";
             }
         },
 
@@ -3960,6 +3961,7 @@ var KTPortlet = function(elementId, options) {
             var toggle = KTUtil.find(the.head, '[data-ktportlet-tool=toggle]');
             if (toggle && KTUtil.data(toggle).has('tooltip')) {
                 KTUtil.data(toggle).get('tooltip').updateTitleContent(the.options.tools.toggle.collapse);
+                toggle.innerHTML = "<i class=\"mdi mdi-chevron-up mdi-18px\"></i>";
             }
         },
 

@@ -258,7 +258,7 @@ function loadSeriesForType(highchart, url, type, show_anomaly, callback) {
 }
 
 function updateScores(info) {
-    var settings = JSON.parse(document.getElementById('settings').textContent);
+    var settings = settingsFromCookie();
     var round_digits = settings.round_digits;
     RoundSliders.init(round_digits);
     RoundSliders.updateValue("#roundslider_accuracy", info.accuracy.toFixed(round_digits));
@@ -268,7 +268,7 @@ function updateScores(info) {
 }
 
 function updateThreshold(value) {
-    var settings = JSON.parse(document.getElementById('settings').textContent);
+    var settings = settingsFromCookie();
     var round_digits = settings.round_digits;
     round_digits = 10;
 

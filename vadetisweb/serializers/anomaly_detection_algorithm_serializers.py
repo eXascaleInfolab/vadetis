@@ -25,11 +25,11 @@ class RPCAMEstimatorLossSerializer(serializers.Serializer):
                                                   'id': 'dataset_series_json',
                                                   'help_text_in_popover': True})
 
-    delta = serializers.IntegerField(initial=1, label='Delta', min_value=1, required=True,
+    delta = serializers.FloatField(initial=1.0, label='Delta', required=True,
                                      help_text='Delta for Huber Loss function. The value of delta depends on the contamination level of the data. '
                                                'The higher the contamination, the lower the threshold value should be chosen.',
                                      style={'template': 'vadetisweb/parts/input/text_input.html',
-                                            'step': 'any', 'min': 1,
+                                            'step': 'any',
                                             'help_text_in_popover': True})
 
     n_components = serializers.IntegerField(initial=2, label='Number of components', min_value=2, required=True,

@@ -1,7 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxLengthValidator, MaxValueValidator, MinValueValidator, RegexValidator
+
 from vadetisweb.models import TaskMixin
+from vadetisweb.parameters import *
 
 
 class UserTasks(TaskMixin, models.Model):
@@ -15,7 +17,7 @@ class UserTasks(TaskMixin, models.Model):
         return '%s' % (self.user.username)
 
 
-class UserSettings(models.Model):
+class UserSetting(models.Model):
     """
     The User Profile contains User settings for the application.
     """
@@ -23,36 +25,37 @@ class UserSettings(models.Model):
     # link UserProfile to a User model instance.
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
 
-    highcharts_height = models.PositiveIntegerField('Height of charts', null=False, default=500,
+    highcharts_height = models.PositiveIntegerField('Height of charts', null=False, default=DEFAULT_HIGHCHARTS_HEIGHT,
                                                     help_text='Value in pixels, Default: 500',
                                                     validators=[MinValueValidator(250)])
-    legend_height = models.PositiveIntegerField('Height of chart legends', null=False, default=100,
+
+    legend_height = models.PositiveIntegerField('Height of chart legends', null=False, default=DEFAULT_LEGEND_HEIGHT,
                                                 help_text='Value in pixels, Default: 100',
                                                 validators=[MinValueValidator(50)])
 
-    color_outliers = models.CharField('Color outliers', max_length=7, null=False, default="#FF0000",
+    color_outliers = models.CharField('Color outliers', max_length=7, null=False, default=DEFAULT_COLOR_OUTLIERS,
                                       help_text='Default: #FF0000, the RGB color used to mark outliers',
                                       validators=[RegexValidator(regex='^#(?:[0-9a-fA-F]{3}){1,2}$')])
 
-    color_clusters = models.CharField('Color for LISA clusters', max_length=7, null=False, default="#0000FF",
+    color_clusters = models.CharField('Color for LISA clusters', max_length=7, null=False, default=DEFAULT_COLOR_CLUSTERS,
                                       help_text='Default: #0000FF, the RGB color used to mark LISA clusters of high or low values',
                                       validators=[RegexValidator(regex='^#(?:[0-9a-fA-F]{3}){1,2}$')])
 
-    color_true_positive = models.CharField('Color for True Positives', max_length=7, null=False, default="#008800",
+    color_true_positive = models.CharField('Color for True Positives', max_length=7, null=False, default=DEFAULT_COLOR_TRUE_POSITIVES,
                                            help_text='Default: #008800, the RGB color used to mark true positives',
                                            validators=[RegexValidator(regex='^#(?:[0-9a-fA-F]{3}){1,2}$')])
 
-    color_false_positive = models.CharField('Color for False Positives', max_length=7, null=False, default="#FF0000",
+    color_false_positive = models.CharField('Color for False Positives', max_length=7, null=False, default=DEFAULT_COLOR_FALSE_POSITIVES,
                                             help_text='Default: #FF0000, the RGB color used to mark false positives',
                                             validators=[RegexValidator(regex='^#(?:[0-9a-fA-F]{3}){1,2}$')])
 
-    color_false_negative = models.CharField('Color for False Negatives', max_length=7, null=False, default="#0000FF",
+    color_false_negative = models.CharField('Color for False Negatives', max_length=7, null=False, default=DEFAULT_COLOR_FALSE_NEGATIVES,
                                             help_text='Default: #0000FF, the RGB color used to mark false negatives',
                                             validators=[RegexValidator(regex='^#(?:[0-9a-fA-F]{3}){1,2}$')])
 
-    round_digits = models.PositiveIntegerField('Number of digits for results', null=False, default=3,
-                                               help_text='Must be a number between 1 and 6',
-                                               validators=[MinValueValidator(1), MaxValueValidator(6)])
+    round_digits = models.PositiveIntegerField('Number of digits for results', null=False, default=DEFAULT_ROUND_DIGITS,
+                                               help_text='Must be a number between 1 and 10',
+                                               validators=[MinValueValidator(1), MaxValueValidator(10)])
 
     # Override the __unicode__() method to return out something meaningful!
     def __str__(self):

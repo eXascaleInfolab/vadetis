@@ -5,7 +5,7 @@ from rest_framework.validators import UniqueTogetherValidator
 from django.core.validators import MaxLengthValidator, MaxValueValidator, MinValueValidator, RegexValidator, FileExtensionValidator
 from django.urls import reverse
 
-from vadetisweb.models import UserSettings, DataSet, User
+from vadetisweb.models import UserSetting, DataSet, User
 from vadetisweb.parameters import REAL_WORLD, DATASET_TYPE, DATASET_SPATIAL_DATA, NON_SPATIAL, SPATIAL
 from vadetisweb.fields import UserOriginalDatasetField
 
@@ -22,7 +22,7 @@ class DatasetImportSerializer(serializers.Serializer):
 
     csv_file = serializers.FileField(required=True, label='CSV File', help_text='The csv file of the dataset',
                                      validators=[FileExtensionValidator(allowed_extensions=['csv'])],
-                                     style={'template': 'vadetisweb/parts/input/text_input.html'})
+                                     style={'template': 'vadetisweb/parts/input/file_input.html'})
 
     owner = UserSerializer(read_only=True, default=serializers.CurrentUserDefault())
 
@@ -31,7 +31,8 @@ class DatasetImportSerializer(serializers.Serializer):
                                    style={'template': 'vadetisweb/parts/input/select_input.html'})
 
     is_public = serializers.BooleanField(default=True,
-                                         help_text='Determines if this dataset is available to other users')
+                                         help_text='Determines if this dataset is available to other users',
+                                         style={'template': 'vadetisweb/parts/input/checkbox_input.html'})
 
     spatial_data = serializers.ChoiceField(choices=DATASET_SPATIAL_DATA, default=NON_SPATIAL,
                                            help_text='Determines whether this dataset is spatial or not. Spatial data requires geographic information about the time series recording location.',
@@ -42,7 +43,7 @@ class DatasetImportSerializer(serializers.Serializer):
                                              allow_empty_file=True,
                                              help_text='The csv file of spatial information. It\'s only required if dataset is spatial.',
                                              validators=[FileExtensionValidator(allowed_extensions=['csv'])],
-                                             style={'template': 'vadetisweb/parts/input/text_input.html'})
+                                             style={'template': 'vadetisweb/parts/input/file_input.html'})
 
     class Meta:
         validators = [
@@ -69,13 +70,15 @@ class TrainingDatasetImportSerializer(serializers.Serializer):
 
     owner = UserSerializer(read_only=True, default=serializers.CurrentUserDefault())
 
-    original_dataset = UserOriginalDatasetField(label="Associated dataset", required=True)
+    original_dataset = UserOriginalDatasetField(label="Associated dataset", required=True,
+                                   style={'template': 'vadetisweb/parts/input/select_input.html'})
 
     is_public = serializers.BooleanField(default=True,
-                                         help_text='Determines if this dataset is available to other users')
+                                         help_text='Determines if this dataset is available to other users',
+                                         style={'template': 'vadetisweb/parts/input/checkbox_input.html'})
 
     csv_file = serializers.FileField(required=True, label='CSV File', help_text='The csv file of the dataset',
-                                     style={'template': 'vadetisweb/parts/input/text_input.html'})
+                                     style={'template': 'vadetisweb/parts/input/file_input.html'})
 
     class Meta:
         validators = [
@@ -87,7 +90,7 @@ class TrainingDatasetImportSerializer(serializers.Serializer):
         ]
 
 
-class UserSettingsSerializer(serializers.ModelSerializer):
+class UserSettingSerializer(serializers.ModelSerializer):
     """
     The form for the settings of the user
     """
@@ -106,31 +109,31 @@ class UserSettingsSerializer(serializers.ModelSerializer):
                                            help_text='Default: #FF0000, the RGB color used to mark outliers',
                                            validators=[RegexValidator(regex='^#(?:[0-9a-fA-F]{3}){1,2}$')],
                                            style={'template': 'vadetisweb/parts/input/text_input.html',
-                                                  'input_class': 'minicolors-input'})
+                                                  'input_type': 'color'})
 
     color_clusters = serializers.CharField(max_length=7, default="#0000FF",
                                            help_text='Default: #0000FF, the RGB color used to mark LISA clusters of high or low values',
                                            validators=[RegexValidator(regex='^#(?:[0-9a-fA-F]{3}){1,2}$')],
                                            style={'template': 'vadetisweb/parts/input/text_input.html',
-                                                  'input_class': 'minicolors-input'})
+                                                  'input_type': 'color'})
 
     color_true_positive = serializers.CharField(max_length=7, default="#008800",
                                                 help_text='Default: #008800, the RGB color used to mark true positives',
                                                 validators=[RegexValidator(regex='^#(?:[0-9a-fA-F]{3}){1,2}$')],
                                                 style={'template': 'vadetisweb/parts/input/text_input.html',
-                                                       'input_class': 'minicolors-input'})
+                                                       'input_type': 'color'})
 
     color_false_positive = serializers.CharField(max_length=7, default="#FF0000",
                                                  help_text='Default: #FF0000, the RGB color used to mark false positives',
                                                  validators=[RegexValidator(regex='^#(?:[0-9a-fA-F]{3}){1,2}$')],
                                                  style={'template': 'vadetisweb/parts/input/text_input.html',
-                                                        'input_class': 'minicolors-input'})
+                                                        'input_type': 'color'})
 
     color_false_negative = serializers.CharField(max_length=7, default="#0000FF",
                                                  help_text='Default: #0000FF, the RGB color used to mark false negatives',
                                                  validators=[RegexValidator(regex='^#(?:[0-9a-fA-F]{3}){1,2}$')],
                                                  style={'template': 'vadetisweb/parts/input/text_input.html',
-                                                        'input_class': 'minicolors-input'})
+                                                        'input_type': 'color'})
 
     round_digits = serializers.IntegerField(default=3,
                                             help_text='Must be a number between 1 and 6',
@@ -139,7 +142,7 @@ class UserSettingsSerializer(serializers.ModelSerializer):
                                                    'class': 'form-group-last'})
 
     class Meta:
-        model = UserSettings
+        model = UserSetting
         fields = ('highcharts_height', 'legend_height', 'color_outliers', 'color_clusters',
                   'color_true_positive', 'color_false_positive', 'color_false_negative', 'round_digits')
 

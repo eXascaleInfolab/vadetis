@@ -1,5 +1,5 @@
 from vadetisweb.parameters import *
-from vadetisweb.models import UserSettings
+from vadetisweb.models import UserSetting
 
 def strToBool(v):
     s = str(v).lower()

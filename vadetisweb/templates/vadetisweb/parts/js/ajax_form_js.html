@@ -17,15 +17,24 @@
 
                 } else if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
                     print_messages(data.responseJSON.messages);
+
+                } else if (data.hasOwnProperty('messages')) {
+                    print_messages(data.messages);
                 }
             },
             error: function(data, status, xhr) {
                 console.error("Sending asynchronous failed");
                 if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
                     print_messages(data.responseJSON.messages);
+
+                } else if (data.hasOwnProperty('messages')) {
+                    print_messages(data.messages);
                 }
                 if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('form_errors')) {
                     print_form_errors(data.responseJSON.form_errors);
+
+                } else if (data.hasOwnProperty('form_errors')) {
+                    print_form_errors(data.form_errors);
                 }
             }
         });
