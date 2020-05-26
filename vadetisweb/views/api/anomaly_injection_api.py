@@ -30,13 +30,12 @@ class AnomalyInjectionFormView(APIView):
             serializer = AnomalyInjectionSerializer(context={'dataset_selected': dataset_id, }, data=request.data)
 
             if serializer.is_valid() and request.accepted_renderer.format == 'json':  # requested format is json
-                type = request.GET.get('type', 'raw')
                 show_anomaly = strToBool(request.query_params.get('show_anomaly', 'true'))
                 data = {}
                 settings = get_settings(request)
                 df_inject, df_inject_class = anomaly_injection(dataset, serializer.validated_data)
 
-                data['series'] = get_dataset_with_marker_json(dataset, df_inject, df_inject_class, type, show_anomaly, settings)
+                data['series'] = get_dataset_with_marker_json(dataset, df_inject, df_inject_class, show_anomaly, settings)
                 return Response(data, status=status.HTTP_200_OK)
 
             else:

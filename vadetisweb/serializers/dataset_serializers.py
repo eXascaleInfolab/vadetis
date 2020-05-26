@@ -3,8 +3,9 @@ from rest_framework import serializers
 
 from django.urls import reverse
 
-from vadetisweb.models import DataSet, User
+from vadetisweb.models import DataSet
 from vadetisweb.parameters import *
+from vadetisweb.fields import DatasetField, DatasetJsonField
 
 
 class DatasetDataTablesSerializer(serializers.ModelSerializer):
@@ -61,3 +62,13 @@ class TrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
         fields = (
             'title', 'owner', 'timeseries', 'values', 'frequency', 'spatial_data',
         )
+
+
+class DatasetUpdateSerializer(serializers.Serializer):
+    dataset = DatasetField(default='overridden')
+    dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
+                                           style={'template': 'vadetisweb/parts/input/hidden_input.html',
+                                                  'id': 'dataset_series_json'})
+
+    def __init__(self, *args, **kwargs):
+        super(DatasetUpdateSerializer, self).__init__(*args, **kwargs)

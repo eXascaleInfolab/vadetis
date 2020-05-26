@@ -285,6 +285,7 @@ def zscore_for_column(column, index, skipna=True):
 
     :param column: the column
     :param index: the index
+    :param skipna: defines if to skip NaN values
     :return: Z-Score for column
     """
 
@@ -294,9 +295,10 @@ def zscore_for_column(column, index, skipna=True):
 
 def df_zscore(df, skipna=True):
     """
-    Returns new pandas dataframe of Z-Score values
+    Transforms a dataframe to z-score values
 
-    :param df: the input dataframe
+    :param df: the dataframe of raw data
+    :param skipna: defines if to skip NaN values
     :return: a dataframe of Z-Score values
     """
 

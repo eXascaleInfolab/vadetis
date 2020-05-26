@@ -8,15 +8,13 @@ from .date_utils import unix_time_millis_from_dt
 from .anomaly_detection_utils import get_info
 
 
-def get_dataset_with_marker_json(dataset, df, df_class, type, show_anomaly, settings):
+def get_dataset_with_marker_json(dataset, df, df_class, show_anomaly, settings, type=None):
     data_series = []
     time_series = dataset.timeseries_set.all()
 
-    # get dataframe of the series
+    # transform dataframe if required
     if type == 'zscore':
-        df = df_zscore(df)  # z-score values
-    """else:
-        df = dataset.dataframe  # raw data""" #TODO
+        df = df_zscore(df)  # transform raw data to z-score values
 
     outlier_color = settings['color_outliers']
 
@@ -36,13 +34,14 @@ def get_dataset_with_marker_json(dataset, df, df_class, type, show_anomaly, sett
                 else:
                     data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class': anomaly_class, 'marker': {'fillColor': outlier_color, 'radius': 3}})
 
-        dict_series = {'id': ts.id,
-                       'name': ts.name,
-                       'unit': ts.unit,
-                       'is_spatial': ts.is_spatial,
-                       'type': type,
-                       'data': data
-                       }
+        dict_series = {
+            'id': ts.id,
+            'name': ts.name,
+            'unit': ts.unit,
+            'is_spatial': ts.is_spatial,
+            'type': type,
+            'data': data
+        }
         data_series.append(dict_series)
 
     return data_series
