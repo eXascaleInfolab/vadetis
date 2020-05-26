@@ -2,8 +2,8 @@
 <script type="text/javascript">
     $('#{{ formid }}').on('submit', function (event) {
         event.preventDefault();
-        clear_form_errors("{{ formid }}");
-        clear_messages();
+        clearFormErrors("{{ formid }}");
+        clearMessages();
         var highchart = $('#'+ {{ highcharts }}).highcharts();
 
         console.log("SERIES");

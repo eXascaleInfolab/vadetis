@@ -11,7 +11,7 @@ function updateHighchartsSeriesForThreshold(highchart, url, post_data, callback)
 
         success: function (data, status, xhr) {
             if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                print_messages(data.responseJSON.messages);
+                printMessages(data.responseJSON.messages);
             }
             var dataset_series_new_json = data['series'];
             var new_info = data['info'];
@@ -26,10 +26,10 @@ function updateHighchartsSeriesForThreshold(highchart, url, post_data, callback)
         error: function(data, status, xhr) {
                 console.error("Sending asynchronous failed");
                 if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                    print_messages(data.responseJSON.messages);
+                    printMessages(data.responseJSON.messages);
                 }
                 if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('form_errors')) {
-                    print_form_errors(data.responseJSON.form_errors);
+                    printFormErrors(data.responseJSON.form_errors);
                 }
         }
     });

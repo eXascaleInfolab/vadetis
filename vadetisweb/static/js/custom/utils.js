@@ -29,8 +29,8 @@ function registerThresholdUpdateForm(form_id) {
     $(html_id).on('submit', function (event) {
         event.preventDefault();
         $(":submit").attr("disabled", true);
-        clear_form_errors(form_id);
-        clear_messages();
+        clearFormErrors(form_id);
+        clearMessages();
 
         var highchart = $('#highcharts_container').highcharts();
         var formData = new FormData(this);
@@ -47,7 +47,7 @@ function registerThresholdUpdateForm(form_id) {
             contentType: false,
             success: function(data, status, xhr) {
                 if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                    print_messages(data.responseJSON.messages);
+                    printMessages(data.responseJSON.messages);
                 }
                 // update series
                 var series_data_json = data['series'];
@@ -73,10 +73,10 @@ function registerThresholdUpdateForm(form_id) {
             error: function(data, status, xhr) {
                 console.error("Sending asynchronous failed");
                 if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                    print_messages(data.responseJSON.messages);
+                    printMessages(data.responseJSON.messages);
                 }
                 if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('form_errors')) {
-                    print_form_errors(data.responseJSON.form_errors);
+                    printFormErrors(data.responseJSON.form_errors);
                 }
                 highchart.hideLoading();
 
@@ -95,8 +95,8 @@ function registerAnomalyDetectionForm(form_id) {
     $(html_id).on('submit', function (event) {
         event.preventDefault();
         $(":submit").attr("disabled", true);
-        clear_form_errors(form_id);
-        clear_messages();
+        clearFormErrors(form_id);
+        clearMessages();
 
         var highchart = $('#highcharts_container').highcharts();
         updateTimeRange(highchart, form_id);
@@ -115,7 +115,7 @@ function registerAnomalyDetectionForm(form_id) {
             contentType: false,
             success: function(data, status, xhr) {
                 if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                    print_messages(data.responseJSON.messages);
+                    printMessages(data.responseJSON.messages);
                 }
                 // update series
                 var series_data_json = data['series'];
@@ -143,10 +143,10 @@ function registerAnomalyDetectionForm(form_id) {
             error: function(data, status, xhr) {
                 console.error("Sending asynchronous failed");
                 if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                    print_messages(data.responseJSON.messages);
+                    printMessages(data.responseJSON.messages);
                 }
                 if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('form_errors')) {
-                    print_form_errors(data.responseJSON.form_errors);
+                    printFormErrors(data.responseJSON.form_errors);
                 }
                 highchart.hideLoading();
 
@@ -165,11 +165,11 @@ function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function clear_messages() {
+function clearMessages() {
     $('#message-container').empty();
 }
 
-function clear_form_errors(formid) {
+function clearFormErrors(formid) {
     form = $("#" + formid);
     form.find(".validated").removeClass("validated");
     form.find(".invalid-feedback").remove();
@@ -193,20 +193,20 @@ function groupBy(list, keyGetter) {
     return map;
 }
 
-function print_messages(messages) {
+function printMessages(messages) {
     grouped_messages = groupBy(messages, message => message.level_tag);
-    grouped_messages.forEach((value, tag) => print_str_message(value, tag));
+    grouped_messages.forEach((value, tag) => printStrMessage(value, tag));
 }
 
-function print_str_message(value, tag) {
+function printStrMessage(value, tag) {
     message_container = $('#message-container');
     html = "<div class=\"messages messages-" + tag + "\">";
-    html += html_messages(value);
+    html += htmlMessages(value);
     html += "</div>";
     message_container.append(html);
 }
 
-function html_messages_list(messages) {
+function htmlMessagesList(messages) {
     html = "<ul class=\"messages_list\">";
     messages.forEach(error => {
         html += "<li class=\"messages_item\">";
@@ -217,16 +217,16 @@ function html_messages_list(messages) {
     return html;
 }
 
-function html_messages(messages) {
+function htmlMessages(messages) {
     if (messages.length > 1) {
-        return html_messages_list(messages);
+        return htmlMessagesList(messages);
     } else if (messages.length === 1) {
         return messages[0].message;
     }
     return "";
 }
 
-function print_form_errors(form_errors) {
+function printFormErrors(form_errors) {
     for (const [key, val] of Object.entries(form_errors)) {
         input_element = $("[name=" + key + "]");
         html = "<div class=\"invalid-feedback\">" + val[0] + "</div>";
@@ -240,18 +240,18 @@ function print_form_errors(form_errors) {
  */
 function settingsFromCookie() {
     var settings = {};
-    _getSettingOrDefault(settings, 'highcharts_height', 750);
-    _getSettingOrDefault(settings, 'legend_height', 100);
-    _getSettingOrDefault(settings, 'color_outliers', '#FF0000');
-    _getSettingOrDefault(settings, 'color_clusters', '#0000FF');
-    _getSettingOrDefault(settings, 'color_true_positive', '#008800');
-    _getSettingOrDefault(settings, 'color_false_positive', '#FF0000');
-    _getSettingOrDefault(settings, 'color_false_negative', '#0000FF');
-    _getSettingOrDefault(settings, 'round_digits', 3);
+    _setSettingOrDefault(settings, 'highcharts_height', 750);
+    _setSettingOrDefault(settings, 'legend_height', 100);
+    _setSettingOrDefault(settings, 'color_outliers', '#FF0000');
+    _setSettingOrDefault(settings, 'color_clusters', '#0000FF');
+    _setSettingOrDefault(settings, 'color_true_positive', '#008800');
+    _setSettingOrDefault(settings, 'color_false_positive', '#FF0000');
+    _setSettingOrDefault(settings, 'color_false_negative', '#0000FF');
+    _setSettingOrDefault(settings, 'round_digits', 3);
     return settings;
 }
 
-function _getSettingOrDefault(setting, cookieName, defaultValue) {
+function _setSettingOrDefault(setting, cookieName, defaultValue) {
     var cookieValue = Cookies.get(cookieName);
     if(cookieValue === undefined) {
         Cookies.set(cookieName, defaultValue, { sameSite: 'lax' });
@@ -259,4 +259,8 @@ function _getSettingOrDefault(setting, cookieName, defaultValue) {
     } else {
         setting[cookieName] = cookieValue;
     }
+}
+
+function getSetting(cookieName) {
+    return Cookies.get(cookieName);
 }

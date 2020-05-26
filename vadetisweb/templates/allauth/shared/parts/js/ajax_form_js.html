@@ -2,7 +2,7 @@
 <script type="text/javascript">
     $('#{{ formid }}').on('submit', function (event) {
         event.preventDefault();
-        clear_messages();
+        clearMessages();
 
         $.post({
             url: $(this).attr('action'),
@@ -16,7 +16,7 @@
             error: function (data, status, xhr) {
                 console.error("Sending asynchronous failed");
                 {% if error_msg %}
-                print_messages(JSON.parse('[{ "message":"{{ error_msg }}", "level_tag":"error"}]'));
+                printMessages(JSON.parse('[{ "message":"{{ error_msg }}", "level_tag":"error"}]'));
                 {% endif %}
                 {% if hasCaptcha is True %}
                 grecaptcha.reset();

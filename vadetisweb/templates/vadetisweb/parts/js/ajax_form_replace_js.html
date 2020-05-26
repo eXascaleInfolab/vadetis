@@ -3,8 +3,8 @@
     $('#{{ formid }}').on('submit', function (event) {
         event.preventDefault();
         updateTimeRange();
-        clear_form_errors("{{ formid }}");
-        clear_messages();
+        clearFormErrors("{{ formid }}");
+        clearMessages();
         $.post({
             url: $(this).attr('action'){% if format %}+'?format={{ format }}'{% endif %},
             data: new FormData(this),
@@ -19,16 +19,16 @@
                 var new_form_inner = $(data).filter('#{{ formid }}').html();
                 $('#{{ formid }}').html(new_form_inner);
                 if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                    print_messages(data.responseJSON.messages);
+                    printMessages(data.responseJSON.messages);
                 }
             },
             error: function (data, status, xhr) {
                 console.error("Sending asynchronous failed");
                 if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                    print_messages(data.responseJSON.messages);
+                    printMessages(data.responseJSON.messages);
                 }
                 if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('form_errors')) {
-                    print_form_errors(data.responseJSON.form_errors);
+                    printFormErrors(data.responseJSON.form_errors);
                 }
             }
         });
