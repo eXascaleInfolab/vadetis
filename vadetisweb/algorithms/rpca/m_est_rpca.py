@@ -1,6 +1,6 @@
 import warnings
 from sklearn.decomposition import PCA
-from sklearn.decomposition.base import _BasePCA
+from sklearn.decomposition._base import _BasePCA
 from sklearn.utils import check_array
 from sklearn.utils.extmath import svd_flip
 from scipy.sparse import issparse

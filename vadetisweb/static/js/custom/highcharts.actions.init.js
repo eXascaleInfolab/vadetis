@@ -1,8 +1,9 @@
 "use strict";
 
-var VadetisHighchartsActionsReload = function () {
-    var initReload = function (container_html_id, button_id, url) {
-        var button = $("#" + button_id), isLoading = false, highchart = $("#" + container_html_id).highcharts();
+var VadetisHighchartsReload = function () {
+
+    var init = function (highcharts_container_id, button_id, url) {
+        var button = $("#" + button_id), isLoading = false, highchart = $("#" + highcharts_container_id).highcharts();
 
         button.click(function () {
             if (!isLoading) {
@@ -26,8 +27,56 @@ var VadetisHighchartsActionsReload = function () {
         });
     };
     return {
-        init: function (container_html_id, button_id, url) {
-            initReload(container_html_id, button_id, url);
+        init: function (highcharts_container_id, button_id, url) {
+            init(highcharts_container_id, button_id, url);
+        }
+    };
+}();
+
+var VadetisHighchartsZScore = function () {
+    var init = function (highcharts_container_id, button_id, url) {
+        var button = $("#" + button_id), isLoading = false, highchart = $("#" + highcharts_container_id).highcharts();
+
+        button.click(function () {
+            if (!isLoading) {
+                button.html('Loading...').addClass('disabled');
+
+                updateSeriesForType(highchart, url, "zscore", true, function () {
+                    isLoading = false;
+                    button.html('Z-Score').removeClass('disabled');
+                });
+            } else {
+                button.html('Z-Score').removeClass('disabled');
+            }
+        });
+    };
+    return {
+        init: function (highcharts_container_id, button_id, url) {
+            init(highcharts_container_id, button_id, url);
+        }
+    };
+}();
+
+var VadetisHighchartsRaw = function () {
+    var init = function (highcharts_container_id, button_id, url) {
+        var button = $("#" + button_id), isLoading = false, highchart = $("#" + highcharts_container_id).highcharts();
+
+        button.click(function () {
+            if (!isLoading) {
+                button.html('Loading...').addClass('disabled');
+
+                updateSeriesForType(highchart, url, "raw", true, function () {
+                    isLoading = false;
+                    button.html('Raw').removeClass('disabled');
+                });
+            } else {
+                button.html('Raw').removeClass('disabled');
+            }
+        });
+    };
+    return {
+        init: function (highcharts_container_id, button_id, url) {
+            init(highcharts_container_id, button_id, url);
         }
     };
 }();

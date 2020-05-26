@@ -1,8 +1,8 @@
 <!-- BEGIN AJAX FORM JS -->
 <script type="text/javascript">
     function ajaxSubmit(formData, formid) {
-        clear_form_errors(formid);
-        clear_messages();
+        clearFormErrors(formid);
+        clearMessages();
         var form_selector = $("#" + formid);
         $.post({
             url: form_selector.attr('action'),
@@ -25,7 +25,7 @@
                     registerAnomalyDetectionForm(receivedFormId);
 
                     if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                        print_messages(data.responseJSON.messages);
+                        printMessages(data.responseJSON.messages);
                     }
                 } else {
                     $('#{{ form_append_container }}').empty();
@@ -35,10 +35,10 @@
                 console.error("Sending asynchronous failed");
                 $('#{{ form_append_container }}').empty();
                 if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                    print_messages(data.responseJSON.messages);
+                    printMessages(data.responseJSON.messages);
                 }
                 if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('form_errors')) {
-                    print_form_errors(data.responseJSON.form_errors);
+                    printFormErrors(data.responseJSON.form_errors);
                 }
             }
         });

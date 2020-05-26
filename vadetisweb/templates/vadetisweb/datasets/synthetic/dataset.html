@@ -38,6 +38,13 @@
                     </div>
                     <div class="kt-portlet__head-toolbar">
                         <div class="kt-portlet__head-actions">
+                            <div id="color_legend_group" class="btn-group">
+                                <button id="true_positive_btn" type="button" class="btn btn-brand btn-color-legend btn-sm" data-container="body" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="True Positive">TP</button>
+                                <button id="false_positive_btn" type="button" class="btn btn-brand btn-color-legend btn-sm" data-container="body" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="False Positive">FP</button>
+                                <button id="false_negative_btn" type="button" class="btn btn-brand btn-color-legend btn-sm" data-container="body" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="False Negative">FN</button>
+                            </div>
+                            <a id="raw_btn" href="#" class="btn btn-outline-brand btn-bold btn-sm">Raw</a>
+                            <a id="zscore_btn" href="#" class="btn btn-outline-brand btn-bold btn-sm">Z-Score</a>
                             <a id="reload_chart_btn" href="#" class="btn btn-outline-brand btn-bold btn-sm">Reset</a>
                         </div>
                     </div>
@@ -171,7 +178,14 @@
     <script type="text/javascript">
         jQuery(document).ready(function () {
             VadetisHighcharts.init("highcharts_container", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", {{ selected_button }});
-            VadetisHighchartsActionsReload.init("highcharts_container", "reload_chart_btn", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}");
+            VadetisHighchartsRaw.init("highcharts_container", "raw_btn", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_update_json' dataset.id %}");
+            VadetisHighchartsZScore.init("highcharts_container", "zscore_btn", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_update_json' dataset.id %}");
+            VadetisHighchartsReload.init("highcharts_container", "reload_chart_btn", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}");
+
+            // color settings
+            $('#true_positive_btn').css({"background-color": getSetting('color_true_positive')});
+            $('#false_positive_btn').css({"background-color": getSetting('color_false_positive')});
+            $('#false_negative_btn').css({"background-color": getSetting('color_false_negative')});
         });
     </script>
     {% include 'vadetisweb/parts/js/ajax_form_append_js.html' with form_append_container="detection_form_container" %}

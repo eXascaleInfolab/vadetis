@@ -89,7 +89,7 @@
     <script type="text/javascript">
         jQuery(document).ready(function () {
             VadetisHighcharts.init("highcharts_container", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", {{ selected_button }});
-            VadetisHighchartsActionsReload.init("highcharts_container", "reload_chart_btn", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}");
+            VadetisHighchartsReload.init("highcharts_container", "reload_chart_btn", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}");
         });
     </script>
     {% include "vadetisweb/parts/js/ajax_form_replace_js.html" with formid="anomaly_detection_form" %}

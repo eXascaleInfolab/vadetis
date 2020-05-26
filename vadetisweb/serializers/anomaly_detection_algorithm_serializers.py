@@ -22,8 +22,7 @@ class RPCAMEstimatorLossSerializer(serializers.Serializer):
     dataset = DatasetField(default='overridden')
     dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
                                            style={'template': 'vadetisweb/parts/input/hidden_input.html',
-                                                  'id': 'dataset_series_json',
-                                                  'help_text_in_popover': True})
+                                                  'id': 'dataset_series_json'})
 
     delta = serializers.FloatField(initial=1.0, label='Delta', required=True,
                                      help_text='Delta for Huber Loss function. The value of delta depends on the contamination level of the data. '
@@ -56,8 +55,7 @@ class HistogramSerializer(serializers.Serializer):
     dataset = DatasetField(default='overridden')
     dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
                                            style={'template': 'vadetisweb/parts/input/hidden_input.html',
-                                                  'id': 'dataset_series_json',
-                                                  'help_text_in_popover': True})
+                                                  'id': 'dataset_series_json'})
 
     training_dataset = TrainingDatasetField(label='Training Dataset',
                                             required=True,
@@ -108,8 +106,7 @@ class SVMSerializer(serializers.Serializer):
     dataset = DatasetField(default='overridden')
     dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
                                            style={'template': 'vadetisweb/parts/input/hidden_input.html',
-                                                  'id': 'dataset_series_json',
-                                                  'help_text_in_popover': True})
+                                                  'id': 'dataset_series_json'})
 
     training_dataset = TrainingDatasetField(label='Training Dataset',
                                             required=True,
@@ -148,8 +145,7 @@ class IsolationForestSerializer(serializers.Serializer):
     dataset = DatasetField(default='overridden')
     dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
                                            style={'template': 'vadetisweb/parts/input/hidden_input.html',
-                                                  'id': 'dataset_series_json',
-                                                  'help_text_in_popover': True})
+                                                  'id': 'dataset_series_json'})
 
     training_dataset = TrainingDatasetField(label='Training Dataset',
                                             required=True,
@@ -181,8 +177,7 @@ class LisaPearsonSerializer(serializers.Serializer):
     dataset = DatasetField(default='overridden')
     dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
                                            style={'template': 'vadetisweb/parts/input/hidden_input.html',
-                                                  'id': 'dataset_series_json',
-                                                  'help_text_in_popover': True})
+                                                  'id': 'dataset_series_json'})
 
     time_series = TimeSeriesField(label='Time Series',
                                   queryset=TimeSeries.objects.none(),
@@ -223,8 +218,7 @@ class LisaDtwPearsonSerializer(serializers.Serializer):
     dataset = DatasetField(default='overridden')
     dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
                                            style={'template': 'vadetisweb/parts/input/hidden_input.html',
-                                                  'id': 'dataset_series_json',
-                                                  'help_text_in_popover': True})
+                                                  'id': 'dataset_series_json'})
 
     time_series = TimeSeriesField(label='Time Series',
                                   queryset=TimeSeries.objects.none(),
@@ -270,8 +264,7 @@ class LisaGeoDistanceSerializer(serializers.Serializer):
     dataset = DatasetField(default='overridden')
     dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
                                            style={'template': 'vadetisweb/parts/input/hidden_input.html',
-                                                  'id': 'dataset_series_json',
-                                                  'help_text_in_popover': True})
+                                                  'id': 'dataset_series_json'})
 
     time_series = TimeSeriesField(label='Time Series',
                                   queryset=TimeSeries.objects.none(),
@@ -327,8 +320,7 @@ class LisaGeoDistanceSerializer(serializers.Serializer):
 class ThresholdSerializer(serializers.Serializer):
     dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
                                            style={'template': 'vadetisweb/parts/input/hidden_input.html',
-                                                  'id': 'dataset_series_json',
-                                                  'help_text_in_popover': True})
+                                                  'id': 'dataset_series_json'})
 
     threshold = serializers.FloatField(label='New Threshold', required=True,
                                        style={'template': 'vadetisweb/parts/input/text_input_slider.html',
