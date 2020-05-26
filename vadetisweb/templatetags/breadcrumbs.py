@@ -1,6 +1,6 @@
+import functools
 from django import template
 from django.utils.html import escape
-from django.utils.six import wraps
 from django.conf import settings
 from django.db.models import Model
 from django.urls import reverse, NoReverseMatch, resolve, Resolver404
@@ -10,6 +10,16 @@ from django.utils.safestring import mark_safe
 
 register = template.Library()
 CONTEXT_KEY = 'DJANGO_BREADCRUMB_LINKS'
+
+
+def wraps(wrapped, assigned=functools.WRAPPER_ASSIGNMENTS,
+          updated=functools.WRAPPER_UPDATES):
+    def wrapper(f):
+        f = functools.wraps(wrapped, assigned, updated)(f)
+        f.__wrapped__ = wrapped
+        return f
+
+    return wrapper
 
 def requires_request(func):
     @wraps(func)
