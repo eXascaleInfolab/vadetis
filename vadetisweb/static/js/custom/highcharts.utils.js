@@ -255,6 +255,7 @@ function loadSeriesForType(highchart, url, type, show_anomaly, callback) {
     });
 }
 
+//Deprecated
 function updateSeriesForType(highchart, url, type, show_anomaly, callback) {
     highchart.showLoading();
     var formData = new FormData(), csrfToken = Cookies.get('csrftoken');

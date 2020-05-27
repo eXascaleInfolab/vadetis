@@ -45,7 +45,7 @@
                             </div>
                             <a id="raw_btn" href="#" class="btn btn-outline-brand btn-bold btn-sm">Raw</a>
                             <a id="zscore_btn" href="#" class="btn btn-outline-brand btn-bold btn-sm">Z-Score</a>
-                            <a id="reload_chart_btn" href="#" class="btn btn-outline-brand btn-bold btn-sm">Reset</a>
+                            <a id="reset_chart_btn" href="#" class="btn btn-outline-brand btn-bold btn-sm">Reset</a>
                         </div>
                     </div>
                 </div>
@@ -178,9 +178,10 @@
     <script type="text/javascript">
         jQuery(document).ready(function () {
             VadetisHighcharts.init("highcharts_container", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", {{ selected_button }});
-            VadetisHighchartsRaw.init("highcharts_container", "raw_btn", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_update_json' dataset.id %}");
-            VadetisHighchartsZScore.init("highcharts_container", "zscore_btn", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_update_json' dataset.id %}");
-            VadetisHighchartsReload.init("highcharts_container", "reload_chart_btn", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}");
+
+            VadetisHighchartsLoad.init("highcharts_container", "raw_btn", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", "raw");
+            VadetisHighchartsLoad.init("highcharts_container", "zscore_btn", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", "zscore");
+            VadetisHighchartsReset.init("highcharts_container", "reset_chart_btn", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}");
 
             // color settings
             $('#true_positive_btn').css({"background-color": getSetting('color_true_positive')});

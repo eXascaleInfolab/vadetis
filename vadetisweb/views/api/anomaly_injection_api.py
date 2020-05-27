@@ -12,7 +12,7 @@ from django.shortcuts import redirect
 from vadetisweb.models import DataSet
 from vadetisweb.serializers import AnomalyInjectionSerializer, MessageSerializer
 from vadetisweb.algorithms import anomaly_injection
-from vadetisweb.utils import get_dataset_with_marker_json, strToBool, get_settings, json_message_utils
+from vadetisweb.utils import dataset_to_json, strToBool, get_settings, json_message_utils
 from vadetisweb.factory import dataset_not_found_msg
 
 
@@ -35,7 +35,7 @@ class AnomalyInjectionFormView(APIView):
                 settings = get_settings(request)
                 df_inject, df_inject_class = anomaly_injection(dataset, serializer.validated_data)
 
-                data['series'] = get_dataset_with_marker_json(dataset, df_inject, df_inject_class, show_anomaly, settings)
+                data['series'] = dataset_to_json(dataset, df_inject, df_inject_class, show_anomaly, settings, 'raw') #raw todo
                 return Response(data, status=status.HTTP_200_OK)
 
             else:
