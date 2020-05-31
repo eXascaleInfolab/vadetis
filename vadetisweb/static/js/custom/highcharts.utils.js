@@ -255,6 +255,49 @@ function loadSeriesForType(highchart, url, type, show_anomaly, callback) {
     });
 }
 
+function downloadDataset(highchart, url, type, callback) {
+    var formData = new FormData(), csrfToken = Cookies.get('csrftoken');
+    var dataset_series_json = getDatasetSeriesJson(highchart);
+    formData.append('dataset_series_json', JSON.stringify(dataset_series_json));
+
+    $.ajax({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrfToken);
+            }
+        },
+        type: "POST",
+        url: url + '?format=' + type,
+        data: formData,
+        dataType: 'binary',
+        processData: false,
+        contentType: false,
+        success: function (data, status, xhr) {
+            if (data !== undefined) {
+                var header = xhr.getResponseHeader('Content-Disposition');
+                var filename = header.match(/filename="(.+)"/)[1];
+                saveData(data, filename);
+            }
+            if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
+                printMessages(data.responseJSON.messages);
+            } else if (data.hasOwnProperty('messages')) {
+                printMessages(data.messages);
+            }
+            callback();
+        },
+        error: function (data, status, xhr) {
+            console.error("Sending asynchronous failed");
+            if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
+                printMessages(data.responseJSON.messages);
+            } else if (data.hasOwnProperty('messages')) {
+                printMessages(data.messages);
+            }
+            callback();
+        }
+    });
+}
+
+
 //Deprecated
 function updateSeriesForType(highchart, url, type, show_anomaly, callback) {
     highchart.showLoading();

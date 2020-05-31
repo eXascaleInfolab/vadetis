@@ -56,3 +56,25 @@ var VadetisHighchartsLoad = function () {
         }
     };
 }();
+
+var VadetisHighchartsFileDownload = function () {
+    var init = function (highcharts_container_id, button_id, url, type) {
+        var button = $("#" + button_id), isLoading = false, highchart = $("#" + highcharts_container_id).highcharts();
+        button.click(function () {
+            if (!isLoading) {
+                button.addClass('disabled');
+                downloadDataset(highchart, url, type,function () {
+                    isLoading = false;
+                    button.removeClass('disabled');
+                });
+            } else {
+                button.removeClass('disabled');
+            }
+        });
+    };
+    return {
+        init: function (highcharts_container_id, button_id, url, type) {
+            init(highcharts_container_id, button_id, url, type);
+        }
+    };
+}();

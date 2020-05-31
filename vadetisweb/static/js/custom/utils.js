@@ -4,6 +4,7 @@ function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
+
 function loadImage(html_id, url, post_data, callback) {
     // todo replace in other occurrences: get csrf from cookie
     var csrftoken = Cookies.get('csrftoken');
@@ -22,6 +23,20 @@ function loadImage(html_id, url, post_data, callback) {
         }
     });
 }
+
+
+function saveData (blob, fileName) {
+    let a = document.createElement("a");
+    const url = window.URL.createObjectURL(blob);
+    a.style = "display: none";
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+}
+
 
 function registerThresholdUpdateForm(form_id) {
     var html_id = '#' + form_id;

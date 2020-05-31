@@ -1,16 +1,16 @@
 import datetime, pytz
 
-def format_time(x):
+def iso_format_time(dt):
     """
-    Returns a string representation of a datetime object
+    Returns a iso string representation of a datetime object
 
-    :param x: a datetime object
+    :param dt: a datetime object
     :return: string representation of datetime
     """
-    if isinstance(x, datetime.datetime):
-        return x.isoformat()
-    if isinstance(x, datetime.timedelta):
-        return x.__str__()
+    if isinstance(dt, datetime.datetime):
+        return dt.isoformat()
+    if isinstance(dt, datetime.timedelta):
+        return dt.__str__()
     raise TypeError("Unknown type")
 
 
@@ -31,7 +31,7 @@ def unix_time_millis_from_dt(dt):
     return (time - epoch).total_seconds() * 1000.0
 
 
-def unix_time_millis_to_dt_str(unix_millis):
+def unix_time_millis_to_dt_str(unix_millis, dense=False):
     """
     Converts a given unix time into a string representation
 
@@ -39,8 +39,10 @@ def unix_time_millis_to_dt_str(unix_millis):
     :return: a string representation of the unix time
     """
     value_sec = float(unix_millis) / 1000
-    dt = datetime.datetime.fromtimestamp(value_sec).strftime('%Y-%m-%d %H:%M:%S')
-    return dt
+    if not dense:
+        return datetime.datetime.fromtimestamp(value_sec).strftime('%Y-%m-%d %H:%M:%S')
+    else:
+        return datetime.datetime.fromtimestamp(value_sec).strftime('%Y%m%d%H%M%S')
 
 
 def unix_time_millis_to_dt(unix_millis):

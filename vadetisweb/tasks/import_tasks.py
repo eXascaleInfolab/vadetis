@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from vadetisweb.models import User, Location, TimeSeries, DataSet
 from vadetisweb.parameters import *
-from vadetisweb.utils import format_time, silent_remove
+from vadetisweb.utils import iso_format_time, silent_remove
 
 
 class TaskImportData(Task):
@@ -176,7 +176,7 @@ class TaskImportData(Task):
                         ts.save()
                         location.save()
 
-        execution_time = format_time(timezone.now() - start_time)
+        execution_time = iso_format_time(timezone.now() - start_time)
         result = {'measurements_added': int(df.count().sum()), 'time_series_added:': len(df.columns),
                   'execution_time': execution_time}
 
@@ -304,7 +304,7 @@ class TaskImportTrainingData(Task):
 
             training_dataset.save()
 
-        execution_time = format_time(timezone.now() - start_time)
+        execution_time = iso_format_time(timezone.now() - start_time)
         result = {'measurements_added': int(df.count().sum()), 'execution_time': execution_time }
 
         return result
