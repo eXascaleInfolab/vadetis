@@ -1,4 +1,4 @@
-import tempfile, os, errno
+import tempfile, os, errno, logging
 
 
 def write_to_tempfile(raw_file, delete=False):
@@ -23,7 +23,8 @@ def silent_remove(filename):
     """
     try:
         os.remove(filename)
-        print("File removed: ", filename)
+        logging.info("File removed: ", filename)
+
     except OSError as e:
         if e.errno != errno.ENOENT:  # errno.ENOENT = no such file or directory
             raise  # re-raise exception if a different error occurred

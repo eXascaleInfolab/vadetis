@@ -1,3 +1,6 @@
+import logging
+
+
 def convertStrToBoolean(s):
     if s == 'True' or s == 'true':
         return True
@@ -70,7 +73,7 @@ def isPositiveInteger(number):
     try:
         val = int(number)
         if val < 1:
-            print("Input must be a positive integer")
+            logging.debug("Input must be a positive integer")
             return False
         else:
             return True

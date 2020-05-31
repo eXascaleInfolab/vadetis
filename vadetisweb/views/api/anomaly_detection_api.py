@@ -1,4 +1,4 @@
-import urllib, json, base64
+import urllib, json, base64, logging
 import numpy as np
 from rest_framework import status
 from rest_framework.views import APIView
@@ -111,7 +111,7 @@ class AnomalyDetectionAlgorithmSelectionView(APIView):
                 else:
                     return Response(template_name='vadetisweb/parts/forms/empty.html', status=status.HTTP_204_NO_CONTENT)
             else:
-                print('Algorithm selection form was not valid')
+                logging.error('Algorithm selection form was not valid')
                 return Response(template_name='vadetisweb/parts/forms/empty.html', status = status.HTTP_204_NO_CONTENT)
 
         except DataSet.DoesNotExist:

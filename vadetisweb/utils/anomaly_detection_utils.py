@@ -1,3 +1,4 @@
+import logging
 import pandas as pd
 from pandas.tseries.frequencies import to_offset
 from sklearn.metrics import fbeta_score, precision_score, recall_score, accuracy_score, confusion_matrix
@@ -261,7 +262,6 @@ def next_dt(dt, type, inferred_freq, size=1):
     :param size: the size of the window (that is applied with the frequency)
     :return: the next later or earlier datetime
     """
-    #print("Inferred_freq:", inferred_freq)
 
     if type == 'later':
         f = lambda x, y: _add(x,y)
@@ -368,10 +368,10 @@ def get_info(threshold, y_hat_results, y_truth):
     info['precision'] = precision
     info['f1_score'] = f1_score
 
-    print('Threshold: %.3f' % threshold)
-    print('Accuracy Score: %.3f' % accuracy)
-    print('Recall Score: %.3f' % recall)
-    print('Precision Score: %.3f' % precision)
-    print('F1 Score: %.3f' % f1_score)
+    logging.debug('Threshold: %.3f' % threshold)
+    logging.debug('Accuracy Score: %.3f' % accuracy)
+    logging.debug('Recall Score: %.3f' % recall)
+    logging.debug('Precision Score: %.3f' % precision)
+    logging.debug('F1 Score: %.3f' % f1_score)
 
     return info
