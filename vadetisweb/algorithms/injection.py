@@ -17,20 +17,20 @@ def anomaly_injection(dataset, validated_data):
     time_series = validated_data['time_series']
     anomaly_type = validated_data['anomaly_type']
     anomaly_factor = validated_data['anomaly_factor']
-    normal_lowerbound_duration = validated_data['normal_lowerbound_duration']
-    normal_upperbound_duration = validated_data['normal_upperbound_duration']
-    probability = validated_data['probability']
-    anomaly_lowerbound_duration = validated_data['anomaly_lowerbound_duration']
-    anomaly_upperbound_duration = validated_data['anomaly_upperbound_duration']
 
+    normal_lower = validated_data['normal_range']['lower']
+    normal_upper = validated_data['normal_range']['upper']
+    probability = validated_data['probability']
+    anomaly_lower = validated_data['anomaly_range']['lower']
+    anomaly_upper = validated_data['anomaly_range']['upper']
 
     done = False
     normal_start_index = 0
     anomaly_start_index = 0
 
     while done is False:
-        normal_duration = stochastic_duration(normal_lowerbound_duration, normal_upperbound_duration)
-        anomaly_duration = stochastic_duration(anomaly_lowerbound_duration, anomaly_upperbound_duration)
+        normal_duration = stochastic_duration(normal_lower, normal_upper)
+        anomaly_duration = stochastic_duration(anomaly_lower, anomaly_upper)
 
         # start of next anomaly duration
         anomaly_start_index += normal_start_index + normal_duration

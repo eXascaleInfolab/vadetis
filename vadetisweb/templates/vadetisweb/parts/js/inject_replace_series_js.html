@@ -4,7 +4,11 @@
         event.preventDefault();
         clearFormErrors("{{ formid }}");
         clearMessages();
-        var highchart = $('#highcharts_container').highcharts(), csrftoken = Cookies.get('csrftoken');
+        var highchart = $('#highcharts_container').highcharts(), csrftoken = Cookies.get('csrftoken'), formData = new FormData(this);
+
+        formData.append('normal_range', JSON.stringify(ionSliderRangeValue("normal_range")));
+        formData.append('anomaly_range', JSON.stringify(ionSliderRangeValue("anomaly_range")));
+
         highchart.showLoading();
 
         $.ajax({
@@ -14,7 +18,7 @@
                 }
             },
             url: $(this).attr('action'){% if format %}+'?format={{ format }}'{% endif %},
-            data: new FormData(this),
+            data: formData,
             type: $(this).attr('method'),
             enctype: $(this).attr('enctype'),
             processData: false,

@@ -10,22 +10,16 @@ class IonIntegerRangeJsonField(serializers.JSONField):
         swagger_schema_fields = {
             'type': openapi.TYPE_OBJECT,
             'properties': {
-                'range': openapi.Schema(
-                    title='range',
-                    type=openapi.TYPE_OBJECT,
-                    properties={
-                        'lower': openapi.Schema(
-                            title='lower',
-                            type=openapi.TYPE_INTEGER,
-                        ),
-                        'upper': openapi.Schema(
-                            title='upper',
-                            type=openapi.TYPE_INTEGER,
-                        ),
-                    }
+                'lower': openapi.Schema(
+                    title='lower',
+                    type=openapi.TYPE_INTEGER,
+                ),
+                'upper': openapi.Schema(
+                    title='upper',
+                    type=openapi.TYPE_INTEGER,
                 ),
             },
-            'required': ['range']
+            'required': ['lower', 'upper']
         }
 
     def __init__(self, **kwargs):

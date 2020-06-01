@@ -13,6 +13,8 @@ var IonRangeSliderInitializer = function () {
 }();
 
 
-function ionSliderDoubleRangeToJson(input_id){
-    $("#" + input_id)
+function ionSliderRangeValue(input_id){
+    var split = $("#" + input_id).val().split(";");
+    return {'lower' : parseInt(split[0]),
+            'upper' : parseInt(split[1])};
 }

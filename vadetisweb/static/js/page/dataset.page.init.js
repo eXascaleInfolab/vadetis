@@ -13,14 +13,7 @@ var DatasetPage = function () {
 
         IonRangeSliderInitializer.init("normal_range");
         IonRangeSliderInitializer.init("anomaly_range");
-
         IonRangeSliderInitializer.init("probability");
-
-
-
-/*
-        IonRangeSingleSlider.init("probability", 0, 1, 0.5);
-*/
 
         // color settings
         $('#true_positive_btn').css({"background-color": getSetting('color_true_positive')});
