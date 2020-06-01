@@ -2,7 +2,7 @@
 {% if field.errors %}
     <div class="form-group error validated {{ style.class }}">
         <label>{{ field.label }}{% if field.help_text and style.help_text_in_popover %}<a tabindex="0" class="btn" role="button" data-toggle="kt-popover" data-placement="top" data-trigger="focus" data-content="{{ field.help_text }}"><i class="mdi mdi-information-outline mdi-18px"></i></a>{% endif %}</label>
-        <input{% if style.id %} id="{{ style.id }}" {% endif %} name="{{ field.name }}" type="hidden" {% if field.value != "null" and field.value is not None %}value="{{ field.value }}"{% else %}value=""{% endif %}>
+        <input{% if style.id %} id="{{ style.id }}" {% endif %} name="{{ field.name }}" type="hidden" {% if field.value != "null" and field.value is not None %}value="{{ field.value }}"{% else %}value=""{% endif %} {% if style.data_min %}data-min="{{ style.data_min }}" {% endif %}{% if style.data_max %}data-max="{{ style.data_max }}" {% endif %}{% if style.data_from %}data-from="{{ style.data_from }}" {% endif %}{% if style.data_to %}data-to="{{ style.data_to }}" {% endif %}{% if style.data_type %}data-type="{{ style.data_type }}" {% endif %}{% if style.data_prefix %}data-prefix="{{ style.data_prefix }}" {% endif %}{% if style.data_grid %}data-grid="{{ style.data_grid }}" {% endif %}{% if style.data_grid_num %}data-grid-num="{{ style.data_grid_num }}" {% endif %}{% if style.data_step %}data-step="{{ style.data_step }}"{% endif %}>
         <div class="invalid-feedback">
             {% for error in field.errors %}{{ error }}{% endfor %}
         </div>
@@ -13,7 +13,7 @@
 {% else %}
     <div class="form-group {{ style.class }}">
         <label>{{ field.label }}{% if field.help_text and style.help_text_in_popover %}<a tabindex="0" class="btn" role="button" data-toggle="kt-popover" data-placement="top" data-trigger="focus" data-content="{{ field.help_text }}"><i class="mdi mdi-information-outline mdi-18px"></i></a>{% endif %}</label>
-        <input{% if style.id %} id="{{ style.id }}" {% endif %} name="{{ field.name }}" type="hidden" {% if field.value != "null" and field.value is not None %}value="{{ field.value }}"{% else %}value=""{% endif %}>
+        <input{% if style.id %} id="{{ style.id }}" {% endif %} name="{{ field.name }}" type="hidden" {% if field.value != "null" and field.value is not None %}value="{{ field.value }}"{% else %}value=""{% endif %} {% if style.data_min %}data-min="{{ style.data_min }}" {% endif %}{% if style.data_max %}data-max="{{ style.data_max }}" {% endif %}{% if style.data_from %}data-from="{{ style.data_from }}" {% endif %}{% if style.data_to %}data-to="{{ style.data_to }}" {% endif %}{% if style.data_type %}data-type="{{ style.data_type }}" {% endif %}{% if style.data_prefix %}data-prefix="{{ style.data_prefix }}" {% endif %}{% if style.data_grid %}data-grid="{{ style.data_grid }}" {% endif %}{% if style.data_grid_num %}data-grid-num="{{ style.data_grid_num }}" {% endif %}{% if style.data_step %}data-step="{{ style.data_step }}"{% endif %}>
         {% if field.help_text and not style.help_text_in_popover %}
             <span class="form-text text-muted">{{ field.help_text }}</span>
         {% endif %}

@@ -11,9 +11,16 @@ var DatasetPage = function () {
         VadetisHighchartsFileDownload.init("highcharts_container", "download_csv", dataset_download_file_url, "csv");
         VadetisHighchartsFileDownload.init("highcharts_container", "download_json", dataset_download_file_url, "json");
 
-        IonRangeDoubleSlider.init("normal_range", 100, 1000, 200, 800);
-        IonRangeDoubleSlider.init("anomaly_range", 1, 100, 10, 20);
+        IonRangeSliderInitializer.init("normal_range");
+        IonRangeSliderInitializer.init("anomaly_range");
+
+        IonRangeSliderInitializer.init("probability");
+
+
+
+/*
         IonRangeSingleSlider.init("probability", 0, 1, 0.5);
+*/
 
         // color settings
         $('#true_positive_btn').css({"background-color": getSetting('color_true_positive')});
