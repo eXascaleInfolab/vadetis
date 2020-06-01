@@ -36,6 +36,7 @@ apipatterns = [
 
     path('api/anomaly-injection/<int:dataset_id>/', views.AnomalyInjectionFormView.as_view(), name='anomaly_injection_form'),
     path('api/dataset/<int:dataset_id>/', views.DatasetJson.as_view(), name='dataset_json'),
+    path('api/dataset/download/', views.DatasetFileDownload.as_view(), name='dataset_download_file'),
     path('api/dataset/<int:dataset_id>/update/', views.DatasetUpdateJson.as_view(), name='dataset_update_json'),
     path('api/datasets/<int:dataset_id>/perform/', views.DatasetPerformAnomalyDetectionJson.as_view(),
          name='dataset_perform_anomaly_detection_json'),

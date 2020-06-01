@@ -3,15 +3,20 @@
  * Data must contain new threshold and series data from highcharts
  */
 function updateHighchartsSeriesForThreshold(highchart, url, post_data, callback) {
+    var csrftoken = Cookies.get('csrftoken');
     $.ajax({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        },
         type: "POST",
         url: url,
         data: post_data,
 
         success: function (data, status, xhr) {
-            if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                printMessages(data.responseJSON.messages);
-            }
+            handleMessages(data);
+
             var dataset_series_new_json = data['series'];
             var new_info = data['info'];
             //dataset_series_data = generateSeriesFromJson(dataset_series_json, "{{ conf|get_item:'algorithm' }}", "{{ conf|get_item:'time_series' }}");
@@ -23,13 +28,8 @@ function updateHighchartsSeriesForThreshold(highchart, url, post_data, callback)
             callback(dataset_series_new_json, new_info);
         },
         error: function(data, status, xhr) {
-                console.error("Sending asynchronous failed");
-                if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                    printMessages(data.responseJSON.messages);
-                }
-                if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('form_errors')) {
-                    printFormErrors(data.responseJSON.form_errors);
-                }
+                printMessages([{'message': "Request failed"}], "error-request");
+                handleMessages(data);
         }
     });
 }
@@ -116,11 +116,16 @@ function _addOrReplaceRangeInput(form_id, selector, id, name, value) {
 }
 
 function updateHighchartsSeriesForType(highchart, url, post_data, callback) {
+    var csrftoken = Cookies.get('csrftoken');
     $.ajax({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        },
         type: "POST",
         url: url,
         data: post_data,
-
         success: function (data) {
             var dataset_series_new_json = data[0];
 
@@ -255,10 +260,43 @@ function loadSeriesForType(highchart, url, type, show_anomaly, callback) {
     });
 }
 
+function downloadDataset(highchart, url, type, callback) {
+    var formData = new FormData(), dataset_series_json = getDatasetSeriesJson(highchart), csrfToken = Cookies.get('csrftoken');
+    formData.append('dataset_series_json', JSON.stringify(dataset_series_json));
+    $.ajax({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrfToken);
+            }
+        },
+        type: "POST",
+        url: url + '?format=' + type,
+        data: formData,
+        dataType: 'binary',
+        processData: false,
+        contentType: false,
+        success: function (data, status, xhr) {
+            if (data !== undefined) {
+                var header = xhr.getResponseHeader('Content-Disposition');
+                var filename = header.match(/filename="(.+)"/)[1];
+                saveData(data, filename);
+            }
+            handleMessages(data);
+            callback();
+        },
+        error: function (data, status, xhr) {
+            printMessages([{'message': "Request failed"}], "error-request");
+            handleMessages(data);
+            callback();
+        }
+    });
+}
+
+
+//Deprecated
 function updateSeriesForType(highchart, url, type, show_anomaly, callback) {
     highchart.showLoading();
-    var formData = new FormData(), csrfToken = Cookies.get('csrftoken');
-    var dataset_series_json = getDatasetSeriesJson(highchart);
+    var formData = new FormData(), dataset_series_json = getDatasetSeriesJson(highchart), csrfToken = Cookies.get('csrftoken');
     formData.append('dataset_series_json', JSON.stringify(dataset_series_json));
 
     $.ajax({
@@ -278,21 +316,13 @@ function updateSeriesForType(highchart, url, type, show_anomaly, callback) {
                 var series_data_json = data['series'];
                 setSeriesData(highchart, series_data_json);
             }
-            if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                printMessages(data.responseJSON.messages);
-            } else if (data.hasOwnProperty('messages')) {
-                printMessages(data.messages);
-            }
+            handleMessages(data);
             highchart.hideLoading();
             callback();
         },
         error: function (data, status, xhr) {
-            console.error("Sending asynchronous failed");
-            if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                printMessages(data.responseJSON.messages);
-            } else if (data.hasOwnProperty('messages')) {
-                printMessages(data.messages);
-            }
+            printMessages([{'message': "Request failed"}], "error-request");
+            handleMessages(data);
             highchart.hideLoading();
             callback();
         }

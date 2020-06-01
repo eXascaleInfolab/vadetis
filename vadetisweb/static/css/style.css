@@ -29,6 +29,14 @@
     margin-left: 0 !important;
 }
 
+.btn-msg-close {
+    padding: 0.3rem 0.3rem;
+    opacity: 0.6;
+}
+.btn-msg-close:hover {
+    opacity: 0.8;
+}
+
 :root {
   --blue: #007bff;
   --indigo: #6610f2;

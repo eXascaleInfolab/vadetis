@@ -4,8 +4,8 @@ function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
+
 function loadImage(html_id, url, post_data, callback) {
-    // todo replace in other occurrences: get csrf from cookie
     var csrftoken = Cookies.get('csrftoken');
     $.ajax({
         beforeSend: function (xhr, settings) {
@@ -23,6 +23,53 @@ function loadImage(html_id, url, post_data, callback) {
     });
 }
 
+/**
+ * Handles messages contained in an ajax response if available
+ * @param data - The data returned from the server
+ */
+function handleMessages(data) {
+    if(data !== undefined) {
+        if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
+            printGroupedMessages(data.responseJSON.messages);
+        } else if (data.hasOwnProperty('messages')) {
+            printGroupedMessages(data.messages);
+        }
+
+        if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('form_errors')) {
+            printFormErrors(data.responseJSON.form_errors);
+        } else if (data.hasOwnProperty('form_errors')) {
+            printFormErrors(data.form_errors);
+        }
+    }
+}
+
+/**
+ * Handles a window location redirect from response header of an ajax response if available
+ * @param xhr - The jqXHR object, which is a superset of the XMLHTTPRequest object
+ */
+function handleRedirect(data, xhr) {
+    if(data !==undefined && data.location) {
+         window.location = data.location;
+    }
+    if (xhr.getResponseHeader('Location')) {
+        window.location = xhr.getResponseHeader('Location');
+    }
+}
+
+
+function saveData (blob, fileName) {
+    let a = document.createElement("a");
+    const url = window.URL.createObjectURL(blob);
+    a.style = "display: none";
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+}
+
+
 function registerThresholdUpdateForm(form_id) {
     var html_id = '#' + form_id;
     $(html_id).on('submit', function (event) {
@@ -30,14 +77,16 @@ function registerThresholdUpdateForm(form_id) {
         $(":submit").attr("disabled", true);
         clearFormErrors(form_id);
         clearMessages();
-
-        var highchart = $('#highcharts_container').highcharts();
-        var formData = new FormData(this);
-        var dataset_series_json = getDatasetSeriesJson(highchart);
+        var highchart = $('#highcharts_container').highcharts(), formData = new FormData(this), dataset_series_json = getDatasetSeriesJson(highchart), csrftoken = Cookies.get('csrftoken');
         formData.append('dataset_series_json', JSON.stringify(dataset_series_json));
-
         highchart.showLoading();
-        $.post({
+
+        $.ajax({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            },
             url: $(this).attr('action'),
             data: formData,
             type: $(this).attr('method'),
@@ -45,9 +94,8 @@ function registerThresholdUpdateForm(form_id) {
             processData: false,
             contentType: false,
             success: function(data, status, xhr) {
-                if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                    printMessages(data.responseJSON.messages);
-                }
+                handleMessages(data);
+
                 // update series
                 var series_data_json = data['series'];
                 setSeriesData(highchart, series_data_json);
@@ -70,13 +118,9 @@ function registerThresholdUpdateForm(form_id) {
                 $(":submit").attr("disabled", false);
             },
             error: function(data, status, xhr) {
-                console.error("Sending asynchronous failed");
-                if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                    printMessages(data.responseJSON.messages);
-                }
-                if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('form_errors')) {
-                    printFormErrors(data.responseJSON.form_errors);
-                }
+                printMessages([{'message': "Request failed"}], "error-request");
+                handleMessages(data);
+
                 highchart.hideLoading();
 
                 $('#scores_portlet').hide();
@@ -100,12 +144,15 @@ function registerAnomalyDetectionForm(form_id) {
         var highchart = $('#highcharts_container').highcharts();
         updateTimeRange(highchart, form_id);
 
-        var formData = new FormData(this);
-        var dataset_series_json = getDatasetSeriesJson(highchart);
+        var formData = new FormData(this), dataset_series_json = getDatasetSeriesJson(highchart), csrftoken = Cookies.get('csrftoken');
         formData.append('dataset_series_json', JSON.stringify(dataset_series_json));
-
         highchart.showLoading();
-        $.post({
+        $.ajax({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            },
             url: $(this).attr('action'),
             data: formData,
             type: $(this).attr('method'),
@@ -113,9 +160,8 @@ function registerAnomalyDetectionForm(form_id) {
             processData: false,
             contentType: false,
             success: function(data, status, xhr) {
-                if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                    printMessages(data.responseJSON.messages);
-                }
+                handleMessages(data);
+
                 // update series
                 var series_data_json = data['series'];
                 setSeriesData(highchart, series_data_json);
@@ -140,13 +186,9 @@ function registerAnomalyDetectionForm(form_id) {
                 $(":submit").attr("disabled", false);
             },
             error: function(data, status, xhr) {
-                console.error("Sending asynchronous failed");
-                if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                    printMessages(data.responseJSON.messages);
-                }
-                if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('form_errors')) {
-                    printFormErrors(data.responseJSON.form_errors);
-                }
+                printMessages([{'message': "Request failed"}], "error-request");
+                handleMessages(data);
+
                 highchart.hideLoading();
 
                 $('#threshold_portlet').hide();
@@ -192,24 +234,28 @@ function groupBy(list, keyGetter) {
     return map;
 }
 
-function printMessages(messages) {
+function printGroupedMessages(messages) {
     grouped_messages = groupBy(messages, message => message.level_tag);
-    grouped_messages.forEach((value, tag) => printStrMessage(value, tag));
+    grouped_messages.forEach((value, tag) => printMessages(value, tag));
 }
 
-function printStrMessage(value, tag) {
+function printMessages(value, tag) {
     message_container = $('#message-container');
     html = "<div class=\"messages messages-" + tag + "\">";
     html += htmlMessages(value);
+    html += "<button id=\"messages-" + tag + "-close\" class=\"close btn-msg-close\"><i class=\"mdi mdi-18px mdi-close\"></i></button>";
     html += "</div>";
     message_container.append(html);
+    $("#messages-" + tag + "-close").click(function() {
+        $(this).parent().fadeOut(800);
+    });
 }
 
 function htmlMessagesList(messages) {
     html = "<ul class=\"messages_list\">";
-    messages.forEach(error => {
+    messages.forEach(msg => {
         html += "<li class=\"messages_item\">";
-        html += error.message;
+        html += msg.message;
         html += "</li>";
     });
     html += "</ul>";

@@ -1,5 +1,4 @@
-import pandas as pd
-import numpy as np
+import pandas as pd, numpy as np, logging
 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import fbeta_score, precision_score, recall_score, accuracy_score, confusion_matrix
@@ -143,7 +142,7 @@ def df_anomaly_instances(df_class):
             if row[column] == 1:
                 indexes.append(index)
                 break
-    print('Number of anomaly instances:', len(indexes))
+    logging.debug('Number of anomaly instances:', len(indexes))
 
     for index in indexes:
         df_class_instances.loc[index, 'class'] = True
@@ -152,15 +151,15 @@ def df_anomaly_instances(df_class):
 
 
 def estimate_score_bound(lower, higher):
-    print('Threshold Normal', higher)
-    print('Threshold Anomaly', lower)
+    logging.debug('Threshold Normal', higher)
+    logging.debug('Threshold Anomaly', lower)
 
     #TODO higher-lower ???
     higher_bound = (higher + np.abs((higher / 100) * 20)) #.astype(int)
     lower_bound = (lower - np.abs((lower / 100) * 20)) #.astype(int)
 
-    print('Higher Bound', higher_bound)
-    print('Lower Bound', lower_bound)
+    logging.debug('Higher Bound', higher_bound)
+    logging.debug('Lower Bound', lower_bound)
 
     return lower_bound, higher_bound
 
@@ -195,11 +194,11 @@ def get_train_valid_test_sets(df_train, train_size=0.5, random_seed=10):
     valid = normal_valid.append(anormal_valid).sample(frac=1, random_state=random_seed)
     test = normal_test.append(anormal_test).sample(frac=1, random_state=random_seed)
 
-    print('Train shape: ', train.shape)
-    print('Proportion of anomaly in training set: %.2f\n' % train['class'].mean())
-    print('Valid shape: ', valid.shape)
-    print('Proportion of anomaly in validation set: %.2f\n' % valid['class'].mean())
-    print('Test shape:, ', test.shape)
-    print('Proportion of anomaly in test set: %.2f\n' % test['class'].mean())
+    logging.debug('Train shape: ', train.shape)
+    logging.debug('Proportion of anomaly in training set: %.2f\n' % train['class'].mean())
+    logging.debug('Valid shape: ', valid.shape)
+    logging.debug('Proportion of anomaly in validation set: %.2f\n' % valid['class'].mean())
+    logging.debug('Test shape:, ', test.shape)
+    logging.debug('Proportion of anomaly in test set: %.2f\n' % test['class'].mean())
 
     return train, valid, test

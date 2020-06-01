@@ -8,13 +8,9 @@ from .date_utils import unix_time_millis_from_dt
 from .anomaly_detection_utils import get_info
 
 
-def get_dataset_with_marker_json(dataset, df, df_class, show_anomaly, settings, type=None):
+def dataset_to_json(dataset, df, df_class, show_anomaly, settings, type):
     data_series = []
     time_series = dataset.timeseries_set.all()
-
-    # transform dataframe if required
-    if type == 'zscore':
-        df = df_zscore(df)  # transform raw data to z-score values
 
     outlier_color = settings['color_outliers']
 

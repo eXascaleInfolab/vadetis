@@ -1,3 +1,4 @@
+import logging
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.renderers import  TemplateHTMLRenderer, JSONRenderer
@@ -39,14 +40,14 @@ class AccountUploadDataset(APIView):
         if serializer.is_valid():
             # handle dataset file
             dataset_file_raw = serializer.validated_data['csv_file']
-            print("Dataset file received: ", dataset_file_raw.name)
+            logging.info("Dataset file received: ", dataset_file_raw.name)
             dataset_file = write_to_tempfile(dataset_file_raw)
 
             # handle spatial file
             spatial_data = serializer.validated_data['spatial_data']
             if spatial_data == SPATIAL:
                 spatial_file_raw = serializer.validated_data['csv_spatial_file']
-                print("Spatial file received: ", spatial_file_raw.name)
+                logging.info("Spatial file received: ", spatial_file_raw.name)
                 spatial_file = write_to_tempfile(spatial_file_raw)
             else:
                 spatial_file = None
@@ -129,7 +130,7 @@ class AccountUploadTrainingDataset(APIView):
 
             # check if user is ok
             if owner == request.user and original_dataset.owner == request.user:
-                print("Training dataset file received: ", training_dataset_file_raw.name)
+                logging.info("Training dataset file received: ", training_dataset_file_raw.name)
                 training_dataset_file = write_to_tempfile(training_dataset_file_raw)
 
                 user_tasks, _ = UserTasks.objects.get_or_create(user=user)

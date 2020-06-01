@@ -1,12 +1,12 @@
-from celery.task import Task
+import collections, logging
 import pandas as pd, numpy as np
-import collections
+from celery.task import Task
 from django.db import transaction, IntegrityError
 from django.utils import timezone
 
 from vadetisweb.models import User, Location, TimeSeries, DataSet
 from vadetisweb.parameters import *
-from vadetisweb.utils import format_time, silent_remove
+from vadetisweb.utils import iso_format_time, silent_remove
 
 
 class TaskImportData(Task):
@@ -36,7 +36,7 @@ class TaskImportData(Task):
             if 'spatial_file_name' in kwargs:
                 self.spatial_csv_name = kwargs['spatial_file_name']
             else:
-                print('No locations file provided for spatial dataset, will change to non spatial dataset')
+                logging.warning('No locations file provided for spatial dataset, will change to non spatial dataset')
                 spatial_data = NON_SPATIAL
         else:
             self.spatial_csv_name = None
@@ -102,14 +102,14 @@ class TaskImportData(Task):
                                              type=type,
                                              frequency=freq,
                                              spatial_data=spatial_data)
-            print("New dataset {0} added".format(dataset))
+            logging.info("New dataset {0} added".format(dataset))
 
             # for each series create a time series object
             for idx, row in df_ts_unit.items():
                 ts = TimeSeries.objects.create(name=idx,
                                                unit=row[0], # safe to get single element as previously checked for consistency
                                                is_spatial=True if spatial_data == SPATIAL else False)
-                print("New time series: {0} added".format(idx))
+                logging.debug("New time series: {0} added".format(idx))
                 ts.datasets.add(dataset)
                 ts.save()
                 # replace column in dataframe by time series database id
@@ -176,7 +176,7 @@ class TaskImportData(Task):
                         ts.save()
                         location.save()
 
-        execution_time = format_time(timezone.now() - start_time)
+        execution_time = iso_format_time(timezone.now() - start_time)
         result = {'measurements_added': int(df.count().sum()), 'time_series_added:': len(df.columns),
                   'execution_time': execution_time}
 
@@ -274,14 +274,14 @@ class TaskImportTrainingData(Task):
                                                       is_training_data=True,
                                                       original_dataset=original_dataset)
 
-            print("Test dataset {0} added".format(training_dataset))
+            logging.info("Test dataset {0} added".format(training_dataset))
 
             # for each series get the time series object
             for idx, row in df_ts_unit.items():
                 ts = TimeSeries.objects.get(name=idx,
                                             datasets__id=original_dataset.id)
 
-                print("Time series: {0} fetched".format(idx))
+                logging.debug("Time series: {0} fetched".format(idx))
                 ts.datasets.add(training_dataset)
                 ts.save()
                 # replace column in dataframe by time series database id
@@ -304,7 +304,7 @@ class TaskImportTrainingData(Task):
 
             training_dataset.save()
 
-        execution_time = format_time(timezone.now() - start_time)
+        execution_time = iso_format_time(timezone.now() - start_time)
         result = {'measurements_added': int(df.count().sum()), 'execution_time': execution_time }
 
         return result

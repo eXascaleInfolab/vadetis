@@ -13,6 +13,11 @@ class AnomalyInjectionSerializer(serializers.Serializer):
     probability is determined by a nominator and a denominator.
     """
 
+    dataset = DatasetField(default='overridden')
+    dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
+                                           style={'template': 'vadetisweb/parts/input/hidden_input.html',
+                                                  'id': 'dataset_series_json'})
+
     time_series = TimeSeriesField(label='Time Series',
                                   queryset=TimeSeries.objects.none(),
                                   required=True,
@@ -35,41 +40,42 @@ class AnomalyInjectionSerializer(serializers.Serializer):
                                                      'step': 'number', 'min': 2,
                                                      'help_text_in_popover': True})
 
-    normal_lowerbound_duration = serializers.IntegerField(label='Normal lower bound', initial=50, min_value=1,
-                                                          required=True,
-                                                          help_text='The lower bound for duration of a normal event.',
-                                                          style={'template': 'vadetisweb/parts/input/text_input.html',
-                                                                 'step': 'number', 'min': 1,
-                                                                 'help_text_in_popover': True})
+    normal_range = IonIntegerRangeJsonField(label="Normal range", required=True,
+                                            help_text='The bound for duration of a normal event.',
+                                            style={'template': 'vadetisweb/parts/input/ion_slider_input.html',
+                                                   'id': 'normal_range',
+                                                   'data_type': "double",
+                                                   'data_grid': "true",
+                                                   'data_min': "100",
+                                                   'data_max': "1000",
+                                                   'data_from': "200",
+                                                   'data_to': "800",
+                                                   'help_text_in_popover': True})
 
-    normal_upperbound_duration = serializers.IntegerField(label='Normal upper bound', initial=500, min_value=1,
-                                                          required=True,
-                                                          help_text='The upper bound for duration of a normal event.',
-                                                          style={'template': 'vadetisweb/parts/input/text_input.html',
-                                                                 'step': 'number', 'min': 1,
-                                                                 'help_text_in_popover': True})
+    anomaly_range = IonIntegerRangeJsonField(label="Anomalous range", required=True,
+                                             help_text='The bound for duration of an anomalous event.',
+                                             style={'template': 'vadetisweb/parts/input/ion_slider_input.html',
+                                                    'id': 'anomaly_range',
+                                                    'data_type': "double",
+                                                    'data_grid': "true",
+                                                    'data_min': "1",
+                                                    'data_max': "100",
+                                                    'data_from': "10",
+                                                    'data_to': "20",
+                                                    'help_text_in_popover': True})
 
-    probability = serializers.FloatField(label='Probability', initial=0.1, min_value=0.0000001, max_value=1,
+    probability = serializers.FloatField(label='Probability', initial=0.5, min_value=0, max_value=1,
                                          required=True,
-                                         help_text='The probability for an anomalous event. '
-                                                   'Should be in the interval (0, 1].',
-                                         style={'template': 'vadetisweb/parts/input/text_input.html', 'step': 'any',
-                                                'min': 0.0000001, 'max': 1,
+                                         help_text='The probability for an anomalous event.',
+                                         style={'template': 'vadetisweb/parts/input/ion_slider_input.html',
+                                                'id': 'probability',
+                                                'data_type': "single",
+                                                'data_grid': "true",
+                                                'data_min': "0",
+                                                'data_max': "1",
+                                                'data_from': "0.5",
+                                                'data_step': "0.1",
                                                 'help_text_in_popover': True})
-
-    anomaly_lowerbound_duration = serializers.IntegerField(label='Anomalous lower bound', initial=5, min_value=1,
-                                                           required=True,
-                                                           help_text='The lower bound for duration of an anomalous event.',
-                                                           style={'template': 'vadetisweb/parts/input/text_input.html',
-                                                                  'step': 'number', 'min': 1,
-                                                                  'help_text_in_popover': True})
-
-    anomaly_upperbound_duration = serializers.IntegerField(label='Anomalous upper bound', initial=10, min_value=1,
-                                                           required=True,
-                                                           help_text='The upper bound for duration of an anomalous event.',
-                                                           style={'template': 'vadetisweb/parts/input/text_input.html',
-                                                                  'step': 'number', 'min': 1,
-                                                                  'help_text_in_popover': True})
 
     def __init__(self, *args, **kwargs):
         super(AnomalyInjectionSerializer, self).__init__(*args, **kwargs)

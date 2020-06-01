@@ -2,21 +2,26 @@
 <script type="text/javascript">
     $('#{{ formid }}').on('submit', function (event) {
         event.preventDefault();
+        clearFormErrors("{{ formid }}");
         clearMessages();
-
-        $.post({
+        var csrftoken = Cookies.get('csrftoken');
+        $.ajax({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            },
             url: $(this).attr('action'),
             data: $(this).serialize(),
             type: $(this).attr('method'),
             success: function (data, status, xhr) {
-                if (data.location) {
-                    window.location = data.location;
-                }
+                 handleRedirect(data, xhr);
+                 printMessages([{'message': "Saved"}], "success");
             },
             error: function (data, status, xhr) {
-                console.error("Sending asynchronous failed");
+                printMessages([{'message': "Request failed"}], "error-request");
                 {% if error_msg %}
-                printMessages(JSON.parse('[{ "message":"{{ error_msg }}", "level_tag":"error"}]'));
+                printGroupedMessages(JSON.parse('[{ "message":"{{ error_msg }}", "level_tag":"error"}]'));
                 {% endif %}
                 {% if hasCaptcha is True %}
                 grecaptcha.reset();

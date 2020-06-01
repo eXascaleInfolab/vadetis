@@ -14,6 +14,7 @@
     {% include 'vadetisweb/parts/includes/highcharts_css.html' %}
     <link href="{% static 'css/lib/nouislider/nouislider.min.css' %}" rel="stylesheet" type="text/css" />
     <link href="{% static 'css/lib/roundslider/roundslider.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/lib/ion-rangeslider/ion.rangeSlider.min.css' %}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
 {% block head_js %}
@@ -45,7 +46,28 @@
                             </div>
                             <a id="raw_btn" href="#" class="btn btn-outline-brand btn-bold btn-sm">Raw</a>
                             <a id="zscore_btn" href="#" class="btn btn-outline-brand btn-bold btn-sm">Z-Score</a>
-                            <a id="reload_chart_btn" href="#" class="btn btn-outline-brand btn-bold btn-sm">Reset</a>
+                            <a id="reset_chart_btn" href="#" class="btn btn-outline-brand btn-bold btn-sm">Reset</a>
+                            <div class="dropdown dropdown-inline">
+                                <a href="#" class="btn btn-outline-brand btn-icon btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="mdi mdi-18px mdi-dots-horizontal"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <ul class="kt-nav">
+                                        <li class="kt-nav__item">
+                                            <a id="download_csv" href="#" class="kt-nav__link">
+                                                <i class="mdi mdi-18px mdi-file-table-outline kt-nav__link-icon"></i>
+                                                <span class="kt-nav__link-text">Download CSV</span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a id="download_json" href="#" class="kt-nav__link">
+                                                <i class="mdi mdi-18px mdi-json kt-nav__link-icon flaticon2-settings"></i>
+                                                <span class="kt-nav__link-text">Download JSON</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -169,26 +191,24 @@
 {% endblock %}
 
 {% block additional_bottom_js %}
+    <!-- page extensions -->
     {% include 'vadetisweb/parts/includes/roundslider_js.html' %}
     {% include 'vadetisweb/parts/includes/nouislider_js.html' %}
+    {% include 'vadetisweb/parts/includes/ion_rangeslider_js.html' %}
+    <script src="{% static 'js/lib/binarytransport/jquery.binarytransport.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/lib/highcharts/highstock.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/custom/highcharts.utils.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/custom/highcharts.view.init.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/custom/highcharts.actions.init.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/custom/form.extensions.js' %}" type="text/javascript"></script>
+
+    <!-- page init -->
+    <script src="{% static 'js/page/dataset.page.init.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
         jQuery(document).ready(function () {
-            VadetisHighcharts.init("highcharts_container", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", {{ selected_button }});
-            VadetisHighchartsRaw.init("highcharts_container", "raw_btn", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_update_json' dataset.id %}");
-            VadetisHighchartsZScore.init("highcharts_container", "zscore_btn", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_update_json' dataset.id %}");
-            VadetisHighchartsReload.init("highcharts_container", "reload_chart_btn", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}");
-
-            // color settings
-            $('#true_positive_btn').css({"background-color": getSetting('color_true_positive')});
-            $('#false_positive_btn').css({"background-color": getSetting('color_false_positive')});
-            $('#false_negative_btn').css({"background-color": getSetting('color_false_negative')});
+            DatasetPage.init("{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_download_file' %}", {{ selected_button }});
         });
     </script>
     {% include 'vadetisweb/parts/js/ajax_form_append_js.html' with form_append_container="detection_form_container" %}
-    {% comment %}{% include 'vadetisweb/parts/js/ajax_form_detection_js.html' with formid="anomaly_detection_form" highcharts="highcharts_container" %}{% endcomment %}
     {% include 'vadetisweb/parts/js/inject_replace_series_js.html' with formid="anomaly_injection_form" format="json" %}
 {% endblock %}

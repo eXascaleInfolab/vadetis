@@ -1,3 +1,5 @@
+import logging
+
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render
@@ -42,7 +44,7 @@ def account(request):
                 message = "Your account has been updated!"
                 messages.success(request, message)
             else:
-                print(form_user.errors)
+                logging.error(form_user.errors)
 
         elif 'submit-password' in request.POST:
 
@@ -71,7 +73,7 @@ def account(request):
             else:
                 message = "Could not disconnect social account!"
                 messages.error(request, message)
-                print(form_social_disconnect.errors)
+                logging.error(form_social_disconnect.errors)
 
         elif 'submit-account-delete' in request.POST:
             form_account_delete = AccountDeleteUserForm(instance=current_user, data=request.POST)

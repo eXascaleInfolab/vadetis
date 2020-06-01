@@ -1,9 +1,10 @@
+import logging
 
 
 def get_highcharts_range_button_preselector(inferred_freq):
 
     if inferred_freq is None:
-        print("Warning: no frequency provided, will return default")
+        logging.warning("Warning: no frequency provided, will return default")
         return 2
 
     if inferred_freq.endswith(('B', 'C', 'D')): # freq of days
