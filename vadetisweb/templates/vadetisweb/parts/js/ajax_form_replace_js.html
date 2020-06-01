@@ -5,7 +5,14 @@
         updateTimeRange();
         clearFormErrors("{{ formid }}");
         clearMessages();
-        $.post({
+
+        var csrftoken = Cookies.get('csrftoken');
+        $.ajax({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            },
             url: $(this).attr('action'){% if format %}+'?format={{ format }}'{% endif %},
             data: new FormData(this),
             type: $(this).attr('method'),

@@ -215,6 +215,5 @@
         });
     </script>
     {% include 'vadetisweb/parts/js/ajax_form_append_js.html' with form_append_container="detection_form_container" %}
-    {% comment %}{% include 'vadetisweb/parts/js/ajax_form_detection_js.html' with formid="anomaly_detection_form" highcharts="highcharts_container" %}{% endcomment %}
     {% include 'vadetisweb/parts/js/inject_replace_series_js.html' with formid="anomaly_injection_form" format="json" %}
 {% endblock %}

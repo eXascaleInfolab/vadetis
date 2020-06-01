@@ -6,7 +6,6 @@ function csrfSafeMethod(method) {
 
 
 function loadImage(html_id, url, post_data, callback) {
-    // todo replace in other occurrences: get csrf from cookie
     var csrftoken = Cookies.get('csrftoken');
     $.ajax({
         beforeSend: function (xhr, settings) {
@@ -75,14 +74,16 @@ function registerThresholdUpdateForm(form_id) {
         $(":submit").attr("disabled", true);
         clearFormErrors(form_id);
         clearMessages();
-
-        var highchart = $('#highcharts_container').highcharts();
-        var formData = new FormData(this);
-        var dataset_series_json = getDatasetSeriesJson(highchart);
+        var highchart = $('#highcharts_container').highcharts(), formData = new FormData(this), dataset_series_json = getDatasetSeriesJson(highchart), csrftoken = Cookies.get('csrftoken');
         formData.append('dataset_series_json', JSON.stringify(dataset_series_json));
-
         highchart.showLoading();
-        $.post({
+
+        $.ajax({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            },
             url: $(this).attr('action'),
             data: formData,
             type: $(this).attr('method'),
@@ -140,12 +141,15 @@ function registerAnomalyDetectionForm(form_id) {
         var highchart = $('#highcharts_container').highcharts();
         updateTimeRange(highchart, form_id);
 
-        var formData = new FormData(this);
-        var dataset_series_json = getDatasetSeriesJson(highchart);
+        var formData = new FormData(this), dataset_series_json = getDatasetSeriesJson(highchart), csrftoken = Cookies.get('csrftoken');
         formData.append('dataset_series_json', JSON.stringify(dataset_series_json));
-
         highchart.showLoading();
-        $.post({
+        $.ajax({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            },
             url: $(this).attr('action'),
             data: formData,
             type: $(this).attr('method'),

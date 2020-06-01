@@ -3,8 +3,13 @@
     $('#{{ formid }}').on('submit', function (event) {
         event.preventDefault();
         clearMessages();
-
-        $.post({
+        var csrftoken = Cookies.get('csrftoken');
+        $.ajax({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            },
             url: $(this).attr('action'),
             data: $(this).serialize(),
             type: $(this).attr('method'),

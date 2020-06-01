@@ -3,8 +3,13 @@
     function ajaxSubmit(formData, formid) {
         clearFormErrors(formid);
         clearMessages();
-        var form_selector = $("#" + formid);
-        $.post({
+        var form_selector = $("#" + formid), csrftoken = Cookies.get('csrftoken');
+        $.ajax({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            },
             url: form_selector.attr('action'),
             data: new FormData(formData),
             type: form_selector.attr('method'),

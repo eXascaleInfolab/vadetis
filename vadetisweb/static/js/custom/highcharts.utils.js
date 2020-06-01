@@ -3,7 +3,13 @@
  * Data must contain new threshold and series data from highcharts
  */
 function updateHighchartsSeriesForThreshold(highchart, url, post_data, callback) {
+    var csrftoken = Cookies.get('csrftoken');
     $.ajax({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        },
         type: "POST",
         url: url,
         data: post_data,
@@ -110,11 +116,16 @@ function _addOrReplaceRangeInput(form_id, selector, id, name, value) {
 }
 
 function updateHighchartsSeriesForType(highchart, url, post_data, callback) {
+    var csrftoken = Cookies.get('csrftoken');
     $.ajax({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        },
         type: "POST",
         url: url,
         data: post_data,
-
         success: function (data) {
             var dataset_series_new_json = data[0];
 
@@ -250,10 +261,8 @@ function loadSeriesForType(highchart, url, type, show_anomaly, callback) {
 }
 
 function downloadDataset(highchart, url, type, callback) {
-    var formData = new FormData(), csrfToken = Cookies.get('csrftoken');
-    var dataset_series_json = getDatasetSeriesJson(highchart);
+    var formData = new FormData(), dataset_series_json = getDatasetSeriesJson(highchart), csrfToken = Cookies.get('csrftoken');
     formData.append('dataset_series_json', JSON.stringify(dataset_series_json));
-
     $.ajax({
         beforeSend: function (xhr, settings) {
             if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -287,8 +296,7 @@ function downloadDataset(highchart, url, type, callback) {
 //Deprecated
 function updateSeriesForType(highchart, url, type, show_anomaly, callback) {
     highchart.showLoading();
-    var formData = new FormData(), csrfToken = Cookies.get('csrftoken');
-    var dataset_series_json = getDatasetSeriesJson(highchart);
+    var formData = new FormData(), dataset_series_json = getDatasetSeriesJson(highchart), csrfToken = Cookies.get('csrftoken');
     formData.append('dataset_series_json', JSON.stringify(dataset_series_json));
 
     $.ajax({
