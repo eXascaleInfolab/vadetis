@@ -191,6 +191,7 @@
 {% endblock %}
 
 {% block additional_bottom_js %}
+    <!-- page extensiions -->
     {% include 'vadetisweb/parts/includes/roundslider_js.html' %}
     {% include 'vadetisweb/parts/includes/nouislider_js.html' %}
     {% include 'vadetisweb/parts/includes/ion_rangeslider_js.html' %}
@@ -200,25 +201,12 @@
     <script src="{% static 'js/custom/highcharts.view.init.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/custom/highcharts.actions.init.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/custom/form.extensions.init.js' %}" type="text/javascript"></script>
+
+    <!-- page init -->
+    <script src="{% static 'js/page/dataset.page.init.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
         jQuery(document).ready(function () {
-            VadetisHighcharts.init("highcharts_container", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", {{ selected_button }});
-
-            VadetisHighchartsLoad.init("highcharts_container", "raw_btn", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", "raw");
-            VadetisHighchartsLoad.init("highcharts_container", "zscore_btn", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", "zscore");
-            VadetisHighchartsReset.init("highcharts_container", "reset_chart_btn", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}");
-
-            VadetisHighchartsFileDownload.init("highcharts_container", "download_csv", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_download_file' %}", "csv");
-            VadetisHighchartsFileDownload.init("highcharts_container", "download_json", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_download_file' %}", "json");
-
-            IonRangeDoubleSlider.init("normal_range", 100, 1000, 200, 800);
-            IonRangeDoubleSlider.init("anomaly_range", 1, 100, 10, 20);
-            IonRangeSingleSlider.init("probability", 0, 1, 0.5);
-
-            // color settings
-            $('#true_positive_btn').css({"background-color": getSetting('color_true_positive')});
-            $('#false_positive_btn').css({"background-color": getSetting('color_false_positive')});
-            $('#false_negative_btn').css({"background-color": getSetting('color_false_negative')});
+            DatasetPage.init("{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_download_file' %}", {{ selected_button }});
         });
     </script>
     {% include 'vadetisweb/parts/js/ajax_form_append_js.html' with form_append_container="detection_form_container" %}
