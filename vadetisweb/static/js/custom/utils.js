@@ -24,6 +24,36 @@ function loadImage(html_id, url, post_data, callback) {
     });
 }
 
+/**
+ * Handles messages contained in an ajax response if available
+ * @param data - The data returned from the server
+ */
+function handleMessages(data) {
+    if(data !== undefined) {
+        if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
+            printMessages(data.responseJSON.messages);
+        } else if (data.hasOwnProperty('messages')) {
+            printMessages(data.messages);
+        }
+
+        if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('form_errors')) {
+            printFormErrors(data.responseJSON.form_errors);
+        } else if (data.hasOwnProperty('form_errors')) {
+            printFormErrors(data.form_errors);
+        }
+    }
+}
+
+/**
+ * Handles a window location redirect from response header of an ajax response if available
+ * @param xhr - The jqXHR object, which is a superset of the XMLHTTPRequest object
+ */
+function handleRedirect(xhr) {
+    if (xhr.getResponseHeader('Location')) {
+        window.location = xhr.getResponseHeader('Location');
+    }
+}
+
 
 function saveData (blob, fileName) {
     let a = document.createElement("a");
@@ -60,9 +90,8 @@ function registerThresholdUpdateForm(form_id) {
             processData: false,
             contentType: false,
             success: function(data, status, xhr) {
-                if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                    printMessages(data.responseJSON.messages);
-                }
+                handleMessages(data);
+
                 // update series
                 var series_data_json = data['series'];
                 setSeriesData(highchart, series_data_json);
@@ -86,12 +115,8 @@ function registerThresholdUpdateForm(form_id) {
             },
             error: function(data, status, xhr) {
                 console.error("Sending asynchronous failed");
-                if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                    printMessages(data.responseJSON.messages);
-                }
-                if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('form_errors')) {
-                    printFormErrors(data.responseJSON.form_errors);
-                }
+                handleMessages(data);
+
                 highchart.hideLoading();
 
                 $('#scores_portlet').hide();
@@ -128,9 +153,8 @@ function registerAnomalyDetectionForm(form_id) {
             processData: false,
             contentType: false,
             success: function(data, status, xhr) {
-                if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                    printMessages(data.responseJSON.messages);
-                }
+                handleMessages(data);
+
                 // update series
                 var series_data_json = data['series'];
                 setSeriesData(highchart, series_data_json);
@@ -156,12 +180,8 @@ function registerAnomalyDetectionForm(form_id) {
             },
             error: function(data, status, xhr) {
                 console.error("Sending asynchronous failed");
-                if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                    printMessages(data.responseJSON.messages);
-                }
-                if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('form_errors')) {
-                    printFormErrors(data.responseJSON.form_errors);
-                }
+                handleMessages(data);
+
                 highchart.hideLoading();
 
                 $('#threshold_portlet').hide();

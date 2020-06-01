@@ -14,21 +14,16 @@
             processData: false,
             contentType: false,
             success: function (data, status, xhr) {
+                handleMessages(data);
+
                 highchart.hideLoading();
                 var series_data_json = data['series'];
                 setSeriesData(highchart, series_data_json);
-
-                console.log(data);
             },
             error: function (data, status, xhr) {
+                handleMessages(data);
                 highchart.hideLoading();
                 console.error("Sending asynchronous failed");
-                if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                    printMessages(data.responseJSON.messages);
-                }
-                if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('form_errors')) {
-                    printFormErrors(data.responseJSON.form_errors);
-                }
             }
         });
     });

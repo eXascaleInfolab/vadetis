@@ -12,6 +12,8 @@
             processData: false,
             contentType: false,
             success: function (data, status, xhr) {
+                handleMessages(data);
+
                 if (data !== undefined) {
                     var receivedForm = $(data);
                     var receivedFormId = $(receivedForm).filter('form').attr('id');
@@ -21,25 +23,15 @@
                     $('#{{ form_append_container }} [data-toggle="kt-popover"]').each(function() {
                         KTApp.initPopover($(this));
                     });
-
                     registerAnomalyDetectionForm(receivedFormId);
-
-                    if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                        printMessages(data.responseJSON.messages);
-                    }
                 } else {
                     $('#{{ form_append_container }}').empty();
                 }
             },
             error: function (data, status, xhr) {
                 console.error("Sending asynchronous failed");
+                handleMessages(data);
                 $('#{{ form_append_container }}').empty();
-                if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                    printMessages(data.responseJSON.messages);
-                }
-                if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('form_errors')) {
-                    printFormErrors(data.responseJSON.form_errors);
-                }
             }
         });
     }

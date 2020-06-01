@@ -9,9 +9,7 @@
             data: $(this).serialize(),
             type: $(this).attr('method'),
             success: function (data, status, xhr) {
-                if (data.location) {
-                    window.location = data.location;
-                }
+                 handleRedirect(xhr);
             },
             error: function (data, status, xhr) {
                 console.error("Sending asynchronous failed");

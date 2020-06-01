@@ -52,7 +52,7 @@ class ApplicationSetting(APIView):
 
             if request.accepted_renderer.format == 'json':  # requested format is json
                 json_messages = []
-                json_message_utils.success(json_messages, 'Setting saved')
+                json_message_utils.success(json_messages, 'Settings saved')
                 response = Response({
                     'status': 'success',
                     'messages': MessageSerializer(json_messages, many=True).data,
@@ -63,7 +63,7 @@ class ApplicationSetting(APIView):
                 return response
 
             else:  # or render html template
-                messages.success(request, 'Setting saved')
+                messages.success(request, 'Settings saved')
                 response = Response({
                     'serializer': serializer,
                 }, status=status.HTTP_201_CREATED)

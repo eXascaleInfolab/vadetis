@@ -13,23 +13,15 @@
             processData: false,
             contentType: false,
             success: function (data, status, xhr) {
-                if (xhr.getResponseHeader('Location')) {
-                    window.location = xhr.getResponseHeader('Location');
-                }
+                handleRedirect(xhr);
+                handleMessages(data);
+
                 var new_form_inner = $(data).filter('#{{ formid }}').html();
                 $('#{{ formid }}').html(new_form_inner);
-                if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                    printMessages(data.responseJSON.messages);
-                }
             },
             error: function (data, status, xhr) {
+                handleMessages(data);
                 console.error("Sending asynchronous failed");
-                if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                    printMessages(data.responseJSON.messages);
-                }
-                if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('form_errors')) {
-                    printFormErrors(data.responseJSON.form_errors);
-                }
             }
         });
     });

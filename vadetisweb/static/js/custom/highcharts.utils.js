@@ -9,9 +9,8 @@ function updateHighchartsSeriesForThreshold(highchart, url, post_data, callback)
         data: post_data,
 
         success: function (data, status, xhr) {
-            if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                printMessages(data.responseJSON.messages);
-            }
+            handleMessages(data);
+
             var dataset_series_new_json = data['series'];
             var new_info = data['info'];
             //dataset_series_data = generateSeriesFromJson(dataset_series_json, "{{ conf|get_item:'algorithm' }}", "{{ conf|get_item:'time_series' }}");
@@ -24,12 +23,7 @@ function updateHighchartsSeriesForThreshold(highchart, url, post_data, callback)
         },
         error: function(data, status, xhr) {
                 console.error("Sending asynchronous failed");
-                if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                    printMessages(data.responseJSON.messages);
-                }
-                if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('form_errors')) {
-                    printFormErrors(data.responseJSON.form_errors);
-                }
+                handleMessages(data);
         }
     });
 }
@@ -278,20 +272,12 @@ function downloadDataset(highchart, url, type, callback) {
                 var filename = header.match(/filename="(.+)"/)[1];
                 saveData(data, filename);
             }
-            if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                printMessages(data.responseJSON.messages);
-            } else if (data.hasOwnProperty('messages')) {
-                printMessages(data.messages);
-            }
+            handleMessages(data);
             callback();
         },
         error: function (data, status, xhr) {
             console.error("Sending asynchronous failed");
-            if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                printMessages(data.responseJSON.messages);
-            } else if (data.hasOwnProperty('messages')) {
-                printMessages(data.messages);
-            }
+            handleMessages(data);
             callback();
         }
     });
@@ -322,21 +308,13 @@ function updateSeriesForType(highchart, url, type, show_anomaly, callback) {
                 var series_data_json = data['series'];
                 setSeriesData(highchart, series_data_json);
             }
-            if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                printMessages(data.responseJSON.messages);
-            } else if (data.hasOwnProperty('messages')) {
-                printMessages(data.messages);
-            }
+            handleMessages(data);
             highchart.hideLoading();
             callback();
         },
         error: function (data, status, xhr) {
             console.error("Sending asynchronous failed");
-            if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-                printMessages(data.responseJSON.messages);
-            } else if (data.hasOwnProperty('messages')) {
-                printMessages(data.messages);
-            }
+            handleMessages(data);
             highchart.hideLoading();
             callback();
         }
