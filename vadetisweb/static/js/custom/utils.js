@@ -47,7 +47,10 @@ function handleMessages(data) {
  * Handles a window location redirect from response header of an ajax response if available
  * @param xhr - The jqXHR object, which is a superset of the XMLHTTPRequest object
  */
-function handleRedirect(xhr) {
+function handleRedirect(data, xhr) {
+    if(data !==undefined && data.location) {
+         window.location = data.location;
+    }
     if (xhr.getResponseHeader('Location')) {
         window.location = xhr.getResponseHeader('Location');
     }

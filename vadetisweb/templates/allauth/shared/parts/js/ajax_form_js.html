@@ -2,6 +2,7 @@
 <script type="text/javascript">
     $('#{{ formid }}').on('submit', function (event) {
         event.preventDefault();
+        clearFormErrors("{{ formid }}");
         clearMessages();
         var csrftoken = Cookies.get('csrftoken');
         $.ajax({
@@ -14,7 +15,7 @@
             data: $(this).serialize(),
             type: $(this).attr('method'),
             success: function (data, status, xhr) {
-                 handleRedirect(xhr);
+                 handleRedirect(data, xhr);
                  printMessages([{'message': "Saved"}], "success");
             },
             error: function (data, status, xhr) {

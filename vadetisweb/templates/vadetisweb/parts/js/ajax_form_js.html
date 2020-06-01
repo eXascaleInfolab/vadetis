@@ -18,7 +18,7 @@
             processData: false,
             contentType: false,
             success: function(data, status, xhr) {
-                handleRedirect(xhr);
+                handleRedirect(data, xhr);
                 handleMessages(data);
             },
             error: function(data, status, xhr) {

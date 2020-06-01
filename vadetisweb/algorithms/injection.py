@@ -60,16 +60,19 @@ def anomaly_injection(dataset, validated_data):
 
     return df_inject, df_inject_class
 
+
 def inject_extreme_outliers(df, df_inject, df_inject_class, anomaly_start_index, normal_start_index, ts_id, factor=10):
     for index, value in df.loc[df.index[anomaly_start_index:normal_start_index], ts_id].iteritems():
         df_inject.at[index, ts_id] = extreme_outlier(df, index, ts_id, factor)
         df_inject_class.at[index, ts_id] = True
+
 
 def extreme_outlier(df, index, ts_id, factor=10):
     before_dt = next_dt(index, 'earlier', df.index.inferred_freq, 10)
     after_dt = next_dt(index, 'later', df.index.inferred_freq, 10)
     local_std = df.loc[before_dt:after_dt, ts_id].std(axis=0, skipna=True, level=None, ddof=0)
     return np.random.choice([-1, 1]) * factor * local_std
+
 
 def inject_level_shift(df, df_inject, df_inject_class, anomaly_start_index, normal_start_index, ts_id, factor=10):
     before_dt = next_dt(df.index[anomaly_start_index], 'earlier', df.index.inferred_freq, 10)
@@ -82,30 +85,3 @@ def inject_level_shift(df, df_inject, df_inject_class, anomaly_start_index, norm
         df_inject_class.at[index, ts_id] = True
 
 
-@DeprecationWarning
-def inject_correlated_std_deviation_anomaly(df, df_inject, df_inject_class, index, ts_id, multiplier=3):
-    df_inject_class.at[index, ts_id] = True
-    # ddof = 0: population standard deviation using n; ddof = 1: sample std deviation using n-1
-    std_deviation = df.loc[index,:].std(axis=0, skipna=True, level=None, ddof=0)
-    multi = multiplier * -1 if random.randint(0,100) <= 50 else multiplier
-    anomaly = (multi * std_deviation) + df.at[index, ts_id]
-    df_inject.at[index, ts_id] = anomaly
-
-
-class MultivariateExtremeOutlierGenerator():
-    def __init__(self, timestamps=None, factor=8):
-        self.timestamps = [] if timestamps is None else list(sum(timestamps, ()))
-        self.factor = factor
-
-    def get_value(self, current_timestamp, timeseries):
-        if current_timestamp in self.timestamps:
-            local_std = timeseries.iloc[max(0, current_timestamp - 10):current_timestamp + 10].std()
-            return np.random.choice([-1, 1]) * self.factor * local_std
-        else:
-            return 0
-
-    def add_outliers(self, timeseries):
-        additional_values = []
-        for timestamp_index in range(len(timeseries)):
-            additional_values.append(self.get_value(timestamp_index, timeseries))
-        return additional_values

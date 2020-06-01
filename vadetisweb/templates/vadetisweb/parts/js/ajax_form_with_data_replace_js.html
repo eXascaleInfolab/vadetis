@@ -17,7 +17,7 @@ function ajaxSubmit(formData, formid) {
         processData: false,
         contentType: false,
         success: function (data, status, xhr) {
-            handleRedirect(xhr);
+            handleRedirect(data, xhr);
             handleMessages(data);
             var new_form_inner = $(data).filter('#'+formid).html();
             $('#'+formid).html(new_form_inner);
