@@ -18,7 +18,7 @@ from vadetisweb.factory import dataset_not_found_msg
 
 class AnomalyInjectionFormView(APIView):
     """
-    Request anomaly injection form
+    Request anomaly injection
     """
     renderer_classes = [JSONRenderer]
 
@@ -33,7 +33,7 @@ class AnomalyInjectionFormView(APIView):
                 show_anomaly = strToBool(request.query_params.get('show_anomaly', 'true'))
                 data = {}
                 settings = get_settings(request)
-                df_inject, df_inject_class = anomaly_injection(dataset, serializer.validated_data)
+                df_inject, df_inject_class = anomaly_injection(serializer.validated_data)
 
                 data['series'] = dataset_to_json(dataset, df_inject, df_inject_class, show_anomaly, settings, 'raw') #raw todo
                 return Response(data, status=status.HTTP_200_OK)

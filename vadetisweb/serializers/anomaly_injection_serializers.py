@@ -13,6 +13,11 @@ class AnomalyInjectionSerializer(serializers.Serializer):
     probability is determined by a nominator and a denominator.
     """
 
+    dataset = DatasetField(default='overridden')
+    dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
+                                           style={'template': 'vadetisweb/parts/input/hidden_input.html',
+                                                  'id': 'dataset_series_json'})
+
     time_series = TimeSeriesField(label='Time Series',
                                   queryset=TimeSeries.objects.none(),
                                   required=True,

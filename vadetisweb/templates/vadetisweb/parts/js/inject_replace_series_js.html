@@ -4,8 +4,10 @@
         event.preventDefault();
         clearFormErrors("{{ formid }}");
         clearMessages();
-        var highchart = $('#highcharts_container').highcharts(), csrftoken = Cookies.get('csrftoken'), formData = new FormData(this);
+        var highchart = $('#highcharts_container').highcharts();
+        var csrftoken = Cookies.get('csrftoken'), formData = new FormData(this), dataset_series_json = getDatasetSeriesJson(highchart);
 
+        formData.append('dataset_series_json', JSON.stringify(dataset_series_json));
         formData.append('normal_range', JSON.stringify(ionSliderRangeValue("normal_range")));
         formData.append('anomaly_range', JSON.stringify(ionSliderRangeValue("anomaly_range")));
 

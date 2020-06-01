@@ -2,16 +2,15 @@ import random
 import numpy as np
 
 from vadetisweb.utils import stochastic_duration
-from vadetisweb.utils import next_dt
+from vadetisweb.utils import next_dt, get_datasets_from_json
 from vadetisweb.parameters import ANOMALY_TYPE_EXTREME, ANOMALY_TYPE_LEVEL_SHIFT, ANOMALY_TYPE_VARIANCE, ANOMALY_TYPE_TREND
 
-def anomaly_injection(dataset, validated_data):
+def anomaly_injection(validated_data):
 
-    df = dataset.dataframe
-    df_class = dataset.dataframe_class
+    df_from_json, df_class_from_json = get_datasets_from_json(validated_data['dataset_series_json'])
 
-    df_inject = dataset.dataframe.copy()
-    df_inject_class = dataset.dataframe_class.copy()
+    df_inject = df_from_json.copy()
+    df_inject_class = df_class_from_json.copy()
     #time_series = dataset.timeseries_set.all()
 
     time_series = validated_data['time_series']
@@ -38,17 +37,17 @@ def anomaly_injection(dataset, validated_data):
         normal_start_index += anomaly_start_index + anomaly_duration
 
         # check break
-        if len(df.index) < anomaly_start_index:
+        if len(df_from_json.index) < anomaly_start_index:
             done = True
         else:
             # respect probability
             if random.uniform(0, 1) <= probability:
 
                 if anomaly_type == ANOMALY_TYPE_EXTREME:
-                    inject_extreme_outliers(df, df_inject, df_inject_class, anomaly_start_index, normal_start_index, time_series.id, anomaly_factor)
+                    inject_extreme_outliers(df_from_json, df_inject, df_inject_class, anomaly_start_index, normal_start_index, time_series.id, anomaly_factor)
 
                 elif anomaly_type == ANOMALY_TYPE_LEVEL_SHIFT:
-                    inject_level_shift(df, df_inject, df_inject_class, anomaly_start_index, normal_start_index, time_series.id, anomaly_factor)
+                    inject_level_shift(df_from_json, df_inject, df_inject_class, anomaly_start_index, normal_start_index, time_series.id, anomaly_factor)
 
                 """elif anomaly_type == ANOMALY_TYPE_VARIANCE:
 
@@ -64,7 +63,7 @@ def anomaly_injection(dataset, validated_data):
 def inject_extreme_outliers(df, df_inject, df_inject_class, anomaly_start_index, normal_start_index, ts_id, factor=10):
     for index, value in df.loc[df.index[anomaly_start_index:normal_start_index], ts_id].iteritems():
         df_inject.at[index, ts_id] = extreme_outlier(df, index, ts_id, factor)
-        df_inject_class.at[index, ts_id] = True
+        df_inject_class.at[index, ts_id] = 1
 
 
 def extreme_outlier(df, index, ts_id, factor=10):
@@ -82,6 +81,6 @@ def inject_level_shift(df, df_inject, df_inject_class, anomaly_start_index, norm
     multiplier = np.random.choice([-1, 1])
     for index, value in df.loc[df.index[anomaly_start_index:normal_start_index], ts_id].iteritems():
         df_inject.at[index, ts_id] += multiplier * factor * local_std
-        df_inject_class.at[index, ts_id] = True
+        df_inject_class.at[index, ts_id] = 1
 
 

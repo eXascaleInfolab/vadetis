@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from drf_yasg import openapi
 
+
 class IonIntegerRangeJsonField(serializers.JSONField):
     """
         A custom JSON Field to transmit a range of upper and lower value
