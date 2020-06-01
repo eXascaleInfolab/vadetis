@@ -27,7 +27,7 @@
                 }
             },
             error: function(data, status, xhr) {
-                console.error("Sending asynchronous failed");
+                printMessages([{'message': "Request failed"}], "error-request");
                 if(data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
                     print_messages(data.responseJSON.messages);
                 }

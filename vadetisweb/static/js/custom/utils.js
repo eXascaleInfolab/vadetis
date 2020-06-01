@@ -31,9 +31,9 @@ function loadImage(html_id, url, post_data, callback) {
 function handleMessages(data) {
     if(data !== undefined) {
         if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('messages')) {
-            printMessages(data.responseJSON.messages);
+            printGroupedMessages(data.responseJSON.messages);
         } else if (data.hasOwnProperty('messages')) {
-            printMessages(data.messages);
+            printGroupedMessages(data.messages);
         }
 
         if (data.responseJSON !== undefined && data.responseJSON.hasOwnProperty('form_errors')) {
@@ -114,7 +114,7 @@ function registerThresholdUpdateForm(form_id) {
                 $(":submit").attr("disabled", false);
             },
             error: function(data, status, xhr) {
-                console.error("Sending asynchronous failed");
+                printMessages([{'message': "Request failed"}], "error-request");
                 handleMessages(data);
 
                 highchart.hideLoading();
@@ -179,7 +179,7 @@ function registerAnomalyDetectionForm(form_id) {
                 $(":submit").attr("disabled", false);
             },
             error: function(data, status, xhr) {
-                console.error("Sending asynchronous failed");
+                printMessages([{'message': "Request failed"}], "error-request");
                 handleMessages(data);
 
                 highchart.hideLoading();
@@ -227,24 +227,28 @@ function groupBy(list, keyGetter) {
     return map;
 }
 
-function printMessages(messages) {
+function printGroupedMessages(messages) {
     grouped_messages = groupBy(messages, message => message.level_tag);
-    grouped_messages.forEach((value, tag) => printStrMessage(value, tag));
+    grouped_messages.forEach((value, tag) => printMessages(value, tag));
 }
 
-function printStrMessage(value, tag) {
+function printMessages(value, tag) {
     message_container = $('#message-container');
     html = "<div class=\"messages messages-" + tag + "\">";
     html += htmlMessages(value);
+    html += "<button id=\"messages-" + tag + "-close\" class=\"close btn-msg-close\"><i class=\"mdi mdi-18px mdi-close\"></i></button>";
     html += "</div>";
     message_container.append(html);
+    $("#messages-" + tag + "-close").click(function() {
+        $(this).parent().fadeOut(800);
+    });
 }
 
 function htmlMessagesList(messages) {
     html = "<ul class=\"messages_list\">";
-    messages.forEach(error => {
+    messages.forEach(msg => {
         html += "<li class=\"messages_item\">";
-        html += error.message;
+        html += msg.message;
         html += "</li>";
     });
     html += "</ul>";

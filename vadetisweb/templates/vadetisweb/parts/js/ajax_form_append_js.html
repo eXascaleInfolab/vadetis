@@ -29,7 +29,7 @@
                 }
             },
             error: function (data, status, xhr) {
-                console.error("Sending asynchronous failed");
+                printMessages([{'message': "Request failed"}], "error-request");
                 handleMessages(data);
                 $('#{{ form_append_container }}').empty();
             }

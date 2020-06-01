@@ -1,6 +1,5 @@
-
 /**
- * Styles for system messages.
+ * Styles for system messages
  */
 .messages {
     background: no-repeat 10px 17px;
@@ -45,6 +44,13 @@
     border-color: #f9c9bf #f9c9bf #f9c9bf transparent;
     box-shadow: -8px 0 0 #e62600;
 }
+.messages-error-request {
+    background-color: #fcf4f2;
+    color: #a51b00;
+    background-image: url("../img/messages/error.svg");
+    border-color: #f9c9bf #f9c9bf #f9c9bf transparent;
+    box-shadow: -8px 0 0 #e62600;
+}
 .messages-info {
     background-color: #d9edf7;
     color: #31708f;
@@ -52,7 +58,6 @@
     border-color: #0074bd #0074bd #0074bd transparent;
     box-shadow: -8px 0 0 #0074bd;
 }
-
 .messages-debug {
     background-color: #d9edf7;
     color: #31708f;

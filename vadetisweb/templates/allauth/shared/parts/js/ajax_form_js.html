@@ -12,9 +12,9 @@
                  handleRedirect(xhr);
             },
             error: function (data, status, xhr) {
-                console.error("Sending asynchronous failed");
+                printMessages([{'message': "Request failed"}], "error-request");
                 {% if error_msg %}
-                printMessages(JSON.parse('[{ "message":"{{ error_msg }}", "level_tag":"error"}]'));
+                printGroupedMessages(JSON.parse('[{ "message":"{{ error_msg }}", "level_tag":"error"}]'));
                 {% endif %}
                 {% if hasCaptcha is True %}
                 grecaptcha.reset();

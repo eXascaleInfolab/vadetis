@@ -21,9 +21,9 @@
                 setSeriesData(highchart, series_data_json);
             },
             error: function (data, status, xhr) {
+                printMessages([{'message': "Request failed"}], "error-request");
                 handleMessages(data);
                 highchart.hideLoading();
-                console.error("Sending asynchronous failed");
             }
         });
     });

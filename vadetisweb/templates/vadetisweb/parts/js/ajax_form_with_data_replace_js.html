@@ -17,8 +17,8 @@ function ajaxSubmit(formData, formid) {
             $('#'+formid).html(new_form_inner);
         },
         error: function (data, status, xhr) {
+            printMessages([{'message': "Request failed"}], "error-request");
             handleMessages(data);
-            console.error("Sending asynchronous failed");
         }
     });
 }

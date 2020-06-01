@@ -22,7 +22,7 @@ function updateHighchartsSeriesForThreshold(highchart, url, post_data, callback)
             callback(dataset_series_new_json, new_info);
         },
         error: function(data, status, xhr) {
-                console.error("Sending asynchronous failed");
+                printMessages([{'message': "Request failed"}], "error-request");
                 handleMessages(data);
         }
     });
@@ -276,7 +276,7 @@ function downloadDataset(highchart, url, type, callback) {
             callback();
         },
         error: function (data, status, xhr) {
-            console.error("Sending asynchronous failed");
+            printMessages([{'message': "Request failed"}], "error-request");
             handleMessages(data);
             callback();
         }
@@ -313,7 +313,7 @@ function updateSeriesForType(highchart, url, type, show_anomaly, callback) {
             callback();
         },
         error: function (data, status, xhr) {
-            console.error("Sending asynchronous failed");
+            printMessages([{'message': "Request failed"}], "error-request");
             handleMessages(data);
             highchart.hideLoading();
             callback();
