@@ -15,6 +15,7 @@
             type: $(this).attr('method'),
             success: function (data, status, xhr) {
                  handleRedirect(xhr);
+                 printMessages([{'message': "Saved"}], "success");
             },
             error: function (data, status, xhr) {
                 printMessages([{'message': "Request failed"}], "error-request");
