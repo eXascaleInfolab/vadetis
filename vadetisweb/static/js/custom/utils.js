@@ -4,6 +4,11 @@ function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
+function insertImg(html_id, imgBlob){
+    // use URL context to display image
+    var url = window.URL || window.webkitURL;
+    $("#" + html_id).html($("<img/>",{src:url.createObjectURL(imgBlob)}));
+}
 
 function loadImage(html_id, url, post_data, callback) {
     var csrftoken = Cookies.get('csrftoken');
@@ -15,9 +20,14 @@ function loadImage(html_id, url, post_data, callback) {
         },
         type: "POST",
         url: url,
+        dataType: 'binary',
         data: post_data,
         success: function (response) {
-            $("#" + html_id).html('<img src="data:image/png;base64,' + response + '" style="max-width: 100%;"/>');
+            insertImg(html_id, response);
+            callback();
+        },
+        error: function(data, status, xhr) {
+            printMessages([{'message': "Request failed"}], "error-request");
             callback();
         }
     });

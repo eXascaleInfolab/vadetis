@@ -1,21 +1,18 @@
-import urllib, json, base64, logging
-import numpy as np
+import base64, logging
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
-from rest_framework.parsers import MultiPartParser
 from drf_yasg.utils import swagger_auto_schema
+from wsgiref.util import FileWrapper
 
 from django.urls import reverse
 from django.shortcuts import redirect
-from django.core.files.temp import NamedTemporaryFile
 from django.http import HttpResponse
 from django.contrib import messages
 
 from vadetisweb.serializers.anomaly_detection_algorithm_serializers import *
 from vadetisweb.models import DataSet
-from vadetisweb.parameters import LISA_PEARSON, HISTOGRAM, CLUSTER_GAUSSIAN_MIXTURE, SVM, ISOLATION_FOREST, PEARSON, DTW, GEO
 from vadetisweb.utils import *
 from vadetisweb.algorithms import *
 from vadetisweb.factory import dataset_not_found_msg
@@ -591,14 +588,18 @@ class CnfImage(APIView):
 
     def post(self, request):
         data = request.POST['data']
+        logging.info("data " + data)
         cnf_matrix = np.array(json.loads(data))
 
         temp_image = NamedTemporaryFile(suffix='.png')
         plot_confusion_matrix(temp_image.name, cnf_matrix, classes=['Normal', 'Anomaly'], title='')
+        file_size = os.path.getsize(temp_image.name)
 
-        open_tempfile = open(temp_image.name, 'rb')
-        cnf_matrix_base64 = base64.b64encode(open_tempfile.read())
-        return HttpResponse(cnf_matrix_base64, content_type="image/png")
+        response = HttpResponse(FileWrapper(temp_image), content_type='image/png',
+                                status=status.HTTP_201_CREATED)
+        response['Content-Disposition'] = 'attachment; filename="%s"' % "cnf.png"
+        response['Content-Length'] = file_size
+        return response
 
 
 class ThresholdsScoresImage(APIView):
@@ -615,7 +616,11 @@ class ThresholdsScoresImage(APIView):
 
         temp_image = NamedTemporaryFile(suffix='.png')
         plot_thresholds_scores(temp_image.name, thresholds, scores)
+        file_size= os.path.getsize(temp_image.name)
 
-        open_tempfile = open(temp_image.name, 'rb')
-        image_base64 = base64.b64encode(open_tempfile.read())
-        return HttpResponse(image_base64, content_type="image/png")
+        response = HttpResponse(FileWrapper(temp_image), content_type='image/png',
+                                status=status.HTTP_201_CREATED)
+        response['Content-Disposition'] = 'attachment; filename="%s"' % "threshold_scores.png"
+        response['Content-Length'] = file_size
+
+        return response

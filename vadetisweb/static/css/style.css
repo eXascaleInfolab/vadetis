@@ -37,6 +37,10 @@
     opacity: 0.8;
 }
 
+.img-container img {
+    max-width: 100%;
+}
+
 :root {
   --blue: #007bff;
   --indigo: #6610f2;
