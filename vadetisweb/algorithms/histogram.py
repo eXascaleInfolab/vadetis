@@ -1,3 +1,4 @@
+import logging
 from vadetisweb.utils import get_info
 from .helper_functions import *
 
@@ -48,7 +49,7 @@ def histogram(df, df_class, df_train, df_train_class, maximize_score=F1_SCORE, t
 
     # square root of number of instances as number of bins
     num_bins = (np.sqrt(train.shape[0])).astype(int)
-    print('Number of bins', num_bins)
+    logging.debug('Number of bins', num_bins)
 
     # create and train model
     model = hist_model(bins=num_bins)

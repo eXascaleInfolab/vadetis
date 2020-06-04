@@ -356,7 +356,7 @@ function updateThreshold(value) {
 
 function requestCnfMatrix(portlet_id, img_container_id, info) {
     // note: url is taken from global const
-    var cnf_data = { data : JSON.stringify(info.cnf_matrix) };
+    var cnf_data = { 'cnf' : JSON.stringify(info.cnf_matrix) };
     loadImage(img_container_id, cnf_url, cnf_data, function () {
         $('#' + portlet_id).show();
     });
@@ -364,7 +364,7 @@ function requestCnfMatrix(portlet_id, img_container_id, info) {
 
 function requestPlot(portlet_id, img_container_id, info) {
     // note: url is taken from global const
-    var ts_data = { thresholds : JSON.stringify(info.thresholds), scores : JSON.stringify(info.threshold_scores) };
+    var ts_data = { 'thresholds' : JSON.stringify(info.thresholds), 'scores' : JSON.stringify(info.threshold_scores) };
     loadImage(img_container_id, plot_url, ts_data, function () {
         $('#' + portlet_id).show();
     });

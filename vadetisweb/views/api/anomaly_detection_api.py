@@ -1,14 +1,11 @@
-import base64, logging
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
-from wsgiref.util import FileWrapper
 
 from django.urls import reverse
 from django.shortcuts import redirect
-from django.http import HttpResponse
 from django.contrib import messages
 
 from vadetisweb.serializers.anomaly_detection_algorithm_serializers import *
@@ -580,47 +577,3 @@ class DatasetThresholdUpdateJson(APIView):
         else:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
-
-class CnfImage(APIView):
-    """
-    Request cnf matrix
-    """
-
-    def post(self, request):
-        data = request.POST['data']
-        logging.info("data " + data)
-        cnf_matrix = np.array(json.loads(data))
-
-        temp_image = NamedTemporaryFile(suffix='.png')
-        plot_confusion_matrix(temp_image.name, cnf_matrix, classes=['Normal', 'Anomaly'], title='')
-        file_size = os.path.getsize(temp_image.name)
-
-        response = HttpResponse(FileWrapper(temp_image), content_type='image/png',
-                                status=status.HTTP_201_CREATED)
-        response['Content-Disposition'] = 'attachment; filename="%s"' % "cnf.png"
-        response['Content-Length'] = file_size
-        return response
-
-
-class ThresholdsScoresImage(APIView):
-    """
-    Request threshold scores image
-    """
-
-    def post(self, request):
-        thresholds = request.POST['thresholds']
-        thresholds = np.array(json.loads(thresholds))
-
-        scores = request.POST['scores']
-        scores = np.array(json.loads(scores))
-
-        temp_image = NamedTemporaryFile(suffix='.png')
-        plot_thresholds_scores(temp_image.name, thresholds, scores)
-        file_size= os.path.getsize(temp_image.name)
-
-        response = HttpResponse(FileWrapper(temp_image), content_type='image/png',
-                                status=status.HTTP_201_CREATED)
-        response['Content-Disposition'] = 'attachment; filename="%s"' % "threshold_scores.png"
-        response['Content-Length'] = file_size
-
-        return response
