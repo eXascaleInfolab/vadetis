@@ -3,14 +3,14 @@ from rest_framework import viewsets
 
 from vadetisweb.models import DataSet
 from vadetisweb.parameters import REAL_WORLD, SYNTHETIC
-from vadetisweb.serializers import DetectionDatasetDataTablesSerializer
+from vadetisweb.serializers import DisplayDatasetDataTablesSerializer
 
-class DetectionSyntheticDatasetDataTableViewSet(viewsets.ModelViewSet):
+class DisplaySyntheticDatasetDataTableViewSet(viewsets.ModelViewSet):
     """
     Request synthetic datasets
     """
     queryset = DataSet.objects.all()
-    serializer_class = DetectionDatasetDataTablesSerializer
+    serializer_class = DisplayDatasetDataTablesSerializer
 
     def get_queryset(self):
         queryset = self.queryset
@@ -28,12 +28,12 @@ class DetectionSyntheticDatasetDataTableViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
-class DetectionRealWorldDatasetDataTableViewSet(viewsets.ModelViewSet):
+class DisplayRealWorldDatasetDataTableViewSet(viewsets.ModelViewSet):
     """
     Request real-world datasets
     """
     queryset = DataSet.objects.all()
-    serializer_class = DetectionDatasetDataTablesSerializer
+    serializer_class = DisplayDatasetDataTablesSerializer
 
     def get_queryset(self):
         queryset = self.queryset

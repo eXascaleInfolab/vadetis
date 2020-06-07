@@ -55,11 +55,19 @@
                                 <ul class="kt-menu__nav ">
                                     <li class="kt-menu__item kt-menu__item--rel"><a href="{% url 'vadetisweb:index' %}" class="kt-menu__link"><span class="kt-menu__link-text">Overview</span></a>
                                     </li>
+                                    <li class="kt-menu__item kt-menu__item--submenu kt-menu__item--rel" data-ktmenu-submenu-toggle="click" aria-haspopup="true"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-text">Display</span></a>
+                                        <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
+                                            <ul class="kt-menu__subnav">
+                                                <li class="kt-menu__item " aria-haspopup="true"><a href="{% url 'vadetisweb:display_real_world_datasets' %}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Real-world datasets</span></a></li>
+                                                <li class="kt-menu__item " aria-haspopup="true"><a href="{% url 'vadetisweb:display_synthetic_datasets' %}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Synthetic datasets</span></a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
                                     <li class="kt-menu__item kt-menu__item--submenu kt-menu__item--rel" data-ktmenu-submenu-toggle="click" aria-haspopup="true"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><span class="kt-menu__link-text">Detection</span></a>
                                         <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left">
                                             <ul class="kt-menu__subnav">
                                                 <li class="kt-menu__item " aria-haspopup="true"><a href="{% url 'vadetisweb:detection_real_world_datasets' %}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Real-world datasets</span></a></li>
-                                                <li class="kt-menu__item " aria-haspopup="true"><a href="{% url 'vadetisweb:detection_synthetic_datasets' %}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Synthetic datasets</span><!--<span class="kt-menu__link-badge"><span class="kt-badge kt-badge--success">2</span></span>--></a></li>
+                                                <li class="kt-menu__item " aria-haspopup="true"><a href="{% url 'vadetisweb:detection_synthetic_datasets' %}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Synthetic datasets</span></a></li>
                                                 <!--<li class="kt-menu__item  kt-menu__item--submenu" data-ktmenu-submenu-toggle="hover" aria-haspopup="true"><a href="#" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Manage Orders</span><i class="kt-menu__hor-arrow la la-angle-right"></i><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
                                                     <div class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--right">
                                                         <ul class="kt-menu__subnav">

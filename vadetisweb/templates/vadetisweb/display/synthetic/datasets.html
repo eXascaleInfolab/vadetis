@@ -5,7 +5,7 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    {% breadcrumb "Real-World Datasets" "vadetisweb:detection_real_world_datasets" %}
+    {% breadcrumb "Synthetic Datasets" "vadetisweb:detection_synthetic_datasets" %}
 {% endblock %}
 
 {% block css %}
@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block page_title %}
-    <h3 class="kt-subheader__title">Real-World Datasets</h3>
+    <h3 class="kt-subheader__title">Synthetic Datasets</h3>
 {% endblock %}
 
 {% block content %}
@@ -25,13 +25,13 @@
                     <i class="mdi mdi-chart-timeline-variant mdi-24px kt-font-brand"></i>
                 </span>
                 <h3 class="kt-portlet__head-title">
-                    Table of Real-World Datasets
+                    Table of Synthetic Datasets
                 </h3>
             </div>
         </div>
-        <div class="kt-portlet__body kt-portlet__body--fit">
+        <div class="kt-portlet__body">
             <!--begin: Datatable -->
-            <table id="table_real_world_datasets" class="table table-bordered table-hover table-checkable"></table>
+            <table id="table_synthetic_datasets" class="table table-bordered table-hover table-checkable"></table>
             <!--end: Datatable -->
         </div>
     </div>
@@ -43,7 +43,7 @@
     <script src="{% static 'js/custom/datatables.init.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
         jQuery(document).ready(function () {
-            VadetisDatatables.init("table_real_world_datasets", "{% url 'vadetisweb:detection_real_world_datasets_datatable-list' %}?format=datatables");
+            VadetisDatatables.init("table_synthetic_datasets", "{% url 'vadetisweb:display_synthetic_datasets_datatable-list' %}?format=datatables");
         });
     </script>
 {% endblock %}

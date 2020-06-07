@@ -1,0 +1,93 @@
+{% extends 'vadetisweb/detection/real-world/datasets.html' %}
+{% load static %}
+{% load breadcrumbs %}
+{% load vadetistags %}
+{% load rest_framework %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb dataset.title "vadetisweb:detection_real_world_dataset" dataset_id=dataset.id %}
+{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+    {% include 'vadetisweb/parts/includes/highcharts_css.html' %}
+    <link href="{% static 'css/lib/nouislider/nouislider.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/lib/roundslider/roundslider.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/lib/ion-rangeslider/ion.rangeSlider.min.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block head_js %}
+    {{ block.super }}
+{% endblock %}
+
+{% block page_title %}
+    <h3 class="kt-subheader__title">{{ dataset.title }}</h3>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">{{ dataset.title }}</h3>
+                    </div>
+                    <div class="kt-portlet__head-toolbar">
+                        <div class="kt-portlet__head-actions">
+                            <a id="raw_btn" href="#" class="btn btn-outline-brand btn-bold btn-sm">Raw</a>
+                            <a id="zscore_btn" href="#" class="btn btn-outline-brand btn-bold btn-sm">Z-Score</a>
+                            <div class="dropdown dropdown-inline">
+                                <a href="#" class="btn btn-outline-brand btn-icon btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="mdi mdi-18px mdi-dots-horizontal"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <ul class="kt-nav">
+                                        <li class="kt-nav__item">
+                                            <a id="download_csv" href="#" class="kt-nav__link">
+                                                <i class="mdi mdi-18px mdi-file-table-outline kt-nav__link-icon"></i>
+                                                <span class="kt-nav__link-text">Download CSV</span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a id="download_json" href="#" class="kt-nav__link">
+                                                <i class="mdi mdi-18px mdi-json kt-nav__link-icon flaticon2-settings"></i>
+                                                <span class="kt-nav__link-text">Download JSON</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="kt-portlet__body kt-portlet__body--fit">
+                    <!--begin: Highcharts -->
+                    <div id="highcharts_container"></div>
+                    <!--end: Highcharts -->
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block additional_bottom_js %}
+    <!-- page extensions -->
+    {% include 'vadetisweb/parts/includes/roundslider_js.html' %}
+    {% include 'vadetisweb/parts/includes/nouislider_js.html' %}
+    {% include 'vadetisweb/parts/includes/ion_rangeslider_js.html' %}
+    <script src="{% static 'js/lib/binarytransport/jquery.binarytransport.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/lib/highcharts/highstock.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/custom/highcharts.utils.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/custom/highcharts.view.init.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/custom/highcharts.actions.init.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/custom/form.extensions.js' %}" type="text/javascript"></script>
+
+    <!-- page init -->
+    <script src="{% static 'js/page/display/page.init.js' %}" type="text/javascript"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            DatasetPage.init("{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_download_file' %}", {{ selected_button }});
+        });
+    </script>
+{% endblock %}

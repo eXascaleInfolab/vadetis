@@ -16,6 +16,8 @@ app_name = 'vadetisweb'
 router = routers.DefaultRouter()
 router.register(r'account/datasets', views.DatasetDataTableViewSet, basename='account_datasets_datatable')
 router.register(r'account/training-datasets', views.TrainingDatasetDataTableViewSet, basename='account_training_datasets_datatable')
+router.register(r'display/datasets/synthetic', views.DisplaySyntheticDatasetDataTableViewSet, basename='display_synthetic_datasets_datatable')
+router.register(r'display/datasets/real-world', views.DisplayRealWorldDatasetDataTableViewSet, basename='display_real_world_datasets_datatable')
 router.register(r'detection/datasets/synthetic', views.DetectionSyntheticDatasetDataTableViewSet, basename='detection_synthetic_datasets_datatable')
 router.register(r'detection/datasets/real-world', views.DetectionRealWorldDatasetDataTableViewSet, basename='detection_real_world_datasets_datatable')
 
@@ -46,6 +48,13 @@ urlpatterns = apipatterns + [
 
     path('account/datasets/upload/', views.AccountUploadDataset.as_view(), name='account_datasets_upload'),
     path('account/training-datasets/upload/', views.AccountUploadTrainingDataset.as_view(), name='account_training_datasets_upload'),
+
+    path('display/real-world/', views.DisplayRealWorldDatasets.as_view(), name='display_real_world_datasets'),
+    path('display/real-world/<int:dataset_id>/', views.DisplayRealWorldDataset.as_view(),
+         name='display_real_world_dataset'),
+    path('display/synthetic/', views.DisplaySyntheticDatasets.as_view(), name='display_synthetic_datasets'),
+    path('display/synthetic/<int:dataset_id>/', views.DisplaySyntheticDataset.as_view(),
+         name='display_synthetic_dataset'),
 
     path('detection/real-world/', views.DetectionRealWorldDatasets.as_view(), name='detection_real_world_datasets'),
     path('detection/real-world/<int:dataset_id>/', views.DetectionRealWorldDataset.as_view(), name='detection_real_world_dataset'),
