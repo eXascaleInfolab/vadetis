@@ -270,6 +270,8 @@ function downloadDataset(highchart, url, type, callback) {
         url: url + '?format=' + type,
         data: formData,
         dataType: 'binary',
+        processData: false,
+        contentType: false,
         success: function (data, status, xhr) {
             if (data !== undefined) {
                 var header = xhr.getResponseHeader('Content-Disposition');
