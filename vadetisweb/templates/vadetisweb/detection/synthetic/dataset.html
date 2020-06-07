@@ -1,0 +1,214 @@
+{% extends 'vadetisweb/detection/synthetic/datasets.html' %}
+{% load static %}
+{% load breadcrumbs %}
+{% load vadetistags %}
+{% load rest_framework %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb dataset.title "vadetisweb:detection_synthetic_dataset" dataset_id=dataset.id %}
+{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+    {% include 'vadetisweb/parts/includes/highcharts_css.html' %}
+    <link href="{% static 'css/lib/nouislider/nouislider.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/lib/roundslider/roundslider.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/lib/ion-rangeslider/ion.rangeSlider.min.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block head_js %}
+    {{ block.super }}
+    <script type="text/javascript">
+        const cnf_url = "{% get_host_url request=request %}{% url 'vadetisweb:cnf_image' %}";
+        const plot_url = "{% get_host_url request=request %}{% url 'vadetisweb:thresholds_scores_image' %}";
+    </script>
+{% endblock %}
+
+{% block page_title %}
+    <h3 class="kt-subheader__title">{{ dataset.title }}</h3>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">{{ dataset.title }}</h3>
+                    </div>
+                    <div class="kt-portlet__head-toolbar">
+                        <div class="kt-portlet__head-actions">
+                            <div id="color_legend_group" class="btn-group">
+                                <button id="true_positive_btn" type="button" class="btn btn-brand btn-color-legend btn-sm" data-container="body" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="True Positive">TP</button>
+                                <button id="false_positive_btn" type="button" class="btn btn-brand btn-color-legend btn-sm" data-container="body" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="False Positive">FP</button>
+                                <button id="false_negative_btn" type="button" class="btn btn-brand btn-color-legend btn-sm" data-container="body" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="False Negative">FN</button>
+                            </div>
+                            <a id="raw_btn" href="#" class="btn btn-outline-brand btn-bold btn-sm">Raw</a>
+                            <a id="zscore_btn" href="#" class="btn btn-outline-brand btn-bold btn-sm">Z-Score</a>
+                            <a id="reset_chart_btn" href="#" class="btn btn-outline-brand btn-bold btn-sm">Reset</a>
+                            <div class="dropdown dropdown-inline">
+                                <a href="#" class="btn btn-outline-brand btn-icon btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="mdi mdi-18px mdi-dots-horizontal"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <ul class="kt-nav">
+                                        <li class="kt-nav__item">
+                                            <a id="download_csv" href="#" class="kt-nav__link">
+                                                <i class="mdi mdi-18px mdi-file-table-outline kt-nav__link-icon"></i>
+                                                <span class="kt-nav__link-text">Download CSV</span>
+                                            </a>
+                                        </li>
+                                        <li class="kt-nav__item">
+                                            <a id="download_json" href="#" class="kt-nav__link">
+                                                <i class="mdi mdi-18px mdi-json kt-nav__link-icon flaticon2-settings"></i>
+                                                <span class="kt-nav__link-text">Download JSON</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="kt-portlet__body kt-portlet__body--fit">
+                    <!--begin: Highcharts -->
+                    <div id="highcharts_container"></div>
+                    <!--end: Highcharts -->
+                </div>
+            </div>
+            <!--begin: Inner Row -->
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                    <div id="scores_portlet" class="kt-portlet" style="display:none;">
+                        <div class="kt-portlet__head">
+                            <div class="kt-portlet__head-label">
+                                <h3 class="kt-portlet__head-title">Scores</h3>
+                            </div>
+                        </div>
+                        <div class="kt-portlet__body ">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                                    <div id="roundslider_accuracy" class="roundslider" title="Accuracy"></div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                                    <div id="roundslider_f1" class="roundslider" title="F1-Score"></div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                                    <div id="roundslider_precision" class="roundslider" title="Precision"></div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                                    <div id="roundslider_recall" class="roundslider" title="Recall"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                    <div id="cnf_portlet" class="kt-portlet" style="display:none;">
+                        <div class="kt-portlet__head">
+                            <div class="kt-portlet__head-label">
+                                <h3 class="kt-portlet__head-title">Confusion Matrix</h3>
+                            </div>
+                        </div>
+                        <div class="kt-portlet__body kt-portlet__body--fit">
+                            <div id="cnf_matrix_img" class="img-container"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                    <div id="plot_portlet" class="kt-portlet" style="display:none;">
+                        <div class="kt-portlet__head">
+                            <div class="kt-portlet__head-label">
+                                <h3 class="kt-portlet__head-title">Threshold / Score Plot</h3>
+                            </div>
+                        </div>
+                        <div class="kt-portlet__body kt-portlet__body--fit">
+                            <div id="plot_img" class="img-container"></div>
+                            <p>(*): These values are computed from the training data.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end: Inner Row -->
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <div id="threshold_portlet" class="kt-portlet kt-portlet--collapsed" data-ktportlet="true" style="display:none;">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">Threshold</h3>
+                    </div>
+                    <div class="kt-portlet__head-toolbar">
+                        <div class="kt-portlet__head-group">
+                            <a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-default btn-icon-md"><i class="mdi mdi-chevron-down mdi-18px"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="kt-portlet__body kt-portlet__body--fit">
+                    <div class="kt-padding-25">
+                        Current Threshold: <span id="current_threshold"></span><br />
+                    </div>
+                    <div id="threshold_slider"></div>
+                    {% url 'vadetisweb:threshold_update_json' as threshold_url %}
+                    {% include 'vadetisweb/parts/forms/serializer_variable_form.html' with formid="threshold_form" url=threshold_url form_serializer=threshold_serializer submit_label="Update" %}
+                </div>
+            </div>
+            <div class="kt-portlet kt-portlet--collapsed" data-ktportlet="true">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">Anomaly Detection</h3>
+                    </div>
+                    <div class="kt-portlet__head-toolbar">
+                        <div class="kt-portlet__head-group">
+                            <a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-default btn-icon-md"><i class="mdi mdi-chevron-down mdi-18px"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="kt-portlet__body kt-portlet__body--fit">
+                    {% url 'vadetisweb:detection_algorithm_selection' dataset_id=dataset.id as detection_url %}
+                    {% include 'vadetisweb/parts/forms/serializer_on_change_submit_form.html' with formid="anomaly_algorithm_form" url=detection_url form_serializer=detection_serializer %}
+                    <div id="form_append_container"></div>
+                </div>
+            </div>
+            <div class="kt-portlet kt-portlet--collapsed" data-ktportlet="true">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">Anomaly Injection</h3>
+                    </div>
+                    <div class="kt-portlet__head-toolbar">
+                        <div class="kt-portlet__head-group">
+                            <a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-default btn-icon-md"><i class="mdi mdi-chevron-down mdi-18px"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="kt-portlet__body kt-portlet__body--fit">
+                    {% url 'vadetisweb:injection_form' dataset_id=dataset.id as injection_url %}
+                    {% include 'vadetisweb/parts/forms/serializer_variable_form.html' with formid="anomaly_injection_form" url=injection_url form_serializer=injection_serializer submit_label="Inject" %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block additional_bottom_js %}
+    <!-- page extensions -->
+    {% include 'vadetisweb/parts/includes/roundslider_js.html' %}
+    {% include 'vadetisweb/parts/includes/nouislider_js.html' %}
+    {% include 'vadetisweb/parts/includes/ion_rangeslider_js.html' %}
+    <script src="{% static 'js/lib/binarytransport/jquery.binarytransport.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/lib/highcharts/highstock.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/custom/highcharts.utils.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/custom/highcharts.view.init.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/custom/highcharts.actions.init.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/custom/form.extensions.js' %}" type="text/javascript"></script>
+
+    <!-- page init -->
+    <script src="{% static 'js/page/detection/page.init.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/page/detection/form.init.js' %}" type="text/javascript"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            DatasetPage.init("{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_download_file' %}", {{ selected_button }});
+            DatasetForm.init("anomaly_injection_form", "json");
+        });
+    </script>
+{% endblock %}

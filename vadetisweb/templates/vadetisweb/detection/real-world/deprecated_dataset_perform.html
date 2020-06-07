@@ -1,4 +1,4 @@
-{% extends 'vadetisweb/datasets/synthetic/dataset.html' %}
+{% extends 'vadetisweb/detection/real-world/dataset.html' %}
 {% load static %}
 {% load breadcrumbs %}
 {% load vadetistags %}
@@ -12,7 +12,7 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    {% breadcrumb "Perform" "vadetisweb:synthetic_dataset_perform" dataset_id=dataset.id %}
+    {% breadcrumb "Perform" "vadetisweb:detection_synthetic_dataset_perform" dataset_id=dataset.id %}
 {% endblock %}
 
 {% block head_js %}

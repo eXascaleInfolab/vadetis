@@ -2,67 +2,18 @@ from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 from rest_framework_csv.renderers import CSVStreamingRenderer
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAdminUser
-from rest_framework import viewsets, status
+from rest_framework import status
 from wsgiref.util import FileWrapper
 
 from drf_yasg.utils import swagger_auto_schema
 from django.contrib import messages
 from django.shortcuts import redirect
-from django.core.files.temp import NamedTemporaryFile
 from django.http import HttpResponse
 
 from vadetisweb.models import DataSet
 from vadetisweb.utils import strToBool, get_settings, dataset_to_json, get_datasets_from_json, df_zscore, export_to_csv, export_to_json
-from vadetisweb.parameters import REAL_WORLD, SYNTHETIC
-from vadetisweb.serializers import DatasetDataTablesSerializer, DatasetUpdateSerializer, DatasetExportSerializer
+from vadetisweb.serializers import DatasetUpdateSerializer, DatasetExportSerializer
 from vadetisweb.factory import dataset_not_found_msg
-
-
-class SyntheticDatasetDataTableViewSet(viewsets.ModelViewSet):
-    """
-    Request synthetic datasets
-    """
-    queryset = DataSet.objects.all()
-    serializer_class = DatasetDataTablesSerializer
-
-    def get_queryset(self):
-        queryset = self.queryset
-        query_set = queryset.filter(type=SYNTHETIC, is_public=True, is_training_data=False)
-        return query_set
-
-    def get_permissions(self):
-        """
-        Instantiates and returns the list of permissions that this view requires.
-        """
-        if self.action == 'list':
-            permission_classes = [AllowAny]
-        else:
-            permission_classes = [IsAdminUser]
-        return [permission() for permission in permission_classes]
-
-
-class RealWorldDatasetDataTableViewSet(viewsets.ModelViewSet):
-    """
-    Request real-world datasets
-    """
-    queryset = DataSet.objects.all()
-    serializer_class = DatasetDataTablesSerializer
-
-    def get_queryset(self):
-        queryset = self.queryset
-        query_set = queryset.filter(type=REAL_WORLD, is_public=True, is_training_data=False)
-        return query_set
-
-    def get_permissions(self):
-        """
-        Instantiates and returns the list of permissions that this view requires.
-        """
-        if self.action == 'list':
-            permission_classes = [AllowAny]
-        else:
-            permission_classes = [IsAdminUser]
-        return [permission() for permission in permission_classes]
 
 
 class DatasetJson(APIView):

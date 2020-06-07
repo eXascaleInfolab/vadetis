@@ -14,40 +14,40 @@ from vadetisweb.factory import dataset_not_found_msg
 from vadetisweb.parameters import SYNTHETIC, REAL_WORLD
 
 
-class SyntheticDatasets(APIView):
+class DetectionSyntheticDatasets(APIView):
     """
     View for synthetic datasets
     """
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'vadetisweb/datasets/synthetic/datasets.html'
+    template_name = 'vadetisweb/detection/synthetic/datasets.html'
 
     def get(self, request):
         return Response(status=status.HTTP_200_OK)
 
 
-class RealWorldDatasets(APIView):
+class DetectionRealWorldDatasets(APIView):
     """
     View for real world datasets
     """
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'vadetisweb/datasets/real-world/datasets.html'
+    template_name = 'vadetisweb/detection/real-world/datasets.html'
 
     def get(self, request):
         return Response(status=status.HTTP_200_OK)
 
 
-class SyntheticDataset(APIView):
+class DetectionSyntheticDataset(APIView):
     """
     View for a single synthetic dataset
     """
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'vadetisweb/datasets/synthetic/dataset.html'
+    template_name = 'vadetisweb/detection/synthetic/dataset.html'
 
     def get(self, request, dataset_id):
         try:
             dataset = DataSet.objects.get(id=dataset_id)
             if dataset.type != SYNTHETIC:
-                return redirect('vadetisweb:synthetic_datasets')
+                return redirect('vadetisweb:detection_synthetic_datasets')
 
             selected_button = get_highcharts_range_button_preselector(dataset.frequency)
 
@@ -65,65 +65,36 @@ class SyntheticDataset(APIView):
 
         except DataSet.DoesNotExist:
             messages.error(request, dataset_not_found_msg(dataset_id))
-            return redirect('vadetisweb:synthetic_datasets')
+            return redirect('vadetisweb:detection_synthetic_datasets')
 
 
-class SyntheticDatasetPerformAnomalyDetection(APIView):
-    """
-    View for performed anomaly detection on a synthetic dataset
-    """
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'vadetisweb/datasets/synthetic/dataset_perform.html'
-
-    def get(self, request, dataset_id):
-        try:
-            dataset = DataSet.objects.get(id=dataset_id)
-            selected_button = get_highcharts_range_button_preselector(dataset.frequency)
-            conf = get_conf_from_query_params(request)
-
-            if not is_valid_conf(conf):
-                message = 'Invalid configuration supplied!'
-                messages.error(request, message)
-                return redirect(reverse('vadetisweb:synthetic_dataset', args=[dataset.id]))
-
-            else:
-                conf_params = urllib.parse.urlencode(conf)
-                serializer = ThresholdSerializer()
-                return Response({'is_synthetic': True, 'conf_params': conf_params, 'conf': conf,
-                                 'dataset': dataset,
-                                 'selected_button': selected_button,
-                                 'serializer': serializer}, status=status.HTTP_200_OK)
-
-        except DataSet.DoesNotExist:
-            messages.error(request, dataset_not_found_msg(dataset_id))
-            return redirect('vadetisweb:synthetic_datasets')
-
-
-class RealWorldDataset(APIView):
+class DetectionRealWorldDataset(APIView):
     """
     View for a single real world dataset
     """
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'vadetisweb/datasets/real-world/dataset.html'
+    template_name = 'vadetisweb/detection/real-world/dataset.html'
 
     def get(self, request, dataset_id):
         try:
             dataset = DataSet.objects.get(id=dataset_id)
             if dataset.type != REAL_WORLD:
-                return redirect('vadetisweb:real_world_datasets')
+                return redirect('vadetisweb:detection_real_world_datasets')
 
             selected_button = get_highcharts_range_button_preselector(dataset.frequency)
 
-            serializer = AlgorithmSerializer()
-            injection_serializer = AnomalyInjectionSerializer()
+            detection_serializer = AlgorithmSerializer()
+            injection_serializer = AnomalyInjectionSerializer(context={'dataset_selected': dataset_id, })
+            threshold_serializer = ThresholdSerializer()
 
             return Response({
                 'dataset': dataset,
                 'selected_button': selected_button,
-                'serializer': serializer,
+                'detection_serializer': detection_serializer,
                 'injection_serializer' : injection_serializer,
+                'threshold_serializer': threshold_serializer,
             }, status=status.HTTP_200_OK)
 
         except DataSet.DoesNotExist:
             messages.error(request, dataset_not_found_msg(dataset_id))
-            return redirect('vadetisweb:real_world_datasets')
+            return redirect('vadetisweb:detection_real_world_datasets')
