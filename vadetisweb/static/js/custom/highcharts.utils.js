@@ -364,8 +364,12 @@ function requestCnfMatrix(portlet_id, img_container_id, info) {
 
 function requestPlot(portlet_id, img_container_id, info) {
     // note: url is taken from global const
-    var ts_data = { 'thresholds' : JSON.stringify(info.thresholds), 'scores' : JSON.stringify(info.threshold_scores) };
-    loadImage(img_container_id, plot_url, ts_data, function () {
+    var plot_data = {
+        thresholds: info.thresholds,
+        threshold_scores: info.threshold_scores
+    };
+    var plotData = {'plot_data' : JSON.stringify(plot_data) };
+    loadImage(img_container_id, plot_url, plotData, function () {
         $('#' + portlet_id).show();
     });
 }

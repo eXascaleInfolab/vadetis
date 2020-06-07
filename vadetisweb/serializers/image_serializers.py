@@ -1,6 +1,6 @@
 from rest_framework import serializers
+from vadetisweb.fields.image_fields import *
 
-from vadetisweb.fields import CnfMatrixJsonField
 
 class CnfImageSerializer(serializers.Serializer):
     """
@@ -9,8 +9,8 @@ class CnfImageSerializer(serializers.Serializer):
     cnf = CnfMatrixJsonField()
 
 
-class ThresholdScoreImageSerializer(serializers.Serializer):
+class ThresholdsScoresImageSerializer(serializers.Serializer):
     """
 
     """
-    level = serializers.IntegerField()
+    plot_data = ThresholdsScoresJsonField()

@@ -23,7 +23,6 @@ class CnfImage(APIView):
             serializer = CnfImageSerializer(data=request.data)
             if serializer.is_valid():
 
-                logging.info(serializer.validated_data['cnf'])
                 cnf_matrix = np.array(serializer.validated_data['cnf'])
 
                 temp_image = NamedTemporaryFile(suffix='.png')
@@ -46,20 +45,26 @@ class ThresholdsScoresImage(APIView):
     Request threshold scores image
     """
 
+    @swagger_auto_schema(request_body=ThresholdsScoresImageSerializer)
     def post(self, request):
-        thresholds = request.POST['thresholds']
-        thresholds = np.array(json.loads(thresholds))
+        try:
+            serializer = ThresholdsScoresImageSerializer(data=request.data)
+            if serializer.is_valid():
+                plot_data = serializer.validated_data['plot_data']
+                thresholds = np.array(plot_data['thresholds'])
+                scores = np.array(plot_data['threshold_scores'])
 
-        scores = request.POST['scores']
-        scores = np.array(json.loads(scores))
+                temp_image = NamedTemporaryFile(suffix='.png')
+                plot_thresholds_scores(temp_image.name, thresholds, scores)
+                file_size= os.path.getsize(temp_image.name)
 
-        temp_image = NamedTemporaryFile(suffix='.png')
-        plot_thresholds_scores(temp_image.name, thresholds, scores)
-        file_size= os.path.getsize(temp_image.name)
+                response = HttpResponse(FileWrapper(temp_image), content_type='image/png',
+                                        status=status.HTTP_201_CREATED)
+                response['Content-Disposition'] = 'attachment; filename="%s"' % "threshold_scores.png"
+                response['Content-Length'] = file_size
 
-        response = HttpResponse(FileWrapper(temp_image), content_type='image/png',
-                                status=status.HTTP_201_CREATED)
-        response['Content-Disposition'] = 'attachment; filename="%s"' % "threshold_scores.png"
-        response['Content-Length'] = file_size
-
-        return response
+                return response
+            else:
+                return Response({}, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
