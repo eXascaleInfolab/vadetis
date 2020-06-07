@@ -16,11 +16,8 @@ function updateHighchartsSeriesForThreshold(highchart, url, post_data, callback)
 
         success: function (data, status, xhr) {
             handleMessages(data);
-
             var dataset_series_new_json = data['series'];
             var new_info = data['info'];
-            //dataset_series_data = generateSeriesFromJson(dataset_series_json, "{{ conf|get_item:'algorithm' }}", "{{ conf|get_item:'time_series' }}");
-            //loadSeries(highchart, dataset_series_data);
 
             setSeriesData(highchart, dataset_series_new_json);
 
@@ -290,6 +287,86 @@ function downloadDataset(highchart, url, type, callback) {
     });
 }
 
+function onChangeAjaxSubmit(formData, form_id, form_append_container_id) {
+    clearFormErrors(form_id);
+    clearMessages();
+    var form_selector = $("#" + form_id), form_append_container_selector = $("#" + form_append_container_id),
+        csrftoken = Cookies.get('csrftoken');
+    $.ajax({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        },
+        url: form_selector.attr('action'),
+        data: new FormData(formData),
+        type: form_selector.attr('method'),
+        enctype: form_selector.attr('enctype'),
+        processData: false,
+        contentType: false,
+        success: function (data, status, xhr) {
+            handleMessages(data);
+
+            if (data !== undefined) {
+                var receivedForm = $(data);
+                var receivedFormId = $(receivedForm).filter('form').attr('id');
+
+                form_append_container_selector.empty();
+                form_append_container_selector.append(receivedForm);
+                $('#' + form_append_container_id + ' [data-toggle="kt-popover"]').each(function () {
+                    KTApp.initPopover($(this));
+                });
+                registerAnomalyDetectionForm(receivedFormId);
+            } else {
+                form_append_container_selector.empty();
+            }
+        },
+        error: function (data, status, xhr) {
+            printMessages([{'message': "Request failed"}], "error-request");
+            handleMessages(data);
+            form_append_container_selector.empty();
+        }
+    });
+}
+
+function inject_replace(form_id, formData, format) {
+    clearFormErrors(form_id);
+    clearMessages();
+    var highchart = $('#highcharts_container').highcharts();
+    var form_selector = $("#" + form_id), csrftoken = Cookies.get('csrftoken'), dataset_series_json = getDatasetSeriesJson(highchart);
+
+    formData.append('dataset_series_json', JSON.stringify(dataset_series_json));
+    formData.append('normal_range', JSON.stringify(ionSliderRangeValue("normal_range")));
+    formData.append('anomaly_range', JSON.stringify(ionSliderRangeValue("anomaly_range")));
+
+    highchart.showLoading();
+
+    $.ajax({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        },
+        url: form_selector.attr('action') +'?format=' + format,
+        data: formData,
+        type: form_selector.attr('method'),
+        enctype: form_selector.attr('enctype'),
+        processData: false,
+        contentType: false,
+        success: function (data, status, xhr) {
+            handleMessages(data);
+
+            highchart.hideLoading();
+            var series_data_json = data['series'];
+            setSeriesData(highchart, series_data_json);
+        },
+        error: function (data, status, xhr) {
+            printMessages([{'message': "Request failed"}], "error-request");
+            handleMessages(data);
+            highchart.hideLoading();
+        }
+    });
+}
 
 //Deprecated
 function updateSeriesForType(highchart, url, type, show_anomaly, callback) {

@@ -12,7 +12,6 @@ var IonRangeSliderInitializer = function () {
     };
 }();
 
-
 function ionSliderRangeValue(input_id){
     var split = $("#" + input_id).val().split(";");
     return {'lower' : parseInt(split[0]),

@@ -11,15 +11,10 @@ var DatasetPage = function () {
         VadetisHighchartsFileDownload.init("highcharts_container", "download_csv", dataset_download_file_url, "csv");
         VadetisHighchartsFileDownload.init("highcharts_container", "download_json", dataset_download_file_url, "json");
 
-        IonRangeSliderInitializer.init("normal_range");
-        IonRangeSliderInitializer.init("anomaly_range");
-        IonRangeSliderInitializer.init("probability");
-
         // color settings
         $('#true_positive_btn').css({"background-color": getSetting('color_true_positive')});
         $('#false_positive_btn').css({"background-color": getSetting('color_false_positive')});
         $('#false_negative_btn').css({"background-color": getSetting('color_false_negative')});
-
     }
     return {
         // public

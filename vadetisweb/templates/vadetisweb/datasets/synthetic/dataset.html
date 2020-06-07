@@ -167,7 +167,7 @@
                 <div class="kt-portlet__body kt-portlet__body--fit">
                     {% url 'vadetisweb:anomaly_detection_algorithm_selection' dataset_id=dataset.id as detection_url %}
                     {% include 'vadetisweb/parts/forms/serializer_on_change_submit_form.html' with formid="anomaly_algorithm_form" url=detection_url form_serializer=detection_serializer %}
-                    <div id="detection_form_container"></div>
+                    <div id="form_append_container"></div>
                 </div>
             </div>
             <div class="kt-portlet kt-portlet--collapsed" data-ktportlet="true">
@@ -203,12 +203,12 @@
     <script src="{% static 'js/custom/form.extensions.js' %}" type="text/javascript"></script>
 
     <!-- page init -->
-    <script src="{% static 'js/page/dataset.page.init.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/page/dataset/page.init.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/page/dataset/form.init.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
         jQuery(document).ready(function () {
             DatasetPage.init("{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_download_file' %}", {{ selected_button }});
+            DatasetForm.init("anomaly_injection_form", "json");
         });
     </script>
-    {% include 'vadetisweb/parts/js/ajax_form_append_js.html' with form_append_container="detection_form_container" %}
-    {% include 'vadetisweb/parts/js/inject_replace_series_js.html' with formid="anomaly_injection_form" format="json" %}
 {% endblock %}

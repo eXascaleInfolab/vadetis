@@ -92,6 +92,4 @@
             VadetisHighchartsReload.init("highcharts_container", "reload_chart_btn", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}");
         });
     </script>
-    {% include "vadetisweb/parts/js/ajax_form_replace_js.html" with formid="anomaly_detection_form" %}
-    {% include 'vadetisweb/parts/js/inject_replace_series_js.html' with formid="anomaly_injection_form" format="json" %}
 {% endblock %}
