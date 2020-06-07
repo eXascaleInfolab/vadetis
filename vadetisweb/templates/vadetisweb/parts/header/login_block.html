@@ -1,0 +1,8 @@
+{% load static %}
+{% if not user.is_authenticated %}
+<div class="kt-header__topbar-item kt-header__topbar-item--user">
+    <div class="kt-header__topbar-wrapper" data-offset="10px,0px">
+        <a href="{% url 'account_login' %}"><span class="kt-header__topbar-icon pr-2 pl-2"  data-toggle="kt-tooltip" data-placement="bottom" data-original-title="Login"><i class="mdi mdi-login mdi-24px"></i></span></a>
+    </div>
+</div>
+{% endif %}

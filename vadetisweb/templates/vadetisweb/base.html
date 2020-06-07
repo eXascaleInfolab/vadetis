@@ -199,12 +199,6 @@
                             {% endblock %}
                             <!--end: Search -->
 
-                            <!--begin: Notifications -->
-                            {% comment %}{% block notification %}
-                                {% include 'vadetisweb/parts/header/notification.html' %}
-                            {% endblock %}{% endcomment %}
-                            <!--end: Notifications -->
-
                             <!--begin: Quick actions -->
                             {% block actions %}
                                 {% include 'vadetisweb/parts/header/actions.html' %}
@@ -216,6 +210,12 @@
                                 {% include 'vadetisweb/parts/header/user_navigation.html' %}
                             {% endblock %}
                             <!--end: User -->
+
+                            <!--begin: Login -->
+                            {% block login_block %}
+                                {% include 'vadetisweb/parts/header/login_block.html' %}
+                            {% endblock %}
+                            <!--end: Login -->
                         </div>
 
                         <!-- end:: Header Topbar -->

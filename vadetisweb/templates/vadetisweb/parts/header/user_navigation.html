@@ -1,31 +1,19 @@
 {% load static %}
 <div class="kt-header__topbar-item kt-header__topbar-item--user">
-
-    {% if user.is_authenticated %}
-        <div class="kt-header__topbar-wrapper" data-toggle="dropdown" data-offset="10px,0px">
-            <span class="kt-header__topbar-username kt-visible-desktop">{{ user.username }}</span>
-            <span class="kt-header__topbar-icon"><i class="mdi mdi-account mdi-24px"></i></span>
-
-            <!--use below badge element instead the user avatar to display username's first letter(remove kt-hidden class to display it) -->
-            <span class="kt-badge kt-badge--username kt-badge--unified-success kt-badge--lg kt-badge--rounded kt-badge--bold kt-hidden">S</span>
-        </div>
-    {% else %}
-        <div class="kt-header__topbar-wrapper" data-offset="10px,0px">
-            <a href="{% url 'account_login' %}"><span class="kt-header__topbar-icon pr-2 pl-2"><span class="kt-visible-desktop">Login</span> <i class="mdi mdi-login mdi-24px"></i></span></a>
-        </div>
-    {% endif %}
+    <div class="kt-header__topbar-wrapper" data-toggle="dropdown" data-offset="10px,0px">
+        <span class="kt-header__topbar-icon" data-container="body" data-toggle="kt-tooltip" data-placement="bottom" data-original-title="User Menu"><i class="mdi mdi-account mdi-24px"></i></span>
+    </div>
 
     <div class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropdown-menu-xl">
+        {% if user.is_authenticated %}
         <!--begin: User Nav Main -->
         <div class="kt-user-card kt-user-card--skin-light kt-notification-item-padding-x">
             <div class="kt-user-card__name">
                 {{ user.username }}
             </div>
-            <div class="kt-user-card__badge">
-                <span class="btn btn-label-primary btn-sm btn-bold btn-font-md">23 messages</span>
-            </div>
         </div>
         <!--end: User Nav Main -->
+        {% endif %}
         <!--begin: User Navigation -->
         <div class="kt-notification">
             <a href="{% url 'vadetisweb:account' %}" class="kt-notification__item">
@@ -38,32 +26,6 @@
                     </div>
                     <div class="kt-notification__item-time">
                         Account settings and more
-                    </div>
-                </div>
-            </a>
-            <a href="#" class="kt-notification__item">
-                <div class="kt-notification__item-icon">
-                    <i class="mdi mdi-bell-outline mdi-24px kt-font-warning"></i>
-                </div>
-                <div class="kt-notification__item-details">
-                    <div class="kt-notification__item-title kt-font-bold">
-                        Notifications
-                    </div>
-                    <div class="kt-notification__item-time">
-                        Inbox and tasks
-                    </div>
-                </div>
-            </a>
-            <a href="#" class="kt-notification__item">
-                <div class="kt-notification__item-icon">
-                    <i class="mdi mdi-timeline-clock-outline mdi-24px kt-font-brand"></i>
-                </div>
-                <div class="kt-notification__item-details">
-                    <div class="kt-notification__item-title kt-font-bold">
-                        Tasks
-                    </div>
-                    <div class="kt-notification__item-time">
-                        Latest tasks
                     </div>
                 </div>
             </a>
@@ -93,9 +55,15 @@
                     </div>
                 </div>
             </a>
+            {% if user.is_authenticated %}
             <div class="kt-notification__custom kt-space-between">
                 <a href="{% url 'account_logout' %}" class="btn btn-label btn-label-brand btn-sm btn-bold">Sign Out</a>
             </div>
+            {% else %}
+            <div class="kt-notification__custom kt-space-between">
+                <a href="{% url 'account_login' %}" class="btn btn-label btn-label-brand btn-sm btn-bold">Login</a>
+            </div>
+            {% endif %}
         </div>
         <!--end: User Navigation -->
     </div>
