@@ -3,6 +3,7 @@ import pandas as pd, numpy as np
 from celery.task import Task
 from django.db import transaction, IntegrityError
 from django.utils import timezone
+from django.conf import settings
 
 from vadetisweb.models import User, Location, TimeSeries, DataSet
 from vadetisweb.parameters import *
@@ -52,6 +53,11 @@ class TaskImportData(Task):
                                   parse_dates=['time'],
                                   infer_datetime_format=True,
                                   index_col='time')
+
+            # check number of values (row counts)
+            num_values = df_read.shape[0]
+            if num_values > settings.DATASET_MAX_VALUES:
+                raise ValueError("Dataset exceeds value limit {} ({} values provided)".format(num_values, settings.DATASET_MAX_VALUES))
 
             # check each series must have same unit
             group_by_ts_name = df_read.groupby('ts_name')
@@ -211,6 +217,11 @@ class TaskImportTrainingData(Task):
                                   parse_dates=['time'],
                                   infer_datetime_format=True,
                                   index_col='time')
+
+            # check number of values (row counts)
+            num_values = df_read.shape[0]
+            if num_values > settings.DATASET_MAX_VALUES:
+                raise ValueError("Dataset exceeds value limit {} ({} values provided)".format(num_values, settings.DATASET_MAX_VALUES))
 
             # check each series must have same unit
             group_by_ts_name = df_read.groupby('ts_name')
