@@ -1,5 +1,5 @@
 {% extends 'vadetisweb/base.html' %}
-{% load breadcrumbs %}
+{% load django_bootstrap_breadcrumbs %}
 
 {% block head %}
 {% endblock %}
@@ -9,7 +9,7 @@
 
 {% block breadcrumbs %}
 {{ block.super }}
-{% breadcrumb 'Account' 'account' %}
+{% breadcrumb 'Account' 'vadetisweb:account' %}
 {% endblock %}
 
 {% block page_title %}

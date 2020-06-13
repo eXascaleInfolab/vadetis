@@ -1,11 +1,11 @@
 {% extends 'vadetisweb/base.html' %}
 {% load static %}
-{% load breadcrumbs %}
+{% load django_bootstrap_breadcrumbs %}
 {% load rest_framework %}
 
 {% block breadcrumbs %}
     {{ block.super }}
-    {% breadcrumb "Account Training Datasets" "account_training_datasets" %}
+    {% breadcrumb "Account Training Datasets" "vadetisweb:account_training_datasets" %}
 {% endblock %}
 
 {% block css %}

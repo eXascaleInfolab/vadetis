@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django_extensions',  # needed for jupyter notebooks
     'vadetisweb',
     'django_celery_results',
+    'django_bootstrap_breadcrumbs',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -81,11 +82,10 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',
+                'django.template.context_processors.request', # required for django-allauth
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.media',
-                'django.template.context_processors.request',  # required for django-allauth
+                'django.template.context_processors.media'
             ],
         },
     },
