@@ -3,8 +3,6 @@ from vadetisweb.models import *
 
 # Register your models here.
 admin.site.register(UserSetting)
-admin.site.register(Station)
-admin.site.register(LisaComputation) #todo remove replace
 admin.site.register(DataSet)
 admin.site.register(TimeSeries)
 admin.site.register(Location)
