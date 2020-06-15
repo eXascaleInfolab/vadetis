@@ -31,17 +31,6 @@
         <div class="kt-portlet">
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
-                    <h3 class="kt-portlet__head-title">Password</h3>
-                </div>
-            </div>
-            {% url 'vadetisweb:account_pwd_update' as password_update_url %}
-            {% include 'vadetisweb/parts/forms/serializer_form.html' with formid="password_form" url=password_update_url serializer=password_update_serializer submit_label="Save" %}
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="kt-portlet">
-            <div class="kt-portlet__head">
-                <div class="kt-portlet__head-label">
                     <h3 class="kt-portlet__head-title">Social Account</h3>
                 </div>
             </div>
@@ -62,6 +51,17 @@
                 {% url 'vadetisweb:account' as social_disconnect_url %}
                 {% include 'vadetisweb/parts/forms/serializer_form.html' with formid="social_disconnect_form" url=social_disconnect_url serializer=social_disconnect_serializer submit_label="Save" %}
             {% endif %}
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="kt-portlet">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">Password</h3>
+                </div>
+            </div>
+            {% url 'vadetisweb:account_pwd_update' as password_update_url %}
+            {% include 'vadetisweb/parts/forms/serializer_form.html' with formid="password_form" url=password_update_url serializer=password_update_serializer submit_label="Save" %}
         </div>
         <div class="kt-portlet">
             <div class="kt-portlet__head">
