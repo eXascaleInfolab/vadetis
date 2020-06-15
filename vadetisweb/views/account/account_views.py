@@ -347,6 +347,7 @@ class AccountPasswordUpdate(APIView):
 
         if password_update_serializer.is_valid():
             password_update_serializer.save()
+            update_session_auth_hash(request, request.user)
 
             json_messages = []
             json_message_utils.success(json_messages, 'Password changed')

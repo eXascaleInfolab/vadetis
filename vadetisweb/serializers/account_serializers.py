@@ -294,6 +294,7 @@ class AccountSocialDisconnectSerializer(serializers.Serializer):
 
 
 class AccountDeleteSerializer(serializers.ModelSerializer):
+
     is_active = serializers.BooleanField(initial=True, label='Account is active',
                                          help_text='Uncheck this box and save if you are sure you want to delete your account.',
                                          style={'template': 'vadetisweb/parts/input/checkbox_input.html'})
