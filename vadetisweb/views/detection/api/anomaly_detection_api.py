@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.shortcuts import redirect
 from django.contrib import messages
 
-from vadetisweb.serializers.anomaly_detection_algorithm_serializers import *
+from vadetisweb.serializers.detection_serializers import *
 from vadetisweb.models import DataSet
 from vadetisweb.utils import *
 from vadetisweb.algorithms import *

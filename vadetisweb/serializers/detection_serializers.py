@@ -1,5 +1,3 @@
-from rest_framework import serializers
-from drf_yasg import openapi
 from vadetisweb.models import *
 from vadetisweb.fields import *
 

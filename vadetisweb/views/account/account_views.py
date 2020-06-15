@@ -289,11 +289,46 @@ class Account(APIView):
     View for account setting
     """
     renderer_classes = [TemplateHTMLRenderer]
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
     template_name = 'vadetisweb/account/account.html'
 
     def get(self, request):
-        return Response(status=status.HTTP_200_OK)
 
+        user_serializer = AccountUserSerializer(instance=request.user)
+        change_password_serializer = AccountChangePasswordSerializer()
+        social_disconnect_serializer = AccountSocialDisconnectSerializer()
+        delete_account_serializer = AccountDeleteSerializer(instance=request.user)
+
+        return Response({'user_serializer': user_serializer,
+                         'change_password_serializer' : change_password_serializer,
+                         'social_disconnect_serializer' : social_disconnect_serializer,
+                         'delete_account_serializer' : delete_account_serializer }, status=status.HTTP_200_OK)
+
+
+class AccountUserUpdate(APIView):
+    """
+    View for account setting update processing
+    """
+    renderer_classes = [JSONRenderer]
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+
+    def post(self, request):
+        user_serializer = AccountUserSerializer(instance=request.user, data=request.data)
+
+        if user_serializer.is_valid():
+            user_serializer.save()
+            json_messages = []
+            json_message_utils.success(json_messages, 'Account saved')
+            return Response({
+                'status': 'success',
+                'message': MessageSerializer(json_messages, many=True).data,
+            }, status=status.HTTP_200_OK)
+        else:
+            Response({
+                'form_errors': user_serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 #TODO
 @login_required

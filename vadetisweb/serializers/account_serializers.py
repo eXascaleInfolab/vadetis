@@ -3,8 +3,10 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from allauth.account import app_settings
 from allauth.account.forms import get_adapter as get_account_adapter, filter_users_by_email
+from allauth.socialaccount.models import SocialAccount
 
-from django.core.validators import MaxLengthValidator, MaxValueValidator, MinValueValidator, RegexValidator, FileExtensionValidator
+from django.core.validators import MaxLengthValidator, MaxValueValidator, MinValueValidator, RegexValidator, \
+    FileExtensionValidator
 from django.urls import reverse
 
 from vadetisweb.models import UserSetting, DataSet, User
@@ -73,7 +75,7 @@ class TrainingDatasetImportSerializer(serializers.Serializer):
     owner = UserSerializer(read_only=True, default=serializers.CurrentUserDefault())
 
     original_dataset = UserOriginalDatasetField(label="Associated dataset", required=True,
-                                   style={'template': 'vadetisweb/parts/input/select_input.html'})
+                                                style={'template': 'vadetisweb/parts/input/select_input.html'})
 
     is_public = serializers.BooleanField(default=True,
                                          help_text='Determines if this dataset is available to other users',
@@ -180,7 +182,8 @@ class AccountDatasetDataTablesSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataSet
         fields = (
-            'title', 'owner', 'timeseries', 'values', 'frequency', 'spatial_data', 'is_public', 'training_datasets', 'actions'
+            'title', 'owner', 'timeseries', 'values', 'frequency', 'spatial_data', 'is_public', 'training_datasets',
+            'actions'
         )
 
 
@@ -209,18 +212,90 @@ class AccountTrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
 
 class AccountUserSerializer(serializers.ModelSerializer):
 
+    username = serializers.CharField(label='Username', required=True,
+                                     style={'template': 'vadetisweb/parts/input/text_input.html'})
+
+    first_name = serializers.CharField(label='First name', required=False,
+                                       style={'template': 'vadetisweb/parts/input/text_input.html'})
+
+    last_name = serializers.CharField(label='Last name', required=False,
+                                      style={'template': 'vadetisweb/parts/input/text_input.html'})
+
+    email = serializers.EmailField(label='E-Mail Address', required=True,
+                                   style={'template': 'vadetisweb/parts/input/text_input.html'})
+
     def validate_email(self, value):
         value = get_account_adapter().clean_email(value)
         errors = {
             "different_account": "This e-mail address is already associated with another account.",
         }
         users = filter_users_by_email(value)
-        on_diff_account = [u for u in users if u.pk != self.user.pk]
+        on_diff_account = [u for u in users if u.pk != self.instance.pk]
 
-        if on_diff_account and app_settings.UNIQUE_EMAIL:
+        if on_diff_account and app_settings.AppSettings.UNIQUE_EMAIL:
             raise serializers.ValidationError(errors["different_account"])
         return value
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email')
+        fields = ('username', 'first_name', 'last_name', 'email', )
+
+
+class AccountChangePasswordSerializer(serializers.Serializer):
+
+    user = UserSerializer(read_only=True, default=serializers.CurrentUserDefault())
+
+    oldpassword = serializers.CharField(label='Current password', write_only=True, required=True,
+                                        allow_null = False, allow_blank = False,
+                                        style={'input_type': 'password',
+                                               'template': 'vadetisweb/parts/input/text_input.html'})
+
+    password1 = serializers.CharField(label='New Password', write_only=True, required=True,
+                                      allow_null=False, allow_blank=False,
+                                      style={'input_type': 'password',
+                                             'template': 'vadetisweb/parts/input/text_input.html'})
+
+    password2 = serializers.CharField(label='New Password (again)', write_only=True, required=True,
+                                      allow_null=False, allow_blank=False,
+                                      style={'input_type': 'password',
+                                             'template': 'vadetisweb/parts/input/text_input.html'})
+
+    def validate_oldpassword(self):
+        if not self.user.check_password(self.validated_data.get("oldpassword")):
+            raise serializers.ValidationError("Please type your current password.")
+        return self.validated_data["oldpassword"]
+
+    def validate(self, data):
+        password1 = data['password1']
+        password2 = data['password2']
+        if (password1 and password2) and password1 != password2:
+            raise serializers.ValidationError("You must type the same password each time.")
+        return data
+
+    def save(self):
+        get_account_adapter().set_password(self.user, self.cleaned_data["password1"])
+
+    def __init__(self, *args, **kwargs):
+        super(AccountChangePasswordSerializer, self).__init__(*args, **kwargs)
+
+
+class AccountSocialDisconnectSerializer(serializers.Serializer):
+    account = serializers.PrimaryKeyRelatedField(queryset=SocialAccount.objects.none(),
+                                      required=True,
+                                      style={'template': 'vadetisweb/parts/input/select_input.html'})
+
+    def __init__(self, *args, **kwargs):
+        super(AccountSocialDisconnectSerializer, self).__init__(*args, **kwargs)
+
+
+class AccountDeleteSerializer(serializers.ModelSerializer):
+    is_active = serializers.BooleanField(initial=True, label='Account is active',
+                                         help_text='Uncheck this box and save if you are sure you want to delete your account.',
+                                         style={'template': 'vadetisweb/parts/input/checkbox_input.html'})
+
+    class Meta:
+        model = User
+        fields = ('is_active', )
+
+    def __init__(self, *args, **kwargs):
+        super(AccountDeleteSerializer, self).__init__(*args, **kwargs)

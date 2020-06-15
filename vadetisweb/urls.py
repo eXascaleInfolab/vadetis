@@ -64,7 +64,9 @@ urlpatterns = apipatterns + [
     path('account/application-setting/', views.ApplicationSetting.as_view(), name='application_setting'),
     path('account/datasets/', views.account_datasets, name='account_datasets'),
     path('account/training-datasets/', views.account_training_datasets, name='account_training_datasets'),
-    path('account/', views.account, name='account'),
+    path('account/user/update', views.AccountUserUpdate.as_view(), name='account_user_update'),
+    path('account/', views.Account.as_view(), name='account'),
+
 
     path('', views.index, name='index'),
 ]
