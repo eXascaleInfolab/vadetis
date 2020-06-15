@@ -323,10 +323,13 @@ class AccountUserUpdate(APIView):
             json_message_utils.success(json_messages, 'Account saved')
             return Response({
                 'status': 'success',
-                'message': MessageSerializer(json_messages, many=True).data,
+                'messages': MessageSerializer(json_messages, many=True).data,
             }, status=status.HTTP_200_OK)
         else:
-            Response({
+            json_messages = []
+            json_message_utils.error(json_messages, 'Form was not valid')
+            return Response({
+                'messages': MessageSerializer(json_messages, many=True).data,
                 'form_errors': user_serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
 

@@ -33,6 +33,38 @@ function loadImage(html_id, url, post_data, callback) {
     });
 }
 
+function initAjaxFormSubmit(form_id, format) {
+    $('#' + form_id).on('submit', function (event) {
+        event.preventDefault();
+        clearFormErrors(form_id);
+        clearMessages();
+        var csrftoken = Cookies.get('csrftoken'), url = $(this).attr('action');
+        if(format) {
+            url += '?format=' + format
+        }
+        $.ajax({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            },
+            url: url,
+            data: new FormData(this),
+            type: $(this).attr('method'),
+            enctype: $(this).attr('enctype'),
+            processData: false,
+            contentType: false,
+            success: function(data, status, xhr) {
+                handleRedirect(data, xhr);
+                handleMessages(data);
+            },
+            error: function(data, status, xhr) {
+                handleMessages(data);
+            }
+        });
+    });
+}
+
 /**
  * Handles messages contained in an ajax response if available
  * @param data - The data returned from the server
@@ -77,139 +109,6 @@ function saveData (blob, fileName) {
     a.click();
     window.URL.revokeObjectURL(url);
     document.body.removeChild(a);
-}
-
-
-function registerThresholdUpdateForm(form_id) {
-    var html_id = '#' + form_id;
-    $(html_id).on('submit', function (event) {
-        event.preventDefault();
-        $(":submit").attr("disabled", true);
-        clearFormErrors(form_id);
-        clearMessages();
-        var highchart = $('#highcharts_container').highcharts(), formData = new FormData(this), dataset_series_json = getDatasetSeriesJson(highchart), csrftoken = Cookies.get('csrftoken');
-        formData.append('dataset_series_json', JSON.stringify(dataset_series_json));
-        highchart.showLoading();
-
-        $.ajax({
-            beforeSend: function (xhr, settings) {
-                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                }
-            },
-            url: $(this).attr('action'),
-            data: formData,
-            type: $(this).attr('method'),
-            enctype: $(this).attr('enctype'),
-            processData: false,
-            contentType: false,
-            success: function(data, status, xhr) {
-                handleMessages(data);
-
-                // update series
-                var series_data_json = data['series'];
-                setSeriesData(highchart, series_data_json);
-                highchart.hideLoading();
-                var info = data['info'];
-
-                // scores
-                $('#scores_portlet').show();
-                updateScores(info);
-
-                // threshold
-                updateThreshold(info.threshold);
-
-                // cnf
-                requestCnfMatrix("cnf_portlet", "cnf_matrix_img", info);
-
-                // plot
-                requestPlot("plot_portlet", "plot_img", info)
-
-                $(":submit").attr("disabled", false);
-            },
-            error: function(data, status, xhr) {
-                printMessages([{'message': "Request failed"}], "error-request");
-                handleMessages(data);
-
-                highchart.hideLoading();
-
-                $('#scores_portlet').hide();
-                $('#cnf_portlet').hide();
-                $('#plot_portlet').hide();
-
-                $(":submit").attr("disabled", false);
-            }
-        });
-    });
-}
-
-function registerAnomalyDetectionForm(form_id) {
-    var html_id = '#' + form_id;
-    $(html_id).on('submit', function (event) {
-        event.preventDefault();
-        $(":submit").attr("disabled", true);
-        clearFormErrors(form_id);
-        clearMessages();
-
-        var highchart = $('#highcharts_container').highcharts();
-        updateTimeRange(highchart, form_id);
-
-        var formData = new FormData(this), dataset_series_json = getDatasetSeriesJson(highchart), csrftoken = Cookies.get('csrftoken');
-        formData.append('dataset_series_json', JSON.stringify(dataset_series_json));
-        highchart.showLoading();
-        $.ajax({
-            beforeSend: function (xhr, settings) {
-                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                }
-            },
-            url: $(this).attr('action'),
-            data: formData,
-            type: $(this).attr('method'),
-            enctype: $(this).attr('enctype'),
-            processData: false,
-            contentType: false,
-            success: function(data, status, xhr) {
-                handleMessages(data);
-
-                // update series
-                var series_data_json = data['series'];
-                setSeriesData(highchart, series_data_json);
-                highchart.hideLoading();
-                var info = data['info'];
-
-                // scores
-                $('#scores_portlet').show();
-                updateScores(info);
-
-                // threshold
-                $('#threshold_portlet').show();
-                registerThresholdUpdateForm('threshold_form');
-                updateThreshold(info.threshold);
-
-                // cnf
-                requestCnfMatrix("cnf_portlet", "cnf_matrix_img", info);
-
-                // plot
-                requestPlot("plot_portlet", "plot_img", info)
-
-                $(":submit").attr("disabled", false);
-            },
-            error: function(data, status, xhr) {
-                printMessages([{'message': "Request failed"}], "error-request");
-                handleMessages(data);
-
-                highchart.hideLoading();
-
-                $('#threshold_portlet').hide();
-                $('#scores_portlet').hide();
-                $('#cnf_portlet').hide();
-                $('#plot_portlet').hide();
-
-                $(":submit").attr("disabled", false);
-            }
-        });
-    });
 }
 
 function capitalizeFirstLetter(string) {

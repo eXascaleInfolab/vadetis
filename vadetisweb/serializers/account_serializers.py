@@ -232,7 +232,7 @@ class AccountUserSerializer(serializers.ModelSerializer):
         users = filter_users_by_email(value)
         on_diff_account = [u for u in users if u.pk != self.instance.pk]
 
-        if on_diff_account and app_settings.AppSettings.UNIQUE_EMAIL:
+        if on_diff_account and app_settings.UNIQUE_EMAIL:
             raise serializers.ValidationError(errors["different_account"])
         return value
 
