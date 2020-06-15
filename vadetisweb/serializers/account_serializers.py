@@ -213,6 +213,7 @@ class AccountTrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
 class AccountUserSerializer(serializers.ModelSerializer):
 
     username = serializers.CharField(label='Username', required=True,
+                                     help_text='Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.',
                                      style={'template': 'vadetisweb/parts/input/text_input.html'})
 
     first_name = serializers.CharField(label='First name', required=False,
@@ -241,9 +242,7 @@ class AccountUserSerializer(serializers.ModelSerializer):
         fields = ('username', 'first_name', 'last_name', 'email', )
 
 
-class AccountChangePasswordSerializer(serializers.Serializer):
-
-    user = UserSerializer(read_only=True, default=serializers.CurrentUserDefault())
+class AccountPasswordSerializer(serializers.Serializer):
 
     oldpassword = serializers.CharField(label='Current password', write_only=True, required=True,
                                         allow_null = False, allow_blank = False,
@@ -260,23 +259,29 @@ class AccountChangePasswordSerializer(serializers.Serializer):
                                       style={'input_type': 'password',
                                              'template': 'vadetisweb/parts/input/text_input.html'})
 
-    def validate_oldpassword(self):
-        if not self.user.check_password(self.validated_data.get("oldpassword")):
-            raise serializers.ValidationError("Please type your current password.")
-        return self.validated_data["oldpassword"]
+    def validate_oldpassword(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError('Please type your current password.')
+        return value
+
 
     def validate(self, data):
+
+        # validate password match
         password1 = data['password1']
         password2 = data['password2']
         if (password1 and password2) and password1 != password2:
-            raise serializers.ValidationError("You must type the same password each time.")
+            raise serializers.ValidationError({'password2': "You must type the same password each time."})
+
         return data
 
     def save(self):
-        get_account_adapter().set_password(self.user, self.cleaned_data["password1"])
+        user = self.context['request'].user
+        get_account_adapter().set_password(user, self.validated_data["password1"])
 
     def __init__(self, *args, **kwargs):
-        super(AccountChangePasswordSerializer, self).__init__(*args, **kwargs)
+        super(AccountPasswordSerializer, self).__init__(*args, **kwargs)
 
 
 class AccountSocialDisconnectSerializer(serializers.Serializer):

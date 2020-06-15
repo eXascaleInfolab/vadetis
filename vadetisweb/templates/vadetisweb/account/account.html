@@ -34,8 +34,8 @@
                     <h3 class="kt-portlet__head-title">Password</h3>
                 </div>
             </div>
-            {% url 'vadetisweb:account' as password_change_url %}
-            {% include 'vadetisweb/parts/forms/serializer_form.html' with formid="password_form" url=password_change_url serializer=change_password_serializer submit_label="Save" %}
+            {% url 'vadetisweb:account_pwd_update' as password_update_url %}
+            {% include 'vadetisweb/parts/forms/serializer_form.html' with formid="password_form" url=password_update_url serializer=password_update_serializer submit_label="Save" %}
         </div>
     </div>
     <div class="col-md-6">

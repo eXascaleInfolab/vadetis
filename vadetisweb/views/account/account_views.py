@@ -139,7 +139,7 @@ class AccountUploadDataset(APIView):
     def post(self, request, format=None):
         user = request.user
 
-        serializer = DatasetImportSerializer(data=request.data, context={"request": self.request, })
+        serializer = DatasetImportSerializer(context={"request": self.request, }, data=request.data)
 
         if serializer.is_valid():
             # handle dataset file
@@ -224,7 +224,7 @@ class AccountUploadTrainingDataset(APIView):
 
     def post(self, request, format=None):
         user = request.user
-        serializer = TrainingDatasetImportSerializer(data=request.data, context={"request": self.request, })
+        serializer = TrainingDatasetImportSerializer(context={"request": self.request, }, data=request.data)
 
         if serializer.is_valid():
             title = serializer.validated_data['title']
@@ -296,12 +296,12 @@ class Account(APIView):
     def get(self, request):
 
         user_serializer = AccountUserSerializer(instance=request.user)
-        change_password_serializer = AccountChangePasswordSerializer()
+        password_update_serializer = AccountPasswordSerializer()
         social_disconnect_serializer = AccountSocialDisconnectSerializer()
         delete_account_serializer = AccountDeleteSerializer(instance=request.user)
 
         return Response({'user_serializer': user_serializer,
-                         'change_password_serializer' : change_password_serializer,
+                         'password_update_serializer' : password_update_serializer,
                          'social_disconnect_serializer' : social_disconnect_serializer,
                          'delete_account_serializer' : delete_account_serializer }, status=status.HTTP_200_OK)
 
@@ -331,6 +331,35 @@ class AccountUserUpdate(APIView):
             return Response({
                 'messages': MessageSerializer(json_messages, many=True).data,
                 'form_errors': user_serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AccountPasswordUpdate(APIView):
+    """
+    View for account setting update processing
+    """
+    renderer_classes = [JSONRenderer]
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+
+    def post(self, request):
+        password_update_serializer = AccountPasswordSerializer(context={"request": self.request, }, data=request.data)
+
+        if password_update_serializer.is_valid():
+            password_update_serializer.save()
+
+            json_messages = []
+            json_message_utils.success(json_messages, 'Password changed')
+            return Response({
+                'status': 'success',
+                'messages': MessageSerializer(json_messages, many=True).data,
+            }, status=status.HTTP_200_OK)
+        else:
+            json_messages = []
+            json_message_utils.error(json_messages, 'Form was not valid')
+            return Response({
+                'messages': MessageSerializer(json_messages, many=True).data,
+                'form_errors': password_update_serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
 
 #TODO
