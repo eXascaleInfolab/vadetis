@@ -15,7 +15,7 @@
 {% block page_title %}
 <h3 class="kt-subheader__title">Account</h3>
 {% endblock %}
-
+{% url 'vadetisweb:account' as pageurl %}
 {% block content %}
 <div class="row">
     <div class="col-md-6">
@@ -25,7 +25,7 @@
                     <h3 class="kt-portlet__head-title">User</h3>
                 </div>
             </div>
-            {% include "vadetisweb/account/forms/user_form.html" with form=form_user %}
+            {% include 'vadetisweb/parts/forms/serializer_form.html' with formid="user_form" url=pageurl serializer=user_serializer submit_label="Save" %}
         </div>
         <div class="kt-portlet">
             <div class="kt-portlet__head">

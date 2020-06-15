@@ -1,10 +1,9 @@
 from .base_views import *
-from .account_views import *
-from .main.account import *
-from .main.account_datasets import *
 from .api.account_datasets_api import *
 from .api.datasets_api import *
 from .api.image_api import *
+
+from .account.account_views import *
 
 from .display.display_views import *
 from .display.api.display_datasets_api import *

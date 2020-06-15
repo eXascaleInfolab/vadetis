@@ -1,6 +1,8 @@
 import numpy as np
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
+from allauth.account import app_settings
+from allauth.account.forms import get_adapter as get_account_adapter, filter_users_by_email
 
 from django.core.validators import MaxLengthValidator, MaxValueValidator, MinValueValidator, RegexValidator, FileExtensionValidator
 from django.urls import reverse
@@ -203,3 +205,22 @@ class AccountTrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
         fields = (
             'title', 'owner', 'timeseries', 'values', 'frequency', 'is_public', 'spatial_data',
         )
+
+
+class AccountUserSerializer(serializers.ModelSerializer):
+
+    def validate_email(self, value):
+        value = get_account_adapter().clean_email(value)
+        errors = {
+            "different_account": "This e-mail address is already associated with another account.",
+        }
+        users = filter_users_by_email(value)
+        on_diff_account = [u for u in users if u.pk != self.user.pk]
+
+        if on_diff_account and app_settings.UNIQUE_EMAIL:
+            raise serializers.ValidationError(errors["different_account"])
+        return value
+
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email')
