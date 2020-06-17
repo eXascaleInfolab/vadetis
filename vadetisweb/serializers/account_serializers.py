@@ -5,6 +5,8 @@ from allauth.account import app_settings
 from allauth.account.forms import get_adapter as get_account_adapter, filter_users_by_email
 from allauth.socialaccount.models import SocialAccount
 
+from django.core.exceptions import ValidationError
+from django.contrib.auth import password_validation
 from django.core.validators import MaxLengthValidator, MaxValueValidator, MinValueValidator, RegexValidator, \
     FileExtensionValidator
 from django.urls import reverse
@@ -233,7 +235,7 @@ class AccountUserSerializer(serializers.ModelSerializer):
         users = filter_users_by_email(value)
         on_diff_account = [u for u in users if u.pk != self.instance.pk]
 
-        if on_diff_account and app_settings.UNIQUE_EMAIL:
+        if on_diff_account and app_settings.app_settings.UNIQUE_EMAIL:
             raise serializers.ValidationError(errors["different_account"])
         return value
 
@@ -249,12 +251,12 @@ class AccountPasswordSerializer(serializers.Serializer):
                                         style={'input_type': 'password',
                                                'template': 'vadetisweb/parts/input/text_input.html'})
 
-    password1 = serializers.CharField(label='New Password', write_only=True, required=True,
+    password1 = serializers.CharField(label='New password', write_only=True, required=True,
                                       allow_null=False, allow_blank=False,
                                       style={'input_type': 'password',
                                              'template': 'vadetisweb/parts/input/text_input.html'})
 
-    password2 = serializers.CharField(label='New Password (again)', write_only=True, required=True,
+    password2 = serializers.CharField(label='New password (again)', write_only=True, required=True,
                                       allow_null=False, allow_blank=False,
                                       style={'input_type': 'password',
                                              'template': 'vadetisweb/parts/input/text_input.html'})
@@ -273,6 +275,13 @@ class AccountPasswordSerializer(serializers.Serializer):
         password2 = data['password2']
         if (password1 and password2) and password1 != password2:
             raise serializers.ValidationError({'password2': "You must type the same password each time."})
+
+        # validate password
+        try:
+            # If the password is valid, returns ``None``
+            password_validation.validate_password(password1)
+        except ValidationError as error:
+            raise serializers.ValidationError({'password2': error.messages })
 
         return data
 
