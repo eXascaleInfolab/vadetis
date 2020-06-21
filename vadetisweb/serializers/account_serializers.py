@@ -72,6 +72,7 @@ class TrainingDatasetImportSerializer(serializers.Serializer):
                                          style={'template': 'vadetisweb/parts/input/checkbox_input.html'})
 
     csv_file = serializers.FileField(required=True, label='CSV File', help_text='The csv file of the dataset',
+                                     validators=[FileExtensionValidator(allowed_extensions=['csv'])],
                                      style={'template': 'vadetisweb/parts/input/file_input.html'})
 
     class Meta:

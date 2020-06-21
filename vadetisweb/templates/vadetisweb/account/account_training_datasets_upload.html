@@ -18,10 +18,10 @@
             <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title">Add training dataset</h3>
+                        <h3 class="kt-portlet__head-title">Import Training Dataset</h3>
                     </div>
                 </div>
-                {% url 'vadetisweb:training_dataset_uploa' as fromurl %}
+                {% url 'vadetisweb:training_dataset_upload' as fromurl %}
                 {% include 'vadetisweb/parts/forms/serializer_form.html' with formid="training_dataset_upload_form" url=fromurl submit_label="Save" %}
             </div>
         </div>

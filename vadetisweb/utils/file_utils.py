@@ -23,7 +23,7 @@ def silent_remove(filename):
     """
     try:
         os.remove(filename)
-        logging.info("File removed: ", filename)
+        logging.info("File removed: %s", filename)
 
     except OSError as e:
         if e.errno != errno.ENOENT:  # errno.ENOENT = no such file or directory

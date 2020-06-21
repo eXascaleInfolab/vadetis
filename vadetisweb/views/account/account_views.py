@@ -160,13 +160,13 @@ class AccountUploadDataset(APIView):
         if serializer.is_valid():
             # handle dataset file
             dataset_file_raw = serializer.validated_data['csv_file']
-            logging.info("Dataset file received: ", dataset_file_raw.name)
+            logging.info("Dataset file received: %s", dataset_file_raw.name)
             dataset_file = write_to_tempfile(dataset_file_raw)
 
             # handle spatial file
-            spatial_file_raw = serializer.validated_data['csv_spatial_file']
+            spatial_file_raw = serializer.validated_data.get('csv_spatial_file', None)
             if spatial_file_raw is not None:
-                logging.info("Spatial file received: ", spatial_file_raw.name)
+                logging.info("Spatial file received: %s", spatial_file_raw.name)
                 spatial_file = write_to_tempfile(spatial_file_raw)
             else:
                 spatial_file = None
@@ -249,7 +249,7 @@ class AccountUploadTrainingDataset(APIView):
 
             # check if user is ok
             if owner == request.user and original_dataset.owner == request.user:
-                logging.info("Training dataset file received: ", training_dataset_file_raw.name)
+                logging.info("Training dataset file received: %s", training_dataset_file_raw.name)
                 training_dataset_file = write_to_tempfile(training_dataset_file_raw)
 
                 user_tasks, _ = UserTasks.objects.get_or_create(user=user)
@@ -274,29 +274,27 @@ class AccountUploadTrainingDataset(APIView):
                     return Response({
                         'serializer': serializer,
                     }, status=status.HTTP_201_CREATED)
-            else:
-                message = "Form was invalid"
         else:
             message = "Form was invalid"
+            if request.accepted_renderer.format == 'json':  # requested format is json
+                json_messages = []
+                json_message_utils.error(json_messages, message)
 
-        if request.accepted_renderer.format == 'json':  # requested format is json
-            json_messages = []
-            json_message_utils.error(json_messages, message)
+                # append non field form errors to message errors
+                if (api_settings.NON_FIELD_ERRORS_KEY in serializer.errors):
+                    for non_field_error in serializer.errors[api_settings.NON_FIELD_ERRORS_KEY]:
+                        json_message_utils.error(json_messages, non_field_error)
 
-            # append non field form errors to message errors
-            if (api_settings.NON_FIELD_ERRORS_KEY in serializer.errors):
-                for non_field_error in serializer.errors[api_settings.NON_FIELD_ERRORS_KEY]:
-                    json_message_utils.error(json_messages, non_field_error)
+                return Response({
+                    'messages': MessageSerializer(json_messages, many=True).data,
+                    'form_errors': serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response({
-                'messages': MessageSerializer(json_messages, many=True).data,
-                'form_errors': serializer.errors,
-            }, status=status.HTTP_400_BAD_REQUEST)
-
-        else:  # or render html template
-            return Response({
-                'serializer': serializer,
-            }, status=status.HTTP_400_BAD_REQUEST)
+            else:  # or render html template
+                messages.error(request, message)
+                return Response({
+                    'serializer': serializer,
+                }, status=status.HTTP_400_BAD_REQUEST)
 
 
 class AccountUserUpdate(APIView):

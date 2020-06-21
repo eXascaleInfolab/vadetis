@@ -176,7 +176,7 @@ class TaskImportData(Task):
                         location.save()
 
         execution_time = iso_format_time(timezone.now() - start_time)
-        result = {'measurements_added': int(df.count().sum()), 'time_series_added:': len(df.columns),
+        result = {'values': int(df.count().sum()), 'time_series:': len(df.columns),
                   'execution_time': execution_time}
 
         return result
@@ -308,7 +308,7 @@ class TaskImportTrainingData(Task):
             training_dataset.save()
 
         execution_time = iso_format_time(timezone.now() - start_time)
-        result = {'measurements_added': int(df.count().sum()), 'execution_time': execution_time }
+        result = {'values': int(df.count().sum()), 'execution_time': execution_time }
 
         return result
 

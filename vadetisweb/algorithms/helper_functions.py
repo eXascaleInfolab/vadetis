@@ -142,7 +142,7 @@ def df_anomaly_instances(df_class):
             if row[column] == 1:
                 indexes.append(index)
                 break
-    logging.debug('Number of anomaly instances:', len(indexes))
+    logging.debug('Number of anomaly instances: %d', len(indexes))
 
     for index in indexes:
         df_class_instances.loc[index, 'class'] = True
@@ -151,15 +151,15 @@ def df_anomaly_instances(df_class):
 
 
 def estimate_score_bound(lower, higher):
-    logging.debug('Threshold Normal', higher)
-    logging.debug('Threshold Anomaly', lower)
+    logging.debug('Threshold Normal: %f', higher)
+    logging.debug('Threshold Anomaly: %f', lower)
 
     #TODO higher-lower ???
     higher_bound = (higher + np.abs((higher / 100) * 20)) #.astype(int)
     lower_bound = (lower - np.abs((lower / 100) * 20)) #.astype(int)
 
-    logging.debug('Higher Bound', higher_bound)
-    logging.debug('Lower Bound', lower_bound)
+    logging.debug('Higher Bound %f', higher_bound)
+    logging.debug('Lower Bound %f', lower_bound)
 
     return lower_bound, higher_bound
 
