@@ -15,18 +15,35 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from vadetisweb.models import UserTasks
-from vadetisweb.utils import settings_from_request_or_default_dict, json_message_utils, update_setting_cookie, write_to_tempfile
+from vadetisweb.utils import settings_from_request_or_default_dict, json_message_utils, update_setting_cookie, \
+    write_to_tempfile
 from vadetisweb.serializers.account_serializers import *
 from vadetisweb.serializers import MessageSerializer
 from vadetisweb.tasks import TaskImportData, TaskImportTrainingData
 from vadetisweb.parameters import SPATIAL
 
-#TODO deprecated
+# TODO deprecated
 from vadetisweb.forms.account_forms import *
+
 
 #########################################################
 # Account Views
 #########################################################
+
+@login_required
+def account(request):
+    """
+    View for account setting
+    """
+    user_serializer = AccountUserSerializer(instance=request.user)
+    password_update_serializer = AccountPasswordSerializer()
+    social_disconnect_serializer = AccountSocialDisconnectSerializer()
+    delete_account_serializer = AccountDeleteSerializer(instance=request.user)
+
+    return render(request, 'vadetisweb/account/account.html', {'user_serializer': user_serializer,
+                                                               'password_update_serializer': password_update_serializer,
+                                                               'social_disconnect_serializer': social_disconnect_serializer,
+                                                               'delete_account_serializer': delete_account_serializer})
 
 
 @login_required
@@ -50,7 +67,7 @@ class ApplicationSetting(APIView):
         user = request.user
         settings_dict, _ = settings_from_request_or_default_dict(request)
 
-        if user.is_authenticated: # use profile
+        if user.is_authenticated:  # use profile
             settings, created = UserSetting.objects.get_or_create(user=user)
             if created:
                 # fill profile with values from cookies
@@ -58,18 +75,17 @@ class ApplicationSetting(APIView):
                 for (key, value) in settings_dict.items():
                     setattr(settings, key, value)
                 settings.save()
-        else: # use cookies
+        else:  # use cookies
             settings = UserSetting(**settings_dict)
 
         serializer = UserSettingSerializer(instance=settings)
         return Response({'serializer': serializer}, status=status.HTTP_200_OK)
 
-
     def post(self, request, format=None):
         user = request.user
 
         if user.is_authenticated:  # use profile
-            settings, _  = UserSetting.objects.get_or_create(user=user)
+            settings, _ = UserSetting.objects.get_or_create(user=user)
             serializer = UserSettingSerializer(instance=settings, data=request.data)
         else:
             serializer = UserSettingSerializer(data=request.data)
@@ -99,7 +115,7 @@ class ApplicationSetting(APIView):
                 update_setting_cookie(response, serializer.validated_data, settings_from_request, missing_keys)
                 return response
 
-        else: # invalid data provided
+        else:  # invalid data provided
             message = "Form was invalid"
             if request.accepted_renderer.format == 'json':  # requested format is json
                 json_messages = []
@@ -177,13 +193,13 @@ class AccountUploadDataset(APIView):
                 json_message_utils.success(json_messages, message)
                 return Response({
                     'status': 'success',
-                    'messages':  MessageSerializer(json_messages, many=True).data,
+                    'messages': MessageSerializer(json_messages, many=True).data,
                 }, status=status.HTTP_201_CREATED)
 
-            else: # or render html template
+            else:  # or render html template
                 messages.success(request, message)
                 return Response({
-                    'serializer' : serializer,
+                    'serializer': serializer,
                 }, status=status.HTTP_201_CREATED)
         else:
             message = "Form was invalid"
@@ -192,7 +208,7 @@ class AccountUploadDataset(APIView):
                 json_message_utils.error(json_messages, message)
 
                 # append non field form errors to message errors
-                if(api_settings.NON_FIELD_ERRORS_KEY in serializer.errors):
+                if (api_settings.NON_FIELD_ERRORS_KEY in serializer.errors):
                     for non_field_error in serializer.errors[api_settings.NON_FIELD_ERRORS_KEY]:
                         json_message_utils.error(json_messages, non_field_error)
 
@@ -201,7 +217,7 @@ class AccountUploadDataset(APIView):
                     'form_errors': serializer.errors
                 }, status=status.HTTP_400_BAD_REQUEST)
 
-            else : # or render html template
+            else:  # or render html template
                 messages.error(request, message)
                 return Response({
                     'serializer': serializer,
@@ -278,32 +294,10 @@ class AccountUploadTrainingDataset(APIView):
                 'form_errors': serializer.errors,
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        else : # or render html template
+        else:  # or render html template
             return Response({
                 'serializer': serializer,
             }, status=status.HTTP_400_BAD_REQUEST)
-
-
-class Account(APIView):
-    """
-    View for account setting
-    """
-    renderer_classes = [TemplateHTMLRenderer]
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
-    template_name = 'vadetisweb/account/account.html'
-
-    def get(self, request):
-
-        user_serializer = AccountUserSerializer(instance=request.user)
-        password_update_serializer = AccountPasswordSerializer()
-        social_disconnect_serializer = AccountSocialDisconnectSerializer()
-        delete_account_serializer = AccountDeleteSerializer(instance=request.user)
-
-        return Response({'user_serializer': user_serializer,
-                         'password_update_serializer' : password_update_serializer,
-                         'social_disconnect_serializer' : social_disconnect_serializer,
-                         'delete_account_serializer' : delete_account_serializer }, status=status.HTTP_200_OK)
 
 
 class AccountUserUpdate(APIView):
@@ -387,7 +381,6 @@ class AccountSocialDisconnectUpdate(APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 class AccountDelete(APIView):
     """
     View for account delete processing
@@ -421,7 +414,8 @@ class AccountDelete(APIView):
                 'form_errors': account_delete_serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
 
-#TODO
+
+# TODO
 @login_required
 def account(request):
     current_user = request.user
@@ -453,7 +447,6 @@ def account(request):
                 message = "Could not disconnect social account!"
                 messages.error(request, message)
                 logging.error(form_social_disconnect.errors)
-
 
     """if form_user is None:
         form_user = AccountUserForm(instance=current_user)"""
