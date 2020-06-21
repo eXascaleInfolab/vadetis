@@ -218,10 +218,10 @@ class AccountUserSerializer(serializers.ModelSerializer):
                                      help_text='Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.',
                                      style={'template': 'vadetisweb/parts/input/text_input.html'})
 
-    first_name = serializers.CharField(label='First name', required=False,
+    first_name = serializers.CharField(label='First Name', required=False,
                                        style={'template': 'vadetisweb/parts/input/text_input.html'})
 
-    last_name = serializers.CharField(label='Last name', required=False,
+    last_name = serializers.CharField(label='Last Name', required=False,
                                       style={'template': 'vadetisweb/parts/input/text_input.html'})
 
     email = serializers.EmailField(label='E-Mail Address', required=True,
@@ -246,17 +246,17 @@ class AccountUserSerializer(serializers.ModelSerializer):
 
 class AccountPasswordSerializer(serializers.Serializer):
 
-    oldpassword = serializers.CharField(label='Current password', write_only=True, required=True,
+    oldpassword = serializers.CharField(label='Current Password', write_only=True, required=True,
                                         allow_null = False, allow_blank = False,
                                         style={'input_type': 'password',
                                                'template': 'vadetisweb/parts/input/text_input.html'})
 
-    password1 = serializers.CharField(label='New password', write_only=True, required=True,
+    password1 = serializers.CharField(label='New Password', write_only=True, required=True,
                                       allow_null=False, allow_blank=False,
                                       style={'input_type': 'password',
                                              'template': 'vadetisweb/parts/input/text_input.html'})
 
-    password2 = serializers.CharField(label='New password (again)', write_only=True, required=True,
+    password2 = serializers.CharField(label='New Password (again)', write_only=True, required=True,
                                       allow_null=False, allow_blank=False,
                                       style={'input_type': 'password',
                                              'template': 'vadetisweb/parts/input/text_input.html'})

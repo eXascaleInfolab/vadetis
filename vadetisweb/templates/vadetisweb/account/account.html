@@ -48,7 +48,7 @@
                 </div>
             {% endif %}
             {% if form_social_disconnect.accounts %}
-                {% url 'vadetisweb:account' as social_disconnect_url %}
+                {% url 'vadetisweb:account_social_disconnect_update' as social_disconnect_url %}
                 {% include 'vadetisweb/parts/forms/serializer_form.html' with formid="social_disconnect_form" url=social_disconnect_url serializer=social_disconnect_serializer submit_label="Save" %}
             {% endif %}
         </div>
@@ -69,7 +69,7 @@
                     <h3 class="kt-portlet__head-title">Delete Account</h3>
                 </div>
             </div>
-            {% url 'vadetisweb:account' as account_delete_url %}
+            {% url 'vadetisweb:account_delete' as account_delete_url %}
             {% include 'vadetisweb/parts/forms/serializer_form.html' with formid="account_delete_form" url=account_delete_url serializer=delete_account_serializer submit_label="Delete Account" %}
         </div>
     </div>

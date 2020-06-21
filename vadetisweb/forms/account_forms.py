@@ -67,19 +67,6 @@ class AccountSetPasswordForm(SetPasswordForm):
         super(AccountSetPasswordForm, self).save()
 
 
-class AccountChangePasswordForm(ChangePasswordForm):
-
-    def __init__(self, user=None, *args, **kwargs):
-        super(AccountChangePasswordForm, self).__init__(user, *args, **kwargs)
-        for field in ('oldpassword', 'password1', 'password2'):
-            self.fields[field].widget.attrs = {'class': 'form-control'}
-
-    def save(self):
-        # Ensure you call the parent classes save
-        # .save() does not return anything
-        super(AccountChangePasswordForm, self).save()
-
-
 class AccountSocialDisconnectForm(DisconnectForm):
 
     def save(self):
@@ -93,18 +80,5 @@ class AccountSocialDisconnectForm(DisconnectForm):
 
         # Add your own processing here if you don't need access to the
         # socialaccount being deleted.
-
-
-class AccountDeleteUserForm(ModelForm):
-    class Meta:
-        model = User
-        fields = ['is_active']
-        widgets = {
-            'is_active': FormCheckboxInput(default=True, label='Account is active'),
-        }
-
-    def __init__(self, *args, **kwargs):
-        super(AccountDeleteUserForm, self).__init__(*args, **kwargs)
-        self.fields['is_active'].help_text = 'Uncheck this box and save if you are sure you want to delete your account.'
 
 

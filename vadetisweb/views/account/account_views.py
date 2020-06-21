@@ -12,7 +12,7 @@ from celery.utils import uuid
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from vadetisweb.models import UserTasks
 from vadetisweb.utils import settings_from_request_or_default_dict, json_message_utils, update_setting_cookie, write_to_tempfile
@@ -363,6 +363,64 @@ class AccountPasswordUpdate(APIView):
                 'form_errors': password_update_serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
 
+
+class AccountSocialDisconnectUpdate(APIView):
+    """
+    View for account social disconnect processing
+    """
+    renderer_classes = [JSONRenderer]
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+
+    def post(self, request):
+        social_disconnect_serializer = AccountSocialDisconnectSerializer(data=request.POST)
+
+        if social_disconnect_serializer.is_valid():
+            social_disconnect_serializer.save()
+
+        else:
+            json_messages = []
+            json_message_utils.error(json_messages, 'Form was not valid')
+            return Response({
+                'messages': MessageSerializer(json_messages, many=True).data,
+                'form_errors': social_disconnect_serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class AccountDelete(APIView):
+    """
+    View for account delete processing
+    """
+    renderer_classes = [JSONRenderer]
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+
+    def post(self, request):
+        account_delete_serializer = AccountDeleteSerializer(instance=request.user, data=request.POST)
+
+        if account_delete_serializer.is_valid():
+
+            deactivate_user = account_delete_serializer.save()
+
+            # check if user no longer active, then delete
+            # remove this if you want only to deactivate
+            if deactivate_user.is_active == False:
+                deactivate_user.delete()
+                message = "Account has been removed"
+                messages.success(request, message)
+                return redirect('vadetisweb:account_logout')
+            else:
+                return Response(status=status.HTTP_200_OK)
+
+        else:
+            json_messages = []
+            json_message_utils.error(json_messages, 'Form was not valid')
+            return Response({
+                'messages': MessageSerializer(json_messages, many=True).data,
+                'form_errors': account_delete_serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
+
 #TODO
 @login_required
 def account(request):
@@ -385,24 +443,6 @@ def account(request):
             else:
                 logging.error(form_user.errors)
 
-        elif 'submit-password' in request.POST:
-
-            if not request.user.has_usable_password():
-                form_password = AccountSetPasswordForm(user=current_user, data=request.POST)
-                message = "Your password has been set!"
-            else:
-                form_password = AccountChangePasswordForm(user=current_user, data=request.POST)
-                message = "Your password has been updated!"
-
-            if form_password.is_valid():
-                form_password.save()
-                update_session_auth_hash(request, form_password.user)
-                messages.success(request, message)
-                form_password = AccountChangePasswordForm(user=current_user)
-            else:
-                message = "Could not update password!"
-                messages.error(request, message)
-
         elif 'submit-social-account-disconnect' in request.POST:
             form_social_disconnect = AccountSocialDisconnectForm(request=request, data=request.POST)
             if form_social_disconnect.is_valid():
@@ -414,33 +454,15 @@ def account(request):
                 messages.error(request, message)
                 logging.error(form_social_disconnect.errors)
 
-        elif 'submit-account-delete' in request.POST:
-            form_account_delete = AccountDeleteUserForm(instance=current_user, data=request.POST)
-            if form_account_delete.is_valid():
-
-                deactivate_user = form_account_delete.save()
-
-                # check if user no longer active, then delete
-                # remove this if you want only to deactivate
-                if deactivate_user.is_active == False:
-                    deactivate_user.delete()
-                    message = "Account has been removed"
-                    messages.success(request, message)
-                    return None #return HttpResponseRedirect(reverse_lazy('account_logout'))
 
     """if form_user is None:
         form_user = AccountUserForm(instance=current_user)"""
 
     if form_password is None and not request.user.has_usable_password():
         form_password = AccountSetPasswordForm(user=current_user)
-    elif form_password is None:
-        form_password = AccountChangePasswordForm(user=current_user)
 
     if form_social_disconnect is None:
         form_social_disconnect = AccountSocialDisconnectForm(request=request)
-
-    if form_account_delete is None:
-        form_account_delete = AccountDeleteUserForm(instance=current_user)
 
     url_social_connect_success_redirect = reverse('vadetisweb:account')
 
