@@ -154,6 +154,7 @@ class UserSettingSerializer(serializers.ModelSerializer):
 
 
 class AccountDatasetDataTablesSerializer(serializers.ModelSerializer):
+
     title = serializers.CharField(read_only=True)
     owner = serializers.CharField(read_only=True)
     timeseries = serializers.SerializerMethodField()

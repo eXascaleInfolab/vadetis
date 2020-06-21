@@ -11,9 +11,16 @@
     overflow-wrap: break-word;
     margin-bottom: 0.5em;
     margin-left: 8px;
+    display: flex;
+    width: 100%;
 }
-.messages + .messages {
-    margin-top: 1.5em;
+.message-inner {
+    flex-grow: 1;
+}
+.message-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 .messages_list {
     list-style: none;

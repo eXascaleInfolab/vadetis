@@ -151,8 +151,12 @@ function printGroupedMessages(messages) {
 function printMessages(value, tag) {
     message_container = $('#message-container');
     html = "<div class=\"messages messages-" + tag + "\">";
+    html += "<div class=\"message-inner\">";
     html += htmlMessages(value);
+    html += "</div>";
+    html += "<div class=\"message-button\">";
     html += "<button id=\"messages-" + tag + "-close\" class=\"close btn-msg-close\"><i class=\"mdi mdi-18px mdi-close\"></i></button>";
+    html += "</div>";
     html += "</div>";
     message_container.append(html);
     $("#messages-" + tag + "-close").click(function() {
