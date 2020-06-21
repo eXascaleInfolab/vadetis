@@ -2,19 +2,24 @@
 var VadetisDatatables = function () {
 
     var initTable = function (html_id, url) {
-        var table = $(html_id);
+        var table = $('#' + html_id);
 
         $.ajax({
             url: url,
             type: "GET",
             success: function (data) {
                 var columns = [];
-                var columnNames = Object.keys(data.data[0]);
-                for (var i in columnNames) {
-                    columns.push({
-                        data: columnNames[i],
-                        title: capitalizeFirstLetter(columnNames[i])
-                    });
+                if (data !== undefined && data.data !== undefined && data.data.length > 0) {
+                    var columnNames = Object.keys(data.data[0]);
+                    for (var i in columnNames) {
+                        columns.push({
+                            data: columnNames[i],
+                            title: capitalizeFirstLetter(columnNames[i])
+                        });
+                    }
+                } else {
+                    // dummy header if no data available
+                    columns = [{title: '', data: null}];
                 }
 
                 var datatable = table.DataTable({
@@ -25,7 +30,7 @@ var VadetisDatatables = function () {
                             "sortAscending": ": activate to sort column ascending",
                             "sortDescending": ": activate to sort column descending"
                         },
-                        "emptyTable": "No data available in table",
+                        "emptyTable": "No data available",
                         "info": "_START_ to _END_ of _TOTAL_ entries",
                         "infoEmpty": "No entries found",
                         "infoFiltered": "(filtered1 from _MAX_ total entries)",
@@ -43,7 +48,7 @@ var VadetisDatatables = function () {
                     // setup colreorder extension: http://datatables.net/extensions/colreorder/
                     colReorder: {
                         reorderCallback: function () {
-                            console.log('callback');
+                            //console.log('callback');
                         }
                     },
 
@@ -68,6 +73,11 @@ var VadetisDatatables = function () {
                     // DOM Layout
                     dom: `<'row'<'col-sm-12'tr>>
                     <'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'lp>>`,
+
+                    fnInitComplete: function(oSettings) {
+                        if(table.DataTable().data().count() === 0)
+                            $('#' + html_id + ' thead').remove();
+                    }
                 });
 
                 table.on('change', 'tbody tr .kt-checkbox', function() {
@@ -81,7 +91,7 @@ var VadetisDatatables = function () {
     };
     return {
         init: function (html_id, url) {
-            initTable('#' + html_id, url);
+            initTable(html_id, url);
         }
     };
 }();
