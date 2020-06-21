@@ -14,7 +14,7 @@ class DisplayDatasetDataTablesSerializer(serializers.ModelSerializer):
     timeseries = serializers.SerializerMethodField()
     values = serializers.SerializerMethodField()
     frequency = serializers.CharField(read_only=True)
-    spatial_data = serializers.BooleanField(read_only=True)
+    spatial_data = serializers.SerializerMethodField()
     training_datasets = serializers.SerializerMethodField()
     actions = serializers.SerializerMethodField()
 
@@ -24,6 +24,9 @@ class DisplayDatasetDataTablesSerializer(serializers.ModelSerializer):
     def get_values(self, obj):
         np_num_values = obj.dataframe.count().sum()
         return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
+
+    def get_spatial_data(self, obj):
+        return all(ts.location is not None for ts in obj.timeseries_set.all())
 
     def get_training_datasets(self, obj):
         return obj.training_dataset.count()
@@ -48,7 +51,7 @@ class DetectionDatasetDataTablesSerializer(serializers.ModelSerializer):
     timeseries = serializers.SerializerMethodField()
     values = serializers.SerializerMethodField()
     frequency = serializers.CharField(read_only=True)
-    spatial_data = serializers.BooleanField(read_only=True)
+    spatial_data = serializers.SerializerMethodField()
     training_datasets = serializers.SerializerMethodField()
     actions = serializers.SerializerMethodField()
 
@@ -58,6 +61,9 @@ class DetectionDatasetDataTablesSerializer(serializers.ModelSerializer):
     def get_values(self, obj):
         np_num_values = obj.dataframe.count().sum()
         return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
+
+    def get_spatial_data(self, obj):
+        return all(ts.location is not None for ts in obj.timeseries_set.all())
 
     def get_training_datasets(self, obj):
         return obj.training_dataset.count()
@@ -82,7 +88,7 @@ class TrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
     timeseries = serializers.SerializerMethodField()
     values = serializers.SerializerMethodField()
     frequency = serializers.CharField(read_only=True)
-    spatial_data = serializers.BooleanField(read_only=True)
+    spatial_data = serializers.SerializerMethodField()
 
     def get_timeseries(self, obj):
         return obj.timeseries_set.count()
@@ -90,6 +96,9 @@ class TrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
     def get_values(self, obj):
         np_num_values = obj.dataframe.count().sum()
         return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
+
+    def get_spatial_data(self, obj):
+        return all(ts.location is not None for ts in obj.timeseries_set.all())
 
     class Meta:
         model = DataSet

@@ -64,10 +64,6 @@ class DataSet(models.Model):
     type = models.CharField(null=False, max_length=32, choices=DATASET_TYPE, default=REAL_WORLD,
                             help_text='Determines whether this dataset is real world or synthetic data.')
 
-    # flag if this set contains spatial time series
-    spatial_data = models.CharField(null=False, max_length=32, choices=DATASET_SPATIAL_DATA, default=NON_SPATIAL,
-                                    help_text='Determines whether this dataset is spatial or not. Spatial data requires geographic information about the time series recording location.')
-
     # pickled object field for the dataframe of values
     dataframe = PickledObjectField(null=True, compress=True)
 
@@ -118,25 +114,14 @@ class TimeSeries(models.Model):
     """
 
     name = models.CharField(max_length=32, null=False)
-    datasets = models.ManyToManyField(
-        DataSet)  # many to many because this series may refer to dataset and multiple training datasets as well
-    # training_dataset = models.ForeignKey(TrainingDataset, null=True, on_delete=models.CASCADE)
+    datasets = models.ManyToManyField(DataSet)  # many to many because this series may refer to dataset and multiple training datasets as well
     unit = models.CharField(max_length=32, choices=UNITS, null=False, help_text='Defines the unit of the values')
-    is_spatial = models.BooleanField(default=False)
     location = models.OneToOneField(Location, null=True, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = 'Time Series'
 
     def save(self, *args, **kwargs):
-        """
-        if self.dataset and self.training_dataset or not self.dataset and not self.training_dataset:
-            raise ValueError('Exactly one of [TimeSeries.dataset, TimeSeries.training_dataset] must be set')
-        """
-        if self.is_spatial:
-            if not self.location:
-                raise ValueError('Spatial Time Series require a Location')
-
         super(TimeSeries, self).save(*args, **kwargs)
 
     def __str__(self):

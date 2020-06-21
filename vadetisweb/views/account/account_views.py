@@ -164,9 +164,8 @@ class AccountUploadDataset(APIView):
             dataset_file = write_to_tempfile(dataset_file_raw)
 
             # handle spatial file
-            spatial_data = serializer.validated_data['spatial_data']
-            if spatial_data == SPATIAL:
-                spatial_file_raw = serializer.validated_data['csv_spatial_file']
+            spatial_file_raw = serializer.validated_data['csv_spatial_file']
+            if spatial_file_raw is not None:
                 logging.info("Spatial file received: ", spatial_file_raw.name)
                 spatial_file = write_to_tempfile(spatial_file_raw)
             else:
@@ -178,13 +177,13 @@ class AccountUploadDataset(APIView):
             # start import task
             user_tasks, _ = UserTasks.objects.get_or_create(user=user)
             task_uuid = uuid()
-            if spatial_data == SPATIAL:
-                user_tasks.apply_async(TaskImportData, args=[user.username, dataset_file.name, title,
-                                                             type, spatial_data],
-                                       kwargs={'spatial_file_name': spatial_file.name}, task_id=task_uuid)
+            if spatial_file is not None:
+                user_tasks.apply_async(TaskImportData, args=[user.username, dataset_file.name, title, type],
+                                       kwargs={'spatial_file_name': spatial_file.name},
+                                       task_id=task_uuid)
             else:
-                user_tasks.apply_async(TaskImportData, args=[user.username, dataset_file.name, title,
-                                                             type, spatial_data], task_id=task_uuid)
+                user_tasks.apply_async(TaskImportData, args=[user.username, dataset_file.name, title, type],
+                                       task_id=task_uuid)
 
             message = "Importing Dataset Task (%s) created" % task_uuid
 

@@ -15,7 +15,7 @@ class TaskImportData(Task):
     Task to insert a dataset into database
     """
 
-    def run(self, owner_username, dataset_file_name, title, type, spatial_data, **kwargs):
+    def run(self, owner_username, dataset_file_name, title, type, **kwargs):
         """
         The execution method of this task. We read the csv with the pandas lib, it's fast!
 
@@ -23,7 +23,6 @@ class TaskImportData(Task):
         :param dataset_file_name: CSV file name of the time series
         :param title: Human readable title of the dataset
         :param type: real world or synthetic
-        :param spatial_data: whether its spatial data or not
         :param kwargs: provide kwarg 'spatial_file_name' when inserting spatial data
         :return: results of the tasks as json
         """
@@ -33,12 +32,8 @@ class TaskImportData(Task):
 
         self.dataset_csv_name = dataset_file_name
 
-        if spatial_data == SPATIAL:
-            if 'spatial_file_name' in kwargs:
-                self.spatial_csv_name = kwargs['spatial_file_name']
-            else:
-                logging.warning('No locations file provided for spatial dataset, will change to non spatial dataset')
-                spatial_data = NON_SPATIAL
+        if 'spatial_file_name' in kwargs:
+            self.spatial_csv_name = kwargs['spatial_file_name']
         else:
             self.spatial_csv_name = None
 
@@ -106,15 +101,14 @@ class TaskImportData(Task):
             dataset = DataSet.objects.create(title=title,
                                              owner=user,
                                              type=type,
-                                             frequency=freq,
-                                             spatial_data=spatial_data)
+                                             frequency=freq)
             logging.info("New dataset {0} added".format(dataset))
 
             # for each series create a time series object
             for idx, row in df_ts_unit.items():
                 ts = TimeSeries.objects.create(name=idx,
                                                unit=row[0], # safe to get single element as previously checked for consistency
-                                               is_spatial=True if spatial_data == SPATIAL else False)
+                                               )
                 logging.debug("New time series: {0} added".format(idx))
                 ts.datasets.add(dataset)
                 ts.save()
@@ -138,7 +132,7 @@ class TaskImportData(Task):
 
             dataset.save()
 
-            if spatial_data == SPATIAL:
+            if self.spatial_csv_name is not None:
                 with open(self.spatial_csv_name, 'r') as locations_csv:
 
                     # get location df
@@ -178,7 +172,6 @@ class TaskImportData(Task):
                                                            ch1903_northing=ch1903_n,
                                                            height=height)
                         ts.location = location
-                        ts.is_spatial = True
                         ts.save()
                         location.save()
 
@@ -280,7 +273,6 @@ class TaskImportTrainingData(Task):
             training_dataset = DataSet.objects.create(title=title,
                                                       owner=user,
                                                       type=original_dataset.type,
-                                                      spatial_data=original_dataset.spatial_data,
                                                       frequency=freq,
                                                       is_training_data=True,
                                                       original_dataset=original_dataset)

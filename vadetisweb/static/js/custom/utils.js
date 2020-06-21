@@ -160,7 +160,7 @@ function printMessages(value, tag) {
     html += "</div>";
     message_container.append(html);
     $("#messages-" + tag + "-close").click(function() {
-        $(this).parent().fadeOut(800);
+        $(this).parent().parent().fadeOut(800);
     });
 }
 

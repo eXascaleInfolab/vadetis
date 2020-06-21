@@ -40,14 +40,10 @@ class DatasetImportSerializer(serializers.Serializer):
                                          help_text='Determines if this dataset is available to other users',
                                          style={'template': 'vadetisweb/parts/input/checkbox_input.html'})
 
-    spatial_data = serializers.ChoiceField(choices=DATASET_SPATIAL_DATA, default=NON_SPATIAL,
-                                           help_text='Determines whether this dataset is spatial or not. Spatial data requires geographic information about the time series recording location.',
-                                           style={'template': 'vadetisweb/parts/input/select_input.html'})
-
     csv_spatial_file = serializers.FileField(label='Spatial CSV File',
                                              required=False,
                                              allow_empty_file=True,
-                                             help_text='The csv file of spatial information. It\'s only required if dataset is spatial.',
+                                             help_text='The csv file of spatial information. If geographic information about the time series of this dataset is available, you can provide this information here.',
                                              validators=[FileExtensionValidator(allowed_extensions=['csv'])],
                                              style={'template': 'vadetisweb/parts/input/file_input.html'})
 
@@ -59,14 +55,6 @@ class DatasetImportSerializer(serializers.Serializer):
                 message='You already have a dataset with this title. Title and owner of a dataset must be distinct.'
             )
         ]
-
-    def validate(self, data):
-        """
-        Object level validation
-        """
-        if data['spatial_data'] == SPATIAL and data['csv_spatial_file'] is None:
-            raise serializers.ValidationError("A spatial dataset requires a CSV file about location information.")
-        return data
 
 
 class TrainingDatasetImportSerializer(serializers.Serializer):
@@ -160,7 +148,7 @@ class AccountDatasetDataTablesSerializer(serializers.ModelSerializer):
     timeseries = serializers.SerializerMethodField()
     values = serializers.SerializerMethodField()
     frequency = serializers.CharField(read_only=True)
-    spatial_data = serializers.BooleanField(read_only=True)
+    spatial_data = serializers.SerializerMethodField()
     is_public = serializers.BooleanField(read_only=True)
     training_datasets = serializers.SerializerMethodField()
     actions = serializers.SerializerMethodField()
@@ -171,6 +159,9 @@ class AccountDatasetDataTablesSerializer(serializers.ModelSerializer):
     def get_values(self, obj):
         np_num_values = obj.dataframe.count().sum()
         return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
+
+    def get_spatial_data(self, obj):
+        return all(ts.location is not None for ts in obj.timeseries_set.all())
 
     def get_training_datasets(self, obj):
         return obj.training_dataset.count()
@@ -185,19 +176,19 @@ class AccountDatasetDataTablesSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataSet
         fields = (
-            'title', 'owner', 'timeseries', 'values', 'frequency', 'spatial_data', 'is_public', 'training_datasets',
-            'actions'
+            'title', 'owner', 'timeseries', 'values', 'frequency', 'spatial_data', 'is_public', 'training_datasets', 'actions'
         )
 
 
 class AccountTrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
+
     title = serializers.CharField(read_only=True)
     owner = serializers.CharField(read_only=True)
     timeseries = serializers.SerializerMethodField()
     values = serializers.SerializerMethodField()
     frequency = serializers.CharField(read_only=True)
     is_public = serializers.BooleanField(read_only=True)
-    spatial_data = serializers.BooleanField(read_only=True)
+    spatial_data = serializers.SerializerMethodField()
 
     def get_timeseries(self, obj):
         return obj.timeseries_set.count()
@@ -205,6 +196,9 @@ class AccountTrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
     def get_values(self, obj):
         np_num_values = obj.dataframe.count().sum()
         return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
+
+    def get_spatial_data(self, obj):
+        return all(ts.location is not None for ts in obj.timeseries_set.all())
 
     class Meta:
         model = DataSet
