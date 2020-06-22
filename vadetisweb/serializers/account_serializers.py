@@ -149,8 +149,8 @@ class AccountDatasetDataTablesSerializer(serializers.ModelSerializer):
     timeseries = serializers.SerializerMethodField()
     values = serializers.SerializerMethodField()
     frequency = serializers.CharField(read_only=True)
-    spatial_data = serializers.SerializerMethodField()
-    is_public = serializers.BooleanField(read_only=True)
+    spatial = serializers.SerializerMethodField()
+    public = serializers.BooleanField(read_only=True)
     training_datasets = serializers.SerializerMethodField()
     actions = serializers.SerializerMethodField()
 
@@ -161,7 +161,7 @@ class AccountDatasetDataTablesSerializer(serializers.ModelSerializer):
         np_num_values = obj.dataframe.count().sum()
         return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
 
-    def get_spatial_data(self, obj):
+    def get_spatial(self, obj):
         return all(ts.location is not None for ts in obj.timeseries_set.all())
 
     def get_training_datasets(self, obj):
@@ -179,7 +179,7 @@ class AccountDatasetDataTablesSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataSet
         fields = (
-            'title', 'owner', 'timeseries', 'values', 'frequency', 'spatial_data', 'is_public', 'training_datasets', 'actions'
+            'title', 'owner', 'timeseries', 'values', 'frequency', 'spatial', 'public', 'training_datasets', 'actions'
         )
 
 
@@ -190,8 +190,8 @@ class AccountTrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
     timeseries = serializers.SerializerMethodField()
     values = serializers.SerializerMethodField()
     frequency = serializers.CharField(read_only=True)
-    is_public = serializers.BooleanField(read_only=True)
-    spatial_data = serializers.SerializerMethodField()
+    public = serializers.BooleanField(read_only=True)
+    spatial = serializers.SerializerMethodField()
 
     def get_timeseries(self, obj):
         return obj.timeseries_set.count()
@@ -200,13 +200,13 @@ class AccountTrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
         np_num_values = obj.dataframe.count().sum()
         return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
 
-    def get_spatial_data(self, obj):
+    def get_spatial(self, obj):
         return all(ts.location is not None for ts in obj.timeseries_set.all())
 
     class Meta:
         model = DataSet
         fields = (
-            'title', 'owner', 'timeseries', 'values', 'frequency', 'is_public', 'spatial_data',
+            'title', 'owner', 'timeseries', 'values', 'frequency', 'public', 'spatial',
         )
 
 

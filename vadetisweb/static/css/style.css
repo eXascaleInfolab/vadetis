@@ -41,6 +41,10 @@
     max-width: 100%;
 }
 
+.dataTables_wrapper .dataTable th {
+    text-transform: capitalize;
+}
+
 :root {
   --blue: #007bff;
   --indigo: #6610f2;

@@ -14,7 +14,7 @@ var VadetisDatatables = function () {
                     for (var i in columnNames) {
                         columns.push({
                             data: columnNames[i],
-                            title: capitalizeFirstLetter(columnNames[i])
+                            title: columnNames[i].replace('_', ' ')
                         });
                     }
                 } else {
