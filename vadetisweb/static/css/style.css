@@ -30790,6 +30790,11 @@ body {
 
 .kt-header__brand .kt-header__brand-logo img {
     height: 45px;
+    -webkit-transition: height 0.3s ease;
+    transition: height 0.3s ease;
+}
+.kt-header--minimize .kt-header__brand .kt-header__brand-logo img {
+    height: 34px;
 }
 
 @media (max-width: 1024px) {
