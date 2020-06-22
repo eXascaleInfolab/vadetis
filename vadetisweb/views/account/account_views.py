@@ -266,7 +266,7 @@ class AccountUploadTrainingDataset(APIView):
                     json_message_utils.success(json_messages, message)
                     return Response({
                         'status': 'success',
-                        'message': MessageSerializer(json_messages, many=True).data,
+                        'messages': MessageSerializer(json_messages, many=True).data,
                     }, status=status.HTTP_201_CREATED)
 
                 else:  # or render html template
@@ -412,9 +412,9 @@ class AccountDelete(APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
 
-# TODO
+# TODO depreacted
 @login_required
-def account(request):
+def deprecated_account(request):
     current_user = request.user
 
     form_password = None

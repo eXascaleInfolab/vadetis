@@ -120,7 +120,7 @@ function clearMessages() {
 }
 
 function clearFormErrors(formid) {
-    form = $("#" + formid);
+    var form = $("#" + formid);
     form.find(".validated").removeClass("validated");
     form.find(".invalid-feedback").remove();
 }
@@ -144,12 +144,12 @@ function groupBy(list, keyGetter) {
 }
 
 function printGroupedMessages(messages) {
-    grouped_messages = groupBy(messages, message => message.level_tag);
+    var grouped_messages = groupBy(messages, message => message.level_tag);
     grouped_messages.forEach((value, tag) => printMessages(value, tag));
 }
 
 function printMessages(value, tag) {
-    message_container = $('#message-container');
+    var message_container = $('#message-container');
     html = "<div class=\"messages messages-" + tag + "\">";
     html += "<div class=\"message-inner\">";
     html += htmlMessages(value);
@@ -165,7 +165,7 @@ function printMessages(value, tag) {
 }
 
 function htmlMessagesList(messages) {
-    html = "<ul class=\"messages_list\">";
+    var html = "<ul class=\"messages_list\">";
     messages.forEach(msg => {
         html += "<li class=\"messages_item\">";
         html += msg.message;
