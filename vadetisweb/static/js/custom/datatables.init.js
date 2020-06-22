@@ -74,6 +74,17 @@ var VadetisDatatables = function () {
                     dom: `<'row'<'col-sm-12'tr>>
                     <'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'lp>>`,
 
+                    /*columnDefs: [
+                        {
+                            // The `data` parameter refers to the data for the cell.
+                            // The `rows`argument is an object representing all the data for the current row.
+                            "render": function ( data, type, row ) {
+                                return "<button class='btn btn-danger btn-delete' data-pk='" + data + "'>" + row.name + "</button>";
+                            },
+                            "targets": -1  // -1 is the last column, 0 the first, 1 the second, etc.
+                        }
+                    ],*/
+
                     fnInitComplete: function(oSettings) {
                         if(table.DataTable().data().count() === 0)
                             $('#' + html_id + ' thead').remove();

@@ -274,7 +274,7 @@ class TaskImportTrainingData(Task):
                                                       owner=user,
                                                       type=original_dataset.type,
                                                       frequency=freq,
-                                                      is_training_data=True,
+                                                      training_data=True,
                                                       original_dataset=original_dataset)
 
             logging.info("Test dataset {0} added".format(training_dataset))

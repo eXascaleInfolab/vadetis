@@ -14,7 +14,7 @@ class DisplaySyntheticDatasetDataTableViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = self.queryset
-        query_set = queryset.filter(type=SYNTHETIC, is_public=True, is_training_data=False)
+        query_set = queryset.filter(type=SYNTHETIC, public=True, training_data=False)
         return query_set
 
     def get_permissions(self):
@@ -37,7 +37,7 @@ class DisplayRealWorldDatasetDataTableViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = self.queryset
-        query_set = queryset.filter(type=REAL_WORLD, is_public=True, is_training_data=False)
+        query_set = queryset.filter(type=REAL_WORLD, public=True, training_data=False)
         return query_set
 
     def get_permissions(self):

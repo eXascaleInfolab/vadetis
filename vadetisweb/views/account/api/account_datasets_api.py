@@ -14,7 +14,7 @@ class DatasetDataTableViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = self.queryset
-        query_set = queryset.filter(owner=self.request.user, is_training_data=False)
+        query_set = queryset.filter(owner=self.request.user, training_data=False)
         return query_set
 
     def get_permissions(self):
@@ -37,7 +37,7 @@ class TrainingDatasetDataTableViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = self.queryset
-        query_set = queryset.filter(owner=self.request.user, is_training_data=True)
+        query_set = queryset.filter(owner=self.request.user, training_data=True)
         return query_set
 
     def get_permissions(self):

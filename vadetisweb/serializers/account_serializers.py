@@ -36,7 +36,7 @@ class DatasetImportSerializer(serializers.Serializer):
                                    help_text='Determines whether this dataset is real world or synthetic data.',
                                    style={'template': 'vadetisweb/parts/input/select_input.html'})
 
-    is_public = serializers.BooleanField(default=True,
+    public = serializers.BooleanField(default=True,
                                          help_text='Determines if this dataset is available to other users',
                                          style={'template': 'vadetisweb/parts/input/checkbox_input.html'})
 
@@ -67,7 +67,7 @@ class TrainingDatasetImportSerializer(serializers.Serializer):
     original_dataset = UserOriginalDatasetField(label="Associated dataset", required=True,
                                                 style={'template': 'vadetisweb/parts/input/select_input.html'})
 
-    is_public = serializers.BooleanField(default=True,
+    public = serializers.BooleanField(default=True,
                                          help_text='Determines if this dataset is available to other users',
                                          style={'template': 'vadetisweb/parts/input/checkbox_input.html'})
 

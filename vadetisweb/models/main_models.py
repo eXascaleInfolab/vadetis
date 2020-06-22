@@ -74,10 +74,10 @@ class DataSet(models.Model):
     frequency = models.CharField(null=True, max_length=16,
                                  help_text='The frequency of the series in this dataset.')
 
-    is_public = models.BooleanField(default=True, help_text='Determines if this dataset is public available.')
+    public = models.BooleanField(default=True, help_text='Determines if this dataset is public available.')
 
     # test data
-    is_training_data = models.BooleanField(default=False)
+    training_data = models.BooleanField(default=False)
     original_dataset = models.ForeignKey('self', null=True, on_delete=models.CASCADE, related_name='training_dataset')
 
     class Meta:
@@ -95,7 +95,7 @@ class DataSet(models.Model):
         # check dataframes are pandas dataframe objects
         self._check_dataframe()
 
-        if self.is_training_data:
+        if self.training_data:
             if not self.original_dataset:
                 raise ValueError('No original dataset specified for this test dataset!')
         else:

@@ -12,7 +12,7 @@ class DatasetField(serializers.HiddenField):
     def get_value(self, dictionary):
         dataset_selected = self.context.get('dataset_selected', None)
         if dataset_selected is not None:
-            return DataSet.objects.filter(id=dataset_selected, is_training_data=False).first()
+            return DataSet.objects.filter(id=dataset_selected, training_data=False).first()
         return None
 
 
@@ -26,7 +26,7 @@ class TrainingDatasetField(serializers.PrimaryKeyRelatedField):
     def get_queryset(self):
         dataset_selected = self.context.get('dataset_selected', None)
         if dataset_selected is not None:
-            return DataSet.objects.filter(original_dataset__id=dataset_selected, is_training_data=True)
+            return DataSet.objects.filter(original_dataset__id=dataset_selected, training_data=True)
         return DataSet.objects.none()
 
     def display_value(self, instance):
