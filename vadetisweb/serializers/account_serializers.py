@@ -169,10 +169,12 @@ class AccountDatasetDataTablesSerializer(serializers.ModelSerializer):
 
     def get_actions(self, obj):
         if obj.type == REAL_WORLD:
-            link = reverse('vadetisweb:detection_real_world_dataset', args=[obj.id])
+            view_link = reverse('vadetisweb:display_real_world_dataset', args=[obj.id])
+            detection_link = reverse('vadetisweb:detection_real_world_dataset', args=[obj.id])
         else:
-            link = reverse('vadetisweb:detection_synthetic_dataset', args=[obj.id])
-        return '<a href="%s">View</a>' % (link)
+            view_link = reverse('vadetisweb:display_synthetic_dataset', args=[obj.id])
+            detection_link = reverse('vadetisweb:detection_synthetic_dataset', args=[obj.id])
+        return '<a href="%s">View</a> <a href="%s">Detection</a>' % (view_link, detection_link)
 
     class Meta:
         model = DataSet
