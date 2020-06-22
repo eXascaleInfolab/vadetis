@@ -277,3 +277,13 @@ DEFAULT_SETTINGS = (
     ('color_false_negative', DEFAULT_COLOR_FALSE_NEGATIVES),
     ('round_digits', DEFAULT_ROUND_DIGITS),
 )
+
+#########################################################
+# Misc
+#########################################################
+
+BOOLEAN_SELECTION = (
+    ('', ''),
+    ('true', 'true'),
+    ('false', 'false'),
+)

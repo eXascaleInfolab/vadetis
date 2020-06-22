@@ -14,8 +14,8 @@ app_name = 'vadetisweb'
 """
 
 router = routers.DefaultRouter()
-router.register(r'account/datasets', views.DatasetDataTableViewSet, basename='account_datasets_datatable')
-router.register(r'account/training-datasets', views.TrainingDatasetDataTableViewSet, basename='account_training_datasets_datatable')
+router.register(r'account/datasets', views.AccountDatasetDataTableViewSet, basename='account_datasets_datatable')
+router.register(r'account/training-datasets', views.AccountTrainingDatasetDataTableViewSet, basename='account_training_datasets_datatable')
 router.register(r'display/datasets/synthetic', views.DisplaySyntheticDatasetDataTableViewSet, basename='display_synthetic_datasets_datatable')
 router.register(r'display/datasets/real-world', views.DisplayRealWorldDatasetDataTableViewSet, basename='display_real_world_datasets_datatable')
 router.register(r'detection/datasets/synthetic', views.DetectionSyntheticDatasetDataTableViewSet, basename='detection_synthetic_datasets_datatable')

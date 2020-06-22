@@ -5,12 +5,13 @@ from vadetisweb.models import DataSet
 from vadetisweb.serializers import AccountDatasetDataTablesSerializer, AccountTrainingDatasetDataTablesSerializer
 
 
-class DatasetDataTableViewSet(viewsets.ModelViewSet):
+class AccountDatasetDataTableViewSet(viewsets.ModelViewSet):
     """
     Request information about datasets of current user
     """
     queryset = DataSet.objects.all()
     serializer_class = AccountDatasetDataTablesSerializer
+    http_method_names = ['get', 'head'] # disable http put, delete etc. from ViewSet
 
     def get_queryset(self):
         queryset = self.queryset
@@ -28,12 +29,13 @@ class DatasetDataTableViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
-class TrainingDatasetDataTableViewSet(viewsets.ModelViewSet):
+class AccountTrainingDatasetDataTableViewSet(viewsets.ModelViewSet):
     """
     Request information about datasets of current user
     """
     queryset = DataSet.objects.all()
     serializer_class = AccountTrainingDatasetDataTablesSerializer
+    http_method_names = ['get', 'head'] # disable http put, delete etc. from ViewSet
 
     def get_queryset(self):
         queryset = self.queryset

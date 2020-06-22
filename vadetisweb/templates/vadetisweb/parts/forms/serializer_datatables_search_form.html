@@ -1,0 +1,25 @@
+{% load rest_framework %}
+<!-- begin:: Search Form -->
+<form class="kt-form kt-form--fit kt-margin-b-20">
+    <div class="row kt-margin-b-20">
+    {% render_form serializer %}
+    </div>
+    <div class="kt-separator kt-separator--md kt-separator--dashed"></div>
+    <div class="row">
+        <div class="col-lg-12">
+            <button class="btn btn-primary btn-brand--icon" id="kt_search">
+                <span>
+                    <i class="mdi mdi-18px mdi-magnify"></i>
+                    <span>Search</span>
+                </span>
+            </button>
+            <button class="btn btn-secondary btn-secondary--icon" id="kt_reset">
+                <span>
+                    <i class="mdi mdi-18px mdi-close"></i>
+                    <span>Reset</span>
+                </span>
+            </button>
+        </div>
+    </div>
+</form>
+<!-- end:: Search Form -->

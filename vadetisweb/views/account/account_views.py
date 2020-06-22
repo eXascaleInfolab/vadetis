@@ -48,12 +48,14 @@ def account(request):
 
 @login_required
 def account_datasets(request):
-    return render(request, 'vadetisweb/account/account_datasets.html')
+    search_serializer = AccountDatasetSearchSerializer()
+    return render(request, 'vadetisweb/account/account_datasets.html', { 'search_serializer' : search_serializer })
 
 
 @login_required
 def account_training_datasets(request):
-    return render(request, 'vadetisweb/account/account_training_datasets.html')
+    search_serializer = AccountTrainingDatasetSearchSerializer()
+    return render(request, 'vadetisweb/account/account_training_datasets.html', { 'search_serializer' : search_serializer })
 
 
 class ApplicationSetting(APIView):
