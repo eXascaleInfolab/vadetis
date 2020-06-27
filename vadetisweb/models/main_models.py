@@ -78,7 +78,7 @@ class DataSet(models.Model):
 
     # test data
     training_data = models.BooleanField(default=False)
-    original_dataset = models.ForeignKey('self', null=True, on_delete=models.CASCADE, related_name='training_dataset')
+    main_dataset = models.ForeignKey('self', null=True, on_delete=models.CASCADE, related_name='training_dataset')
 
     class Meta:
         unique_together = ('title', 'owner',)
@@ -97,15 +97,15 @@ class DataSet(models.Model):
 
         if self.training_data:
             if not self.original_dataset:
-                raise ValueError('No original dataset specified for this test dataset!')
+                raise ValueError('No original dataset specified for this training dataset!')
         else:
             if self.original_dataset:
-                raise ValueError('An original dataset cannot be a test dataset!')
+                raise ValueError('An original dataset cannot be a training dataset!')
 
         super(DataSet, self).save(*args, **kwargs)
 
     def __str__(self):
-        return '%s (%s)' % (self.title, self.id)
+        return '%s' % (self.title)
 
 
 class TimeSeries(models.Model):

@@ -4,7 +4,7 @@ from drf_yasg import openapi
 from vadetisweb.models import DataSet
 
 
-class UserOriginalDatasetField(serializers.PrimaryKeyRelatedField):
+class MainDatasetField(serializers.PrimaryKeyRelatedField):
     def get_queryset(self):
         request = self.context.get('request', None)
         user = request.user

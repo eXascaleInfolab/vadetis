@@ -33,7 +33,7 @@ var VadetisDatatables = function () {
                         "emptyTable": "No data available",
                         "info": "_START_ to _END_ of _TOTAL_ entries",
                         "infoEmpty": "No entries found",
-                        "infoFiltered": "(filtered1 from _MAX_ total entries)",
+                        "infoFiltered": "(filtered from _MAX_ total entries)",
                         "lengthMenu": "_MENU_ entries",
                         "search": "Search:",
                         "zeroRecords": "No matching records found",
@@ -44,13 +44,6 @@ var VadetisDatatables = function () {
                     responsive: true,
 
                     buttons: [],
-
-                    // setup colreorder extension: http://datatables.net/extensions/colreorder/
-                    colReorder: {
-                        reorderCallback: function () {
-                            //console.log('callback');
-                        }
-                    },
 
                     order: [
                         [0, 'asc']
