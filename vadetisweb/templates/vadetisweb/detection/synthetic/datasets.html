@@ -30,6 +30,7 @@
             </div>
         </div>
         <div class="kt-portlet__body">
+            {% include 'vadetisweb/parts/forms/serializer_datatables_search_form.html' with serializer=search_serializer %}
             <!--begin: Datatable -->
             <table id="table_synthetic_datasets" class="table table-bordered table-hover table-checkable"></table>
             <!--end: Datatable -->

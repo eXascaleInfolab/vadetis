@@ -41,3 +41,64 @@ class DetectionDatasetDataTablesSerializer(serializers.ModelSerializer):
         fields = (
             'title', 'owner', 'timeseries', 'values', 'frequency', 'spatial_data', 'training_datasets', 'actions'
         )
+
+
+class DetectionDatasetSearchSerializer(serializers.Serializer):
+    """
+        Order is important and must refer to the order in the datatables serializer
+    """
+    title = serializers.CharField(write_only=True,
+                                  style={'template': 'vadetisweb/parts/input/text_input.html',
+                                         'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
+                                         'input_class' : 'search-input',
+                                         'col_index' : '0' })
+
+    owner = serializers.CharField(write_only=True,
+                                  style={'template': 'vadetisweb/parts/input/text_input.html',
+                                         'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
+                                         'input_class': 'search-input',
+                                         'col_index': '1'})
+
+    timeseries = serializers.IntegerField(write_only=True,
+                                          style={'template': 'vadetisweb/parts/input/text_input.html',
+                                                 'input_type': 'number',
+                                                 'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
+                                                 'input_class' : 'search-input',
+                                                 'col_index': '2',
+                                                 'step': 'any'})
+
+    values = serializers.IntegerField(write_only=True,
+                                      style={'template': 'vadetisweb/parts/input/text_input.html',
+                                             'input_type' : 'number',
+                                             'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
+                                             'input_class': 'search-input',
+                                             'col_index': '3',
+                                             'step': 'any'})
+
+    frequency = serializers.CharField(write_only=True,
+                                      style={'template': 'vadetisweb/parts/input/text_input.html',
+                                             'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
+                                             'input_class' : 'search-input',
+                                             'col_index' : '4' })
+
+    spatial = serializers.ChoiceField(write_only=True, choices=BOOLEAN_SELECTION,
+                                      style={'template': 'vadetisweb/parts/input/select_input.html',
+                                             'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
+                                             'input_class' : 'search-input',
+                                             'col_index' : '5' })
+
+    public = serializers.ChoiceField(write_only=True, choices=BOOLEAN_SELECTION,
+                                     style={'template': 'vadetisweb/parts/input/select_input.html',
+                                            'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
+                                            'input_class' : 'search-input',
+                                            'col_index' : '6' })
+
+    training_datasets = serializers.IntegerField(write_only=True,
+                                                 style={'template': 'vadetisweb/parts/input/text_input.html',
+                                                        'input_type': 'number',
+                                                        'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
+                                                        'input_class' : 'search-input',
+                                                        'col_index' : '7'})
+
+    def __init__(self, *args, **kwargs):
+        super(DetectionDatasetSearchSerializer, self).__init__(*args, **kwargs)

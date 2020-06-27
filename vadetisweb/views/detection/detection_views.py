@@ -12,6 +12,7 @@ from vadetisweb.serializers import AlgorithmSerializer, ThresholdSerializer, Ano
 from vadetisweb.utils import get_settings, get_highcharts_range_button_preselector, get_conf_from_query_params, is_valid_conf
 from vadetisweb.factory import dataset_not_found_msg
 from vadetisweb.parameters import SYNTHETIC, REAL_WORLD
+from vadetisweb.serializers.dataset.detection_dataset_serializer import DetectionDatasetSearchSerializer
 
 
 class DetectionSyntheticDatasets(APIView):
@@ -22,7 +23,8 @@ class DetectionSyntheticDatasets(APIView):
     template_name = 'vadetisweb/detection/synthetic/datasets.html'
 
     def get(self, request):
-        return Response(status=status.HTTP_200_OK)
+        search_serializer = DetectionDatasetSearchSerializer()
+        return Response({ 'search_serializer' : search_serializer }, status=status.HTTP_200_OK)
 
 
 class DetectionRealWorldDatasets(APIView):
@@ -33,7 +35,9 @@ class DetectionRealWorldDatasets(APIView):
     template_name = 'vadetisweb/detection/real-world/datasets.html'
 
     def get(self, request):
-        return Response(status=status.HTTP_200_OK)
+        search_serializer = DetectionDatasetSearchSerializer()
+
+        return Response({ 'search_serializer' : search_serializer }, status=status.HTTP_200_OK)
 
 
 class DetectionSyntheticDataset(APIView):

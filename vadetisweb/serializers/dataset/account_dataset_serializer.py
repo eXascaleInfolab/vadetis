@@ -1,14 +1,15 @@
 import numpy as np
 from rest_framework import serializers
-from django.urls import reverse
-from django.core.validators import FileExtensionValidator
 from rest_framework.validators import UniqueTogetherValidator
 
+from django.urls import reverse
+from django.core.validators import FileExtensionValidator
 
 from vadetisweb.models import DataSet
 from vadetisweb.parameters import REAL_WORLD, DATASET_TYPE, BOOLEAN_SELECTION
 from vadetisweb.fields import UserOriginalDatasetField
 from vadetisweb.serializers.account_serializers import UserSerializer
+
 
 class AccountDatasetDataTablesSerializer(serializers.ModelSerializer):
     title = serializers.CharField(read_only=True)

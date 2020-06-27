@@ -10,6 +10,7 @@ from vadetisweb.models import DataSet
 from vadetisweb.utils import get_highcharts_range_button_preselector
 from vadetisweb.factory import dataset_not_found_msg
 from vadetisweb.parameters import SYNTHETIC, REAL_WORLD
+from vadetisweb.serializers.dataset.display_dataset_serializer import DisplayDatasetSearchSerializer
 
 
 class DisplaySyntheticDatasets(APIView):
@@ -20,7 +21,9 @@ class DisplaySyntheticDatasets(APIView):
     template_name = 'vadetisweb/display/synthetic/datasets.html'
 
     def get(self, request):
-        return Response(status=status.HTTP_200_OK)
+        search_serializer = DisplayDatasetSearchSerializer()
+
+        return Response({ 'search_serializer' : search_serializer }, status=status.HTTP_200_OK)
 
 
 class DisplayRealWorldDatasets(APIView):
@@ -31,7 +34,9 @@ class DisplayRealWorldDatasets(APIView):
     template_name = 'vadetisweb/display/real-world/datasets.html'
 
     def get(self, request):
-        return Response(status=status.HTTP_200_OK)
+        search_serializer = DisplayDatasetSearchSerializer()
+
+        return Response({ 'search_serializer' : search_serializer }, status=status.HTTP_200_OK)
 
 
 class DisplaySyntheticDataset(APIView):
