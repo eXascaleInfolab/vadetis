@@ -15,7 +15,7 @@ from vadetisweb.models import DataSet
 from vadetisweb.utils import json_message_utils
 from vadetisweb.serializers import MessageSerializer
 from vadetisweb.serializers.dataset.account_dataset_serializer import *
-from vadetisweb.factory.message_factory import *
+from vadetisweb.factory import *
 
 class AccountDatasetDataTableViewSet(viewsets.ModelViewSet):
     """
@@ -137,16 +137,7 @@ class AccountDatasetDelete(APIView):
                 message = "Form was invalid"
                 json_messages = []
                 json_message_utils.error(json_messages, message)
-
-                # append non field form errors to message errors
-                if (api_settings.NON_FIELD_ERRORS_KEY in dataset_delete_serializer.errors):
-                    for non_field_error in dataset_delete_serializer.errors[api_settings.NON_FIELD_ERRORS_KEY]:
-                        json_message_utils.error(json_messages, non_field_error)
-                return Response({
-                    'messages': MessageSerializer(json_messages, many=True).data,
-                    'form_errors': dataset_delete_serializer.errors
-                }, status=status.HTTP_400_BAD_REQUEST)
-
+                return invalid_form_rest_response(serializer, json_messages)
 
         except DataSet.DoesNotExist:
             messages.error(request, dataset_not_found_msg(dataset_id))

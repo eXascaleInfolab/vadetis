@@ -21,7 +21,7 @@ from vadetisweb.serializers.account_serializers import *
 from vadetisweb.serializers.dataset.account_dataset_serializer import *
 from vadetisweb.serializers import MessageSerializer
 from vadetisweb.tasks import TaskImportData, TaskImportTrainingData
-from vadetisweb.factory.message_factory import *
+from vadetisweb.factory import *
 
 # TODO deprecated
 from vadetisweb.forms.account_forms import *
@@ -124,16 +124,7 @@ class ApplicationSetting(APIView):
             if request.accepted_renderer.format == 'json':  # requested format is json
                 json_messages = []
                 json_message_utils.error(json_messages, message)
-
-                # append non field form errors to message errors
-                if (api_settings.NON_FIELD_ERRORS_KEY in serializer.errors):
-                    for non_field_error in serializer.errors[api_settings.NON_FIELD_ERRORS_KEY]:
-                        json_message_utils.error(json_messages, non_field_error)
-
-                return Response({
-                    'messages': MessageSerializer(json_messages, many=True).data,
-                    'form_errors': serializer.errors
-                }, status=status.HTTP_400_BAD_REQUEST)
+                return invalid_form_rest_response(serializer, json_messages)
 
             else:  # or render html template
                 messages.error(request, message)
@@ -209,16 +200,7 @@ class AccountUploadDataset(APIView):
             if request.accepted_renderer.format == 'json':  # requested format is json
                 json_messages = []
                 json_message_utils.error(json_messages, message)
-
-                # append non field form errors to message errors
-                if (api_settings.NON_FIELD_ERRORS_KEY in serializer.errors):
-                    for non_field_error in serializer.errors[api_settings.NON_FIELD_ERRORS_KEY]:
-                        json_message_utils.error(json_messages, non_field_error)
-
-                return Response({
-                    'messages': MessageSerializer(json_messages, many=True).data,
-                    'form_errors': serializer.errors
-                }, status=status.HTTP_400_BAD_REQUEST)
+                return invalid_form_rest_response(serializer, json_messages)
 
             else:  # or render html template
                 messages.error(request, message)
@@ -285,14 +267,7 @@ class AccountUploadTrainingDataset(APIView):
                 json_message_utils.error(json_messages, message)
 
                 # append non field form errors to message errors
-                if (api_settings.NON_FIELD_ERRORS_KEY in serializer.errors):
-                    for non_field_error in serializer.errors[api_settings.NON_FIELD_ERRORS_KEY]:
-                        json_message_utils.error(json_messages, non_field_error)
-
-                return Response({
-                    'messages': MessageSerializer(json_messages, many=True).data,
-                    'form_errors': serializer.errors
-                }, status=status.HTTP_400_BAD_REQUEST)
+                return invalid_form_rest_response(serializer, json_messages)
 
             else:  # or render html template
                 messages.error(request, message)
