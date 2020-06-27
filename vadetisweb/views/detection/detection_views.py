@@ -4,12 +4,12 @@ from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 
-from django.shortcuts import redirect, reverse
+from django.shortcuts import redirect
 from django.contrib import messages
 
 from vadetisweb.models import DataSet
 from vadetisweb.serializers import AlgorithmSerializer, ThresholdSerializer, AnomalyInjectionSerializer
-from vadetisweb.utils import get_settings, get_highcharts_range_button_preselector, get_conf_from_query_params, is_valid_conf
+from vadetisweb.utils import get_highcharts_range_button_preselector
 from vadetisweb.factory import dataset_not_found_msg
 from vadetisweb.parameters import SYNTHETIC, REAL_WORLD
 from vadetisweb.serializers.dataset.detection_dataset_serializer import DetectionDatasetSearchSerializer
