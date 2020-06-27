@@ -18,9 +18,9 @@ from vadetisweb.models import UserTasks
 from vadetisweb.utils import settings_from_request_or_default_dict, json_message_utils, update_setting_cookie, \
     write_to_tempfile
 from vadetisweb.serializers.account_serializers import *
+from vadetisweb.serializers.dataset.account_dataset_serializer import *
 from vadetisweb.serializers import MessageSerializer
 from vadetisweb.tasks import TaskImportData, TaskImportTrainingData
-from vadetisweb.parameters import SPATIAL
 
 # TODO deprecated
 from vadetisweb.forms.account_forms import *
