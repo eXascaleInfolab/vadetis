@@ -21,7 +21,7 @@ from vadetisweb.serializers.account_serializers import *
 from vadetisweb.serializers.dataset.account_dataset_serializer import *
 from vadetisweb.serializers import MessageSerializer
 from vadetisweb.tasks import TaskImportData, TaskImportTrainingData
-from vadetisweb.factory import dataset_not_found_msg
+from vadetisweb.factory.message_factory import *
 
 # TODO deprecated
 from vadetisweb.forms.account_forms import *
@@ -422,86 +422,27 @@ class AccountDatasetEdit(APIView):
     """
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
-    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
-    parser_classes = [MultiPartParser]
+    renderer_classes = [TemplateHTMLRenderer]
     template_name = 'vadetisweb/account/account_dataset_edit.html'
 
     def get(self, request, dataset_id):
         try:
-            dataset = DataSet.objects.get(id=dataset_id)
+            dataset = DataSet.objects.get(id=dataset_id, training_data=False)
 
             if dataset.owner == request.user:
-                dataset_edit_serializer = AccountDatasetEditSerializer(instance=dataset)
+                dataset_edit_serializer = AccountDatasetUpdateSerializer(instance=dataset)
+                dataset_delete_serializer = AccountDatasetDeleteSerializer()
 
                 return Response({'dataset': dataset,
-                                 'dataset_edit_serializer': dataset_edit_serializer},
+                                 'dataset_edit_serializer': dataset_edit_serializer,
+                                 'dataset_delete_serializer': dataset_delete_serializer},
                                 status=status.HTTP_200_OK)
             else:
                 return Response(status=status.HTTP_403_FORBIDDEN)
 
         except DataSet.DoesNotExist:
             messages.error(request, dataset_not_found_msg(dataset_id))
-            return redirect('vadetisweb:display_synthetic_datasets')
-
-
-    def post(self, request, dataset_id):
-        account_delete_serializer = AccountDeleteSerializer(instance=request.user, data=request.POST)
-
-        if account_delete_serializer.is_valid():
-
-            deactivate_user = account_delete_serializer.save()
-
-            # check if user no longer active, then delete
-            # remove this if you want only to deactivate
-            if deactivate_user.is_active == False:
-                deactivate_user.delete()
-                message = "Account has been removed"
-                messages.success(request, message)
-                return redirect('vadetisweb:account_logout')
-            else:
-                return Response(status=status.HTTP_200_OK)
-
-        else:
-            json_messages = []
-            json_message_utils.error(json_messages, 'Form was not valid')
-            return Response({
-                'messages': MessageSerializer(json_messages, many=True).data,
-                'form_errors': account_delete_serializer.errors
-            }, status=status.HTTP_400_BAD_REQUEST)
-
-
-class AccountDatasetDelete(APIView):
-    """
-    View for dataset delete processing
-    """
-    renderer_classes = [JSONRenderer]
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
-
-    def post(self, request):
-        account_delete_serializer = AccountDeleteSerializer(instance=request.user, data=request.POST)
-
-        if account_delete_serializer.is_valid():
-
-            deactivate_user = account_delete_serializer.save()
-
-            # check if user no longer active, then delete
-            # remove this if you want only to deactivate
-            if deactivate_user.is_active == False:
-                deactivate_user.delete()
-                message = "Dataset has been removed"
-                messages.success(request, message)
-                return redirect('vadetisweb:account_datasets')
-            else:
-                return Response(status=status.HTTP_200_OK)
-
-        else:
-            json_messages = []
-            json_message_utils.error(json_messages, 'Form was not valid')
-            return Response({
-                'messages': MessageSerializer(json_messages, many=True).data,
-                'form_errors': account_delete_serializer.errors
-            }, status=status.HTTP_400_BAD_REQUEST)
+            return redirect('vadetisweb:account_datasets')
 
 
 # TODO depreacted

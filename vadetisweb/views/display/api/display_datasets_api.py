@@ -11,6 +11,7 @@ class DisplaySyntheticDatasetDataTableViewSet(viewsets.ModelViewSet):
     """
     queryset = DataSet.objects.all()
     serializer_class = DisplayDatasetDataTablesSerializer
+    http_method_names = ['get', 'head'] # disable http put, delete etc. from ViewSet
 
     def get_queryset(self):
         queryset = self.queryset
@@ -34,6 +35,7 @@ class DisplayRealWorldDatasetDataTableViewSet(viewsets.ModelViewSet):
     """
     queryset = DataSet.objects.all()
     serializer_class = DisplayDatasetDataTablesSerializer
+    http_method_names = ['get', 'head'] # disable http put, delete etc. from ViewSet
 
     def get_queryset(self):
         queryset = self.queryset

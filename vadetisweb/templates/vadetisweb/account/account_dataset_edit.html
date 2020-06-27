@@ -17,31 +17,50 @@
 {% endblock %}
 
 {% block content %}
-    <div class="kt-portlet kt-portlet--mobile">
-        <div class="kt-portlet__head kt-portlet__head--lg">
-            <div class="kt-portlet__head-label">
-                <span class="kt-portlet__head-icon">
-                    <i class="mdi mdi-chart-timeline-variant mdi-24px kt-font-brand"></i>
-                </span>
-                <h3 class="kt-portlet__head-title">
-                    {{ dataset.title }}
-                </h3>
-            </div>
-            <div class="kt-portlet__head-toolbar">
-                <div class="kt-portlet__head-wrapper">
-                    <a href="{% url 'vadetisweb:account_datasets_upload' %}">
-                        <button type="button" class="btn btn-brand btn-icon-sm">
-                            <i class="mdi mdi-delete mdi-18px"></i> Delete Dataset
-                        </button>
-                    </a>
+<div class="row">
+    <div class="col-md-6">
+        <div class="kt-portlet kt-portlet--mobile">
+            <div class="kt-portlet__head kt-portlet__head--lg">
+                <div class="kt-portlet__head-label">
+                    <span class="kt-portlet__head-icon">
+                        <i class="mdi mdi-chart-timeline-variant mdi-24px kt-font-brand"></i>
+                    </span>
+                    <h3 class="kt-portlet__head-title">
+                        {{ dataset.title }}
+                    </h3>
                 </div>
             </div>
-        </div>
-        <div class="kt-portlet__body">
-            {% url 'vadetisweb:account_dataset_edit' dataset.id as fromurl %}
-            {% include 'vadetisweb/parts/forms/serializer_form.html' with formid="dataset_edit_form" url=fromurl serializer=dataset_edit_serializer submit_label="Save" %}
+            <div class="kt-portlet__body">
+                {% url 'vadetisweb:account_dataset_update' dataset.id as fromurl %}
+                {% include 'vadetisweb/parts/forms/serializer_form.html' with formid="dataset_edit_form" url=fromurl serializer=dataset_edit_serializer submit_label="Save" %}
+            </div>
         </div>
     </div>
+    <div class="col-md-6">
+        <div class="kt-portlet kt-portlet--mobile">
+            <div class="kt-portlet__head kt-portlet__head--lg">
+                <div class="kt-portlet__head-label">
+                    <span class="kt-portlet__head-icon">
+                        <i class="mdi mdi-chart-timeline-variant mdi-24px kt-font-brand"></i>
+                    </span>
+                    <h3 class="kt-portlet__head-title">
+                        {{ dataset.title }}
+                    </h3>
+                </div>
+            </div>
+            <div class="kt-portlet__body">
+                <div class="alert alert-secondary" role="alert">
+                    <div class="alert-icon"><i class="mdi mdi-alert-outline mdi-24px"></i></div>
+                    <div class="alert-text">
+                        <p>Deleting the dataset will delete the training data as well.</p>
+                    </div>
+                </div>
+                {% url 'vadetisweb:account_dataset_delete' dataset.id as fromurl %}
+                {% include 'vadetisweb/parts/forms/serializer_form.html' with formid="dataset_delete_form" url=fromurl serializer=dataset_delete_serializer submit_label="Delete" %}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block additional_bottom_js %}

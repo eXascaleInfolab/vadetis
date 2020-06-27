@@ -43,7 +43,8 @@ class AccountDatasetDataTablesSerializer(serializers.ModelSerializer):
             view_link = reverse('vadetisweb:display_synthetic_dataset', args=[obj.id])
             detection_link = reverse('vadetisweb:detection_synthetic_dataset', args=[obj.id])
             edit_link = reverse('vadetisweb:account_dataset_edit', args=[obj.id])
-        return '<a href="%s">View</a> <a href="%s">Detection</a> <a href="%s">Edit</a>' % (view_link, detection_link, edit_link)
+        return '<a href="%s">View</a> <a href="%s">Detection</a> <a href="%s">Edit</a>' % (
+        view_link, detection_link, edit_link)
 
     class Meta:
         model = DataSet
@@ -59,20 +60,20 @@ class AccountDatasetSearchSerializer(serializers.Serializer):
     title = serializers.CharField(write_only=True,
                                   style={'template': 'vadetisweb/parts/input/text_input.html',
                                          'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
-                                         'input_class' : 'search-input',
-                                         'col_index' : '0' })
+                                         'input_class': 'search-input',
+                                         'col_index': '0'})
 
     timeseries = serializers.IntegerField(write_only=True,
                                           style={'template': 'vadetisweb/parts/input/text_input.html',
                                                  'input_type': 'number',
                                                  'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
-                                                 'input_class' : 'search-input',
+                                                 'input_class': 'search-input',
                                                  'col_index': '1',
                                                  'step': 'any'})
 
     values = serializers.IntegerField(write_only=True,
                                       style={'template': 'vadetisweb/parts/input/text_input.html',
-                                             'input_type' : 'number',
+                                             'input_type': 'number',
                                              'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
                                              'input_class': 'search-input',
                                              'col_index': '2',
@@ -81,27 +82,27 @@ class AccountDatasetSearchSerializer(serializers.Serializer):
     frequency = serializers.CharField(write_only=True,
                                       style={'template': 'vadetisweb/parts/input/text_input.html',
                                              'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
-                                             'input_class' : 'search-input',
-                                             'col_index' : '3' })
+                                             'input_class': 'search-input',
+                                             'col_index': '3'})
 
     spatial = serializers.ChoiceField(write_only=True, choices=BOOLEAN_SELECTION,
                                       style={'template': 'vadetisweb/parts/input/select_input.html',
                                              'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
-                                             'input_class' : 'search-input',
-                                             'col_index' : '4' })
+                                             'input_class': 'search-input',
+                                             'col_index': '4'})
 
     public = serializers.ChoiceField(write_only=True, choices=BOOLEAN_SELECTION,
                                      style={'template': 'vadetisweb/parts/input/select_input.html',
                                             'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
-                                            'input_class' : 'search-input',
-                                            'col_index' : '5' })
+                                            'input_class': 'search-input',
+                                            'col_index': '5'})
 
     training_datasets = serializers.IntegerField(write_only=True,
                                                  style={'template': 'vadetisweb/parts/input/text_input.html',
                                                         'input_type': 'number',
                                                         'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
-                                                        'input_class' : 'search-input',
-                                                        'col_index' : '6'})
+                                                        'input_class': 'search-input',
+                                                        'col_index': '6'})
 
     def __init__(self, *args, **kwargs):
         super(AccountDatasetSearchSerializer, self).__init__(*args, **kwargs)
@@ -140,26 +141,26 @@ class AccountTrainingDatasetSearchSerializer(serializers.Serializer):
     title = serializers.CharField(write_only=True,
                                   style={'template': 'vadetisweb/parts/input/text_input.html',
                                          'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
-                                         'input_class' : 'search-input',
-                                         'col_index' : '0' })
+                                         'input_class': 'search-input',
+                                         'col_index': '0'})
 
     main_dataset = serializers.CharField(write_only=True,
-                                  style={'template': 'vadetisweb/parts/input/text_input.html',
-                                         'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
-                                         'input_class' : 'search-input',
-                                         'col_index' : '1' })
+                                         style={'template': 'vadetisweb/parts/input/text_input.html',
+                                                'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
+                                                'input_class': 'search-input',
+                                                'col_index': '1'})
 
     timeseries = serializers.IntegerField(write_only=True,
                                           style={'template': 'vadetisweb/parts/input/text_input.html',
                                                  'input_type': 'number',
                                                  'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
-                                                 'input_class' : 'search-input',
+                                                 'input_class': 'search-input',
                                                  'col_index': '2',
                                                  'step': 'any'})
 
     values = serializers.IntegerField(write_only=True,
                                       style={'template': 'vadetisweb/parts/input/text_input.html',
-                                             'input_type' : 'number',
+                                             'input_type': 'number',
                                              'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
                                              'input_class': 'search-input',
                                              'col_index': '3',
@@ -168,25 +169,23 @@ class AccountTrainingDatasetSearchSerializer(serializers.Serializer):
     frequency = serializers.CharField(write_only=True,
                                       style={'template': 'vadetisweb/parts/input/text_input.html',
                                              'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
-                                             'input_class' : 'search-input',
-                                             'col_index' : '4' })
+                                             'input_class': 'search-input',
+                                             'col_index': '4'})
 
     spatial = serializers.ChoiceField(write_only=True, choices=BOOLEAN_SELECTION,
                                       style={'template': 'vadetisweb/parts/input/select_input.html',
                                              'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
-                                             'input_class' : 'search-input',
-                                             'col_index' : '5' })
+                                             'input_class': 'search-input',
+                                             'col_index': '5'})
 
     public = serializers.ChoiceField(write_only=True, choices=BOOLEAN_SELECTION,
                                      style={'template': 'vadetisweb/parts/input/select_input.html',
                                             'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
-                                            'input_class' : 'search-input',
-                                            'col_index' : '6' })
-
+                                            'input_class': 'search-input',
+                                            'col_index': '6'})
 
     def __init__(self, *args, **kwargs):
         super(AccountTrainingDatasetSearchSerializer, self).__init__(*args, **kwargs)
-
 
 
 class DatasetImportSerializer(serializers.Serializer):
@@ -232,7 +231,7 @@ class TrainingDatasetImportSerializer(serializers.Serializer):
     owner = UserSerializer(read_only=True, default=serializers.CurrentUserDefault())
 
     main_dataset = MainDatasetField(label="Main dataset", required=True,
-                                        style={'template': 'vadetisweb/parts/input/select_input.html'})
+                                    style={'template': 'vadetisweb/parts/input/select_input.html'})
 
     public = serializers.BooleanField(default=True, initial=True,
                                       help_text='Determines if this dataset is available to other users',
@@ -252,15 +251,20 @@ class TrainingDatasetImportSerializer(serializers.Serializer):
         ]
 
 
-class AccountDatasetEditSerializer(serializers.ModelSerializer):
-
+class AccountDatasetUpdateSerializer(serializers.ModelSerializer):
     title = serializers.CharField(required=True, max_length=128, help_text='Human readable title of the dataset',
                                   style={'template': 'vadetisweb/parts/input/text_input.html'})
 
-    public = serializers.BooleanField(default=True,
-                                      help_text='Determines if this dataset is available to other users',
+    public = serializers.BooleanField(required=True, help_text='Determines if this dataset is available to other users',
                                       style={'template': 'vadetisweb/parts/input/checkbox_input.html'})
 
     class Meta:
         model = DataSet
         fields = ('title', 'public')
+
+
+class AccountDatasetDeleteSerializer(serializers.Serializer):
+    confirm = serializers.BooleanField(required=True,
+                                       label="Confirm",
+                                       help_text='Check to delete this dataset',
+                                       style={'template': 'vadetisweb/parts/input/checkbox_input.html'})
