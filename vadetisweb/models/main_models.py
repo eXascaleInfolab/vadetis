@@ -96,10 +96,10 @@ class DataSet(models.Model):
         self._check_dataframe()
 
         if self.training_data:
-            if not self.original_dataset:
+            if not self.main_dataset:
                 raise ValueError('No original dataset specified for this training dataset!')
         else:
-            if self.original_dataset:
+            if self.main_dataset:
                 raise ValueError('An original dataset cannot be a training dataset!')
 
         super(DataSet, self).save(*args, **kwargs)

@@ -26,7 +26,7 @@ class TrainingDatasetField(serializers.PrimaryKeyRelatedField):
     def get_queryset(self):
         dataset_selected = self.context.get('dataset_selected', None)
         if dataset_selected is not None:
-            return DataSet.objects.filter(original_dataset__id=dataset_selected, training_data=True)
+            return DataSet.objects.filter(main_dataset__id=dataset_selected, training_data=True)
         return DataSet.objects.none()
 
     def display_value(self, instance):

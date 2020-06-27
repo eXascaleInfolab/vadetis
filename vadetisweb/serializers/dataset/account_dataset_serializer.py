@@ -38,10 +38,12 @@ class AccountDatasetDataTablesSerializer(serializers.ModelSerializer):
         if obj.type == REAL_WORLD:
             view_link = reverse('vadetisweb:display_real_world_dataset', args=[obj.id])
             detection_link = reverse('vadetisweb:detection_real_world_dataset', args=[obj.id])
+            edit_link = reverse('vadetisweb:account_dataset_edit', args=[obj.id])
         else:
             view_link = reverse('vadetisweb:display_synthetic_dataset', args=[obj.id])
             detection_link = reverse('vadetisweb:detection_synthetic_dataset', args=[obj.id])
-        return '<a href="%s">View</a> <a href="%s">Detection</a>' % (view_link, detection_link)
+            edit_link = reverse('vadetisweb:account_dataset_edit', args=[obj.id])
+        return '<a href="%s">View</a> <a href="%s">Detection</a> <a href="%s">Edit</a>' % (view_link, detection_link, edit_link)
 
     class Meta:
         model = DataSet
@@ -201,7 +203,7 @@ class DatasetImportSerializer(serializers.Serializer):
                                    help_text='Determines whether this dataset is real world or synthetic data.',
                                    style={'template': 'vadetisweb/parts/input/select_input.html'})
 
-    public = serializers.BooleanField(default=True,
+    public = serializers.BooleanField(default=True, initial=True,
                                       help_text='Determines if this dataset is available to other users',
                                       style={'template': 'vadetisweb/parts/input/checkbox_input.html'})
 
@@ -232,7 +234,7 @@ class TrainingDatasetImportSerializer(serializers.Serializer):
     main_dataset = MainDatasetField(label="Main dataset", required=True,
                                         style={'template': 'vadetisweb/parts/input/select_input.html'})
 
-    public = serializers.BooleanField(default=True,
+    public = serializers.BooleanField(default=True, initial=True,
                                       help_text='Determines if this dataset is available to other users',
                                       style={'template': 'vadetisweb/parts/input/checkbox_input.html'})
 
@@ -248,3 +250,17 @@ class TrainingDatasetImportSerializer(serializers.Serializer):
                 message='You already have a dataset with this title. Title and owner of a dataset must be distinct.'
             )
         ]
+
+
+class AccountDatasetEditSerializer(serializers.ModelSerializer):
+
+    title = serializers.CharField(required=True, max_length=128, help_text='Human readable title of the dataset',
+                                  style={'template': 'vadetisweb/parts/input/text_input.html'})
+
+    public = serializers.BooleanField(default=True,
+                                      help_text='Determines if this dataset is available to other users',
+                                      style={'template': 'vadetisweb/parts/input/checkbox_input.html'})
+
+    class Meta:
+        model = DataSet
+        fields = ('title', 'public')

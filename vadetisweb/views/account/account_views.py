@@ -21,6 +21,7 @@ from vadetisweb.serializers.account_serializers import *
 from vadetisweb.serializers.dataset.account_dataset_serializer import *
 from vadetisweb.serializers import MessageSerializer
 from vadetisweb.tasks import TaskImportData, TaskImportTrainingData
+from vadetisweb.factory import dataset_not_found_msg
 
 # TODO deprecated
 from vadetisweb.forms.account_forms import *
@@ -49,13 +50,14 @@ def account(request):
 @login_required
 def account_datasets(request):
     search_serializer = AccountDatasetSearchSerializer()
-    return render(request, 'vadetisweb/account/account_datasets.html', { 'search_serializer' : search_serializer })
+    return render(request, 'vadetisweb/account/account_datasets.html', {'search_serializer': search_serializer})
 
 
 @login_required
 def account_training_datasets(request):
     search_serializer = AccountTrainingDatasetSearchSerializer()
-    return render(request, 'vadetisweb/account/account_training_datasets.html', { 'search_serializer' : search_serializer })
+    return render(request, 'vadetisweb/account/account_training_datasets.html',
+                  {'search_serializer': search_serializer})
 
 
 class ApplicationSetting(APIView):
@@ -245,12 +247,12 @@ class AccountUploadTrainingDataset(APIView):
 
         if serializer.is_valid():
             title = serializer.validated_data['title']
-            owner = serializer.validated_data['original_dataset'].owner
-            original_dataset = serializer.validated_data['original_dataset']
+            owner = serializer.validated_data['main_dataset'].owner
+            main_dataset = serializer.validated_data['main_dataset']
             training_dataset_file_raw = serializer.validated_data['csv_file']
 
             # check if user is ok
-            if owner == request.user and original_dataset.owner == request.user:
+            if owner == request.user and main_dataset.owner == request.user:
                 logging.info("Training dataset file received: %s", training_dataset_file_raw.name)
                 training_dataset_file = write_to_tempfile(training_dataset_file_raw)
 
@@ -259,7 +261,7 @@ class AccountUploadTrainingDataset(APIView):
                 # start import task
                 task_uuid = uuid()
                 user_tasks.apply_async(TaskImportTrainingData,
-                                       args=[user.username, original_dataset.id, training_dataset_file.name,
+                                       args=[user.username, main_dataset.id, training_dataset_file.name,
                                              title], task_id=task_uuid)
 
                 message = 'Importing Training Dataset: Task (%s) created' % task_uuid
@@ -402,6 +404,94 @@ class AccountDelete(APIView):
                 message = "Account has been removed"
                 messages.success(request, message)
                 return redirect('vadetisweb:account_logout')
+            else:
+                return Response(status=status.HTTP_200_OK)
+
+        else:
+            json_messages = []
+            json_message_utils.error(json_messages, 'Form was not valid')
+            return Response({
+                'messages': MessageSerializer(json_messages, many=True).data,
+                'form_errors': account_delete_serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AccountDatasetEdit(APIView):
+    """
+    View for dataset editing
+    """
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+    parser_classes = [MultiPartParser]
+    template_name = 'vadetisweb/account/account_dataset_edit.html'
+
+    def get(self, request, dataset_id):
+        try:
+            dataset = DataSet.objects.get(id=dataset_id)
+
+            if dataset.owner == request.user:
+                dataset_edit_serializer = AccountDatasetEditSerializer(instance=dataset)
+
+                return Response({'dataset': dataset,
+                                 'dataset_edit_serializer': dataset_edit_serializer},
+                                status=status.HTTP_200_OK)
+            else:
+                return Response(status=status.HTTP_403_FORBIDDEN)
+
+        except DataSet.DoesNotExist:
+            messages.error(request, dataset_not_found_msg(dataset_id))
+            return redirect('vadetisweb:display_synthetic_datasets')
+
+
+    def post(self, request, dataset_id):
+        account_delete_serializer = AccountDeleteSerializer(instance=request.user, data=request.POST)
+
+        if account_delete_serializer.is_valid():
+
+            deactivate_user = account_delete_serializer.save()
+
+            # check if user no longer active, then delete
+            # remove this if you want only to deactivate
+            if deactivate_user.is_active == False:
+                deactivate_user.delete()
+                message = "Account has been removed"
+                messages.success(request, message)
+                return redirect('vadetisweb:account_logout')
+            else:
+                return Response(status=status.HTTP_200_OK)
+
+        else:
+            json_messages = []
+            json_message_utils.error(json_messages, 'Form was not valid')
+            return Response({
+                'messages': MessageSerializer(json_messages, many=True).data,
+                'form_errors': account_delete_serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AccountDatasetDelete(APIView):
+    """
+    View for dataset delete processing
+    """
+    renderer_classes = [JSONRenderer]
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+
+    def post(self, request):
+        account_delete_serializer = AccountDeleteSerializer(instance=request.user, data=request.POST)
+
+        if account_delete_serializer.is_valid():
+
+            deactivate_user = account_delete_serializer.save()
+
+            # check if user no longer active, then delete
+            # remove this if you want only to deactivate
+            if deactivate_user.is_active == False:
+                deactivate_user.delete()
+                message = "Dataset has been removed"
+                messages.success(request, message)
+                return redirect('vadetisweb:account_datasets')
             else:
                 return Response(status=status.HTTP_200_OK)
 

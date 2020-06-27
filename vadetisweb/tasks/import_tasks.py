@@ -192,7 +192,7 @@ class TaskImportTrainingData(Task):
     """
     Task to insert a test dataset into database
     """
-    def run(self, owner_username, original_dataset_id, training_dataset_file_name, title):
+    def run(self, owner_username, main_dataset_id, training_dataset_file_name, title):
 
         # set start time
         start_time = timezone.now()
@@ -226,7 +226,7 @@ class TaskImportTrainingData(Task):
                     raise ValueError(err_msg)
 
             # check if all time series from original dataset provided, and not more or less
-            ts_names_from_original = TimeSeries.objects.filter(datasets__id=original_dataset_id).values_list('name', flat=True)
+            ts_names_from_original = TimeSeries.objects.filter(datasets__id=main_dataset_id).values_list('name', flat=True)
             compare = lambda x, y: collections.Counter(x) == collections.Counter(y)
             if not compare(list(ts_names_from_original), df_ts_unit.index.tolist()):
                 err_msg = "Either some series are missing or some series are provided that are not in the original dataset."
@@ -267,22 +267,22 @@ class TaskImportTrainingData(Task):
             if len(units) > 1:
                 raise ValueError('Different types of values provided')
 
-            original_dataset = DataSet.objects.get(id=original_dataset_id)
+            main_dataset = DataSet.objects.get(id=main_dataset_id)
 
             # create (and saves) training dataset
             training_dataset = DataSet.objects.create(title=title,
                                                       owner=user,
-                                                      type=original_dataset.type,
+                                                      type=main_dataset.type,
                                                       frequency=freq,
                                                       training_data=True,
-                                                      original_dataset=original_dataset)
+                                                      main_dataset=main_dataset)
 
             logging.info("Test dataset {0} added".format(training_dataset))
 
             # for each series get the time series object
             for idx, row in df_ts_unit.items():
                 ts = TimeSeries.objects.get(name=idx,
-                                            datasets__id=original_dataset.id)
+                                            datasets__id=main_dataset.id)
 
                 logging.debug("Time series: {0} fetched".format(idx))
                 ts.datasets.add(training_dataset)
@@ -297,7 +297,7 @@ class TaskImportTrainingData(Task):
             # rename df class before assign
             for idx, row in df_ts_unit.items():
                 ts = TimeSeries.objects.get(name=idx,
-                                            datasets__id=original_dataset.id)
+                                            datasets__id=main_dataset.id)
                 # replace column in dataframe by time series database id
                 df_class = df_class.rename(columns={idx: ts.id})
 

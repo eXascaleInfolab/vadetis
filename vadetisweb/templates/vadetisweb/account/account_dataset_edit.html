@@ -1,0 +1,48 @@
+{% extends 'vadetisweb/account/account_datasets.html' %}
+{% load static %}
+{% load django_bootstrap_breadcrumbs %}
+{% load rest_framework %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "Edit: "|add:dataset.title "vadetisweb:account_dataset_edit" dataset_id=dataset.id %}
+{% endblock %}
+
+{% block css %}
+    {% include 'vadetisweb/parts/includes/css.html' %}
+{% endblock %}
+
+{% block page_title %}
+    <h3 class="kt-subheader__title">Edit: {{ dataset.title }}</h3>
+{% endblock %}
+
+{% block content %}
+    <div class="kt-portlet kt-portlet--mobile">
+        <div class="kt-portlet__head kt-portlet__head--lg">
+            <div class="kt-portlet__head-label">
+                <span class="kt-portlet__head-icon">
+                    <i class="mdi mdi-chart-timeline-variant mdi-24px kt-font-brand"></i>
+                </span>
+                <h3 class="kt-portlet__head-title">
+                    {{ dataset.title }}
+                </h3>
+            </div>
+            <div class="kt-portlet__head-toolbar">
+                <div class="kt-portlet__head-wrapper">
+                    <a href="{% url 'vadetisweb:account_datasets_upload' %}">
+                        <button type="button" class="btn btn-brand btn-icon-sm">
+                            <i class="mdi mdi-delete mdi-18px"></i> Delete Dataset
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="kt-portlet__body">
+            {% url 'vadetisweb:account_dataset_edit' dataset.id as fromurl %}
+            {% include 'vadetisweb/parts/forms/serializer_form.html' with formid="dataset_edit_form" url=fromurl serializer=dataset_edit_serializer submit_label="Save" %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block additional_bottom_js %}
+{% endblock %}
