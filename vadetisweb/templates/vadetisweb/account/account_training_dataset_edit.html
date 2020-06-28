@@ -1,0 +1,57 @@
+{% extends 'vadetisweb/account/account_datasets.html' %}
+{% load static %}
+{% load django_bootstrap_breadcrumbs %}
+{% load rest_framework %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "Edit: "|add:training_dataset.title "vadetisweb:account_training_dataset_edit" dataset_id=training_dataset.id %}
+{% endblock %}
+
+{% block css %}
+    {% include 'vadetisweb/parts/includes/css.html' %}
+{% endblock %}
+
+{% block page_title %}
+    <h3 class="kt-subheader__title">Edit: {{ training_dataset.title }}</h3>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="kt-portlet">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <span class="kt-portlet__head-icon">
+                        <i class="mdi mdi-square-edit-outline mdi-24px kt-font-brand"></i>
+                    </span>
+                    <h3 class="kt-portlet__head-title">
+                        Modify
+                    </h3>
+                </div>
+            </div>
+            {% url 'vadetisweb:account_training_dataset_update' training_dataset.id as fromurl %}
+            {% include 'vadetisweb/parts/forms/serializer_form.html' with formid="training_dataset_edit_form" url=fromurl serializer=training_dataset_edit_serializer submit_label="Save" %}
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="kt-portlet">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <span class="kt-portlet__head-icon">
+                        <i class="mdi mdi-delete-alert-outline mdi-24px kt-font-brand"></i>
+                    </span>
+                    <h3 class="kt-portlet__head-title">
+                        Delete
+                    </h3>
+                </div>
+            </div>
+            {% url 'vadetisweb:account_training_dataset_delete' training_dataset.id as fromurl %}
+            {% include 'vadetisweb/parts/forms/serializer_form.html' with formid="training_dataset_delete_form" url=fromurl serializer=training_dataset_delete_serializer submit_label="Delete" %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block additional_bottom_js %}
+{% endblock %}

@@ -420,6 +420,35 @@ class AccountDatasetEdit(APIView):
             return redirect('vadetisweb:account_datasets')
 
 
+class AccountTrainingDatasetEdit(APIView):
+    """
+    View for dataset editing
+    """
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'vadetisweb/account/account_training_dataset_edit.html'
+
+    def get(self, request, dataset_id):
+        try:
+            training_dataset = DataSet.objects.get(id=dataset_id, training_data=True)
+
+            if training_dataset.owner == request.user:
+                training_dataset_edit_serializer = AccountDatasetUpdateSerializer(instance=training_dataset)
+                training_dataset_delete_serializer = AccountDatasetDeleteSerializer()
+
+                return Response({'training_dataset': training_dataset,
+                                 'training_dataset_edit_serializer': training_dataset_edit_serializer,
+                                 'training_dataset_delete_serializer': training_dataset_delete_serializer},
+                                status=status.HTTP_200_OK)
+            else:
+                return Response(status=status.HTTP_403_FORBIDDEN)
+
+        except DataSet.DoesNotExist:
+            messages.error(request, dataset_not_found_msg(dataset_id))
+            return redirect('vadetisweb:account_training_datasets')
+
+
 # TODO depreacted
 @login_required
 def deprecated_account(request):

@@ -37,6 +37,8 @@ apipatterns = [
     path('api/dataset/<int:dataset_id>/', views.DatasetJson.as_view(), name='dataset_json'),
     path('api/dataset/<int:dataset_id>/update/', views.AccountDatasetUpdate.as_view(), name='account_dataset_update'),
     path('api/dataset/<int:dataset_id>/delete/', views.AccountDatasetDelete.as_view(), name='account_dataset_delete'),
+    path('api/training-dataset/<int:dataset_id>/update/', views.AccountTrainingDatasetUpdate.as_view(), name='account_training_dataset_update'),
+    path('api/training-dataset/<int:dataset_id>/delete/', views.AccountTrainingDatasetDelete.as_view(), name='account_training_dataset_delete'),
 
     path('api/dataset/download/', views.DatasetFileDownload.as_view(), name='dataset_download_file'),
     path('api/dataset/<int:dataset_id>/update/', views.DatasetUpdateJson.as_view(), name='dataset_update_json'),
@@ -67,6 +69,7 @@ urlpatterns = apipatterns + [
     path('account/application-setting/', views.ApplicationSetting.as_view(), name='application_setting'),
     path('account/datasets/', views.account_datasets, name='account_datasets'),
     path('account/datasets/<int:dataset_id>/edit/', views.AccountDatasetEdit.as_view(), name='account_dataset_edit'),
+    path('account/training-datasets/<int:dataset_id>/edit/', views.AccountTrainingDatasetEdit.as_view(), name='account_training_dataset_edit'),
     path('account/training-datasets/', views.account_training_datasets, name='account_training_datasets'),
     path('account/user/update', views.AccountUserUpdate.as_view(), name='account_user_update'),
     path('account/pwd/update', views.AccountPasswordUpdate.as_view(), name='account_pwd_update'),

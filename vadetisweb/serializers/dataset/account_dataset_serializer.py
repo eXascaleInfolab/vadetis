@@ -38,11 +38,12 @@ class AccountDatasetDataTablesSerializer(serializers.ModelSerializer):
         if obj.type == REAL_WORLD:
             view_link = reverse('vadetisweb:display_real_world_dataset', args=[obj.id])
             detection_link = reverse('vadetisweb:detection_real_world_dataset', args=[obj.id])
-            edit_link = reverse('vadetisweb:account_dataset_edit', args=[obj.id])
         else:
             view_link = reverse('vadetisweb:display_synthetic_dataset', args=[obj.id])
             detection_link = reverse('vadetisweb:detection_synthetic_dataset', args=[obj.id])
-            edit_link = reverse('vadetisweb:account_dataset_edit', args=[obj.id])
+
+        edit_link = reverse('vadetisweb:account_dataset_edit', args=[obj.id])
+
         return '<a href="%s">View</a> <a href="%s">Detection</a> <a href="%s">Edit</a>' % (
         view_link, detection_link, edit_link)
 
@@ -109,6 +110,7 @@ class AccountDatasetSearchSerializer(serializers.Serializer):
 
 
 class AccountTrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
+
     title = serializers.CharField(read_only=True)
     main_dataset = serializers.StringRelatedField(read_only=True, label="Main dataset")
     timeseries = serializers.SerializerMethodField()
@@ -116,6 +118,7 @@ class AccountTrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
     frequency = serializers.CharField(read_only=True)
     public = serializers.BooleanField(read_only=True)
     spatial = serializers.SerializerMethodField()
+    actions = serializers.SerializerMethodField(read_only=True)
 
     def get_timeseries(self, obj):
         return obj.timeseries_set.count()
@@ -127,10 +130,14 @@ class AccountTrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
     def get_spatial(self, obj):
         return all(ts.location is not None for ts in obj.timeseries_set.all())
 
+    def get_actions(self, obj):
+        edit_link = reverse('vadetisweb:account_training_dataset_edit', args=[obj.id])
+        return '<a href="%s">Edit</a>' % (edit_link)
+
     class Meta:
         model = DataSet
         fields = (
-            'title', 'main_dataset', 'timeseries', 'values', 'frequency', 'spatial', 'public',
+            'title', 'main_dataset', 'timeseries', 'values', 'frequency', 'spatial', 'public', 'actions'
         )
 
 
