@@ -124,7 +124,7 @@ class DatasetUpdateJson(APIView):
             return redirect('vadetisweb:index')
 
 
-class DatasetSearchAPIView(generics.ListAPIView):
+class DatasetSearchView(generics.ListAPIView):
     """
     API View to search for datasets
     """

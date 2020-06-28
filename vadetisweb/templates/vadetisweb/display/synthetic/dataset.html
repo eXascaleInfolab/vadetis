@@ -1,4 +1,4 @@
-{% extends 'vadetisweb/detection/synthetic/datasets.html' %}
+{% extends 'vadetisweb/display/synthetic/datasets.html' %}
 {% load static %}
 {% load django_bootstrap_breadcrumbs %}
 {% load vadetistags %}
@@ -6,7 +6,7 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    {% breadcrumb dataset.title "vadetisweb:detection_synthetic_dataset" dataset_id=dataset.id %}
+    {% breadcrumb dataset.title "vadetisweb:display_synthetic_dataset" dataset_id=dataset.id %}
 {% endblock %}
 
 {% block css %}
