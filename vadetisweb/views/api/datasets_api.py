@@ -3,6 +3,8 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework_csv.renderers import CSVStreamingRenderer
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import generics
+from rest_framework import filters
 from wsgiref.util import FileWrapper
 
 from drf_yasg.utils import swagger_auto_schema
@@ -12,7 +14,7 @@ from django.http import HttpResponse
 
 from vadetisweb.models import DataSet
 from vadetisweb.utils import strToBool, get_settings, dataset_to_json, get_datasets_from_json, df_zscore, export_to_csv, export_to_json
-from vadetisweb.serializers import DatasetUpdateSerializer, DatasetExportSerializer
+from vadetisweb.serializers import DatasetUpdateSerializer, DatasetExportSerializer, DatasetSearchSerializer
 from vadetisweb.factory import dataset_not_found_msg
 
 
@@ -84,6 +86,7 @@ class DatasetFileDownload(APIView):
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
+#Deprecated
 class DatasetUpdateJson(APIView):
     """
     Request an updated dataset for type
@@ -119,3 +122,14 @@ class DatasetUpdateJson(APIView):
         except DataSet.DoesNotExist:
             messages.error(request, dataset_not_found_msg(dataset_id))
             return redirect('vadetisweb:index')
+
+
+class DatasetSearchAPIView(generics.ListAPIView):
+    """
+    API View to search for datasets
+    """
+    renderer_classes = [JSONRenderer]
+    search_fields = ['title', 'owner__username', 'training_dataset__title']
+    filter_backends = (filters.SearchFilter,)
+    queryset = DataSet.objects.filter(training_data=False, public=True)
+    serializer_class = DatasetSearchSerializer

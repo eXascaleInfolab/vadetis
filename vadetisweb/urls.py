@@ -40,6 +40,7 @@ apipatterns = [
     path('api/training-dataset/<int:dataset_id>/update/', views.AccountTrainingDatasetUpdate.as_view(), name='account_training_dataset_update'),
     path('api/training-dataset/<int:dataset_id>/delete/', views.AccountTrainingDatasetDelete.as_view(), name='account_training_dataset_delete'),
 
+    path('api/dataset/search/', views.DatasetSearchAPIView.as_view(), name='dataset_search'),
     path('api/dataset/download/', views.DatasetFileDownload.as_view(), name='dataset_download_file'),
     path('api/dataset/<int:dataset_id>/update/', views.DatasetUpdateJson.as_view(), name='dataset_update_json'),
     path('api/datasets/<int:dataset_id>/perform/', views.DatasetPerformAnomalyDetectionJson.as_view(),

@@ -9349,6 +9349,47 @@ var KTQuickSearch = function() {
         }
     }
 
+    var showSearchResults = function(resultWrapper, results) {
+        if(results.hasOwnProperty('results')) {
+            if(results.results.length > 0) {
+                var printedResults = printSearchResults(results.results);
+                KTUtil.setHTML(resultWrapper, printedResults);
+            } else {
+                KTUtil.setHTML(resultWrapper, '<div class="kt-quick-search__message">No Results.</div>');
+            }
+        } else {
+            KTUtil.setHTML(resultWrapper, '<div class="kt-quick-search__message">No Results.</div>');
+        }
+    }
+
+    var printSearchResults = function(results) {
+        var html = "<div class=\"search-result\">";
+        results.forEach((result) => html += printSearchResult(result));
+        html += "</div>";
+        return html;
+    }
+
+    var printSearchResult = function(result) {
+        var html = "<div class=\"d-flex align-items-center flex-grow-1 mb-2\">"
+            + "<div class=\"d-flex flex-column ml-3 mt-2 mb-2\">"
+            + "<a href=\"" + result.display + "\" class=\"text-dark font-weight-bold text-hover-primary\">"
+            + result.title
+            + "</a>"
+            + "<span class=\"font-size-sm font-weight-bold text-muted\">"
+            + "by " + result.owner
+            + "</span>"
+            + "<div>"
+            + "<a href=\"" + result.detection + "\" class=\"text-dark text-hover-primary\">Detection</a>"
+            + " | "
+            + "<a href=\"" + result.detection + "\" class=\"text-dark text-hover-primary\">Recommend</a>"
+            + " | "
+            + "<a href=\"" + result.detection + "\" class=\"text-dark text-hover-primary\">Outlier Analysis</a>"
+            + "</div>"
+            + "</div>"
+            + "</div>";
+        return html;
+    }
+
     var processSearch = function() {
         if (hasResult && query === input.value) {  
             hideProgress();
@@ -9366,16 +9407,17 @@ var KTQuickSearch = function() {
 
         setTimeout(function() {
             $.ajax({
-                url: 'https://keenthemes.com/metronic/themes/themes/metronic/dist/preview/inc/api/quick_search.php',
+                url: 'http://localhost:8000/api/dataset/search/', // todo inject url
                 data: {
-                    query: query
+                    search: query
                 },
-                dataType: 'html',
+                dataType: 'json',
                 success: function(res) {
                     hasResult = true;
                     hideProgress();
                     KTUtil.addClass(target, resultClass);
-                    KTUtil.setHTML(resultWrapper, res);
+                    //KTUtil.setHTML(resultWrapper, res);
+                    showSearchResults(resultWrapper, res);
                     showDropdown();
                     KTUtil.scrollUpdate(resultWrapper);
                 },
@@ -9383,7 +9425,7 @@ var KTQuickSearch = function() {
                     hasResult = false;
                     hideProgress();
                     KTUtil.addClass(target, resultClass);
-                    KTUtil.setHTML(resultWrapper, '<span class="kt-quick-search__message">Connection error. Pleae try again later.</div>');
+                    KTUtil.setHTML(resultWrapper, '<div class="kt-quick-search__message">Connection failed.</div>');
                     showDropdown();
                     KTUtil.scrollUpdate(resultWrapper);
                 }

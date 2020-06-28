@@ -146,7 +146,7 @@ function printGroupedMessages(messages) {
 
 function printMessages(value, tag) {
     var message_container = $('#message-container');
-    html = "<div class=\"messages messages-" + tag + "\">";
+    var html = "<div class=\"messages messages-" + tag + "\">";
     html += "<div class=\"message-inner\">";
     html += htmlMessages(value);
     html += "</div>";
