@@ -1,4 +1,3 @@
-import numpy as np
 from django.urls import reverse
 from rest_framework import serializers
 
@@ -20,8 +19,7 @@ class DetectionDatasetDataTablesSerializer(serializers.ModelSerializer):
         return obj.timeseries_set.count()
 
     def get_values(self, obj):
-        np_num_values = obj.dataframe.count().sum()
-        return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
+        return obj.number_of_dataframe_values()
 
     def get_spatial(self, obj):
         return all(ts.location is not None for ts in obj.timeseries_set.all())

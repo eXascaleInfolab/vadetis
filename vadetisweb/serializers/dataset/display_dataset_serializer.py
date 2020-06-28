@@ -5,7 +5,6 @@ from rest_framework import serializers
 from vadetisweb.models import DataSet
 from vadetisweb.parameters import *
 
-
 class DisplayDatasetDataTablesSerializer(serializers.ModelSerializer):
 
     title = serializers.CharField(read_only=True)
@@ -21,8 +20,7 @@ class DisplayDatasetDataTablesSerializer(serializers.ModelSerializer):
         return obj.timeseries_set.count()
 
     def get_values(self, obj):
-        np_num_values = obj.dataframe.count().sum()
-        return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
+        return obj.number_of_dataframe_values()
 
     def get_spatial(self, obj):
         return all(ts.location is not None for ts in obj.timeseries_set.all())

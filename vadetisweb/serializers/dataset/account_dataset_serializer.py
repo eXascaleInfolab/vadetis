@@ -1,4 +1,3 @@
-import numpy as np
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
@@ -25,8 +24,7 @@ class AccountDatasetDataTablesSerializer(serializers.ModelSerializer):
         return obj.timeseries_set.count()
 
     def get_values(self, obj):
-        np_num_values = obj.dataframe.count().sum()
-        return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
+        return obj.number_of_dataframe_values()
 
     def get_spatial(self, obj):
         return all(ts.location is not None for ts in obj.timeseries_set.all())
@@ -124,8 +122,7 @@ class AccountTrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
         return obj.timeseries_set.count()
 
     def get_values(self, obj):
-        np_num_values = obj.dataframe.count().sum()
-        return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
+        return count_df_values(obj.dataframe)
 
     def get_spatial(self, obj):
         return all(ts.location is not None for ts in obj.timeseries_set.all())

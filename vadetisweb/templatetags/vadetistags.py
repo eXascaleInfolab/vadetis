@@ -27,6 +27,26 @@ def get_item(dict, key):
     return dict.get(key)
 
 
+@register.filter
+def count_dataset_values(dataset):
+    return dataset.number_of_dataframe_values()
+
+
+@register.filter
+def count_dataset_normal_values(dataset):
+    return dataset.number_of_normal_values()
+
+
+@register.filter
+def count_dataset_anomaly_values(dataset):
+    return dataset.number_of_anomaly_values()
+
+
+@register.simple_tag
+def count_time_series_anomaly_values(dataset, ts_id):
+    return dataset.number_of_time_series_anomaly_values(ts_id)
+
+
 @register.filter(takes_context=False, is_safe=False, needs_autoescape=False)
 def get_conf_item(dict, key):
 

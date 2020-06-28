@@ -56,6 +56,7 @@ class DisplaySyntheticDataset(APIView):
 
             return Response({
                 'dataset': dataset,
+                'time_series_info' : {},
                 'selected_button': selected_button
             }, status=status.HTTP_200_OK)
 

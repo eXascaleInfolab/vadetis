@@ -31,7 +31,7 @@
             <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title">{{ dataset.title }}</h3>
+                        <h3 class="kt-portlet__head-title">Time Series</h3>
                     </div>
                     <div class="kt-portlet__head-toolbar">
                         <div class="kt-portlet__head-actions">
@@ -65,6 +65,65 @@
                     <!--begin: Highcharts -->
                     <div id="highcharts_container"></div>
                     <!--end: Highcharts -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div id="threshold_portlet" class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">About</h3>
+                    </div>
+                </div>
+                <div class="kt-portlet__body">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td class="border-top-0">Uploaded by</td>
+                                <td class="border-top-0">{{ dataset.owner.username }}</td>
+                            </tr>
+                            <tr>
+                                <td>Date added</td>
+                                <td>{{ dataset.date_added }}</td>
+                            </tr>
+                            <tr>
+                                <td>Last modified</td>
+                                <td>{% if dataset.last_modified %}{{ dataset.last_modified }}{% else %}never{% endif %}</td>
+                            </tr>
+                            <tr>
+                                <td>Number of values</td>
+                                <td>{{ dataset|count_dataset_values }}</td>
+                            </tr>
+                            <tr>
+                                <td>Number of normal values</td>
+                                <td>{{ dataset|count_dataset_normal_values }}</td>
+                            </tr>
+                            <tr>
+                                <td>Number of anomalies</td>
+                                <td>{{ dataset|count_dataset_anomaly_values }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-head-bg-brand">
+                        <thead class="thead-inverse">
+                            <tr>
+                                <th>Time Series</th>
+                                <th>Unit</th>
+                                <th>Anomalies</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for timeseries in dataset.timeseries_set.all %}
+                            <tr>
+                                <td>{{ timeseries.name }}</td>
+                                <td>{{ timeseries.unit }}</td>
+                                <td>{% count_time_series_anomaly_values dataset timeseries.id %}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

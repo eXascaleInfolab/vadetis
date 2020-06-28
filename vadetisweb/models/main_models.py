@@ -1,3 +1,4 @@
+import numpy as np, pandas as pd
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_delete
@@ -79,6 +80,29 @@ class DataSet(models.Model):
     # test data
     training_data = models.BooleanField(default=False)
     main_dataset = models.ForeignKey('self', null=True, on_delete=models.CASCADE, related_name='training_dataset')
+
+    date_added = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    # Model Methods
+    def number_of_dataframe_values(self):
+        np_num_values = self.dataframe.count().sum()
+        return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
+
+    def number_of_normal_values(self):
+        df_class_count = self.dataframe_class.apply(pd.Series.value_counts).sum(axis=1)
+        np_num_values = df_class_count.loc[False]
+        return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
+
+    def number_of_anomaly_values(self):
+        df_class_count = self.dataframe_class.apply(pd.Series.value_counts).sum(axis=1)
+        np_num_values = df_class_count.loc[True]
+        return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
+
+    def number_of_time_series_anomaly_values(self, ts_id):
+        df_class_count = self.dataframe_class[ts_id].value_counts()
+        np_num_values = df_class_count.loc[True]
+        return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
 
     class Meta:
         unique_together = ('title', 'owner',)
