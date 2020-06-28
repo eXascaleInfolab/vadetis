@@ -122,7 +122,7 @@ class AccountTrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
         return obj.timeseries_set.count()
 
     def get_values(self, obj):
-        return count_df_values(obj.dataframe)
+        return obj.number_of_dataframe_values()
 
     def get_spatial(self, obj):
         return all(ts.location is not None for ts in obj.timeseries_set.all())
