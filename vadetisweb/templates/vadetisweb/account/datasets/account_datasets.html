@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet">
         <div class="kt-portlet__head kt-portlet__head--lg">
             <div class="kt-portlet__head-label">
                 <span class="kt-portlet__head-icon">
@@ -39,7 +39,18 @@
             </div>
         </div>
         <div class="kt-portlet__body">
-            {% include 'vadetisweb/parts/forms/serializer_datatables_search_form.html' with serializer=search_serializer %}
+            <div class="kt-portlet shadow-none kt-portlet--fit kt-portlet--collapsed mb-0" data-ktportlet="true">
+                <div class="kt-portlet__head border-bottom-0">
+                    <div class="kt-portlet__head-toolbar">
+                        <div class="kt-portlet__head-group">
+                            <span class="font-weight-bold">Search Table</span> <a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-default btn-icon-md"><i class="mdi mdi-chevron-down mdi-18px"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="kt-portlet__body mt-3">
+                    {% include 'vadetisweb/parts/forms/serializer_datatables_search_form.html' with serializer=search_serializer %}
+                </div>
+            </div>
             <!--begin: Datatable -->
             <table id="table_account_datasets" class="table table-bordered table-hover table-checkable"></table>
             <!--end: Datatable -->

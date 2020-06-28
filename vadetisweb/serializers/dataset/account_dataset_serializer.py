@@ -44,7 +44,7 @@ class AccountDatasetDataTablesSerializer(serializers.ModelSerializer):
 
         edit_link = reverse('vadetisweb:account_dataset_edit', args=[obj.id])
 
-        return '<a href="%s">View</a> <a href="%s">Detection</a> <a href="%s">Edit</a>' % (
+        return '<a href="%s">Display</a> <a href="%s">Detection</a> <a href="%s">Edit</a>' % (
         view_link, detection_link, edit_link)
 
     class Meta:

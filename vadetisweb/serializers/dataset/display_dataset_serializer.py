@@ -35,7 +35,7 @@ class DisplayDatasetDataTablesSerializer(serializers.ModelSerializer):
             link = reverse('vadetisweb:display_real_world_dataset', args=[obj.id])
         else:
             link = reverse('vadetisweb:display_synthetic_dataset', args=[obj.id])
-        return '<a href="%s">View</a>' % (link)
+        return '<a href="%s">Display</a>' % (link)
 
     class Meta:
         model = DataSet
