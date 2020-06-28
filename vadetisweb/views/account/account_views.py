@@ -50,13 +50,13 @@ def account(request):
 @login_required
 def account_datasets(request):
     search_serializer = AccountDatasetSearchSerializer()
-    return render(request, 'vadetisweb/account/account_datasets.html', {'search_serializer': search_serializer})
+    return render(request, 'vadetisweb/account/datasets/account_datasets.html', {'search_serializer': search_serializer})
 
 
 @login_required
 def account_training_datasets(request):
     search_serializer = AccountTrainingDatasetSearchSerializer()
-    return render(request, 'vadetisweb/account/account_training_datasets.html',
+    return render(request, 'vadetisweb/account/training_datasets/account_training_datasets.html',
                   {'search_serializer': search_serializer})
 
 
@@ -141,7 +141,7 @@ class AccountUploadDataset(APIView):
     permission_classes = [IsAuthenticated]
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
     parser_classes = [MultiPartParser]
-    template_name = 'vadetisweb/account/account_datasets_upload.html'
+    template_name = 'vadetisweb/account/datasets/account_datasets_upload.html'
 
     def get(self, request, format=None):
         serializer = DatasetImportSerializer(context={"request": self.request, })
@@ -217,7 +217,7 @@ class AccountUploadTrainingDataset(APIView):
     permission_classes = [IsAuthenticated]
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
     parser_classes = [MultiPartParser]
-    template_name = 'vadetisweb/account/account_training_datasets_upload.html'
+    template_name = 'vadetisweb/account/training_datasets/account_training_datasets_upload.html'
 
     def get(self, request, format=None):
         serializer = TrainingDatasetImportSerializer(context={"request": self.request, })
@@ -398,7 +398,7 @@ class AccountDatasetEdit(APIView):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'vadetisweb/account/account_dataset_edit.html'
+    template_name = 'vadetisweb/account/datasets/account_dataset_edit.html'
 
     def get(self, request, dataset_id):
         try:
@@ -427,7 +427,7 @@ class AccountTrainingDatasetEdit(APIView):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'vadetisweb/account/account_training_dataset_edit.html'
+    template_name = 'vadetisweb/account/training_datasets/account_training_dataset_edit.html'
 
     def get(self, request, dataset_id):
         try:
