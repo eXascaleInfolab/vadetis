@@ -57,11 +57,11 @@ urlpatterns = apipatterns + [
     path('account/training-datasets/upload/', views.AccountUploadTrainingDataset.as_view(), name='account_training_datasets_upload'),
 
     path('display/real-world/', views.DisplayRealWorldDatasets.as_view(), name='display_real_world_datasets'),
-    path('display/real-world/<int:dataset_id>/', views.DisplayRealWorldDataset.as_view(),
-         name='display_real_world_dataset'),
+    path('display/real-world/<int:dataset_id>/', views.DisplayRealWorldDataset.as_view(), name='display_real_world_dataset'),
+    path('display/real-world/<int:dataset_id>/<int:training_dataset_id>/', views.DisplayRealWorldTrainingDataset.as_view(), name='display_real_world_training_dataset'),
     path('display/synthetic/', views.DisplaySyntheticDatasets.as_view(), name='display_synthetic_datasets'),
-    path('display/synthetic/<int:dataset_id>/', views.DisplaySyntheticDataset.as_view(),
-         name='display_synthetic_dataset'),
+    path('display/synthetic/<int:dataset_id>/', views.DisplaySyntheticDataset.as_view(), name='display_synthetic_dataset'),
+    path('display/synthetic/<int:dataset_id>/<int:training_dataset_id>/', views.DisplaySyntheticTrainingDataset.as_view(), name='display_synthetic_training_dataset'),
 
     path('detection/real-world/', views.DetectionRealWorldDatasets.as_view(), name='detection_real_world_datasets'),
     path('detection/real-world/<int:dataset_id>/', views.DetectionRealWorldDataset.as_view(), name='detection_real_world_dataset'),

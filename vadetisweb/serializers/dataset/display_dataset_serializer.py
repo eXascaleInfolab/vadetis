@@ -114,9 +114,9 @@ class DisplayTrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
 
     def get_actions(self, obj):
         if obj.type == REAL_WORLD:
-            link = reverse('vadetisweb:display_real_world_dataset', args=[obj.id])
+            link = reverse('vadetisweb:display_real_world_training_dataset', args=[obj.main_dataset.id, obj.id])
         else:
-            link = reverse('vadetisweb:display_synthetic_dataset', args=[obj.id])
+            link = reverse('vadetisweb:display_synthetic_training_dataset', args=[obj.main_dataset.id, obj.id])
         return '<a href="%s">Display</a>' % (link)
 
     class Meta:
