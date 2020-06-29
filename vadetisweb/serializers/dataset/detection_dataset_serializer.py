@@ -25,7 +25,7 @@ class DetectionDatasetDataTablesSerializer(serializers.ModelSerializer):
         return all(ts.location is not None for ts in obj.timeseries_set.all())
 
     def get_training_datasets(self, obj):
-        return obj.training_dataset.count()
+        return obj.number_of_public_training_datasets()
 
     def get_actions(self, obj):
         if obj.type == REAL_WORLD:

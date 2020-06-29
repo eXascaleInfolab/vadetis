@@ -104,6 +104,12 @@ class DataSet(models.Model):
         np_num_values = df_class_count.loc[True]
         return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
 
+    def number_of_training_datasets(self):
+        return self.training_dataset.count()
+
+    def number_of_public_training_datasets(self):
+        return self.training_dataset.filter(public=True).count()
+
     class Meta:
         unique_together = ('title', 'owner',)
 

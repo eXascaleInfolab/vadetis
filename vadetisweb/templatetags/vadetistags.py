@@ -28,18 +28,28 @@ def get_item(dict, key):
 
 
 @register.filter
-def count_dataset_values(dataset):
+def number_of_dataset_values(dataset):
     return dataset.number_of_dataframe_values()
 
 
 @register.filter
-def count_dataset_normal_values(dataset):
+def number_of_dataset_normal_values(dataset):
     return dataset.number_of_normal_values()
 
 
 @register.filter
-def count_dataset_anomaly_values(dataset):
+def number_of_dataset_anomaly_values(dataset):
     return dataset.number_of_anomaly_values()
+
+
+@register.filter
+def count_number_of_training_datasets(dataset):
+    return dataset.number_of_training_datasets()
+
+
+@register.filter
+def count_number_of_public_training_datasets(dataset):
+    return dataset.number_of_training_datasets()
 
 
 @register.simple_tag

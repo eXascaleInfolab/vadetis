@@ -71,7 +71,7 @@
     </div>
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <div id="threshold_portlet" class="kt-portlet">
+            <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
                         <h3 class="kt-portlet__head-title">About</h3>
@@ -94,15 +94,19 @@
                             </tr>
                             <tr>
                                 <td>Number of values</td>
-                                <td>{{ dataset|count_dataset_values }}</td>
+                                <td>{{ dataset|number_of_dataset_values }}</td>
                             </tr>
                             <tr>
                                 <td>Number of normal values</td>
-                                <td>{{ dataset|count_dataset_normal_values }}</td>
+                                <td>{{ dataset|number_of_dataset_normal_values }}</td>
                             </tr>
                             <tr>
                                 <td>Number of anomalies</td>
-                                <td>{{ dataset|count_dataset_anomaly_values }}</td>
+                                <td>{{ dataset|number_of_dataset_anomaly_values }}</td>
+                            </tr>
+                             <tr>
+                                <td>Public training datasets</td>
+                                <td>{{ dataset|count_number_of_public_training_datasets }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -111,7 +115,7 @@
                             <tr>
                                 <th>Time Series</th>
                                 <th>Unit</th>
-                                <th>Anomalies</th>
+                                <th>Number of anomalies</th>
                             </tr>
                         </thead>
                         <tbody>
