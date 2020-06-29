@@ -6,6 +6,7 @@ from rest_framework.response import Response
 
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.db.models import Q
 
 from vadetisweb.models import DataSet
 from vadetisweb.serializers import AlgorithmSerializer, ThresholdSerializer, AnomalyInjectionSerializer
@@ -49,14 +50,16 @@ class DetectionSyntheticDataset(APIView):
 
     def get(self, request, dataset_id):
         try:
-            dataset = DataSet.objects.get(id=dataset_id)
-            if dataset.type != SYNTHETIC:
+            dataset = DataSet.objects.filter(Q(id=dataset_id, type=SYNTHETIC),
+                                             Q(public=True) | Q(owner=request.user)).first()
+            if dataset is None:
+                messages.error(request, dataset_not_found_msg(dataset_id))
                 return redirect('vadetisweb:detection_synthetic_datasets')
 
             selected_button = get_highcharts_range_button_preselector(dataset.frequency)
 
             detection_serializer = AlgorithmSerializer()
-            injection_serializer = AnomalyInjectionSerializer(context={'dataset_selected': dataset_id, })
+            injection_serializer = AnomalyInjectionSerializer(context={'dataset_selected': dataset_id, 'request' : request })
             threshold_serializer = ThresholdSerializer()
 
             return Response({
@@ -81,14 +84,16 @@ class DetectionRealWorldDataset(APIView):
 
     def get(self, request, dataset_id):
         try:
-            dataset = DataSet.objects.get(id=dataset_id)
-            if dataset.type != REAL_WORLD:
+            dataset = DataSet.objects.filter(Q(id=dataset_id, type=REAL_WORLD),
+                                             Q(public=True) | Q(owner=request.user)).first()
+            if dataset is None:
+                messages.error(request, dataset_not_found_msg(dataset_id))
                 return redirect('vadetisweb:detection_real_world_datasets')
 
             selected_button = get_highcharts_range_button_preselector(dataset.frequency)
 
             detection_serializer = AlgorithmSerializer()
-            injection_serializer = AnomalyInjectionSerializer(context={'dataset_selected': dataset_id, })
+            injection_serializer = AnomalyInjectionSerializer(context={'dataset_selected': dataset_id, 'request' : request })
             threshold_serializer = ThresholdSerializer()
 
             return Response({

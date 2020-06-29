@@ -68,7 +68,6 @@ class HistogramSerializer(serializers.Serializer):
     def __init__(self, *args, **kwargs):
         super(HistogramSerializer, self).__init__(*args, **kwargs)
 
-
 class ClusterSerializer(serializers.Serializer):
     dataset = DatasetField(default='overridden')
     dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,

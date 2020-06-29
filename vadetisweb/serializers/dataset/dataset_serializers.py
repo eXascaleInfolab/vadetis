@@ -16,16 +16,6 @@ class DatasetExportSerializer(serializers.Serializer):
         super(DatasetExportSerializer, self).__init__(*args, **kwargs)
 
 
-class DatasetUpdateSerializer(serializers.Serializer):
-    dataset = DatasetField(default='overridden')
-    dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
-                                           style={'template': 'vadetisweb/parts/input/hidden_input.html',
-                                                  'id': 'dataset_series_json'})
-
-    def __init__(self, *args, **kwargs):
-        super(DatasetUpdateSerializer, self).__init__(*args, **kwargs)
-
-
 class DatasetSearchSerializer(serializers.ModelSerializer):
     owner = serializers.StringRelatedField(read_only=True, label="username", many=False)
     display = serializers.SerializerMethodField()

@@ -34,7 +34,7 @@ def dataset_to_json(dataset, df, df_class, show_anomaly, settings, type):
             'id': ts.id,
             'name': ts.name,
             'unit': ts.unit,
-            'is_spatial': ts.location is not None,
+            'is_spatial': ts.is_spatial(),
             'type': type,
             'data': data
         }
@@ -92,7 +92,7 @@ def get_anomaly_detection_single_ts_results_json(dataset, ts_id, df_with_class_i
     raw_measurements = get_predicted_series_data_json(ts.id, df_with_class_instances, scores, y_hat_results, settings)
     z_measurements = get_predicted_series_data_json(ts.id, df_z_with_class_instances, scores, y_hat_results, settings)
 
-    dict_series = {'id': ts.id, 'name': ts.name, 'unit': ts.unit, 'is_spatial': ts.location is not None,
+    dict_series = {'id': ts.id, 'name': ts.name, 'unit': ts.unit, 'is_spatial': ts.is_spatial(),
                    'measurements': {'raw': raw_measurements, 'zscore': z_measurements}}
     data_series.append(dict_series)
 
@@ -101,7 +101,7 @@ def get_anomaly_detection_single_ts_results_json(dataset, ts_id, df_with_class_i
         raw_measurements = get_data_series_measurements(corr_ts.id, df_with_class_instances.drop('class', axis=1), y_hat_results)
         z_measurements = get_data_series_measurements(corr_ts.id, df_z, y_hat_results)
 
-        dict_series = {'id': corr_ts.id, 'name': corr_ts.name, 'unit': corr_ts.unit, 'is_spatial': corr_ts.is_spatial,
+        dict_series = {'id': corr_ts.id, 'name': corr_ts.name, 'unit': corr_ts.unit, 'is_spatial': corr_ts.is_spatial(),
                        'measurements': {'raw': raw_measurements, 'zscore': z_measurements}}
         data_series.append(dict_series)
 
@@ -120,7 +120,7 @@ def get_anomaly_detection_results_json(dataset, df_with_class_instances, scores,
         dict_series = {'id' : ts.id,
                        'name' : ts.name, #todo
                        'unit' : ts.unit, #todo
-                       'is_spatial' : ts.is_spatial, #todo
+                       'is_spatial' : ts.is_spatial(), #todo
                        'type' : 'raw', #todo
                        'data' : data_series
                        }

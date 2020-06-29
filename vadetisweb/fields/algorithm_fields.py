@@ -1,4 +1,8 @@
 from rest_framework import serializers
+
+from django.db.models import Q
+from django.core.exceptions import ObjectDoesNotExist
+
 from vadetisweb.parameters import TIME_RANGE, ANOMALY_DETECTION_SCORE_TYPES
 from vadetisweb.models import DataSet, TimeSeries
 
@@ -11,9 +15,15 @@ class DatasetField(serializers.HiddenField):
 
     def get_value(self, dictionary):
         dataset_selected = self.context.get('dataset_selected', None)
-        if dataset_selected is not None:
-            return DataSet.objects.filter(id=dataset_selected, training_data=False).first()
-        return None
+        request = self.context.get('request', None)
+        if dataset_selected is not None and request is not None:
+            dataset = DataSet.objects.filter(Q(id=dataset_selected, training_data=False),
+                                             Q(public=True) | Q(owner=request.user)).first()
+            if dataset is None:
+                raise ObjectDoesNotExist
+            return dataset
+        else:
+            raise ObjectDoesNotExist
 
 
 class TrainingDatasetField(serializers.PrimaryKeyRelatedField):
@@ -25,8 +35,11 @@ class TrainingDatasetField(serializers.PrimaryKeyRelatedField):
 
     def get_queryset(self):
         dataset_selected = self.context.get('dataset_selected', None)
-        if dataset_selected is not None:
-            return DataSet.objects.filter(main_dataset__id=dataset_selected, training_data=True)
+        request = self.context.get('request', None)
+        if dataset_selected is not None and request is not None:
+            return DataSet.objects.filter(Q(main_dataset__id=dataset_selected, training_data=True),
+                                          Q(public=True) | Q(owner=request.user))
+
         return DataSet.objects.none()
 
     def display_value(self, instance):
@@ -41,9 +54,11 @@ class TimeSeriesField(serializers.PrimaryKeyRelatedField):
 
     def get_queryset(self):
         dataset_selected = self.context.get('dataset_selected', None)
+        request = self.context.get('request', None)
         # timeseries_selected = self.context.get('timeseries_selected', None)
-        if dataset_selected is not None:
-            return TimeSeries.objects.filter(datasets__in=[dataset_selected])
+        if dataset_selected is not None and request is not None:
+            return TimeSeries.objects.filter(Q(datasets__in=[dataset_selected]),
+                                             Q(datasets__public=True) | Q(datasets__owner=request.user))
         return TimeSeries.objects.none()
 
     def display_value(self, instance):

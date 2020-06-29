@@ -151,6 +151,9 @@ class TimeSeries(models.Model):
     unit = models.CharField(max_length=32, choices=UNITS, null=False, help_text='Defines the unit of the values')
     location = models.OneToOneField(Location, null=True, on_delete=models.CASCADE)
 
+    def is_spatial(self):
+        return self.location is not None
+
     class Meta:
         verbose_name_plural = 'Time Series'
 

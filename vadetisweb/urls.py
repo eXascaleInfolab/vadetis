@@ -43,9 +43,6 @@ apipatterns = [
 
     path('api/dataset/search/', views.DatasetSearchView.as_view(), name='dataset_search'),
     path('api/dataset/download/', views.DatasetFileDownload.as_view(), name='dataset_download_file'),
-    path('api/dataset/<int:dataset_id>/update/', views.DatasetUpdateJson.as_view(), name='dataset_update_json'),
-    path('api/datasets/<int:dataset_id>/perform/', views.DatasetPerformAnomalyDetectionJson.as_view(),
-         name='dataset_perform_anomaly_detection_json'),
     path('api/threshold-update', views.DatasetThresholdUpdateJson.as_view(), name='threshold_update_json'),
     path('api/image/cnf/', views.CnfImage.as_view(), name='cnf_image'),
     path('api/image/thresholds-scores/', views.ThresholdsScoresImage.as_view(), name='thresholds_scores_image'),
