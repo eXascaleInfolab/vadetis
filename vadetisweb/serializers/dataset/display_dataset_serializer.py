@@ -1,9 +1,9 @@
-import numpy as np
 from django.urls import reverse
 from rest_framework import serializers
 
 from vadetisweb.models import DataSet
 from vadetisweb.parameters import *
+
 
 class DisplayDatasetDataTablesSerializer(serializers.ModelSerializer):
 
@@ -23,7 +23,7 @@ class DisplayDatasetDataTablesSerializer(serializers.ModelSerializer):
         return obj.number_of_dataframe_values()
 
     def get_spatial(self, obj):
-        return all(ts.location is not None for ts in obj.timeseries_set.all())
+        return obj.is_spatial()
 
     def get_training_datasets(self, obj):
         return obj.number_of_public_training_datasets()
@@ -101,3 +101,26 @@ class DisplayDatasetSearchSerializer(serializers.Serializer):
 
     def __init__(self, *args, **kwargs):
         super(DisplayDatasetSearchSerializer, self).__init__(*args, **kwargs)
+
+
+class DisplayTrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
+
+    title = serializers.CharField(read_only=True)
+    values = serializers.SerializerMethodField()
+    actions = serializers.SerializerMethodField()
+
+    def get_values(self, obj):
+        return obj.number_of_dataframe_values()
+
+    def get_actions(self, obj):
+        if obj.type == REAL_WORLD:
+            link = reverse('vadetisweb:display_real_world_dataset', args=[obj.id])
+        else:
+            link = reverse('vadetisweb:display_synthetic_dataset', args=[obj.id])
+        return '<a href="%s">Display</a>' % (link)
+
+    class Meta:
+        model = DataSet
+        fields = (
+            'title', 'values', 'actions'
+        )

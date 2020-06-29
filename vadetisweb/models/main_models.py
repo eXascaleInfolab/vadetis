@@ -110,6 +110,9 @@ class DataSet(models.Model):
     def number_of_public_training_datasets(self):
         return self.training_dataset.filter(public=True).count()
 
+    def is_spatial(self):
+        return all(ts.location is not None for ts in self.timeseries_set.all())
+
     class Meta:
         unique_together = ('title', 'owner',)
 

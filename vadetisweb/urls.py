@@ -18,6 +18,7 @@ router.register(r'account/datasets', views.AccountDatasetDataTableViewSet, basen
 router.register(r'account/training-datasets', views.AccountTrainingDatasetDataTableViewSet, basename='account_training_datasets_datatable')
 router.register(r'display/datasets/synthetic', views.DisplaySyntheticDatasetDataTableViewSet, basename='display_synthetic_datasets_datatable')
 router.register(r'display/datasets/real-world', views.DisplayRealWorldDatasetDataTableViewSet, basename='display_real_world_datasets_datatable')
+router.register(r'display/training-datasets', views.DisplayTrainingDatasetDataTableViewSet, basename='display_training_datasets_datatable')
 router.register(r'detection/datasets/synthetic', views.DetectionSyntheticDatasetDataTableViewSet, basename='detection_synthetic_datasets_datatable')
 router.register(r'detection/datasets/real-world', views.DetectionRealWorldDatasetDataTableViewSet, basename='detection_real_world_datasets_datatable')
 

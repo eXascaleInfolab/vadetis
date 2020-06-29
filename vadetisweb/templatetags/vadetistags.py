@@ -43,17 +43,21 @@ def number_of_dataset_anomaly_values(dataset):
 
 
 @register.filter
-def count_number_of_training_datasets(dataset):
+def number_of_training_datasets(dataset):
     return dataset.number_of_training_datasets()
 
 
 @register.filter
-def count_number_of_public_training_datasets(dataset):
+def number_of_public_training_datasets(dataset):
     return dataset.number_of_training_datasets()
+
+@register.filter
+def is_spatial(dataset):
+    return dataset.is_spatial()
 
 
 @register.simple_tag
-def count_time_series_anomaly_values(dataset, ts_id):
+def number_of_time_series_anomaly_values(dataset, ts_id):
     return dataset.number_of_time_series_anomaly_values(ts_id)
 
 

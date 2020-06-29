@@ -22,7 +22,7 @@ class DetectionDatasetDataTablesSerializer(serializers.ModelSerializer):
         return obj.number_of_dataframe_values()
 
     def get_spatial(self, obj):
-        return all(ts.location is not None for ts in obj.timeseries_set.all())
+        return obj.is_spatial()
 
     def get_training_datasets(self, obj):
         return obj.number_of_public_training_datasets()
