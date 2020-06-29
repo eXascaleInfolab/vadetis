@@ -6,7 +6,7 @@ from vadetisweb.utils import json_message_utils
 from vadetisweb.serializers.message_serializers import MessageSerializer
 
 
-def invalid_form_rest_response(serializer, json_messages):
+def response_invalid_form(serializer, json_messages):
 
     # append non field form errors to message errors
     if (api_settings.NON_FIELD_ERRORS_KEY in serializer.errors):

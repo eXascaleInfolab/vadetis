@@ -81,31 +81,27 @@ class AccountDatasetUpdate(APIView):
     @swagger_auto_schema(request_body=AccountDatasetUpdateSerializer)
     def post(self, request, dataset_id):
         try:
-            dataset = DataSet.objects.get(id=dataset_id, training_data=False)
+            dataset = DataSet.objects.get(id=dataset_id, owner=request.user, training_data=False)
             dataset_edit_serializer = AccountDatasetUpdateSerializer(instance=dataset, data=request.POST)
 
             if dataset_edit_serializer.is_valid():
+                dataset_edit_serializer.save()
 
-                if dataset.owner == request.user:
-                    dataset_edit_serializer.save()
-
-                    messages.success(request, dataset_saved_msg(dataset_id))
-                    return redirect('vadetisweb:account_datasets')
-
-                else:
-                    return Response(status=status.HTTP_403_FORBIDDEN)
+                messages.success(request, dataset_saved_msg(dataset_id))
+                response = Response({}, status=status.HTTP_200_OK)
+                response['Location'] = reverse('vadetisweb:account_datasets')
+                return response
 
             else:
                 json_messages = []
                 json_message_utils.error(json_messages, 'Form was not valid')
-                return Response({
-                    'messages': MessageSerializer(json_messages, many=True).data,
-                    'form_errors': dataset_edit_serializer.errors
-                }, status=status.HTTP_400_BAD_REQUEST)
+                return response_invalid_form(dataset_edit_serializer, json_messages)
 
         except DataSet.DoesNotExist:
             messages.error(request, dataset_not_found_msg(dataset_id))
-            return redirect('vadetisweb:account_datasets')
+            response = Response({}, status=status.HTTP_404_NOT_FOUND)
+            response['Location'] = reverse('vadetisweb:account_datasets')
+            return response
 
 
 class AccountDatasetDelete(APIView):
@@ -119,30 +115,34 @@ class AccountDatasetDelete(APIView):
     @swagger_auto_schema(request_body=AccountDatasetDeleteSerializer)
     def post(self, request, dataset_id):
         try:
-            dataset = DataSet.objects.get(id=dataset_id, training_data=False)
+            dataset = DataSet.objects.get(id=dataset_id, owner=request.user, training_data=False)
             dataset_delete_serializer = AccountDatasetDeleteSerializer(data=request.POST)
 
             if dataset_delete_serializer.is_valid():
                 if dataset_delete_serializer.validated_data['confirm'] is True:
-                    if dataset.owner == request.user:
-                        dataset_title = dataset.title
-                        dataset.delete()
-                        messages.success(request, dataset_removed_msg(dataset_title))
-                        return redirect('vadetisweb:account_datasets')
-                    else:
-                        return Response(status=status.HTTP_403_FORBIDDEN)
+                    dataset_title = dataset.title
+                    dataset.delete()
+
+                    messages.success(request, dataset_removed_msg(dataset_title))
+                    response = Response({}, status=status.HTTP_200_OK)
+                    response['Location'] = reverse('vadetisweb:account_datasets')
+                    return response
+
                 else:
-                    messages.warning(request, 'Check "Confirm" if you want to delete this dataset')
-                    return redirect('vadetisweb:account_dataset_edit', dataset_id=dataset_id)
+                    message = 'Check "Confirm" if you want to delete this dataset'
+                    json_messages = []
+                    json_message_utils.warning(json_messages, message)
+                    return response_invalid_form(dataset_delete_serializer, json_messages)
             else:
-                message = "Form was invalid"
                 json_messages = []
-                json_message_utils.error(json_messages, message)
-                return invalid_form_rest_response(dataset_delete_serializer, json_messages)
+                json_message_utils.error(json_messages, 'Form was not valid')
+                return response_invalid_form(dataset_delete_serializer, json_messages)
 
         except DataSet.DoesNotExist:
             messages.error(request, dataset_not_found_msg(dataset_id))
-            return redirect('vadetisweb:account_datasets')
+            response = Response({}, status=status.HTTP_404_NOT_FOUND)
+            response['Location'] = reverse('vadetisweb:account_datasets')
+            return response
 
 
 class AccountTrainingDatasetUpdate(APIView):
@@ -156,31 +156,27 @@ class AccountTrainingDatasetUpdate(APIView):
     @swagger_auto_schema(request_body=AccountDatasetUpdateSerializer)
     def post(self, request, dataset_id):
         try:
-            training_dataset = DataSet.objects.get(id=dataset_id, training_data=True)
+            training_dataset = DataSet.objects.get(id=dataset_id, owner=request.user, training_data=True)
             training_dataset_edit_serializer = AccountDatasetUpdateSerializer(instance=training_dataset, data=request.POST)
 
             if training_dataset_edit_serializer.is_valid():
+                training_dataset_edit_serializer.save()
 
-                if training_dataset.owner == request.user:
-                    training_dataset_edit_serializer.save()
-
-                    messages.success(request, dataset_saved_msg(dataset_id))
-                    return redirect('vadetisweb:account_training_datasets')
-
-                else:
-                    return Response(status=status.HTTP_403_FORBIDDEN)
+                messages.success(request, dataset_saved_msg(dataset_id))
+                response = Response({}, status=status.HTTP_200_OK)
+                response['Location'] = reverse('vadetisweb:account_training_datasets')
+                return response
 
             else:
                 json_messages = []
                 json_message_utils.error(json_messages, 'Form was not valid')
-                return Response({
-                    'messages': MessageSerializer(json_messages, many=True).data,
-                    'form_errors': training_dataset_edit_serializer.errors
-                }, status=status.HTTP_400_BAD_REQUEST)
+                return response_invalid_form(training_dataset_edit_serializer, json_messages)
 
         except DataSet.DoesNotExist:
             messages.error(request, dataset_not_found_msg(dataset_id))
-            return redirect('vadetisweb:account_training_datasets')
+            response = Response({}, status=status.HTTP_404_NOT_FOUND)
+            response['Location'] = reverse('vadetisweb:account_training_datasets')
+            return response
 
 
 class AccountTrainingDatasetDelete(APIView):
@@ -194,27 +190,31 @@ class AccountTrainingDatasetDelete(APIView):
     @swagger_auto_schema(request_body=AccountDatasetDeleteSerializer)
     def post(self, request, dataset_id):
         try:
-            training_dataset = DataSet.objects.get(id=dataset_id, training_data=True)
+            training_dataset = DataSet.objects.get(id=dataset_id, owner=request.user, training_data=True)
             training_dataset_delete_serializer = AccountDatasetDeleteSerializer(data=request.POST)
 
             if training_dataset_delete_serializer.is_valid():
                 if training_dataset_delete_serializer.validated_data['confirm'] is True:
-                    if training_dataset.owner == request.user:
-                        dataset_title = training_dataset.title
-                        training_dataset.delete()
-                        messages.success(request, dataset_removed_msg(dataset_title))
-                        return redirect('vadetisweb:account_training_datasets')
-                    else:
-                        return Response(status=status.HTTP_403_FORBIDDEN)
+                    dataset_title = training_dataset.title
+                    training_dataset.delete()
+
+                    messages.success(request, dataset_removed_msg(dataset_title))
+                    response = Response({}, status=status.HTTP_200_OK)
+                    response['Location'] = reverse('vadetisweb:account_training_datasets')
+                    return response
+
                 else:
-                    messages.warning(request, 'Check "Confirm" if you want to delete this dataset')
-                    return redirect('vadetisweb:account_training_dataset_edit', dataset_id=dataset_id)
+                    message = 'Check "Confirm" if you want to delete this dataset'
+                    json_messages = []
+                    json_message_utils.warning(json_messages, message)
+                    return response_invalid_form(training_dataset_delete_serializer, json_messages)
             else:
-                message = "Form was invalid"
                 json_messages = []
-                json_message_utils.error(json_messages, message)
-                return invalid_form_rest_response(training_dataset_delete_serializer, json_messages)
+                json_message_utils.error(json_messages, 'Form was not valid')
+                return response_invalid_form(training_dataset_delete_serializer, json_messages)
 
         except DataSet.DoesNotExist:
             messages.error(request, dataset_not_found_msg(dataset_id))
-            return redirect('vadetisweb:account_training_datasets')
+            response = Response({}, status=status.HTTP_404_NOT_FOUND)
+            response['Location'] = reverse('vadetisweb:account_training_datasets')
+            return response

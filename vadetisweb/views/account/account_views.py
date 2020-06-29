@@ -124,7 +124,7 @@ class ApplicationSetting(APIView):
             if request.accepted_renderer.format == 'json':  # requested format is json
                 json_messages = []
                 json_message_utils.error(json_messages, message)
-                return invalid_form_rest_response(serializer, json_messages)
+                return response_invalid_form(serializer, json_messages)
 
             else:  # or render html template
                 messages.error(request, message)
@@ -200,7 +200,7 @@ class AccountUploadDataset(APIView):
             if request.accepted_renderer.format == 'json':  # requested format is json
                 json_messages = []
                 json_message_utils.error(json_messages, message)
-                return invalid_form_rest_response(serializer, json_messages)
+                return response_invalid_form(serializer, json_messages)
 
             else:  # or render html template
                 messages.error(request, message)
@@ -267,7 +267,7 @@ class AccountUploadTrainingDataset(APIView):
                 json_message_utils.error(json_messages, message)
 
                 # append non field form errors to message errors
-                return invalid_form_rest_response(serializer, json_messages)
+                return response_invalid_form(serializer, json_messages)
 
             else:  # or render html template
                 messages.error(request, message)

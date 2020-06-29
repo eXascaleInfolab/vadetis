@@ -54,4 +54,10 @@
 {% endblock %}
 
 {% block additional_bottom_js %}
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            initAjaxFormSubmit("training_dataset_edit_form", null);
+            initAjaxFormSubmit("training_dataset_delete_form", null);
+        });
+    </script>
 {% endblock %}

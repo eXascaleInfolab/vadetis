@@ -49,7 +49,7 @@ class AnomalyInjectionFormView(APIView):
             if request.accepted_renderer.format == 'json':  # requested format is json
                 json_messages = []
                 json_message_utils.error(json_messages, message)
-                return invalid_form_rest_response(serializer, json_messages)
+                return response_invalid_form(serializer, json_messages)
 
             else:  # or render html template
                 messages.error(request, message)

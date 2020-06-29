@@ -90,7 +90,7 @@ function handleMessages(data) {
  * @param xhr - The jqXHR object, which is a superset of the XMLHTTPRequest object
  */
 function handleRedirect(data, xhr) {
-    if(data !==undefined && data.location) {
+    if(data !== undefined && data.location) {
          window.location = data.location;
     }
     if (xhr.getResponseHeader('Location')) {

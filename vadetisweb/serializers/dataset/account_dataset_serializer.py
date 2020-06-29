@@ -193,7 +193,7 @@ class AccountTrainingDatasetSearchSerializer(serializers.Serializer):
 
 
 class DatasetImportSerializer(serializers.Serializer):
-    title = serializers.CharField(required=True, max_length=128, help_text='Human readable title of the dataset',
+    title = serializers.CharField(required=True, max_length=64, help_text='Human readable title of the dataset',
                                   style={'template': 'vadetisweb/parts/input/text_input.html'})
 
     csv_file = serializers.FileField(required=True, label='CSV File', help_text='The csv file of the dataset',
@@ -256,7 +256,7 @@ class TrainingDatasetImportSerializer(serializers.Serializer):
 
 
 class AccountDatasetUpdateSerializer(serializers.ModelSerializer):
-    title = serializers.CharField(required=True, max_length=128, help_text='Human readable title of the dataset',
+    title = serializers.CharField(required=True, max_length=64, help_text='Human readable title of the dataset',
                                   style={'template': 'vadetisweb/parts/input/text_input.html'})
 
     public = serializers.BooleanField(required=True, help_text='Determines if this dataset is available to other users',

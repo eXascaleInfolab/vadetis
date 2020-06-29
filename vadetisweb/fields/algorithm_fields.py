@@ -7,6 +7,7 @@ from vadetisweb.parameters import TIME_RANGE, ANOMALY_DETECTION_SCORE_TYPES
 from vadetisweb.models import DataSet, TimeSeries
 from vadetisweb.utils.request_utils import q_public_or_user_is_owner, q_related_public_or_user_is_owner
 
+
 class DatasetField(serializers.HiddenField):
     """
         Note: a HiddenField should normally not be used that way (overriding default value),

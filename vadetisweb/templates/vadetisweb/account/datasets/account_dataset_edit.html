@@ -63,4 +63,10 @@
 {% endblock %}
 
 {% block additional_bottom_js %}
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            initAjaxFormSubmit("dataset_edit_form", null);
+            initAjaxFormSubmit("dataset_delete_form", null);
+        });
+    </script>
 {% endblock %}
