@@ -70,13 +70,16 @@ class TrainSizeFloatField(serializers.FloatField):
     def __init__(self, **kwargs):
         super(TrainSizeFloatField, self).__init__(**kwargs)
         self.label = 'Train Size'
-        self.help_text = 'Represent the proportion of the training dataset to use for model training. The rest of the data will be used to validate the model. Should be in the interval (0, 1).'
-        self.style = {'template': 'vadetisweb/parts/input/text_input.html',
-                      'placeholder': 'e.g. 0.5',
-                      'step': 'any',
-                      'min': self.min_value,
-                      'max': self.max_value,
-                      'help_text_in_popover': True}
+        self.help_text = 'Represent the proportion of the training dataset to use for model training. The rest of the data will be used to validate the model. At least 20% of the data will be required to either train or validate the model.'
+        self.style = {'template': 'vadetisweb/parts/input/ion_slider_input.html',
+                 'id': 'train_size',
+                 'data_type': "single",
+                 'data_grid': "true",
+                 'data_min': self.min_value,
+                 'data_max': self.max_value,
+                 'data_from': "0.5",
+                 'data_step': "0.01",
+                 'help_text_in_popover': True}
 
 
 class RandomSeedIntegerField(serializers.IntegerField):

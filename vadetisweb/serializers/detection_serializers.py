@@ -38,7 +38,9 @@ class RPCAMEstimatorLossSerializer(serializers.Serializer):
     training_dataset = TrainingDatasetField(label='Training Dataset',
                                             required=True,
                                             queryset=DataSet.objects.none())
-    train_size = TrainSizeFloatField(initial=0.5, min_value=0.001, max_value=0.999, required=True)
+
+    train_size = TrainSizeFloatField(initial=0.5, min_value=0.2, max_value=0.8, required=True)
+
     random_seed = RandomSeedIntegerField(initial=10, required=False)
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
@@ -58,7 +60,7 @@ class HistogramSerializer(serializers.Serializer):
     training_dataset = TrainingDatasetField(label='Training Dataset',
                                             required=True,
                                             queryset=DataSet.objects.none())
-    train_size = TrainSizeFloatField(initial=0.5, min_value=0.001, max_value=0.999, required=True)
+    train_size = TrainSizeFloatField(initial=0.5, min_value=0.2, max_value=0.8, required=True)
     random_seed = RandomSeedIntegerField(initial=10, required=False)
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
@@ -88,7 +90,7 @@ class ClusterSerializer(serializers.Serializer):
                                       style={'template': 'vadetisweb/parts/input/text_input.html',
                                              'help_text_in_popover': True})
 
-    train_size = TrainSizeFloatField(initial=0.5, min_value=0.001, max_value=0.999, required=True)
+    train_size = TrainSizeFloatField(initial=0.5, min_value=0.2, max_value=0.8, required=True)
     random_seed = RandomSeedIntegerField(initial=10, required=False)
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
@@ -126,7 +128,7 @@ class SVMSerializer(serializers.Serializer):
                                        'min': 0.000001,
                                        'max': 1,
                                        'help_text_in_popover': True})
-    train_size = TrainSizeFloatField(initial=0.5, min_value=0.001, max_value=0.999, required=True)
+    train_size = TrainSizeFloatField(initial=0.5, min_value=0.2, max_value=0.8, required=True)
 
     random_seed = RandomSeedIntegerField(initial=10, required=False)
     time_range = TimeRangeChoiceField(required=True)
@@ -154,7 +156,7 @@ class IsolationForestSerializer(serializers.Serializer):
                                             help_text='The number of base estimators in the ensemble.',
                                             style={'template': 'vadetisweb/parts/input/text_input.html',
                                                    'help_text_in_popover': True})
-    train_size = TrainSizeFloatField(initial=0.5, min_value=0.001, max_value=0.999, required=True)
+    train_size = TrainSizeFloatField(initial=0.5, min_value=0.2, max_value=0.8, required=True)
 
     random_seed = RandomSeedIntegerField(initial=10, required=False)
     time_range = TimeRangeChoiceField(required=True)

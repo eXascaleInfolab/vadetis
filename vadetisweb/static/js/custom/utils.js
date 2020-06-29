@@ -218,3 +218,50 @@ function _setSettingOrDefault(setting, cookieName, defaultValue) {
 function getSetting(cookieName) {
     return Cookies.get(cookieName);
 }
+
+function onChangeAjaxSubmit(formData, form_id, form_append_container_id) {
+    clearFormErrors(form_id);
+    clearMessages();
+    var form_selector = $("#" + form_id), form_append_container_selector = $("#" + form_append_container_id), csrftoken = Cookies.get('csrftoken');
+    $.ajax({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        },
+        url: form_selector.attr('action'),
+        data: new FormData(formData),
+        type: form_selector.attr('method'),
+        enctype: form_selector.attr('enctype'),
+        processData: false,
+        contentType: false,
+        success: function (data, status, xhr) {
+            handleMessages(data);
+
+            if (data !== undefined) {
+                var receivedForm = $(data);
+                var receivedFormId = $(receivedForm).filter('form').attr('id');
+
+                form_append_container_selector.empty();
+                form_append_container_selector.append(receivedForm);
+                $('#' + form_append_container_id + ' [data-toggle="kt-popover"]').each(function () {
+                    KTApp.initPopover($(this));
+                });
+                $('#' + form_append_container_id + ' [data-type="single"]').each(function () {
+                    IonRangeSliderInitializer.init(this.id);
+                });
+                $('#' + form_append_container_id + ' [data-type="double"]').each(function () {
+                    IonRangeSliderInitializer.init(this.id);
+                });
+                registerAnomalyDetectionForm(receivedFormId);
+            } else {
+                form_append_container_selector.empty();
+            }
+        },
+        error: function (data, status, xhr) {
+            printMessages([{'message': "Request failed"}], "error-request");
+            handleMessages(data);
+            form_append_container_selector.empty();
+        }
+    });
+}

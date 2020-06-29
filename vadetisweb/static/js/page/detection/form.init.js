@@ -5,7 +5,7 @@ var DatasetForm = function () {
 
         $('#'+anomaly_injection_form_id).on('submit', function (event) {
             event.preventDefault();
-            inject_replace(anomaly_injection_form_id, new FormData(event.target), format);
+            inject_replace_series(anomaly_injection_form_id, new FormData(event.target), format);
         });
 
         IonRangeSliderInitializer.init("normal_range");
