@@ -5,6 +5,7 @@ from .api.image_api import *
 
 from .account.account_views import *
 from .account.api.account_datasets_api import *
+from .account.api.account_api import *
 
 from .display.display_views import *
 from .display.api.display_datasets_api import *

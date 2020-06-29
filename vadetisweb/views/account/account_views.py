@@ -1,25 +1,19 @@
 import logging
-from rest_framework import status
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.parsers import MultiPartParser
 from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.settings import api_settings
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from celery.utils import uuid
 
 from django.contrib import messages
-from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from vadetisweb.models import UserTasks
-from vadetisweb.utils import settings_from_request_or_default_dict, json_message_utils, update_setting_cookie, \
-    write_to_tempfile
+from vadetisweb.utils import settings_from_request_or_default_dict, update_setting_cookie, write_to_tempfile
 from vadetisweb.serializers.account_serializers import *
 from vadetisweb.serializers.dataset.account_dataset_serializer import *
-from vadetisweb.serializers import MessageSerializer
 from vadetisweb.tasks import TaskImportData, TaskImportTrainingData
 from vadetisweb.factory import *
 
@@ -274,121 +268,6 @@ class AccountUploadTrainingDataset(APIView):
                 return Response({
                     'serializer': serializer,
                 }, status=status.HTTP_400_BAD_REQUEST)
-
-
-class AccountUserUpdate(APIView):
-    """
-    View for account setting update processing
-    """
-    renderer_classes = [JSONRenderer]
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
-
-    def post(self, request):
-        user_serializer = AccountUserSerializer(instance=request.user, data=request.data)
-
-        if user_serializer.is_valid():
-            user_serializer.save()
-            json_messages = []
-            json_message_utils.success(json_messages, 'Account saved')
-            return Response({
-                'status': 'success',
-                'messages': MessageSerializer(json_messages, many=True).data,
-            }, status=status.HTTP_200_OK)
-        else:
-            json_messages = []
-            json_message_utils.error(json_messages, 'Form was not valid')
-            return Response({
-                'messages': MessageSerializer(json_messages, many=True).data,
-                'form_errors': user_serializer.errors
-            }, status=status.HTTP_400_BAD_REQUEST)
-
-
-class AccountPasswordUpdate(APIView):
-    """
-    View for account setting update processing
-    """
-    renderer_classes = [JSONRenderer]
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
-
-    def post(self, request):
-        password_update_serializer = AccountPasswordSerializer(context={"request": self.request, }, data=request.data)
-
-        if password_update_serializer.is_valid():
-            password_update_serializer.save()
-            update_session_auth_hash(request, request.user)
-
-            json_messages = []
-            json_message_utils.success(json_messages, 'Password changed')
-            return Response({
-                'status': 'success',
-                'messages': MessageSerializer(json_messages, many=True).data,
-            }, status=status.HTTP_200_OK)
-        else:
-            json_messages = []
-            json_message_utils.error(json_messages, 'Form was not valid')
-            return Response({
-                'messages': MessageSerializer(json_messages, many=True).data,
-                'form_errors': password_update_serializer.errors
-            }, status=status.HTTP_400_BAD_REQUEST)
-
-
-class AccountSocialDisconnectUpdate(APIView):
-    """
-    View for account social disconnect processing
-    """
-    renderer_classes = [JSONRenderer]
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
-
-    def post(self, request):
-        social_disconnect_serializer = AccountSocialDisconnectSerializer(data=request.POST)
-
-        if social_disconnect_serializer.is_valid():
-            social_disconnect_serializer.save()
-
-        else:
-            json_messages = []
-            json_message_utils.error(json_messages, 'Form was not valid')
-            return Response({
-                'messages': MessageSerializer(json_messages, many=True).data,
-                'form_errors': social_disconnect_serializer.errors
-            }, status=status.HTTP_400_BAD_REQUEST)
-
-
-class AccountDelete(APIView):
-    """
-    View for account delete processing
-    """
-    renderer_classes = [JSONRenderer]
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
-
-    def post(self, request):
-        account_delete_serializer = AccountDeleteSerializer(instance=request.user, data=request.POST)
-
-        if account_delete_serializer.is_valid():
-
-            deactivate_user = account_delete_serializer.save()
-
-            # check if user no longer active, then delete
-            # remove this if you want only to deactivate
-            if deactivate_user.is_active == False:
-                deactivate_user.delete()
-                message = "Account has been removed"
-                messages.success(request, message)
-                return redirect('vadetisweb:account_logout')
-            else:
-                return Response(status=status.HTTP_200_OK)
-
-        else:
-            json_messages = []
-            json_message_utils.error(json_messages, 'Form was not valid')
-            return Response({
-                'messages': MessageSerializer(json_messages, many=True).data,
-                'form_errors': account_delete_serializer.errors
-            }, status=status.HTTP_400_BAD_REQUEST)
 
 
 class AccountDatasetEdit(APIView):

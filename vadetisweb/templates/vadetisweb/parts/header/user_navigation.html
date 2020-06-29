@@ -11,6 +11,16 @@
             <div class="kt-user-card__name">
                 {{ user.username }}
             </div>
+            <div>
+            {% if user.first_name and user.last_name %}
+                <span class="kt-font-primary">
+                    {{ user.first_name }} {{ user.last_name }}
+                </span><br/>
+            {% endif %}
+                <span class="kt-font-primary font-italic">
+                    {% if user.is_superuser %}Administrator{% else %}Regular User{% endif %}
+                </span>
+            </div>
         </div>
         <!--end: User Nav Main -->
         {% endif %}
@@ -25,7 +35,7 @@
                         Profile
                     </div>
                     <div class="kt-notification__item-time">
-                        Account settings and more
+                        Settings for your account
                     </div>
                 </div>
             </a>
