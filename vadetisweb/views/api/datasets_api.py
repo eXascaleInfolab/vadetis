@@ -98,5 +98,8 @@ class DatasetSearchView(generics.ListAPIView):
     renderer_classes = [JSONRenderer]
     search_fields = ['title', 'owner__username', 'training_dataset__title']
     filter_backends = (filters.SearchFilter,)
-    queryset = DataSet.objects.filter(training_data=False, public=True)
     serializer_class = DatasetSearchSerializer
+
+    def get_queryset(self):
+        return DataSet.objects.filter(Q(training_data=False),
+                                      Q(public=True) | Q(owner=self.request.user))
