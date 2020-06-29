@@ -13,7 +13,7 @@ from django.db.models import Q
 from vadetisweb.models import DataSet
 from vadetisweb.serializers import AnomalyInjectionSerializer, MessageSerializer
 from vadetisweb.algorithms import anomaly_injection
-from vadetisweb.utils import dataset_to_json, strToBool, get_settings, json_message_utils
+from vadetisweb.utils import dataset_to_json, strToBool, get_settings, json_message_utils, q_public_or_user_is_owner
 from vadetisweb.factory import *
 
 
@@ -27,7 +27,7 @@ class AnomalyInjectionFormView(APIView):
     def post(self, request, dataset_id, format=None):
 
         dataset = DataSet.objects.filter(Q(id=dataset_id),
-                                         Q(public=True) | Q(owner=request.user)).first()
+                                         q_public_or_user_is_owner(request)).first()
         if dataset is None:
             messages.error(request, dataset_not_found_msg(dataset_id))
             return redirect('vadetisweb:index')

@@ -17,7 +17,7 @@ from vadetisweb.models import DataSet
 from vadetisweb.utils import strToBool, get_settings, dataset_to_json, get_datasets_from_json, df_zscore, export_to_csv, export_to_json
 from vadetisweb.serializers import DatasetExportSerializer, DatasetSearchSerializer
 from vadetisweb.factory import dataset_not_found_msg
-
+from vadetisweb.utils.request_utils import q_public_or_user_is_owner
 
 class DatasetJson(APIView):
     """
@@ -27,8 +27,9 @@ class DatasetJson(APIView):
 
     def get(self, request, dataset_id):
         try:
+
             dataset = DataSet.objects.filter(Q(id=dataset_id),
-                                             Q(public=True) | Q(owner=request.user)).first()
+                                             q_public_or_user_is_owner(request)).first()
             if dataset is None:
                 return Response({}, status=status.HTTP_400_BAD_REQUEST)
 

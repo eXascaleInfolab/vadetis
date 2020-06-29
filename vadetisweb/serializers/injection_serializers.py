@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from vadetisweb.fields import *
-from vadetisweb.parameters import ANOMALY_INJECTION_TYPES
+from vadetisweb.parameters import ANOMALY_INJECTION_TYPES, ANOMALY_INJECTION_DEVIATIONS, ANOMALY_INJECTION_DEVIATION_MEDIUM
 
 
 class AnomalyInjectionSerializer(serializers.Serializer):
@@ -33,12 +33,13 @@ class AnomalyInjectionSerializer(serializers.Serializer):
                                            style={'template': 'vadetisweb/parts/input/select_input.html',
                                                   'help_text_in_popover': True})
 
-    anomaly_factor = serializers.IntegerField(label='Factor', initial=10, min_value=2,
-                                              required=True,
-                                              help_text='The factor that is used to define the deviation of the normal data.',
-                                              style={'template': 'vadetisweb/parts/input/text_input.html',
-                                                     'step': 'number', 'min': 2,
-                                                     'help_text_in_popover': True})
+    anomaly_deviation = serializers.ChoiceField(label='Deviation',
+                                                allow_blank=False,
+                                                choices=ANOMALY_INJECTION_DEVIATIONS,
+                                                default=ANOMALY_INJECTION_DEVIATION_MEDIUM,
+                                                help_text='The grade of deviation for anomalies from the normal data.',
+                                                style={'template': 'vadetisweb/parts/input/select_input.html',
+                                                       'help_text_in_popover': True})
 
     normal_range = IonIntegerRangeJsonField(label="Normal range", required=True,
                                             help_text='The bound for duration of a normal event.',

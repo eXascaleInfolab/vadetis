@@ -7,7 +7,6 @@ from drf_yasg.utils import swagger_auto_schema
 from django.urls import reverse
 from django.shortcuts import redirect
 from django.contrib import messages
-from django.db.models import Q
 
 from vadetisweb.serializers.detection_serializers import *
 from vadetisweb.models import DataSet
@@ -25,7 +24,7 @@ class AnomalyDetectionAlgorithmSelectionView(APIView):
 
     def post(self, request, dataset_id):
         dataset = DataSet.objects.filter(Q(id=dataset_id),
-                                         Q(public=True) | Q(owner=request.user)).first()
+                                         q_public_or_user_is_owner(request)).first()
         if dataset is None:
             messages.error(request, dataset_not_found_msg(dataset_id))
             return redirect('vadetisweb:index')
