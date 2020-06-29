@@ -22,6 +22,10 @@ class RPCAMEstimatorLossSerializer(serializers.Serializer):
                                            style={'template': 'vadetisweb/parts/input/hidden_input.html',
                                                   'id': 'dataset_series_json'})
 
+    training_dataset = TrainingDatasetField(label='Training Dataset',
+                                            required=True,
+                                            queryset=DataSet.objects.none())
+
     delta = serializers.FloatField(initial=1.0, label='Delta', required=True,
                                      help_text='Delta for Huber Loss function. The value of delta depends on the contamination level of the data. '
                                                'The higher the contamination, the lower the value should be chosen.',
@@ -34,10 +38,6 @@ class RPCAMEstimatorLossSerializer(serializers.Serializer):
                                             style={'template': 'vadetisweb/parts/input/text_input.html',
                                                    'step': 'any', 'min': 2,
                                                    'help_text_in_popover': True})
-
-    training_dataset = TrainingDatasetField(label='Training Dataset',
-                                            required=True,
-                                            queryset=DataSet.objects.none())
 
     train_size = TrainSizeFloatField(initial=0.5, min_value=0.2, max_value=0.8, required=True)
 
