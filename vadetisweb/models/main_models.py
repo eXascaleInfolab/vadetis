@@ -56,7 +56,7 @@ class DataSet(models.Model):
     """
 
     # human readable title for this dataset
-    title = models.CharField(null=False, blank=False, max_length=128, help_text='Human readable title of the dataset')
+    title = models.CharField(null=False, blank=False, max_length=64, help_text='Human readable title of the dataset')
 
     # owner of the dataset
     owner = models.ForeignKey(User, null=False, on_delete=models.CASCADE)
