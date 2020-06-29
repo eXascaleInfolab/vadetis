@@ -9739,15 +9739,7 @@ var KTLayout = function() {
             this.initHeader();
             this.initAside();
             this.initPageStickyPortlet();
-
-            // Non functional links notice(can be removed in production)
-            $('#kt_aside_menu, #kt_header_menu').on('click', '.kt-menu__link[href="#"]', function() {
-                if(location.hostname.match('keenthemes.com')) {
-                    swal.fire("You have clicked on a dummy link!", "To browse the theme features please refer to the header menu.", "warning");
-                } else {
-                    swal.fire("You have clicked on a dummy link!", "This demo shows only its unique layout features. <b>Keen's</b> all available features can be re-used in this and any other demos by refering to <b>the default demo</b>.", "warning");
-                }
-            });
+            this.initCloseMessages();
         },
 
         initHeader: function() {
@@ -9795,7 +9787,13 @@ var KTLayout = function() {
 
         getContentHeight: function() {
 			return getContentHeight();
-		}
+		},
+
+        initCloseMessages: function () {
+            $(".message-button button").click(function() {
+                $(this).parent().parent().fadeOut(800);
+            });
+        }
     };
 }();
 

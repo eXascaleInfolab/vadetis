@@ -1,15 +1,18 @@
-{% if messages %}{% regroup messages|dictsort:"level_tag" by level_tag as message_list  %}
-{% for level in message_list %}
-<div class="messages messages-{{ level.grouper }}">
-    {% if level.list|length > 1 %}
-    <ul class="messages_list">
-        {% for message in level.list %}
-        <li class="messages_item">{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    {{ level.list|first }}
-    {% endif %}
-</div>
-{% endfor %}
+{% if messages %}{% regroup messages|dictsort:"level_tag" by level_tag as message_list %}
+    {% for level in message_list %}
+        <div class="messages messages-{{ level.grouper }}">
+            <div class="message-inner">
+                {% if level.list|length > 1 %}
+                    <ul class="messages_list">
+                        {% for message in level.list %}
+                            <li class="messages_item">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    {{ level.list|first }}
+                {% endif %}
+            </div>
+            <div class="message-button"><button id="messages-{{ level.grouper }}-close" class="close btn-msg-close"><i class="mdi mdi-18px mdi-close"></i></button></div>
+        </div>
+    {% endfor %}
 {% endif %}
