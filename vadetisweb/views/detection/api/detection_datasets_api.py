@@ -1,6 +1,8 @@
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework import viewsets
 
+from django.db.models import Q
+
 from vadetisweb.models import DataSet
 from vadetisweb.parameters import REAL_WORLD, SYNTHETIC
 from vadetisweb.serializers import DetectionDatasetDataTablesSerializer
@@ -15,7 +17,8 @@ class DetectionSyntheticDatasetDataTableViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = self.queryset
-        query_set = queryset.filter(type=SYNTHETIC, public=True, training_data=False)
+        query_set = queryset.filter(Q(type=SYNTHETIC, training_data=False),
+                                    Q(public=True) | Q(owner=self.request.user))
         return query_set
 
     def get_permissions(self):
@@ -39,7 +42,8 @@ class DetectionRealWorldDatasetDataTableViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = self.queryset
-        query_set = queryset.filter(type=REAL_WORLD, public=True, training_data=False)
+        query_set = queryset.filter(Q(type=REAL_WORLD, training_data=False),
+                                    Q(public=True) | Q(owner=self.request.user))
         return query_set
 
     def get_permissions(self):
