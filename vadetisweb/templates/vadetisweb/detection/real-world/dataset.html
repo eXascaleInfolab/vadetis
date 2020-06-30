@@ -182,7 +182,7 @@
                     </div>
                 </div>
                 <div class="kt-portlet__body kt-portlet__body--fit">
-                    {% url 'vadetisweb:injection_form' dataset_id=dataset.id as injection_url %}
+                    {% url 'vadetisweb:injection_anomaly' dataset_id=dataset.id as injection_url %}
                     {% include 'vadetisweb/parts/forms/serializer_variable_form.html' with formid="anomaly_injection_form" url=injection_url form_serializer=injection_serializer submit_label="Inject" %}
                 </div>
             </div>

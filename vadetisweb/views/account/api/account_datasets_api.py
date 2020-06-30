@@ -82,7 +82,7 @@ class AccountDatasetUpdate(APIView):
     def post(self, request, dataset_id):
         try:
             dataset = DataSet.objects.get(id=dataset_id, owner=request.user, training_data=False)
-            dataset_edit_serializer = AccountDatasetUpdateSerializer(instance=dataset, data=request.POST)
+            dataset_edit_serializer = AccountDatasetUpdateSerializer(instance=dataset, data=request.data)
 
             if dataset_edit_serializer.is_valid():
                 dataset_edit_serializer.save()
@@ -116,7 +116,7 @@ class AccountDatasetDelete(APIView):
     def post(self, request, dataset_id):
         try:
             dataset = DataSet.objects.get(id=dataset_id, owner=request.user, training_data=False)
-            dataset_delete_serializer = AccountDatasetDeleteSerializer(data=request.POST)
+            dataset_delete_serializer = AccountDatasetDeleteSerializer(data=request.data)
 
             if dataset_delete_serializer.is_valid():
                 if dataset_delete_serializer.validated_data['confirm'] is True:
@@ -157,7 +157,7 @@ class AccountTrainingDatasetUpdate(APIView):
     def post(self, request, dataset_id):
         try:
             training_dataset = DataSet.objects.get(id=dataset_id, owner=request.user, training_data=True)
-            training_dataset_edit_serializer = AccountDatasetUpdateSerializer(instance=training_dataset, data=request.POST)
+            training_dataset_edit_serializer = AccountDatasetUpdateSerializer(instance=training_dataset, data=request.data)
 
             if training_dataset_edit_serializer.is_valid():
                 training_dataset_edit_serializer.save()
@@ -191,7 +191,7 @@ class AccountTrainingDatasetDelete(APIView):
     def post(self, request, dataset_id):
         try:
             training_dataset = DataSet.objects.get(id=dataset_id, owner=request.user, training_data=True)
-            training_dataset_delete_serializer = AccountDatasetDeleteSerializer(data=request.POST)
+            training_dataset_delete_serializer = AccountDatasetDeleteSerializer(data=request.data)
 
             if training_dataset_delete_serializer.is_valid():
                 if training_dataset_delete_serializer.validated_data['confirm'] is True:

@@ -5,75 +5,52 @@ from vadetisweb.utils import stochastic_duration
 from vadetisweb.utils import next_dt, get_datasets_from_json
 from vadetisweb.parameters import ANOMALY_TYPE_EXTREME, ANOMALY_TYPE_LEVEL_SHIFT, ANOMALY_TYPE_VARIANCE, ANOMALY_TYPE_TREND
 
+
 def anomaly_injection(validated_data):
 
     df_from_json, df_class_from_json = get_datasets_from_json(validated_data['dataset_series_json'])
 
     df_inject = df_from_json.copy()
     df_inject_class = df_class_from_json.copy()
-    #time_series = dataset.timeseries_set.all()
 
     time_series = validated_data['time_series']
     anomaly_type = validated_data['anomaly_type']
-    anomaly_factor = validated_data['anomaly_factor']
+    anomaly_repetition = validated_data['anomaly_repetition']
+    anomaly_deviation = validated_data['anomaly_deviation']
+    range_start = validated_data['range_start']
+    range_end = validated_data['range_end']
 
-    normal_lower = validated_data['normal_range']['lower']
-    normal_upper = validated_data['normal_range']['upper']
-    probability = validated_data['probability']
-    anomaly_lower = validated_data['anomaly_range']['lower']
-    anomaly_upper = validated_data['anomaly_range']['upper']
+    """if anomaly_type == ANOMALY_TYPE_EXTREME:
+        inject_extreme_outliers(df_from_json, df_inject, df_inject_class, validated_data)
 
-    done = False
-    normal_start_index = 0
-    anomaly_start_index = 0
+    elif anomaly_type == ANOMALY_TYPE_LEVEL_SHIFT:
+        inject_level_shift(df_from_json, df_inject, df_inject_class, validated_data)
 
-    while done is False:
-        normal_duration = stochastic_duration(normal_lower, normal_upper)
-        anomaly_duration = stochastic_duration(anomaly_lower, anomaly_upper)
-
-        # start of next anomaly duration
-        anomaly_start_index += normal_start_index + normal_duration
-        # start of next normal duration
-        normal_start_index += anomaly_start_index + anomaly_duration
-
-        # check break
-        if len(df_from_json.index) < anomaly_start_index:
-            done = True
-        else:
-            # respect probability
-            if random.uniform(0, 1) <= probability:
-
-                if anomaly_type == ANOMALY_TYPE_EXTREME:
-                    inject_extreme_outliers(df_from_json, df_inject, df_inject_class, anomaly_start_index, normal_start_index, time_series.id, anomaly_factor)
-
-                elif anomaly_type == ANOMALY_TYPE_LEVEL_SHIFT:
-                    inject_level_shift(df_from_json, df_inject, df_inject_class, anomaly_start_index, normal_start_index, time_series.id, anomaly_factor)
-
-                """elif anomaly_type == ANOMALY_TYPE_VARIANCE:
-
-                elif anomaly_type == ANOMALY_TYPE_TREND:"""
+    elif anomaly_type == ANOMALY_TYPE_VARIANCE:
 
 
+    elif anomaly_type == ANOMALY_TYPE_TREND:"""
 
-                #inject_correlated_std_deviation_anomaly(df, df_inject, df_inject_class, index, time_series.id)
 
     return df_inject, df_inject_class
 
 
-def inject_extreme_outliers(df, df_inject, df_inject_class, anomaly_start_index, normal_start_index, ts_id, factor=10):
+
+
+def deprecated_inject_extreme_outliers(df, df_inject, df_inject_class, anomaly_start_index, normal_start_index, ts_id, factor=10):
     for index, value in df.loc[df.index[anomaly_start_index:normal_start_index], ts_id].iteritems():
-        df_inject.at[index, ts_id] = extreme_outlier(df, index, ts_id, factor)
+        df_inject.at[index, ts_id] = deprecated_extreme_outlier(df, index, ts_id, factor)
         df_inject_class.at[index, ts_id] = 1
 
 
-def extreme_outlier(df, index, ts_id, factor=10):
+def deprecated_extreme_outlier(df, index, ts_id, factor=10):
     before_dt = next_dt(index, 'earlier', df.index.inferred_freq, 10)
     after_dt = next_dt(index, 'later', df.index.inferred_freq, 10)
     local_std = df.loc[before_dt:after_dt, ts_id].std(axis=0, skipna=True, level=None, ddof=0)
     return np.random.choice([-1, 1]) * factor * local_std
 
 
-def inject_level_shift(df, df_inject, df_inject_class, anomaly_start_index, normal_start_index, ts_id, factor=10):
+def deprecated_inject_level_shift(df, df_inject, df_inject_class, anomaly_start_index, normal_start_index, ts_id, factor=10):
     before_dt = next_dt(df.index[anomaly_start_index], 'earlier', df.index.inferred_freq, 10)
     after_dt = next_dt(df.index[normal_start_index], 'later', df.index.inferred_freq, 10)
     local_std = df.loc[before_dt:after_dt, ts_id].std(axis=0, skipna=True, level=None, ddof=0)

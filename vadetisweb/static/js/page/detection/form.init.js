@@ -7,10 +7,6 @@ var DatasetForm = function () {
             event.preventDefault();
             inject_replace_series(anomaly_injection_form_id, new FormData(event.target), format);
         });
-
-        IonRangeSliderInitializer.init("normal_range");
-        IonRangeSliderInitializer.init("anomaly_range");
-        IonRangeSliderInitializer.init("probability");
     }
     return {
         // public

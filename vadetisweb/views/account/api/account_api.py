@@ -75,7 +75,7 @@ class AccountSocialDisconnectUpdate(APIView):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
 
     def post(self, request):
-        social_disconnect_serializer = AccountSocialDisconnectSerializer(data=request.POST)
+        social_disconnect_serializer = AccountSocialDisconnectSerializer(data=request.data)
 
         if social_disconnect_serializer.is_valid():
             social_disconnect_serializer.save()
@@ -100,7 +100,7 @@ class AccountDelete(APIView):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
 
     def post(self, request):
-        account_delete_serializer = AccountDeleteSerializer(instance=request.user, data=request.POST)
+        account_delete_serializer = AccountDeleteSerializer(instance=request.user, data=request.data)
 
         if account_delete_serializer.is_valid():
 

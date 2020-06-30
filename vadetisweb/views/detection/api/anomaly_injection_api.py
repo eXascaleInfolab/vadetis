@@ -7,7 +7,7 @@ from rest_framework.settings import api_settings
 from drf_yasg.utils import swagger_auto_schema
 
 from django.contrib import messages
-from django.shortcuts import redirect
+from django.shortcuts import reverse
 from django.db.models import Q
 
 from vadetisweb.models import DataSet
@@ -17,25 +17,26 @@ from vadetisweb.utils import dataset_to_json, strToBool, get_settings, json_mess
 from vadetisweb.factory import *
 
 
-class AnomalyInjectionFormView(APIView):
+class AnomalyInjectionView(APIView):
     """
     Request anomaly injection
     """
     renderer_classes = [JSONRenderer]
 
     @swagger_auto_schema(request_body=AnomalyInjectionSerializer)
-    def post(self, request, dataset_id, format=None):
+    def post(self, request, dataset_id):
 
         dataset = DataSet.objects.filter(Q(id=dataset_id),
                                          q_public_or_user_is_owner(request)).first()
         if dataset is None:
             messages.error(request, dataset_not_found_msg(dataset_id))
-            return redirect('vadetisweb:index')
-
+            response = Response({}, status=status.HTTP_404_NOT_FOUND)
+            response['Location'] = reverse('vadetisweb:index')
+            return response
 
         serializer = AnomalyInjectionSerializer(context={'dataset_selected': dataset_id, 'request' : request }, data=request.data)
 
-        if serializer.is_valid() and request.accepted_renderer.format == 'json':  # requested format is json
+        if serializer.is_valid():
             show_anomaly = strToBool(request.query_params.get('show_anomaly', 'true'))
             data = {}
             settings = get_settings(request)
@@ -45,14 +46,6 @@ class AnomalyInjectionFormView(APIView):
             return Response(data, status=status.HTTP_200_OK)
 
         else:
-            message = "Form was invalid"
-            if request.accepted_renderer.format == 'json':  # requested format is json
-                json_messages = []
-                json_message_utils.error(json_messages, message)
-                return response_invalid_form(serializer, json_messages)
-
-            else:  # or render html template
-                messages.error(request, message)
-                return Response({
-                    'injection_serializer': serializer,
-                }, status=status.HTTP_400_BAD_REQUEST)
+            json_messages = []
+            json_message_utils.error(json_messages, 'Form was invalid')
+            return response_invalid_form(serializer, json_messages)

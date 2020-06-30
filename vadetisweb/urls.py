@@ -33,7 +33,7 @@ apipatterns = [
     path('api/detection/<int:dataset_id>/cluster', views.AnomalyDetectionCluster.as_view(), name='detection_cluster'),
     path('api/detection/<int:dataset_id>/svm', views.AnomalyDetectionSVM.as_view(), name='detection_svm'),
     path('api/detection/<int:dataset_id>/isolationforest', views.AnomalyDetectionIsolationForest.as_view(), name='detection_isolation_forest'),
-    path('api/injection/<int:dataset_id>/', views.AnomalyInjectionFormView.as_view(), name='injection_form'),
+    path('api/injection/<int:dataset_id>/', views.AnomalyInjectionView.as_view(), name='injection_anomaly'),
 
     path('api/dataset/<int:dataset_id>/', views.DatasetJson.as_view(), name='dataset_json'),
     path('api/dataset/<int:dataset_id>/update/', views.AccountDatasetUpdate.as_view(), name='account_dataset_update'),
