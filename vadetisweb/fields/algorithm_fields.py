@@ -113,17 +113,19 @@ class MaximizeScoreChoiceField(serializers.ChoiceField):
 
 class RangeStartHiddenIntegerField(serializers.IntegerField):
     def __init__(self, **kwargs):
+        html_id = kwargs.pop('html_id', 'rangeStart')
         super(RangeStartHiddenIntegerField, self).__init__(**kwargs)
         self.required = True
         self.min_value = 0
         self.style = {'template': 'vadetisweb/parts/input/hidden_input.html',
-                      'id': 'rangeStart'}
+                      'id': html_id }
 
 
 class RangeEndHiddenIntegerField(serializers.IntegerField):
     def __init__(self, **kwargs):
+        html_id = kwargs.pop('html_id', 'rangeEnd')
         super(RangeEndHiddenIntegerField, self).__init__(**kwargs)
         self.required = True
         self.min_value = 0
         self.style = {'template': 'vadetisweb/parts/input/hidden_input.html',
-                      'id': 'rangeEnd'}
+                      'id': html_id }

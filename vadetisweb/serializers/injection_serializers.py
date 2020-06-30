@@ -42,5 +42,8 @@ class AnomalyInjectionSerializer(serializers.Serializer):
                                                 style={'template': 'vadetisweb/parts/input/select_input.html',
                                                        'help_text_in_popover': True})
 
+    range_start = RangeStartHiddenIntegerField(html_id='rangeStartInjection')
+    range_end = RangeEndHiddenIntegerField(html_id='rangeEndInjection')
+
     def __init__(self, *args, **kwargs):
         super(AnomalyInjectionSerializer, self).__init__(*args, **kwargs)

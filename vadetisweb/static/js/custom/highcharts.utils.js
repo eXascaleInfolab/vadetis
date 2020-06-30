@@ -122,7 +122,7 @@ function registerAnomalyDetectionForm(form_id) {
         clearMessages();
 
         var highchart = $('#highcharts_container').highcharts();
-        updateTimeRange(highchart, form_id);
+        updateTimeRangeBySelection(highchart, form_id, "rangeStart", "rangeEnd");
 
         var formData = new FormData(this), dataset_series_json = getDatasetSeriesJson(highchart), csrftoken = Cookies.get('csrftoken');
         formData.append('dataset_series_json', JSON.stringify(dataset_series_json));
@@ -201,11 +201,9 @@ function _objectWithoutProperties(obj, keys) {
     return target;
 }
 
-function updateTimeRange(highchart, form_id) {
+function updateTimeRangeBySelection(highchart, form_id, rangeStartId, rangeEndId) {
     var timeRangeSelector = $('#timeRange');
     if (timeRangeSelector.length > 0) {
-        var rangeStartId = "rangeStart";
-        var rangeEndId = "rangeEnd";
         var rangeStartSelector = $('#' + rangeStartId);
         var rangeEndSelector = $('#' + rangeEndId);
         var range = _getExtremesForDetection(highchart, timeRangeSelector);
@@ -213,6 +211,17 @@ function updateTimeRange(highchart, form_id) {
         _addOrReplaceRangeInput(form_id, rangeStartSelector, rangeStartId, "range_start", range.min);
         _addOrReplaceRangeInput(form_id, rangeEndSelector, rangeEndId, "range_end", range.max);
     }
+}
+
+function updateTimeRange(highchart, form_id, rangeStartId, rangeEndId) {
+
+    var rangeStartSelector = $('#' + rangeStartId);
+    var rangeEndSelector = $('#' + rangeEndId);
+    var extremes_x = highchart.xAxis[0].getExtremes();
+    var range = { min : Math.round(extremes_x.dataMin), max : Math.round(extremes_x.dataMax) }
+
+    _addOrReplaceRangeInput(form_id, rangeStartSelector, rangeStartId, "range_start", range.min);
+    _addOrReplaceRangeInput(form_id, rangeEndSelector, rangeEndId, "range_end", range.max);
 }
 
 function _getExtremesForDetection(highchart, timeRangeSelector) {
@@ -418,45 +427,6 @@ function downloadDataset(highchart, url, type, callback) {
             printMessages([{'message': "Request failed"}], "error-request");
             handleMessages(data);
             callback();
-        }
-    });
-}
-
-function inject_replace_series(form_id, formData, format) {
-    clearFormErrors(form_id);
-    clearMessages();
-    var highchart = $('#highcharts_container').highcharts();
-    var form_selector = $("#" + form_id), csrftoken = Cookies.get('csrftoken'), dataset_series_json = getDatasetSeriesJson(highchart);
-
-    formData.append('dataset_series_json', JSON.stringify(dataset_series_json));
-    /*formData.append('normal_range', JSON.stringify(ionSliderRangeValue("normal_range")));
-    formData.append('anomaly_range', JSON.stringify(ionSliderRangeValue("anomaly_range")));*/
-
-    highchart.showLoading();
-
-    $.ajax({
-        beforeSend: function (xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            }
-        },
-        url: form_selector.attr('action') +'?format=' + format,
-        data: formData,
-        type: form_selector.attr('method'),
-        enctype: form_selector.attr('enctype'),
-        processData: false,
-        contentType: false,
-        success: function (data, status, xhr) {
-            handleMessages(data);
-
-            highchart.hideLoading();
-            var series_data_json = data['series'];
-            setSeriesData(highchart, series_data_json);
-        },
-        error: function (data, status, xhr) {
-            printMessages([{'message': "Request failed"}], "error-request");
-            handleMessages(data);
-            highchart.hideLoading();
         }
     });
 }
