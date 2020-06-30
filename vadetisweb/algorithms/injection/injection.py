@@ -2,7 +2,7 @@ import random
 import numpy as np
 
 from vadetisweb.utils import stochastic_duration
-from vadetisweb.utils import next_dt, get_datasets_from_json
+from vadetisweb.utils import next_earlier_dt, next_later_dt, get_datasets_from_json
 from vadetisweb.parameters import ANOMALY_TYPE_EXTREME, ANOMALY_TYPE_LEVEL_SHIFT, ANOMALY_TYPE_VARIANCE, ANOMALY_TYPE_TREND
 
 
@@ -24,7 +24,7 @@ def anomaly_injection(validated_data):
         inject_extreme_outliers(df_from_json, df_inject, df_inject_class, validated_data)
 
     elif anomaly_type == ANOMALY_TYPE_LEVEL_SHIFT:
-        inject_level_shift(df_from_json, df_inject, df_inject_class, validated_data)
+
 
     elif anomaly_type == ANOMALY_TYPE_VARIANCE:
 
@@ -44,15 +44,15 @@ def deprecated_inject_extreme_outliers(df, df_inject, df_inject_class, anomaly_s
 
 
 def deprecated_extreme_outlier(df, index, ts_id, factor=10):
-    before_dt = next_dt(index, 'earlier', df.index.inferred_freq, 10)
-    after_dt = next_dt(index, 'later', df.index.inferred_freq, 10)
+    before_dt = next_earlier_dt(index, df.index.inferred_freq, 10)
+    after_dt = next_later_dt(index, df.index.inferred_freq, 10)
     local_std = df.loc[before_dt:after_dt, ts_id].std(axis=0, skipna=True, level=None, ddof=0)
     return np.random.choice([-1, 1]) * factor * local_std
 
 
 def deprecated_inject_level_shift(df, df_inject, df_inject_class, anomaly_start_index, normal_start_index, ts_id, factor=10):
-    before_dt = next_dt(df.index[anomaly_start_index], 'earlier', df.index.inferred_freq, 10)
-    after_dt = next_dt(df.index[normal_start_index], 'later', df.index.inferred_freq, 10)
+    before_dt = next_earlier_dt(df.index[anomaly_start_index], df.index.inferred_freq, 10)
+    after_dt = next_later_dt(df.index[normal_start_index], df.index.inferred_freq, 10)
     local_std = df.loc[before_dt:after_dt, ts_id].std(axis=0, skipna=True, level=None, ddof=0)
 
     multiplier = np.random.choice([-1, 1])

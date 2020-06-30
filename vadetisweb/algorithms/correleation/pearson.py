@@ -1,7 +1,12 @@
-import numpy as np
+import numpy as np, pandas as pd
 import datetime
 
+from vadetisweb.utils import next_earlier_dt
 from vadetisweb.algorithms.helper_functions import _sum_of_squares
+
+from ..correleation.dtw import dtw
+from ..helper_functions import _sequences_from_path
+
 
 #########################################################
 # PEARSON
@@ -155,7 +160,7 @@ def dtw_pearson(df_z, station_id, distance, window_size=2, absolute_values=True)
     #iterate over all time frames
     for index_dt in index_dts:
         win_end_index_dt = pd.to_datetime(index_dt)
-        win_start_index_dt = next_dt(win_end_index_dt, 'earlier', df_z.index.inferred_freq, past_size)
+        win_start_index_dt = next_earlier_dt(win_end_index_dt, df_z.index.inferred_freq, past_size)
 
         df_z_part = df_z.loc[win_start_index_dt : win_end_index_dt]
 

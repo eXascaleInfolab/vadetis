@@ -251,24 +251,24 @@ def _subtract(x, y):
     return x - y
 
 
-def next_dt(dt, type, inferred_freq, size=1):
+def next_dt(dt, f, inferred_freq, size=1):
     """
     Provides a later or earlier datetime from the given datetime that corresponds
     to a certain frequency and size.
 
     :param dt: a datetime object
-    :param type: either 'later' or 'earlier'
+    :param f: a function to either subtract or add two datetime object
     :param freq: the frequency for the timedelta
     :param size: the size of the window (that is applied with the frequency)
     :return: the next later or earlier datetime
     """
 
-    if type == 'later':
+    """if type == 'later':
         f = lambda x, y: _add(x,y)
     elif type == 'earlier':
-        f = lambda  x, y: _subtract(x,y)
+        f = lambda x, y: _subtract(x,y)
     else:
-        raise ValueError('Wrong type provided')
+        raise ValueError('Wrong type provided')"""
 
     # some freqs require relative offset, others can be computed with timedelta
     if inferred_freq.endswith(('MS', 'AS', 'B', 'W', 'M', 'SM', 'BM', 'CBM', 'SMS', 'BMS', 'CBMS', 'Q', 'BQ', 'QS', 'BQS', 'A', 'Y', 'BA', 'BY', 'YS', 'BAS', 'BYS', 'BH')):
@@ -277,6 +277,14 @@ def next_dt(dt, type, inferred_freq, size=1):
         next_dt = f(dt, pd.to_timedelta(to_offset(inferred_freq)) * size)
 
     return next_dt
+
+
+def next_earlier_dt(dt, inferred_freq, size=1):
+    return next_dt(dt, lambda x, y: _subtract(x,y), inferred_freq, size)
+
+
+def next_later_dt(dt, inferred_freq, size=1):
+    return next_dt(dt, lambda x, y: _add(x,y), inferred_freq, size)
 
 
 def zscore_for_column(column, index, skipna=True):
@@ -337,7 +345,7 @@ def get_dataframes_for_ranges(df, df_class, conf):
 
             if range_start is not None and range_end is not None:
                 # todo instead of date, may locate by number of index steps?
-                range_start_offset = next_dt(range_start, 'earlier', df.index.inferred_freq, window_size - 1)
+                range_start_offset = next_earlier_dt(range_start, df.index.inferred_freq, window_size - 1)
 
                 df = df.loc[range_start_offset:range_end]
                 df_class = df_class[range_start_offset:range_end]
