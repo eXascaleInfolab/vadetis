@@ -2,13 +2,14 @@ from rest_framework import serializers
 from allauth.account import app_settings
 from allauth.account.forms import get_adapter as get_account_adapter, filter_users_by_email
 from allauth.socialaccount.models import SocialAccount
+from allauth.utils import get_username_max_length
 
 from django.core.exceptions import ValidationError
 from django.contrib.auth import password_validation
 from django.core.validators import MaxLengthValidator, MaxValueValidator, MinValueValidator, RegexValidator
 
 from vadetisweb.models import UserSetting, User
-
+from vadetisweb.validators import username_validators, email_validators, alphabetic_validator
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -75,16 +76,22 @@ class UserSettingSerializer(serializers.ModelSerializer):
 
 class AccountUserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(label='Username', required=True,
+                                     min_length=app_settings.USERNAME_MIN_LENGTH,
+                                     max_length=get_username_max_length(),
+                                     validators=username_validators,
                                      help_text='Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.',
                                      style={'template': 'vadetisweb/parts/input/text_input.html'})
 
     first_name = serializers.CharField(label='First Name', required=False,
+                                       validators=[alphabetic_validator],
                                        style={'template': 'vadetisweb/parts/input/text_input.html'})
 
     last_name = serializers.CharField(label='Last Name', required=False,
+                                      validators=[alphabetic_validator],
                                       style={'template': 'vadetisweb/parts/input/text_input.html'})
 
     email = serializers.EmailField(label='E-Mail Address', required=True,
+                                   validators=email_validators,
                                    style={'template': 'vadetisweb/parts/input/text_input.html'})
 
     def validate_email(self, value):
