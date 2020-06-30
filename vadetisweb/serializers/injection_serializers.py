@@ -5,13 +5,6 @@ from vadetisweb.parameters import ANOMALY_INJECTION_TYPES, ANOMALY_INJECTION_DEV
 
 
 class AnomalyInjectionSerializer(serializers.Serializer):
-    """
-    The stochastic duration of a normal event or an anomalous event is specified by a lower bound and an
-    upper bound. We randomly choose a duration from the specified range whenever a normal or an anomalous event occurs.
-
-    The probability of an anomalous event specifies how likely an anomalous event may occur. The
-    probability is determined by a nominator and a denominator.
-    """
 
     dataset = DatasetField(default='overridden')
     dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
