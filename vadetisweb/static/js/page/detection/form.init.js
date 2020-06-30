@@ -35,11 +35,13 @@ var DatasetDetectionForm = function () {
                     highchart.hideLoading();
                     var series_data_json = data['series'];
                     setSeriesData(highchart, series_data_json);
+                    $(":submit").attr("disabled", false);
                 },
                 error: function (data, status, xhr) {
                     printMessages([{'message': "Request failed"}], "error-request");
                     handleMessages(data);
                     highchart.hideLoading();
+                    $(":submit").attr("disabled", false);
                 }
             });
         });
