@@ -208,7 +208,7 @@
     <script type="text/javascript">
         jQuery(document).ready(function () {
             DatasetPage.init("{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_download_file' %}", {{ selected_button }});
-            DatasetDetectionForm.init("anomaly_injection_form");
+            DatasetDetectionForm.init("anomaly_injection_form", "detectionOnChange");
         });
     </script>
 {% endblock %}

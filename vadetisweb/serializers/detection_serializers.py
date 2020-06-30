@@ -9,7 +9,8 @@ class AlgorithmSerializer(serializers.Serializer):
     algorithm = serializers.ChoiceField(choices=ANOMALY_DETECTION_ALGORITHMS_EMPTY,
                                         required=True,
                                         help_text='The type of anomaly detection algorithm',
-                                        style={'template': 'vadetisweb/parts/input/select_input_onchange_submit.html',
+                                        style={'template': 'vadetisweb/parts/input/select_input.html',
+                                               'id' : 'detectionOnChange',
                                                'help_text_in_popover': True})
 
     def __init__(self, *args, **kwargs):
