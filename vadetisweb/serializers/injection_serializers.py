@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from vadetisweb.fields import *
-from vadetisweb.parameters import ANOMALY_INJECTION_TYPES, ANOMALY_INJECTION_DEVIATIONS, ANOMALY_INJECTION_DEVIATION_MEDIUM
+from vadetisweb.parameters import ANOMALY_INJECTION_TYPES, ANOMALY_INJECTION_DEVIATIONS, ANOMALY_INJECTION_DEVIATION_MEDIUM, ANOMALY_INJECTION_REPETITIONS, ANOMALY_INJECTION_REPEAT_SINGLE
 
 
 class AnomalyInjectionSerializer(serializers.Serializer):
@@ -33,6 +33,14 @@ class AnomalyInjectionSerializer(serializers.Serializer):
                                            style={'template': 'vadetisweb/parts/input/select_input.html',
                                                   'help_text_in_popover': True})
 
+    anomaly_repetition = serializers.ChoiceField(label='Insertion',
+                                                allow_blank=False,
+                                                choices=ANOMALY_INJECTION_REPETITIONS,
+                                                default=ANOMALY_INJECTION_REPEAT_SINGLE,
+                                                help_text='Anomalies are inserted into the selected area of the chart. Anomalies can be inserted individually or in intervals.',
+                                                style={'template': 'vadetisweb/parts/input/select_input.html',
+                                                       'help_text_in_popover': True})
+
     anomaly_deviation = serializers.ChoiceField(label='Deviation',
                                                 allow_blank=False,
                                                 choices=ANOMALY_INJECTION_DEVIATIONS,
@@ -40,20 +48,6 @@ class AnomalyInjectionSerializer(serializers.Serializer):
                                                 help_text='The grade of deviation for anomalies from the normal data.',
                                                 style={'template': 'vadetisweb/parts/input/select_input.html',
                                                        'help_text_in_popover': True})
-
-
-    probability = serializers.FloatField(label='Probability', initial=0.5, min_value=0, max_value=1,
-                                         required=True,
-                                         help_text='The probability for an anomalous event.',
-                                         style={'template': 'vadetisweb/parts/input/ion_slider_input.html',
-                                                'id': 'probability',
-                                                'data_type': "single",
-                                                'data_grid': "true",
-                                                'data_min': "0",
-                                                'data_max': "1",
-                                                'data_from': "0.5",
-                                                'data_step': "0.1",
-                                                'help_text_in_popover': True })
 
     def __init__(self, *args, **kwargs):
         super(AnomalyInjectionSerializer, self).__init__(*args, **kwargs)
