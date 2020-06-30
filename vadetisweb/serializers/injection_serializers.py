@@ -27,7 +27,7 @@ class AnomalyInjectionSerializer(serializers.Serializer):
                                                   'help_text_in_popover': True})
 
     anomaly_repetition = serializers.ChoiceField(label='Insertion',
-                                                allow_blank=False,
+                                                required=False,
                                                 choices=ANOMALY_INJECTION_REPETITIONS,
                                                 default=ANOMALY_INJECTION_REPEAT_SINGLE,
                                                 help_text='Anomalies are inserted into the selected area of the chart. Anomalies can be inserted individually or in intervals.',
@@ -35,7 +35,7 @@ class AnomalyInjectionSerializer(serializers.Serializer):
                                                        'help_text_in_popover': True})
 
     anomaly_deviation = serializers.ChoiceField(label='Deviation',
-                                                allow_blank=False,
+                                                required=False,
                                                 choices=ANOMALY_INJECTION_DEVIATIONS,
                                                 default=ANOMALY_INJECTION_DEVIATION_MEDIUM,
                                                 help_text='The grade of deviation for anomalies from the normal data.',
