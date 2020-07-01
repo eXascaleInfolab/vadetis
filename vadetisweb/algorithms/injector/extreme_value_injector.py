@@ -47,6 +47,10 @@ class ExtremeValueInjector(OutlierInjector):
 
 
     def next_injection_index(self):
+        """
+        Is only safe to be called after valid_time_range
+        :return: next index to insert anomaly
+        """
         ts_id = self.get_time_series().id
         inject_at_index = random.choice(self.get_range_indexes_dt())
         if self.df_class.loc[inject_at_index, ts_id] == True:
