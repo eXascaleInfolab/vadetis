@@ -1,17 +1,17 @@
 import random
 import numpy as np
 
+from .injector.extreme_value_injector import ExtremeValueInjector
+
 from vadetisweb.utils import stochastic_duration
 from vadetisweb.utils import next_earlier_dt, next_later_dt, get_datasets_from_json
 from vadetisweb.parameters import ANOMALY_TYPE_EXTREME, ANOMALY_TYPE_LEVEL_SHIFT, ANOMALY_TYPE_VARIANCE, ANOMALY_TYPE_TREND
 
-
 def anomaly_injection(validated_data):
 
-    df_from_json, df_class_from_json = get_datasets_from_json(validated_data['dataset_series_json'])
-
+    """df_from_json, df_class_from_json = get_datasets_from_json(validated_data['dataset_series_json'])
     df_inject = df_from_json.copy()
-    df_inject_class = df_class_from_json.copy()
+    df_inject_class = df_class_from_json.copy()"""
 
     time_series = validated_data['time_series']
     anomaly_type = validated_data['anomaly_type']
@@ -19,6 +19,9 @@ def anomaly_injection(validated_data):
     anomaly_deviation = validated_data['anomaly_deviation']
     range_start = validated_data['range_start']
     range_end = validated_data['range_end']
+
+    extreme_value_injector = ExtremeValueInjector(validated_data)
+    extreme_value_injector.inject_outliers()
 
     """if anomaly_type == ANOMALY_TYPE_EXTREME:
         inject_extreme_outliers(df_from_json, df_inject, df_inject_class, validated_data)
@@ -32,7 +35,7 @@ def anomaly_injection(validated_data):
     elif anomaly_type == ANOMALY_TYPE_TREND:"""
 
 
-    return df_inject, df_inject_class
+    return extreme_value_injector.get_injection_datasets()
 
 
 

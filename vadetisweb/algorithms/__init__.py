@@ -10,4 +10,5 @@ from .isolation_forest import *
 from .robust_pca import *
 from .perform import *
 
-from .injection.injection import *
+from .injector.extreme_value_injector import *
+from .injection import *

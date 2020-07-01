@@ -85,7 +85,7 @@ function updateTimeRange(highchart, form_id, rangeStartId, rangeEndId) {
     var rangeStartSelector = $('#' + rangeStartId);
     var rangeEndSelector = $('#' + rangeEndId);
     var extremes_x = highchart.xAxis[0].getExtremes();
-    var range = { min : Math.round(extremes_x.dataMin), max : Math.round(extremes_x.dataMax) }
+    var range = { min : Math.round(extremes_x.min), max : Math.round(extremes_x.max) }
 
     _addOrReplaceRangeInput(form_id, rangeStartSelector, rangeStartId, "range_start", range.min);
     _addOrReplaceRangeInput(form_id, rangeEndSelector, rangeEndId, "range_end", range.max);
