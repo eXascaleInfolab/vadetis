@@ -68,5 +68,9 @@ class OutlierInjector:
     def next_injection_index(self):
         return NotImplementedError
 
-    def inject_outliers(self):
+    def inject(self):
         return NotImplementedError
+
+    def inject_outliers(self):
+        if self.valid_time_range():
+            self.inject()
