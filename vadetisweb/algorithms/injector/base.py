@@ -3,7 +3,7 @@ import logging
 
 from vadetisweb.parameters import *
 from vadetisweb.utils import get_datasets_from_json, unix_time_millis_to_dt
-from vadetisweb.factory import warning_msg_injection_all_anomalies
+from vadetisweb.factory import msg_injection_all_anomalies
 
 class OutlierInjector:
 
@@ -64,6 +64,9 @@ class OutlierInjector:
         split = np.array_split(range, n)
         return split
 
+    def get_split_ranges(self):
+        return self.split(self.df.loc[self.get_range_start_dt():self.get_range_end_dt()].index, self._number_of_splits())
+
     def valid_time_range(self, range_indexes):
         """
         If a time range for a time series consists only of anomalies, its not valid, as there is not possibility to inject an anomaly
@@ -71,7 +74,7 @@ class OutlierInjector:
         """
         ts_id = self.get_time_series().id
         if self.df_class.loc[range_indexes, ts_id].eq(True).all():
-            logging.warning(warning_msg_injection_all_anomalies())
+            logging.warning(msg_injection_all_anomalies())
             return False
         else:
             return True
@@ -87,6 +90,5 @@ class OutlierInjector:
 
     def inject_outliers(self):
         if self.valid_time_range(range_indexes=self.get_range_indexes_dt()):
-            self.splitted_ranges = self.split(self.df.loc[self.get_range_start_dt():self.get_range_end_dt()].index, self._number_of_splits())
-            for range in self.splitted_ranges:
+            for range in self.get_split_ranges():
                 self.inject(range)

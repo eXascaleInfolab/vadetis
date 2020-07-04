@@ -1,13 +1,15 @@
 import numpy as np
+import pandas as pd
 import logging
 
 from .base import OutlierInjector
 
 from vadetisweb.parameters import *
-from vadetisweb.factory import msg_injection_all_anomalies
 from vadetisweb.utils import next_earlier_dt, next_later_dt
+from vadetisweb.factory import msg_injection_all_anomalies
 
-class ExtremeValueInjector(OutlierInjector):
+
+class LevelShiftInjector(OutlierInjector):
 
     def __init__(self, validated_data):
         super().__init__(validated_data)
@@ -28,7 +30,6 @@ class ExtremeValueInjector(OutlierInjector):
 
         else:
             raise ValueError
-
 
     def get_value(self, inject_at_index, ts_id):
         """
@@ -62,14 +63,14 @@ class ExtremeValueInjector(OutlierInjector):
         return np.random.choice([-1, 1]) * self.get_factor() * local_std
 
 
-    def next_injection_index(self, range):
+    def next_injection_index(self, range_index):
         """
-        :param range the range in which the anomaly is injected
+        :param range_index the range in which the anomaly is injected
         :return: next index to insert anomaly
         """
-        if self.valid_time_range(range_indexes=range):
+        if self.valid_time_range(range_indexes=range_index):
             ts_id = self.get_time_series().id
-            df_normal_part = self.df_class.loc[(self.df_class.index.isin(range)) & (self.df_class[ts_id] == False), ts_id]
+            df_normal_part = self.df_class.loc[(self.df_class.index.isin(range_index)) & (self.df_class[ts_id] == False), ts_id]
             normal_indexes = df_normal_part.index
             inject_at_index = np.random.choice(normal_indexes)
             return inject_at_index
@@ -77,9 +78,20 @@ class ExtremeValueInjector(OutlierInjector):
         return None
 
 
-    def inject(self, range):
+    def get_split_ranges(self):
+        """
+        For level shit we consider only every second range in order to have some space between subsequent level shifts
+        :return: the ranges to insert the anomaly into
+        """
+        split_ranges = super().get_split_ranges()
+        return split_ranges[1:len(split_ranges):2] # numpy [start:stop:step]
+
+
+    def inject(self, range_index):
         ts_id = self.get_time_series().id
-        inject_at_index = self.next_injection_index(range)
+        inject_at_index = self.next_injection_index(range_index)
         if inject_at_index is not None:
-            self.df_inject.at[inject_at_index, ts_id] += self.get_value(inject_at_index, ts_id)
-            self.df_inject_class.at[inject_at_index, ts_id] = 1
+            upper_boundary = min(next_later_dt(inject_at_index, self.df.index.inferred_freq, 10), self.df.index.max())
+            level_shit_indexes = pd.date_range(inject_at_index, upper_boundary, freq=self.df.index.inferred_freq)
+            self.df_inject.loc[level_shit_indexes, ts_id] += self.get_value(inject_at_index, ts_id)
+            self.df_inject_class.loc[level_shit_indexes, ts_id] = 1

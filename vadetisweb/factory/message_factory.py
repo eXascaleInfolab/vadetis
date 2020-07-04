@@ -19,5 +19,5 @@ def dataset_removed_msg(dataset_title):
     return 'Dataset "%s" removed' % dataset_title
 
 
-def warning_msg_injection_all_anomalies():
+def msg_injection_all_anomalies():
     return "Cannot compute an anomaly in a range that contains only anomalies"
