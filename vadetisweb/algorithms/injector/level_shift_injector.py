@@ -84,7 +84,7 @@ class LevelShiftInjector(OutlierInjector):
         :return: the ranges to insert the anomaly into
         """
         split_ranges = super().get_split_ranges()
-        return split_ranges[1:len(split_ranges):2] # numpy [start:stop:step]
+        return split_ranges[1:len(split_ranges):2] if len(split_ranges) > 1 else split_ranges # numpy [start:stop:step]
 
 
     def inject(self, range_index):
