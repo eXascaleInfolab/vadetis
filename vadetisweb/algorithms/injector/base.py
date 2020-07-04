@@ -38,6 +38,37 @@ class OutlierInjector:
     def get_range_indexes_dt(self):
         return self.df.loc[self.get_range_start_dt():self.get_range_end_dt()].index.tolist()
 
+    def get_factor(self):
+        anomaly_deviation = self.validated_data['anomaly_deviation']
+        if anomaly_deviation == ANOMALY_INJECTION_DEVIATION_SMALL:
+            return 8
+
+        elif anomaly_deviation == ANOMALY_INJECTION_DEVIATION_MEDIUM:
+            return 16
+
+        elif anomaly_deviation == ANOMALY_INJECTION_DEVIATION_HIGH:
+            return 24
+
+        elif anomaly_deviation == ANOMALY_INJECTION_DEVIATION_RANDOM:
+            return np.random.choice([8, 16, 24])
+
+        else:
+            raise ValueError
+
+    def next_injection_index(self, range_index):
+        """
+        :param range_index the range in which the anomaly is injected
+        :return: next index to insert anomaly
+        """
+        if self.valid_time_range(range_indexes=range_index):
+            ts_id = self.get_time_series().id
+            df_normal_part = self.df_class.loc[(self.df_class.index.isin(range_index)) & (self.df_class[ts_id] == False), ts_id]
+            normal_indexes = df_normal_part.index
+            inject_at_index = np.random.choice(normal_indexes)
+            return inject_at_index
+
+        return None
+
     def _number_of_splits(self):
         anomaly_deviation = self.validated_data['anomaly_repetition']
         if anomaly_deviation == ANOMALY_INJECTION_REPEAT_INTERVAL_LOW:
@@ -78,12 +109,6 @@ class OutlierInjector:
             return False
         else:
             return True
-
-    def get_factor(self):
-        return NotImplementedError
-
-    def next_injection_index(self, range):
-        return NotImplementedError
 
     def inject(self, range):
         return NotImplementedError

@@ -12,24 +12,6 @@ class ExtremeValueInjector(OutlierInjector):
     def __init__(self, validated_data):
         super().__init__(validated_data)
 
-    def get_factor(self):
-        anomaly_deviation = self.validated_data['anomaly_deviation']
-        if anomaly_deviation == ANOMALY_INJECTION_DEVIATION_SMALL:
-            return 8
-
-        elif anomaly_deviation == ANOMALY_INJECTION_DEVIATION_MEDIUM:
-            return 16
-
-        elif anomaly_deviation == ANOMALY_INJECTION_DEVIATION_HIGH:
-            return 24
-
-        elif anomaly_deviation == ANOMALY_INJECTION_DEVIATION_RANDOM:
-            return np.random.choice([8, 16, 24])
-
-        else:
-            raise ValueError
-
-
     def get_value(self, inject_at_index, ts_id):
         """
         :param inject_at_index: the index to inject the anomaly at
@@ -60,21 +42,6 @@ class ExtremeValueInjector(OutlierInjector):
 
         local_std = injection_series.std(axis=0, skipna=True, level=None, ddof=0)
         return np.random.choice([-1, 1]) * self.get_factor() * local_std
-
-
-    def next_injection_index(self, range):
-        """
-        :param range the range in which the anomaly is injected
-        :return: next index to insert anomaly
-        """
-        if self.valid_time_range(range_indexes=range):
-            ts_id = self.get_time_series().id
-            df_normal_part = self.df_class.loc[(self.df_class.index.isin(range)) & (self.df_class[ts_id] == False), ts_id]
-            normal_indexes = df_normal_part.index
-            inject_at_index = np.random.choice(normal_indexes)
-            return inject_at_index
-
-        return None
 
 
     def inject(self, range):
