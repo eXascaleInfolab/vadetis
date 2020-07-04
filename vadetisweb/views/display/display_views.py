@@ -5,9 +5,10 @@ from rest_framework.response import Response
 
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.db.models import Q
 
 from vadetisweb.models import DataSet
-from vadetisweb.utils import get_highcharts_range_button_preselector
+from vadetisweb.utils import get_highcharts_range_button_preselector, q_public_or_user_is_owner
 from vadetisweb.factory import dataset_not_found_msg
 from vadetisweb.parameters import SYNTHETIC, REAL_WORLD
 from vadetisweb.serializers.dataset.display_dataset_serializer import DisplayDatasetSearchSerializer
@@ -47,23 +48,19 @@ class DisplaySyntheticDataset(APIView):
     template_name = 'vadetisweb/display/synthetic/dataset.html'
 
     def get(self, request, dataset_id):
-        try:
-            dataset = DataSet.objects.filter(id=dataset_id, public=True, type=SYNTHETIC).first()
-            if dataset is None:
-                messages.error(request, dataset_not_found_msg(dataset_id))
-                return redirect('vadetisweb:display_synthetic_datasets')
-
-            selected_button = get_highcharts_range_button_preselector(dataset.frequency)
-
-            return Response({
-                'dataset': dataset,
-                'time_series_info' : {},
-                'selected_button': selected_button
-            }, status=status.HTTP_200_OK)
-
-        except DataSet.DoesNotExist:
+        dataset = DataSet.objects.filter(Q(id=dataset_id, type=SYNTHETIC),
+                                         q_public_or_user_is_owner(request)).first()
+        if dataset is None:
             messages.error(request, dataset_not_found_msg(dataset_id))
             return redirect('vadetisweb:display_synthetic_datasets')
+
+        selected_button = get_highcharts_range_button_preselector(dataset.frequency)
+
+        return Response({
+            'dataset': dataset,
+            'time_series_info' : {},
+            'selected_button': selected_button
+        }, status=status.HTTP_200_OK)
 
 
 class DisplayRealWorldDataset(APIView):
@@ -74,22 +71,19 @@ class DisplayRealWorldDataset(APIView):
     template_name = 'vadetisweb/display/real-world/dataset.html'
 
     def get(self, request, dataset_id):
-        try:
-            dataset = DataSet.objects.filter(id=dataset_id, public=True, type=REAL_WORLD).first()
-            if dataset is None:
-                messages.error(request, dataset_not_found_msg(dataset_id))
-                return redirect('vadetisweb:display_real_world_datasets')
-
-            selected_button = get_highcharts_range_button_preselector(dataset.frequency)
-
-            return Response({
-                'dataset': dataset,
-                'selected_button': selected_button
-            }, status=status.HTTP_200_OK)
-
-        except DataSet.DoesNotExist:
+        dataset = DataSet.objects.filter(Q(id=dataset_id, type=REAL_WORLD),
+                                         q_public_or_user_is_owner(request)).first()
+        if dataset is None:
             messages.error(request, dataset_not_found_msg(dataset_id))
             return redirect('vadetisweb:display_real_world_datasets')
+
+        selected_button = get_highcharts_range_button_preselector(dataset.frequency)
+
+        return Response({
+            'dataset': dataset,
+            'selected_button': selected_button
+        }, status=status.HTTP_200_OK)
+
 
 
 class DisplaySyntheticTrainingDataset(APIView):
@@ -100,23 +94,19 @@ class DisplaySyntheticTrainingDataset(APIView):
     template_name = 'vadetisweb/display/synthetic/training_dataset.html'
 
     def get(self, request, dataset_id, training_dataset_id):
-        try:
-            training_dataset = DataSet.objects.filter(id=training_dataset_id, main_dataset_id=dataset_id, public=True, type=SYNTHETIC).first()
-            if training_dataset is None:
-                messages.error(request, dataset_not_found_msg(dataset_id))
-                return redirect('vadetisweb:display_synthetic_datasets')
-
-            selected_button = get_highcharts_range_button_preselector(training_dataset.frequency)
-
-            return Response({
-                'dataset': training_dataset.main_dataset,
-                'training_dataset': training_dataset,
-                'selected_button': selected_button
-            }, status=status.HTTP_200_OK)
-
-        except DataSet.DoesNotExist:
-            messages.error(request, dataset_not_found_msg(dataset_id))
+        training_dataset = DataSet.objects.filter(Q(id=training_dataset_id, main_dataset_id=dataset_id, type=SYNTHETIC),
+                                                  q_public_or_user_is_owner(request)).first()
+        if training_dataset is None:
+            messages.error(request, dataset_not_found_msg(training_dataset_id))
             return redirect('vadetisweb:display_synthetic_datasets')
+
+        selected_button = get_highcharts_range_button_preselector(training_dataset.frequency)
+
+        return Response({
+            'dataset': training_dataset.main_dataset,
+            'training_dataset': training_dataset,
+            'selected_button': selected_button
+        }, status=status.HTTP_200_OK)
 
 
 class DisplayRealWorldTrainingDataset(APIView):
@@ -127,20 +117,16 @@ class DisplayRealWorldTrainingDataset(APIView):
     template_name = 'vadetisweb/display/real-world/training_dataset.html'
 
     def get(self, request, dataset_id, training_dataset_id):
-        try:
-            training_dataset = DataSet.objects.filter(id=training_dataset_id, main_dataset_id=dataset_id, public=True, type=REAL_WORLD).first()
-            if training_dataset is None:
-                messages.error(request, dataset_not_found_msg(dataset_id))
-                return redirect('vadetisweb:display_real_world_datasets')
-
-            selected_button = get_highcharts_range_button_preselector(training_dataset.frequency)
-
-            return Response({
-                'dataset': training_dataset.main_dataset,
-                'training_dataset': training_dataset,
-                'selected_button': selected_button
-            }, status=status.HTTP_200_OK)
-
-        except DataSet.DoesNotExist:
-            messages.error(request, dataset_not_found_msg(dataset_id))
+        training_dataset = DataSet.objects.filter(Q(id=training_dataset_id, main_dataset_id=dataset_id, type=REAL_WORLD),
+                                                  q_public_or_user_is_owner(request)).first()
+        if training_dataset is None:
+            messages.error(request, dataset_not_found_msg(training_dataset_id))
             return redirect('vadetisweb:display_real_world_datasets')
+
+        selected_button = get_highcharts_range_button_preselector(training_dataset.frequency)
+
+        return Response({
+            'dataset': training_dataset.main_dataset,
+            'training_dataset': training_dataset,
+            'selected_button': selected_button
+        }, status=status.HTTP_200_OK)
