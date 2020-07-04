@@ -81,5 +81,7 @@ class ExtremeValueInjector(OutlierInjector):
         ts_id = self.get_time_series().id
         inject_at_index = self.next_injection_index(range)
         if inject_at_index is not None:
-            self.df_inject.at[inject_at_index, ts_id] += self.get_value(inject_at_index, ts_id)
-            self.df_inject_class.at[inject_at_index, ts_id] = 1
+            adjustment_value = self.get_value(inject_at_index, ts_id)
+            if adjustment_value != 0:
+                self.df_inject.at[inject_at_index, ts_id] += adjustment_value
+                self.df_inject_class.at[inject_at_index, ts_id] = 1

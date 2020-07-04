@@ -3,6 +3,7 @@ import numpy as np
 
 from .injector.extreme_value_injector import ExtremeValueInjector
 from .injector.level_shift_injector import LevelShiftInjector
+from .injector.trend_injector import TrendInjector
 
 from vadetisweb.utils import stochastic_duration
 from vadetisweb.utils import next_earlier_dt, next_later_dt, get_datasets_from_json
@@ -31,10 +32,12 @@ def anomaly_injection(validated_data):
         level_shift_injector.inject_outliers()
         return level_shift_injector.get_injection_datasets()
 
-    """elif anomaly_type == ANOMALY_TYPE_VARIANCE:
+    elif anomaly_type == ANOMALY_TYPE_TREND:
+        trend_injector = TrendInjector(validated_data)
+        trend_injector.inject_outliers()
+        return trend_injector.get_injection_datasets()
 
-
-    elif anomaly_type == ANOMALY_TYPE_TREND:"""
+    """elif anomaly_type == ANOMALY_TYPE_VARIANCE:"""
 
     df_from_json, df_class_from_json = get_datasets_from_json(validated_data['dataset_series_json'])
     return df_from_json, df_class_from_json

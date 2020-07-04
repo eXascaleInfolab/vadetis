@@ -1,4 +1,4 @@
-import numpy as np
+import numpy as np, pandas as pd
 import logging
 
 from .base import OutlierInjector
@@ -25,42 +25,10 @@ class TrendInjector(OutlierInjector):
             return 24 / 10
 
         elif anomaly_deviation == ANOMALY_INJECTION_DEVIATION_RANDOM:
-            return np.random.choice([8, 16, 24])
+            return np.random.choice([8 / 10, 16 / 10, 24 / 10])
 
         else:
             raise ValueError
-
-    def get_value(self, inject_at_index, ts_id):
-        """
-        :param inject_at_index: the index to inject the anomaly at
-        :param ts_id: the affected time series
-        :return: the value to add to the current value at index 'inject_at_index'
-        """
-
-        frequency = self.df.index.inferred_freq
-        before_dt = next_earlier_dt(inject_at_index, frequency, 10)
-        after_dt = next_later_dt(inject_at_index, frequency, 10)
-
-        index_min = self.df.index.min()
-        index_max = self.df.index.max()
-
-        lower_boundary = max(index_min, before_dt)
-        upper_boundary = min(after_dt, index_max)
-
-        injection_series = self.df.loc[lower_boundary:upper_boundary, ts_id]
-
-        # remove indexes which are already an anomaly, we won't consider them for the deviation value as it would change the outcome significantly
-        df_anomaly_part = self.df_class.loc[(self.df_class.index.isin(injection_series.index)) & (self.df_class[ts_id] == True), ts_id]
-        injection_series = injection_series.drop(index=df_anomaly_part.index)
-
-        # check the remaining length
-        if injection_series.index.size == 0:
-            logging.debug(msg_injection_all_anomalies())
-            return 0
-
-        local_std = injection_series.std(axis=0, skipna=True, level=None, ddof=0)
-        return np.random.choice([-1, 1]) * self.get_factor() * local_std
-
 
     def next_injection_index(self, range):
         """
@@ -88,5 +56,9 @@ class TrendInjector(OutlierInjector):
         ts_id = self.get_time_series().id
         inject_at_index = self.next_injection_index(range)
         if inject_at_index is not None:
-            self.df_inject.at[inject_at_index, ts_id] += self.get_value(inject_at_index, ts_id)
-            self.df_inject_class.at[inject_at_index, ts_id] = 1
+
+            upper_boundary = min(next_later_dt(inject_at_index, self.df.index.inferred_freq, 10), self.df.index.max())
+            trend_indexes = pd.date_range(inject_at_index, upper_boundary, freq=self.df.index.inferred_freq)
+            slope = np.random.choice([-1, 1]) * self.get_factor() * np.arange(len(trend_indexes))
+            self.df_inject.loc[trend_indexes, ts_id] += slope
+            self.df_inject_class.loc[trend_indexes, ts_id] = 1

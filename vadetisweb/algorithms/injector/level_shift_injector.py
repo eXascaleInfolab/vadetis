@@ -91,7 +91,12 @@ class LevelShiftInjector(OutlierInjector):
         ts_id = self.get_time_series().id
         inject_at_index = self.next_injection_index(range_index)
         if inject_at_index is not None:
+
+            lower_boundary = max(next_earlier_dt(inject_at_index, self.df.index.inferred_freq, 10), self.df.index.min())
             upper_boundary = min(next_later_dt(inject_at_index, self.df.index.inferred_freq, 10), self.df.index.max())
-            level_shit_indexes = pd.date_range(inject_at_index, upper_boundary, freq=self.df.index.inferred_freq)
-            self.df_inject.loc[level_shit_indexes, ts_id] += self.get_value(inject_at_index, ts_id)
-            self.df_inject_class.loc[level_shit_indexes, ts_id] = 1
+
+            level_shift_indexes = pd.date_range(lower_boundary, upper_boundary, freq=self.df.index.inferred_freq)
+            adjustment_value = self.get_value(inject_at_index, ts_id)
+            if adjustment_value != 0:
+                self.df_inject.loc[level_shift_indexes, ts_id] += adjustment_value
+                self.df_inject_class.loc[level_shift_indexes, ts_id] = 1

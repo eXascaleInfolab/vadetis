@@ -11,4 +11,6 @@ from .robust_pca import *
 from .perform import *
 
 from .injector.extreme_value_injector import *
+from .injector.level_shift_injector import *
+from .injector.trend_injector import *
 from .injection import *
