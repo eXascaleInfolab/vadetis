@@ -12,7 +12,7 @@ from django.db.models import Q
 
 from vadetisweb.models import DataSet
 from vadetisweb.serializers import AnomalyInjectionSerializer, MessageSerializer
-from vadetisweb.algorithms import anomaly_injection
+from vadetisweb.anomaly_algorithms import anomaly_injection
 from vadetisweb.utils import dataset_to_json, strToBool, get_settings, json_message_utils, q_public_or_user_is_owner
 from vadetisweb.factory import *
 
