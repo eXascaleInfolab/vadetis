@@ -104,36 +104,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                    <div id="cnf_portlet" class="kt-portlet" style="display:none;">
-                        <div class="kt-portlet__head">
-                            <div class="kt-portlet__head-label">
-                                <h3 class="kt-portlet__head-title">Confusion Matrix</h3>
-                            </div>
-                        </div>
-                        <div class="kt-portlet__body kt-portlet__body--fit">
-                            <div id="cnf_matrix_img" class="img-container"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                    <div id="plot_portlet" class="kt-portlet" style="display:none;">
-                        <div class="kt-portlet__head">
-                            <div class="kt-portlet__head-label">
-                                <h3 class="kt-portlet__head-title">Threshold / Score Plot</h3>
-                            </div>
-                        </div>
-                        <div class="kt-portlet__body kt-portlet__body--fit">
-                            <div id="plot_img" class="img-container"></div>
-                            <p>(*): These values are computed from the training data.</p>
-                        </div>
-                    </div>
-                </div>
             </div>
+            <div id="detection_portlets" class="row"></div>
         </div>
         <!--end: Inner Row -->
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <div id="threshold_portlet" class="kt-portlet kt-portlet--collapsed" data-ktportlet="true" style="display:none;">
+
+            <div id="threshold_portlet" class="kt-portlet kt-portlet--collapsed" data-ktportlet="true">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
                         <h3 class="kt-portlet__head-title">Threshold</h3>
@@ -153,6 +130,8 @@
                     {% include 'vadetisweb/parts/forms/serializer_variable_form.html' with formid="threshold_form" url=threshold_url form_serializer=threshold_serializer submit_label="Update" %}
                 </div>
             </div>
+
+
             <div class="kt-portlet kt-portlet--collapsed" data-ktportlet="true">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
@@ -208,7 +187,7 @@
     <script type="text/javascript">
         jQuery(document).ready(function () {
             DatasetPage.init("{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_download_file' %}", {{ selected_button }});
-            DatasetDetectionForm.init("anomaly_injection_form", "detectionOnChange");
+            DatasetDetectionForm.init("anomaly_injection_form", "detectionOnChange", "{% url 'vadetisweb:base_portlet' %}?format=html");
         });
     </script>
 {% endblock %}

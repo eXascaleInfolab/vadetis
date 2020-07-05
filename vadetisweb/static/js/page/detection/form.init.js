@@ -110,7 +110,42 @@ var DatasetDetectionForm = function () {
         });
     }
 
-    var registerAnomalyDetectionForm = function(form_id) {
+    var requestPortlet = function (portlet_url, portlet_id, title, content_id, content_class, prepend, callback) {
+        var data = {
+            id: portlet_id,
+            title: title,
+            content_id: content_id,
+            content_class: content_class
+        }
+        var csrftoken = Cookies.get('csrftoken');
+        $.ajax({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            },
+            url: portlet_url,
+            data: data,
+            dataType: "html",
+            type: 'POST',
+            enctype: "multipart/form-data",
+            success: function(data, status, xhr) {
+                var column = '<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">' + data + '</div>';
+                if(prepend) {
+                    $('#detection_portlets').prepend(column);
+                } else {
+                    $('#detection_portlets').append(column);
+                }
+                callback();
+            },
+            error: function (data, status, xhr) {
+                printMessages([{'message': "Request failed"}], "error-request");
+                handleMessages(data);
+            }
+        });
+    }
+
+    var registerAnomalyDetectionForm = function(form_id, portlet_url) {
         var html_id = '#' + form_id;
         $(html_id).on('submit', function (event) {
             event.preventDefault();
@@ -155,11 +190,16 @@ var DatasetDetectionForm = function () {
                     updateThreshold(info.threshold);
 
                     // cnf
-                    requestCnfMatrix("cnf_portlet", "cnf_matrix_img", info);
+                    requestPortlet(portlet_url, "cnf_portlet", "Confusion Matrix", "cnf_matrix_img", "img-container", true,
+                        function() {
+                        requestCnfMatrix("cnf_portlet", "cnf_matrix_img", info);
+                    });
 
                     // plot
-                    requestPlot("plot_portlet", "plot_img", info)
-
+                    requestPortlet(portlet_url, "plot_portlet", "Threshold / Score Plot", "plot_img", "img-container", false,
+                        function () {
+                        requestPlot("plot_portlet", "plot_img", info)
+                    });
                     $(":submit").attr("disabled", false);
                 },
                 error: function(data, status, xhr) {
@@ -170,6 +210,7 @@ var DatasetDetectionForm = function () {
 
                     $('#threshold_portlet').hide();
                     $('#scores_portlet').hide();
+
                     $('#cnf_portlet').hide();
                     $('#plot_portlet').hide();
 
@@ -179,7 +220,7 @@ var DatasetDetectionForm = function () {
         });
     }
 
-    var initOnChangeDetection = function(select_on_change_id) {
+    var initOnChangeDetection = function(select_on_change_id, portlet_url) {
 
         var onChangeSubmit = function(formData, form_id, form_append_container_id) {
             clearFormErrors(form_id);
@@ -216,7 +257,7 @@ var DatasetDetectionForm = function () {
                         $('#' + form_append_container_id + ' [data-type="double"]').each(function () {
                             IonRangeSliderInitializer.init(this.id);
                         });
-                        registerAnomalyDetectionForm(receivedFormId);
+                        registerAnomalyDetectionForm(receivedFormId, portlet_url);
                     } else {
                         form_append_container_selector.empty();
                     }
@@ -234,15 +275,15 @@ var DatasetDetectionForm = function () {
     }
 
     // private
-    var init = function (anomaly_injection_form_id, select_on_change_id) {
+    var init = function (anomaly_injection_form_id, select_on_change_id, portlet_url) {
         initInjection(anomaly_injection_form_id);
-        initOnChangeDetection(select_on_change_id);
+        initOnChangeDetection(select_on_change_id, portlet_url);
     }
 
     return {
         // public
-        init: function(anomaly_injection_form_id, select_on_change_id) {
-            init(anomaly_injection_form_id, select_on_change_id);
+        init: function(anomaly_injection_form_id, select_on_change_id, portlet_url) {
+            init(anomaly_injection_form_id, select_on_change_id, portlet_url);
         }
     };
 }();
