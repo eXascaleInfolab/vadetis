@@ -101,7 +101,7 @@
                     <div id="form_append_container"></div>
                 </div>
             </div>
-            <div class="kt-portlet kt-portlet--collapsed" data-ktportlet="true">
+            <div id="injection_portlet" class="kt-portlet kt-portlet--collapsed" data-ktportlet="true">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
                         <h3 class="kt-portlet__head-title">Anomaly Injection</h3>
@@ -139,7 +139,7 @@
     <script type="text/javascript">
         jQuery(document).ready(function () {
             DatasetDetectionPage.init("{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_download_file' %}", {{ selected_button }});
-            DatasetDetectionForm.init("anomaly_injection_form", "detectionOnChange", "{% url 'vadetisweb:image_portlet' %}?format=html", "{% url 'vadetisweb:score_portlet' %}?format=html", "{% url 'vadetisweb:threshold_portlet' %}?format=html", "{% url 'vadetisweb:injection_form_portlet' %}?format=html");
+            DatasetDetectionForm.init("{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", "anomaly_injection_form", "detectionOnChange", "{% url 'vadetisweb:image_portlet' %}?format=html", "{% url 'vadetisweb:score_portlet' %}?format=html", "{% url 'vadetisweb:threshold_portlet' %}?format=html", "{% url 'vadetisweb:injection_form_portlet' dataset.id %}?format=html");
         });
     </script>
 {% endblock %}

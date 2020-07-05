@@ -5,8 +5,13 @@ from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 
 from django.urls import reverse
+from django.db.models import Q
+from django.contrib import messages
 
+from vadetisweb.utils import q_public_or_user_is_owner
 from vadetisweb.serializers import ImagePortletSerializer, BasePortletSerializer, ThresholdSerializer, InjectionSerializer
+from vadetisweb.models import DataSet
+from vadetisweb.factory import dataset_not_found_msg
 
 
 class InjectionFormPortlet(APIView):
@@ -17,17 +22,25 @@ class InjectionFormPortlet(APIView):
     template_name = 'vadetisweb/parts/portlet/serializer_portlet.html'
 
     @swagger_auto_schema(request_body=BasePortletSerializer)
-    def post(self, request, format=None):
+    def post(self, request, dataset_id, format=None):
         portlet_serializer = BasePortletSerializer(data=request.data)
+
+        dataset = DataSet.objects.filter(Q(id=dataset_id),
+                                         q_public_or_user_is_owner(request)).first()
+        if dataset is None:
+            messages.error(request, dataset_not_found_msg(dataset_id))
+            response = Response({}, status=status.HTTP_404_NOT_FOUND)
+            response['Location'] = reverse('vadetisweb:index')
+            return response
 
         if portlet_serializer.is_valid() and request.accepted_renderer.format == 'html':  # rendered template:
             validated_data = portlet_serializer.validated_data
-            injection_serializer = InjectionSerializer()
+            injection_serializer = InjectionSerializer(context={'dataset_selected': dataset_id, 'request' : request})
             return Response({
                 'id': validated_data['id'],
                 'title': validated_data['title'],
-                'serializer_formid' : 'threshold_form',
-                'serializer_url' : reverse('vadetisweb:injection_anomaly'),
+                'serializer_formid' : 'anomaly_injection_form',
+                'serializer_url' : reverse('vadetisweb:injection_anomaly', args=[dataset.id]),
                 'serializer' : injection_serializer,
                 'serializer_submit_label' : 'Update',
             }, status=status.HTTP_200_OK)

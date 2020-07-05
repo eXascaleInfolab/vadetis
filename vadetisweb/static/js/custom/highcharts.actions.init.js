@@ -1,14 +1,14 @@
 "use strict";
 
+var clearInserted = function () {
+    $('#threshold_form_portlet').remove();
+    $('#detection_portlets').empty();
+    $('#score_portlets').empty();
+}
+
 var VadetisHighchartsReset = function () {
 
-    var clearInserted = function () {
-        $('#threshold_form_portlet').remove();
-        $('#detection_portlets').empty();
-        $('#score_portlets').empty();
-    }
-
-    var init = function (highcharts_container_id, button_id, url) {
+    var init = function (highcharts_container_id, button_id, url, callback) {
         var button = $("#" + button_id), isLoading = false, highchart = $("#" + highcharts_container_id).highcharts();
 
         button.click(function () {
@@ -20,23 +20,25 @@ var VadetisHighchartsReset = function () {
                     $(":submit").attr("disabled", false);
                     button.html('Reset').removeClass('disabled');
                     clearInserted();
+                    callback();
                 });
             } else {
                 $(":submit").attr("disabled", false);
                 button.html('Reset').removeClass('disabled');
                 clearInserted();
+                callback();
             }
         });
     };
     return {
-        init: function (highcharts_container_id, button_id, url) {
-            init(highcharts_container_id, button_id, url);
+        init: function (highcharts_container_id, button_id, url, callback) {
+            init(highcharts_container_id, button_id, url, callback);
         }
     };
 }();
 
 var VadetisHighchartsLoad = function () {
-    var init = function (highcharts_container_id, button_id, url, type) {
+    var init = function (highcharts_container_id, button_id, url, type, callback) {
         var button = $("#" + button_id), isLoading = false, highchart = $("#" + highcharts_container_id).highcharts();
         var buttonTxt = type === 'raw' ? 'Raw' : (type === 'zscore' ? "Z-Score" : type);
         button.click(function () {
@@ -47,16 +49,20 @@ var VadetisHighchartsLoad = function () {
                     isLoading = false;
                     $(":submit").attr("disabled", false);
                     button.html(buttonTxt).removeClass('disabled');
+                    clearInserted();
+                    callback();
                 });
             } else {
                 $(":submit").attr("disabled", false);
                 button.html(buttonTxt).removeClass('disabled');
+                clearInserted();
+                callback();
             }
         });
     };
     return {
-        init: function (highcharts_container_id, button_id, url, type) {
-            init(highcharts_container_id, button_id, url, type);
+        init: function (highcharts_container_id, button_id, url, type, callback) {
+            init(highcharts_container_id, button_id, url, type, callback);
         }
     };
 }();
