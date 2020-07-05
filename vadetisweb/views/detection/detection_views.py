@@ -70,7 +70,6 @@ class DetectionSyntheticDataset(APIView):
         }, status=status.HTTP_200_OK)
 
 
-
 class DetectionRealWorldDataset(APIView):
     """
     View for a single real world dataset

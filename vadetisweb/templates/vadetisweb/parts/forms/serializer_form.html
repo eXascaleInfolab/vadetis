@@ -2,7 +2,7 @@
 <!-- begin:: Form -->
 <form id="{{ formid }}" name="{{ formid }}_name" class="kt-form" method="POST" action="{{ url }}" enctype="multipart/form-data">
     {% csrf_token %}
-    <div class="kt-portlet__body">
+    <div class="kt-portlet__body{% if class %} {{ class }}{% endif %}">
     {% render_form serializer %}
     </div>
     <div class="kt-portlet__foot">

@@ -40,6 +40,7 @@ class AnomalyDetectionAlgorithmSelectionView(APIView):
                     'dataset': dataset,
                     'formid': formid,
                     'url': reverse('vadetisweb:detection_lisa_person', args=[dataset_id]),
+                    'class' : 'pt-0',
                     'serializer': LisaPearsonSerializer(context={'dataset_selected': dataset_id, 'request' : request }),
                     'submit_label': 'Run',
                 }, status=status.HTTP_200_OK)
@@ -49,6 +50,7 @@ class AnomalyDetectionAlgorithmSelectionView(APIView):
                     'dataset': dataset,
                     'formid': formid,
                     'url': reverse('vadetisweb:detection_lisa_dtw_person', args=[dataset_id]),
+                    'class': 'pt-0',
                     'serializer': LisaDtwPearsonSerializer(context={'dataset_selected': dataset_id, 'request' : request }),
                     'submit_label' : 'Run',
                 }, status=status.HTTP_200_OK)
@@ -58,6 +60,7 @@ class AnomalyDetectionAlgorithmSelectionView(APIView):
                     'dataset': dataset,
                     'formid': formid,
                     'url': reverse('vadetisweb:detection_lisa_geo', args=[dataset_id]),
+                    'class': 'pt-0',
                     'serializer': LisaGeoDistanceSerializer(context={'dataset_selected': dataset_id, 'request' : request }),
                     'submit_label' : 'Run',
                 }, status=status.HTTP_200_OK)
@@ -67,6 +70,7 @@ class AnomalyDetectionAlgorithmSelectionView(APIView):
                     'dataset': dataset,
                     'formid': formid,
                     'url': reverse('vadetisweb:detection_rpca_mestimator', args=[dataset_id]),
+                    'class': 'pt-0',
                     'serializer': RPCAMEstimatorLossSerializer(context={'dataset_selected': dataset_id, 'request' : request }),
                     'submit_label' : 'Run',
                 }, status=status.HTTP_200_OK)
@@ -76,6 +80,7 @@ class AnomalyDetectionAlgorithmSelectionView(APIView):
                     'dataset': dataset,
                     'formid': formid,
                     'url': reverse('vadetisweb:detection_histogram', args=[dataset_id]),
+                    'class': 'pt-0',
                     'serializer': HistogramSerializer(context={'dataset_selected': dataset_id, 'request' : request }),
                     'submit_label' : 'Run',
                 }, status=status.HTTP_200_OK)
@@ -85,6 +90,7 @@ class AnomalyDetectionAlgorithmSelectionView(APIView):
                     'dataset': dataset,
                     'formid': formid,
                     'url': reverse('vadetisweb:detection_cluster', args=[dataset_id]),
+                    'class': 'pt-0',
                     'serializer': ClusterSerializer(context={'dataset_selected': dataset_id, 'request' : request }),
                     'submit_label': 'Run',
                 }, status=status.HTTP_200_OK)
@@ -94,6 +100,7 @@ class AnomalyDetectionAlgorithmSelectionView(APIView):
                     'dataset': dataset,
                     'formid': formid,
                     'url': reverse('vadetisweb:detection_svm', args=[dataset_id]),
+                    'class': 'pt-0',
                     'serializer': SVMSerializer(context={'dataset_selected': dataset_id, 'request' : request }),
                     'submit_label': 'Run',
                 }, status=status.HTTP_200_OK)
@@ -103,6 +110,7 @@ class AnomalyDetectionAlgorithmSelectionView(APIView):
                     'dataset': dataset,
                     'formid': formid,
                     'url': reverse('vadetisweb:detection_isolation_forest', args=[dataset_id]),
+                    'class': 'pt-0',
                     'serializer': IsolationForestSerializer(context={'dataset_selected': dataset_id, 'request' : request }),
                     'submit_label': 'Run',
                 }, status=status.HTTP_200_OK)

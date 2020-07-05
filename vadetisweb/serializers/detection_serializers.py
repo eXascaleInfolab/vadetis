@@ -151,9 +151,12 @@ class IsolationForestSerializer(serializers.Serializer):
     training_dataset = TrainingDatasetField(label='Training Dataset',
                                             required=True,
                                             queryset=DataSet.objects.none())
+
     bootstrap = serializers.BooleanField(label='Bootstrap', required=False,
                                          help_text='If True, individual trees are fit on random subsets of the training data sampled with replacement. If False, sampling without replacement is performed.',
-                                         style={'help_text_in_popover': True})
+                                         style={'help_text_in_popover': False,
+                                                'template': 'vadetisweb/parts/input/checkbox_input.html'})
+
     n_estimators = serializers.IntegerField(initial=40, label='Number of Estimators', min_value=1, required=True,
                                             help_text='The number of base estimators in the ensemble.',
                                             style={'template': 'vadetisweb/parts/input/text_input.html',
@@ -189,10 +192,7 @@ class LisaPearsonSerializer(serializers.Serializer):
                                   style={'template': 'vadetisweb/parts/input/select_input.html',
                                          'help_text_in_popover': True})
 
-    window_size = serializers.IntegerField(initial=12, required=True, min_value=1,
-                                           help_text='Select the moving window size as a percentage value relative to the length of the time series or as an absolute value range.',
-                                           style={'template': 'vadetisweb/parts/input/text_input.html',
-                                                  'help_text_in_popover': True})
+    window_size = WindowSizeIntegerField(initial=10, required=True, min_value=1, max_value=19)
 
     row_standardized = serializers.BooleanField(initial=True, label='Apply Row Standardization', required=False,
                                                 help_text='Determines if row standardization is applied to the correlation values',
@@ -223,10 +223,7 @@ class LisaDtwPearsonSerializer(serializers.Serializer):
                                   style={'template': 'vadetisweb/parts/input/select_input.html',
                                          'help_text_in_popover': True})
 
-    window_size = serializers.IntegerField(initial=12, required=True, min_value=1,
-                                           help_text='Select the moving window size as a percentage value relative to the length of the time series or as an absolute value range.',
-                                           style={'template': 'vadetisweb/parts/input/text_input.html',
-                                                  'help_text_in_popover': True})
+    window_size = WindowSizeIntegerField(initial=10, required=True, min_value=1, max_value=19)
 
     dtw_distance_function = serializers.ChoiceField(label='DTW Distance Function', choices=DTW_DISTANCE_FUNCTION,
                                                     required=True,
