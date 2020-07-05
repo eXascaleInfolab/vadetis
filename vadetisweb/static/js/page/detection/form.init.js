@@ -174,7 +174,35 @@ var DatasetDetectionForm = function () {
         });
     }
 
-    var registerAnomalyDetectionForm = function(form_id, img_portlet_url, score_portlet_url) {
+    var requestThresholdPortlet = function (portlet_url, portlet_id, title, callback) {
+        var data = {
+            id: portlet_id,
+            title: title
+        }
+        var csrftoken = Cookies.get('csrftoken');
+        $.ajax({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            },
+            url: portlet_url,
+            data: data,
+            dataType: "html",
+            type: 'POST',
+            enctype: "multipart/form-data",
+            success: function(data, status, xhr) {
+                $('#form_portlets').prepend(data);
+                callback();
+            },
+            error: function (data, status, xhr) {
+                printMessages([{'message': "Request failed"}], "error-request");
+                handleMessages(data);
+            }
+        });
+    }
+
+    var registerAnomalyDetectionForm = function(form_id, img_portlet_url, score_portlet_url, threshold_portlet_url) {
         var html_id = '#' + form_id;
         $(html_id).on('submit', function (event) {
             event.preventDefault();
@@ -204,6 +232,7 @@ var DatasetDetectionForm = function () {
                     handleMessages(data);
 
                     // clear
+                    $('#threshold_form_portlet').remove();
                     $('#detection_portlets').empty();
                     $('#score_portlets').empty();
 
@@ -219,9 +248,12 @@ var DatasetDetectionForm = function () {
                     });
 
                     // threshold
-                    $('#threshold_portlet').show();
-                    registerThresholdUpdateForm('threshold_form');
-                    updateThreshold(info.threshold);
+                    requestThresholdPortlet(threshold_portlet_url, "threshold_form_portlet", "Threshold",
+                        function () {
+                        KTApp.initPortlets();
+                        registerThresholdUpdateForm('threshold_form');
+                        updateThreshold(info.threshold);
+                    });
 
                     // cnf
                     requestImagePortlet(img_portlet_url, "cnf_portlet", "Confusion Matrix", "cnf_matrix_img", "img-container", true,
@@ -242,17 +274,17 @@ var DatasetDetectionForm = function () {
 
                     highchart.hideLoading();
 
-                    $('#threshold_portlet').hide();
-
+                    $('#threshold_form_portlet').remove();
                     $('#detection_portlets').empty();
                     $('#score_portlets').empty();
+
                     $(":submit").attr("disabled", false);
                 }
             });
         });
     }
 
-    var initOnChangeDetection = function(select_on_change_id, img_portlet_url, score_portlet_url) {
+    var initOnChangeDetection = function(select_on_change_id, img_portlet_url, score_portlet_url, threshold_portlet_url) {
 
         var onChangeSubmit = function(formData, form_id, form_append_container_id) {
             clearFormErrors(form_id);
@@ -289,7 +321,7 @@ var DatasetDetectionForm = function () {
                         $('#' + form_append_container_id + ' [data-type="double"]').each(function () {
                             IonRangeSliderInitializer.init(this.id);
                         });
-                        registerAnomalyDetectionForm(receivedFormId, img_portlet_url, score_portlet_url);
+                        registerAnomalyDetectionForm(receivedFormId, img_portlet_url, score_portlet_url, threshold_portlet_url);
                     } else {
                         form_append_container_selector.empty();
                     }
@@ -307,15 +339,15 @@ var DatasetDetectionForm = function () {
     }
 
     // private
-    var init = function (anomaly_injection_form_id, select_on_change_id, img_portlet_url, score_portlet_url) {
+    var init = function (anomaly_injection_form_id, select_on_change_id, img_portlet_url, score_portlet_url, threshold_portlet_url) {
         initInjection(anomaly_injection_form_id);
-        initOnChangeDetection(select_on_change_id, img_portlet_url, score_portlet_url);
+        initOnChangeDetection(select_on_change_id, img_portlet_url, score_portlet_url, threshold_portlet_url);
     }
 
     return {
         // public
-        init: function(anomaly_injection_form_id, select_on_change_id, img_portlet_url, score_portlet_url) {
-            init(anomaly_injection_form_id, select_on_change_id, img_portlet_url, score_portlet_url);
+        init: function(anomaly_injection_form_id, select_on_change_id, img_portlet_url, score_portlet_url, threshold_portlet_url) {
+            init(anomaly_injection_form_id, select_on_change_id, img_portlet_url, score_portlet_url, threshold_portlet_url);
         }
     };
 }();

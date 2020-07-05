@@ -83,8 +83,9 @@
             <!--end: Inner Row -->
         </div>
         <!--end: Inner Row -->
-        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <div id="threshold_portlet" class="kt-portlet kt-portlet--collapsed" data-ktportlet="true" style="display:none;">
+        <div id="form_portlets" class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+
+            {% comment %}<div id="threshold_portlet" class="kt-portlet kt-portlet--collapsed" data-ktportlet="true" style="display:none;">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
                         <h3 class="kt-portlet__head-title">Threshold</h3>
@@ -103,7 +104,8 @@
                     {% url 'vadetisweb:threshold_update_json' as threshold_url %}
                     {% include 'vadetisweb/parts/forms/serializer_variable_form.html' with formid="threshold_form" url=threshold_url form_serializer=threshold_serializer submit_label="Update" %}
                 </div>
-            </div>
+            </div>{% endcomment %}
+
             <div class="kt-portlet kt-portlet--collapsed" data-ktportlet="true">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
@@ -159,7 +161,7 @@
     <script type="text/javascript">
         jQuery(document).ready(function () {
             DatasetPage.init("{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_download_file' %}", {{ selected_button }});
-            DatasetDetectionForm.init("anomaly_injection_form", "detectionOnChange", "{% url 'vadetisweb:image_portlet' %}?format=html", "{% url 'vadetisweb:score_portlet' %}?format=html");
+            DatasetDetectionForm.init("anomaly_injection_form", "detectionOnChange", "{% url 'vadetisweb:image_portlet' %}?format=html", "{% url 'vadetisweb:score_portlet' %}?format=html", "{% url 'vadetisweb:threshold_portlet' %}?format=html");
         });
     </script>
 {% endblock %}
