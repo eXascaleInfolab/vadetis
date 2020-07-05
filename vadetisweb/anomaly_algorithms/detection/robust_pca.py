@@ -1,5 +1,4 @@
 from vadetisweb.utils import get_info
-from vadetisweb.parameters import F1_SCORE
 
 from .rpca import *
 from .helper_functions import *

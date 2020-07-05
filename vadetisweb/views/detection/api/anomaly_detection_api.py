@@ -11,7 +11,7 @@ from django.contrib import messages
 from vadetisweb.serializers.detection_serializers import *
 from vadetisweb.models import DataSet
 from vadetisweb.utils import *
-from vadetisweb.algorithms import *
+from vadetisweb.anomaly_algorithms.detection import *
 from vadetisweb.factory import dataset_not_found_msg
 
 

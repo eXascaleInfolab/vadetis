@@ -1,14 +1,12 @@
-from sklearn.svm import OneClassSVM
-
+from sklearn.ensemble import IsolationForest
+from .helper_functions import *
 from vadetisweb.utils import get_info
 
-from .helper_functions import *
-
 #########################################################
-# SVM
+# ISOLATION FOREST
 #########################################################
 
-def svm(df, df_class, df_train, df_train_class, maximize_score=F1_SCORE, gamma=0.000562, nu=0.5, kernel='rbf', train_size=0.5, random_seed=10):
+def isolation_forest(df, df_class, df_train, df_train_class, maximize_score=F1_SCORE, n_jobs=-1, bootstrap=True, n_estimators=40, train_size=0.5, random_seed=10):
 
     df_train_class_instances = df_anomaly_instances(df_train_class)
     df_train = df_train.join(df_train_class_instances)
@@ -18,7 +16,7 @@ def svm(df, df_class, df_train, df_train_class, maximize_score=F1_SCORE, gamma=0
 
     train, valid, test = get_train_valid_test_sets(df_train, train_size=train_size, random_seed=random_seed)
 
-    model = OneClassSVM(gamma=gamma, nu=nu, kernel=kernel)
+    model = IsolationForest(random_state=random_seed, n_jobs=n_jobs, max_samples=train.shape[0], bootstrap=bootstrap, n_estimators=n_estimators)
     model.fit(train.drop('class', axis=1).values)
 
     higher = model.decision_function(valid[valid['class'] == False].drop('class', axis=1).values).mean()
@@ -32,8 +30,6 @@ def svm(df, df_class, df_train, df_train_class, maximize_score=F1_SCORE, gamma=0
     selected_threshold = thresholds[selected_index]
 
     scores = model.decision_function(df_with_class_instances.drop('class', axis=1).values)
-    scores = scores.flatten() #bug, its corrected in next version of scikit-learn
-
     y_hat_results = (scores < selected_threshold).astype(int)
     y_truth = df_with_class_instances['class'].values.astype(int)
     info = get_info(selected_threshold, y_hat_results, y_truth)

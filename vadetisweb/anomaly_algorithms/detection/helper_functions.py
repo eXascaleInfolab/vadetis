@@ -5,16 +5,6 @@ from sklearn.metrics import fbeta_score, precision_score, recall_score, accuracy
 
 from vadetisweb.parameters import F1_SCORE, PRECISION, RECALL, ACCURACY
 
-def _sequences_from_path(x, y, path):
-    #print("x:", x)
-    #print("path_x:", path[0])
-    x_dtw = x[path[0]]
-    #print("y:", y)
-    #print("path_y:", path[1])
-    y_dtw = y[path[1]]
-
-    return x_dtw, y_dtw
-
 
 def df_row_standardized(df):
     """
@@ -65,16 +55,6 @@ def _df_remove_column(df, column_name):
     """
     if column_name in df.columns:
         del df[column_name]
-
-
-def _sum_of_squares(values):
-    """
-    Squares each value of a list of values and returns the sum of it
-
-    :param values: a list of values
-    :return: the sum of squared values
-    """
-    return sum(n ** 2 for n in values)
 
 
 def get_threshold_scores(thresholds, y_scores, valid, upper_boundary=False):

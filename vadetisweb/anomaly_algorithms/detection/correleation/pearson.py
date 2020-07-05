@@ -1,12 +1,33 @@
 import numpy as np, pandas as pd
 import datetime
 
+from .dtw import dtw
+
 from vadetisweb.utils import next_earlier_dt
-from vadetisweb.algorithms.helper_functions import _sum_of_squares
 
-from ..correleation.dtw import dtw
-from ..helper_functions import _sequences_from_path
+#########################################################
+# PEARSON HELPER FUNCTIONS
+#########################################################
 
+def _sum_of_squares(values):
+    """
+    Squares each value of a list of values and returns the sum of it
+
+    :param values: a list of values
+    :return: the sum of squared values
+    """
+    return sum(n ** 2 for n in values)
+
+
+def _sequences_from_path(x, y, path):
+    #print("x:", x)
+    #print("path_x:", path[0])
+    x_dtw = x[path[0]]
+    #print("y:", y)
+    #print("path_y:", path[1])
+    y_dtw = y[path[1]]
+
+    return x_dtw, y_dtw
 
 #########################################################
 # PEARSON

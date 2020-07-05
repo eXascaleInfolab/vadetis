@@ -8,7 +8,6 @@ import vadetis.cutil as cutil
 # DTW
 #########################################################
 
-
 def dtw(x, y, distance):
     """
     Computes Dynamic Time Warping (DTW) of two sequences. It uses the cdist function from scipy
