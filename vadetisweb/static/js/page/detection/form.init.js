@@ -243,11 +243,9 @@ var DatasetDetectionForm = function () {
                     highchart.hideLoading();
 
                     $('#threshold_portlet').hide();
-                    $('#scores_portlet').hide();
 
-                    $('#cnf_portlet').hide();
-                    $('#plot_portlet').hide();
-
+                    $('#detection_portlets').empty();
+                    $('#score_portlets').empty();
                     $(":submit").attr("disabled", false);
                 }
             });
