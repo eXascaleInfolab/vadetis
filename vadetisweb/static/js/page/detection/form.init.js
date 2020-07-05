@@ -47,6 +47,12 @@ var DatasetDetectionForm = function () {
         });
     }
 
+    var clearInserted = function () {
+        $('#threshold_form_portlet').remove();
+        $('#detection_portlets').empty();
+        $('#score_portlets').empty();
+    }
+
     var registerThresholdUpdateForm = function(form_id) {
         var html_id = '#' + form_id;
         $(html_id).on('submit', function (event) {
@@ -73,6 +79,7 @@ var DatasetDetectionForm = function () {
                 success: function(data, status, xhr) {
                     handleMessages(data);
 
+                    console.log(data);
                     // update series
                     var series_data_json = data['series'];
                     setSeriesData(highchart, series_data_json);
@@ -80,7 +87,6 @@ var DatasetDetectionForm = function () {
                     var info = data['info'];
 
                     // scores
-                    $('#scores_portlet').show();
                     updateScores(info);
 
                     // threshold
@@ -88,9 +94,6 @@ var DatasetDetectionForm = function () {
 
                     // cnf
                     requestCnfMatrix("cnf_portlet", "cnf_matrix_img", info);
-
-                    // plot
-                    requestPlot("plot_portlet", "plot_img", info)
 
                     $(":submit").attr("disabled", false);
                 },
@@ -100,10 +103,7 @@ var DatasetDetectionForm = function () {
 
                     highchart.hideLoading();
 
-                    $('#scores_portlet').hide();
-                    $('#cnf_portlet').hide();
-                    $('#plot_portlet').hide();
-
+                   clearInserted();
                     $(":submit").attr("disabled", false);
                 }
             });
@@ -232,9 +232,7 @@ var DatasetDetectionForm = function () {
                     handleMessages(data);
 
                     // clear
-                    $('#threshold_form_portlet').remove();
-                    $('#detection_portlets').empty();
-                    $('#score_portlets').empty();
+                    clearInserted();
 
                     // update series
                     var series_data_json = data['series'], info = data['info'];
@@ -274,10 +272,7 @@ var DatasetDetectionForm = function () {
 
                     highchart.hideLoading();
 
-                    $('#threshold_form_portlet').remove();
-                    $('#detection_portlets').empty();
-                    $('#score_portlets').empty();
-
+                    clearInserted();
                     $(":submit").attr("disabled", false);
                 }
             });

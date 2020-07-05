@@ -422,4 +422,3 @@ class DatasetThresholdUpdateJson(APIView):
                 return Response({}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
-
