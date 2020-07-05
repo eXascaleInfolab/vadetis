@@ -44,7 +44,8 @@ apipatterns = [
     path('api/dataset/search/', views.DatasetSearchView.as_view(), name='dataset_search'),
     path('api/dataset/download/', views.DatasetFileDownload.as_view(), name='dataset_download_file'),
 
-    path('api/portlet/base/', views.BasePortlet.as_view(), name='base_portlet'),
+    path('api/portlet/image/', views.ImagePortlet.as_view(), name='image_portlet'),
+    path('api/portlet/score/', views.ScorePortlet.as_view(), name='score_portlet'),
 
     path('api/threshold-update', views.DatasetThresholdUpdateJson.as_view(), name='threshold_update_json'),
     path('api/image/cnf/', views.CnfImage.as_view(), name='cnf_image'),

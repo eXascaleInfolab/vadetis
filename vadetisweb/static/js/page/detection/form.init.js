@@ -110,7 +110,7 @@ var DatasetDetectionForm = function () {
         });
     }
 
-    var requestPortlet = function (portlet_url, portlet_id, title, content_id, content_class, prepend, callback) {
+    var requestImagePortlet = function (portlet_url, portlet_id, title, content_id, content_class, prepend, callback) {
         var data = {
             id: portlet_id,
             title: title,
@@ -145,7 +145,36 @@ var DatasetDetectionForm = function () {
         });
     }
 
-    var registerAnomalyDetectionForm = function(form_id, portlet_url) {
+    var requestScorePortlet = function (portlet_url, portlet_id, title, callback) {
+        var data = {
+            id: portlet_id,
+            title: title
+        }
+        var csrftoken = Cookies.get('csrftoken');
+        $.ajax({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            },
+            url: portlet_url,
+            data: data,
+            dataType: "html",
+            type: 'POST',
+            enctype: "multipart/form-data",
+            success: function(data, status, xhr) {
+                var column = '<div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">' + data + '</div>';
+                $('#score_portlets').append(column);
+                callback();
+            },
+            error: function (data, status, xhr) {
+                printMessages([{'message': "Request failed"}], "error-request");
+                handleMessages(data);
+            }
+        });
+    }
+
+    var registerAnomalyDetectionForm = function(form_id, img_portlet_url, score_portlet_url) {
         var html_id = '#' + form_id;
         $(html_id).on('submit', function (event) {
             event.preventDefault();
@@ -174,15 +203,20 @@ var DatasetDetectionForm = function () {
                 success: function(data, status, xhr) {
                     handleMessages(data);
 
+                    // clear
+                    $('#detection_portlets').empty();
+                    $('#score_portlets').empty();
+
                     // update series
-                    var series_data_json = data['series'];
+                    var series_data_json = data['series'], info = data['info'];
                     setSeriesData(highchart, series_data_json);
                     highchart.hideLoading();
-                    var info = data['info'];
 
                     // scores
-                    $('#scores_portlet').show();
-                    updateScores(info);
+                    requestScorePortlet(score_portlet_url, "scores_portlet", "Scores",
+                        function () {
+                        updateScores(info);
+                    });
 
                     // threshold
                     $('#threshold_portlet').show();
@@ -190,15 +224,15 @@ var DatasetDetectionForm = function () {
                     updateThreshold(info.threshold);
 
                     // cnf
-                    requestPortlet(portlet_url, "cnf_portlet", "Confusion Matrix", "cnf_matrix_img", "img-container", true,
+                    requestImagePortlet(img_portlet_url, "cnf_portlet", "Confusion Matrix", "cnf_matrix_img", "img-container", true,
                         function() {
                         requestCnfMatrix("cnf_portlet", "cnf_matrix_img", info);
                     });
 
                     // plot
-                    requestPortlet(portlet_url, "plot_portlet", "Threshold / Score Plot", "plot_img", "img-container", false,
+                    requestImagePortlet(img_portlet_url, "plot_portlet", "Threshold / Score Plot", "plot_img", "img-container", false,
                         function () {
-                        requestPlot("plot_portlet", "plot_img", info)
+                        requestPlot("plot_portlet", "plot_img", info);
                     });
                     $(":submit").attr("disabled", false);
                 },
@@ -220,7 +254,7 @@ var DatasetDetectionForm = function () {
         });
     }
 
-    var initOnChangeDetection = function(select_on_change_id, portlet_url) {
+    var initOnChangeDetection = function(select_on_change_id, img_portlet_url, score_portlet_url) {
 
         var onChangeSubmit = function(formData, form_id, form_append_container_id) {
             clearFormErrors(form_id);
@@ -257,7 +291,7 @@ var DatasetDetectionForm = function () {
                         $('#' + form_append_container_id + ' [data-type="double"]').each(function () {
                             IonRangeSliderInitializer.init(this.id);
                         });
-                        registerAnomalyDetectionForm(receivedFormId, portlet_url);
+                        registerAnomalyDetectionForm(receivedFormId, img_portlet_url, score_portlet_url);
                     } else {
                         form_append_container_selector.empty();
                     }
@@ -275,15 +309,15 @@ var DatasetDetectionForm = function () {
     }
 
     // private
-    var init = function (anomaly_injection_form_id, select_on_change_id, portlet_url) {
+    var init = function (anomaly_injection_form_id, select_on_change_id, img_portlet_url, score_portlet_url) {
         initInjection(anomaly_injection_form_id);
-        initOnChangeDetection(select_on_change_id, portlet_url);
+        initOnChangeDetection(select_on_change_id, img_portlet_url, score_portlet_url);
     }
 
     return {
         // public
-        init: function(anomaly_injection_form_id, select_on_change_id, portlet_url) {
-            init(anomaly_injection_form_id, select_on_change_id, portlet_url);
+        init: function(anomaly_injection_form_id, select_on_change_id, img_portlet_url, score_portlet_url) {
+            init(anomaly_injection_form_id, select_on_change_id, img_portlet_url, score_portlet_url);
         }
     };
 }();

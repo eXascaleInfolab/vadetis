@@ -78,36 +78,10 @@
                 </div>
             </div>
             <!--begin: Inner Row -->
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
-                    <div id="scores_portlet" class="kt-portlet" style="display:none;">
-                        <div class="kt-portlet__head">
-                            <div class="kt-portlet__head-label">
-                                <h3 class="kt-portlet__head-title">Scores</h3>
-                            </div>
-                        </div>
-                        <div class="kt-portlet__body ">
-                            <div class="row">
-                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-                                    <div id="roundslider_accuracy" class="roundslider" title="Accuracy"></div>
-                                </div>
-                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-                                    <div id="roundslider_f1" class="roundslider" title="F1-Score"></div>
-                                </div>
-                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-                                    <div id="roundslider_precision" class="roundslider" title="Precision"></div>
-                                </div>
-                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-                                    <div id="roundslider_recall" class="roundslider" title="Recall"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div id="score_portlets" class="row"></div>
             <div id="detection_portlets" class="row"></div>
+            <!--end: Inner Row -->
         </div>
-        <!--end: Inner Row -->
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
 
             <div id="threshold_portlet" class="kt-portlet kt-portlet--collapsed" data-ktportlet="true">
@@ -187,7 +161,7 @@
     <script type="text/javascript">
         jQuery(document).ready(function () {
             DatasetPage.init("{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_download_file' %}", {{ selected_button }});
-            DatasetDetectionForm.init("anomaly_injection_form", "detectionOnChange", "{% url 'vadetisweb:base_portlet' %}?format=html");
+            DatasetDetectionForm.init("anomaly_injection_form", "detectionOnChange", "{% url 'vadetisweb:image_portlet' %}?format=html", "{% url 'vadetisweb:score_portlet' %}?format=html");
         });
     </script>
 {% endblock %}
