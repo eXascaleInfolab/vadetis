@@ -1,5 +1,11 @@
 var DatasetDetectionForm = function () {
 
+    var clearInserted = function () {
+        $('#threshold_form_portlet').remove();
+        $('#detection_portlets').empty();
+        $('#score_portlets').empty();
+    }
+
     var initInjection = function(form_id) {
 
         var html_id = '#' + form_id;
@@ -45,12 +51,6 @@ var DatasetDetectionForm = function () {
                 }
             });
         });
-    }
-
-    var clearInserted = function () {
-        $('#threshold_form_portlet').remove();
-        $('#detection_portlets').empty();
-        $('#score_portlets').empty();
     }
 
     var registerThresholdUpdateForm = function(form_id) {

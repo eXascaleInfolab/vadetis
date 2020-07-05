@@ -2,27 +2,29 @@
 
 var VadetisHighchartsReset = function () {
 
+    var clearInserted = function () {
+        $('#threshold_form_portlet').remove();
+        $('#detection_portlets').empty();
+        $('#score_portlets').empty();
+    }
+
     var init = function (highcharts_container_id, button_id, url) {
         var button = $("#" + button_id), isLoading = false, highchart = $("#" + highcharts_container_id).highcharts();
 
         button.click(function () {
             if (!isLoading) {
+                $(":submit").attr("disabled", true);
                 button.html('Loading...').addClass('disabled');
                 loadSeriesForType(highchart, url, "raw", true, function () {
                     isLoading = false;
+                    $(":submit").attr("disabled", false);
                     button.html('Reset').removeClass('disabled');
-                    // TODO better hiding
-                    $('#threshold_portlet').hide();
-                    $('#scores_portlet').hide();
-                    $('#cnf_portlet').hide();
-                    $('#plot_portlet').hide();
+                    clearInserted();
                 });
             } else {
+                $(":submit").attr("disabled", false);
                 button.html('Reset').removeClass('disabled');
-                $('#threshold_portlet').hide();
-                $('#scores_portlet').hide();
-                $('#cnf_portlet').hide();
-                $('#plot_portlet').hide();
+                clearInserted();
             }
         });
     };
@@ -39,13 +41,15 @@ var VadetisHighchartsLoad = function () {
         var buttonTxt = type === 'raw' ? 'Raw' : (type === 'zscore' ? "Z-Score" : type);
         button.click(function () {
             if (!isLoading) {
+                $(":submit").attr("disabled", true);
                 button.html('Loading...').addClass('disabled');
-
                 loadSeriesForType(highchart, url, type, true, function () {
                     isLoading = false;
+                    $(":submit").attr("disabled", false);
                     button.html(buttonTxt).removeClass('disabled');
                 });
             } else {
+                $(":submit").attr("disabled", false);
                 button.html(buttonTxt).removeClass('disabled');
             }
         });
