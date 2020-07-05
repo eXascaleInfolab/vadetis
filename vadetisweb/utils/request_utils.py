@@ -101,7 +101,7 @@ def update_setting_cookie(response, validated_data, previous_setting=None, missi
             response.set_cookie(key=key, value=validated_data[key], samesite='Lax')
 
 
-def get_conf_from_query_params(request):
+"""def get_conf_from_query_params(request):
     conf = {}
 
     algorithm = request.GET.get('algorithm', None)
@@ -183,4 +183,4 @@ def get_conf_from_query_params(request):
         conf['bootstrap'] = convertStrToBoolean(request.GET.get("bootstrap", 'False'))
         conf['n_estimators'] = convertToInt(request.GET.get("n_estimators", ''))
 
-    return conf
+    return conf"""

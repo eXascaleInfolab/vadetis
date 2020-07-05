@@ -2,13 +2,11 @@ import logging
 import pandas as pd
 from pandas.tseries.frequencies import to_offset
 from sklearn.metrics import fbeta_score, precision_score, recall_score, accuracy_score, confusion_matrix
-from vadetisweb.parameters import GEO, HISTOGRAM, CLUSTER_GAUSSIAN_MIXTURE, SVM, ISOLATION_FOREST, \
-    DTW_DISTANCE_FUNCTION, GEO_DISTANCE, TIME_RANGE, ANOMALY_DETECTION_SCORE_TYPES, WINDOW_SIZE_ABSOLUTE, \
-    WINDOW_SIZE_PERCENT, SELECTION, DTW, PEARSON, LISA_PEARSON
+from vadetisweb.parameters import *
 
 from .date_utils import unix_time_millis_to_dt
 from .helper_function_utils import *
-
+"""
 def is_valid_conf(conf):
     if 'algorithm' in conf:
 
@@ -227,7 +225,7 @@ def is_valid_conf(conf):
     else:
         return False
 
-    return True
+    return True"""
 
 
 def _add(x, y):
@@ -314,7 +312,7 @@ def df_zscore(df, skipna=True):
     return df_zscore
 
 
-def get_window_size(df,window_size, window_size_unit):
+"""def get_window_size(df,window_size, window_size_unit):
     if window_size_unit == WINDOW_SIZE_PERCENT:
         return get_window_size_for_percentage(df, window_size)
 
@@ -326,7 +324,7 @@ def get_window_size(df,window_size, window_size_unit):
 
 
 def get_window_size_for_percentage(df, percentage):
-    return int(round((float(len(df.index)) / float(100)) * int(percentage)))
+    return int(round((float(len(df.index)) / float(100)) * int(percentage)))"""
 
 
 def get_dataframes_for_ranges(df, df_class, conf):
@@ -341,7 +339,7 @@ def get_dataframes_for_ranges(df, df_class, conf):
 
     elif conf['algorithm'] == LISA_PEARSON:
         if conf['correlation_algorithm'] == PEARSON or conf['correlation_algorithm'] == DTW:
-            window_size = get_window_size(conf['window_size'], conf['window_size_unit'], df)
+            window_size = conf['window_size']
 
             if range_start is not None and range_end is not None:
                 # todo instead of date, may locate by number of index steps?

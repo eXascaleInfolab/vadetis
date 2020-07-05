@@ -4,8 +4,7 @@ from .helper_functions import *
 from .correleation.pearson import pearson, dtw_pearson
 from .correleation.distance import df_distance, df_corr_geo_distance
 
-from vadetisweb.utils import get_window_size, df_zscore, get_info
-from vadetisweb.parameters import ANOMALY_TYPE_INDIVIDUAL
+from vadetisweb.utils import df_zscore, get_info
 
 #########################################################
 # LISA HELPER
@@ -178,7 +177,7 @@ def lisa_pearson(df, df_class, validated_data):
     #df_class_copy = df_class_copy.rename(columns={time_series_id: 'class'})
     #df_with_class_instances = df.join(df_class_copy['class'])
 
-    window_size = get_window_size(df, validated_data['window_size'], validated_data['window_size_unit'])
+    window_size = validated_data['window_size']
 
     # mean values of each row of dataframe
     df_mean = df_copy_with_mean(df)
@@ -197,10 +196,6 @@ def lisa_pearson(df, df_class, validated_data):
 
         # perform LISA on Time Series
         _ = df_lisa_time_series(time_series.id, df_results, df_mean, df_correlation)
-
-    # mark anomalies either individually for each time series or as anomalous instances
-    if(validated_data['anomaly_type'] == ANOMALY_TYPE_INDIVIDUAL):
-        print(df_results)
 
     else: # instance
         higher = df_results.max(axis=0).max()
@@ -264,7 +259,7 @@ def lisa_dtw(df, df_class, conf, time_series_id):
     # get Z-Score values
     df_z = df_zscore(df)
 
-    window_size = get_window_size(conf['window_size'], conf['window_size_unit'], df)
+    window_size = conf['window_size']
 
     df_correlation, correlation_time_elapsed = dtw_pearson(df_z, time_series_id, conf['dtw_distance_function'],
                                                            window_size=window_size)
