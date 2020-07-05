@@ -36,9 +36,6 @@ def settings_from_request_or_default_dict(request):
     settings = {}
     missing_keys = []
 
-    _get_int_setting_from_cookie(settings, missing_keys, request, 'highcharts_height', DEFAULT_HIGHCHARTS_HEIGHT)
-    _get_int_setting_from_cookie(settings, missing_keys, request, 'legend_height', DEFAULT_LEGEND_HEIGHT)
-
     _get_str_setting_from_cookie(settings, missing_keys, request, 'color_outliers', DEFAULT_COLOR_OUTLIERS)
     _get_str_setting_from_cookie(settings, missing_keys, request, 'color_clusters', DEFAULT_COLOR_CLUSTERS)
     _get_str_setting_from_cookie(settings, missing_keys, request, 'color_true_positive', DEFAULT_COLOR_TRUE_POSITIVES)

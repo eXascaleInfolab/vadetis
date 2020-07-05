@@ -18,7 +18,7 @@ var VadetisHighcharts = function () {
         var highchart = new Highcharts.StockChart(html_id, {
             chart: {
                 zoomType: 'x',
-                height: settings.highcharts_height,
+                height: 750,
             },
 
             navigator: {
@@ -63,7 +63,7 @@ var VadetisHighcharts = function () {
             legend: {
                 enabled: true,
                 layout: 'horizontal',
-                maxHeight: settings.legend_height,
+                /*maxHeight: 100,*/
             },
 
             rangeSelector: {

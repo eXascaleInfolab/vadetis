@@ -266,8 +266,6 @@ GEO_DISTANCE = (
 # Defaults for application settings
 #########################################################
 
-DEFAULT_HIGHCHARTS_HEIGHT = 750
-DEFAULT_LEGEND_HEIGHT = 100
 DEFAULT_COLOR_OUTLIERS = '#FF0000'
 DEFAULT_COLOR_CLUSTERS = '#0000FF'
 DEFAULT_COLOR_TRUE_POSITIVES = '#008800'
@@ -276,8 +274,6 @@ DEFAULT_COLOR_FALSE_NEGATIVES = '#0000FF'
 DEFAULT_ROUND_DIGITS = 3
 
 DEFAULT_SETTINGS = (
-    ('highcharts_height', DEFAULT_HIGHCHARTS_HEIGHT),
-    ('legend_height', DEFAULT_LEGEND_HEIGHT),
     ('color_outliers', DEFAULT_COLOR_OUTLIERS),
     ('color_clusters', DEFAULT_COLOR_CLUSTERS),
     ('color_true_positive', DEFAULT_COLOR_TRUE_POSITIVES),

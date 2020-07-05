@@ -25,14 +25,6 @@ class UserSetting(models.Model):
     # link UserProfile to a User model instance.
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
 
-    highcharts_height = models.PositiveIntegerField('Height of charts', null=False, default=DEFAULT_HIGHCHARTS_HEIGHT,
-                                                    help_text='Value in pixels, Default: 500',
-                                                    validators=[MinValueValidator(250)])
-
-    legend_height = models.PositiveIntegerField('Height of chart legends', null=False, default=DEFAULT_LEGEND_HEIGHT,
-                                                help_text='Value in pixels, Default: 100',
-                                                validators=[MinValueValidator(50)])
-
     color_outliers = models.CharField('Color outliers', max_length=7, null=False, default=DEFAULT_COLOR_OUTLIERS,
                                       help_text='Default: #FF0000, the RGB color used to mark outliers',
                                       validators=[RegexValidator(regex='^#(?:[0-9a-fA-F]{3}){1,2}$')])

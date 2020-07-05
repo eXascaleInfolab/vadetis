@@ -194,8 +194,6 @@ function printFormErrors(form_errors) {
  */
 function settingsFromCookie() {
     var settings = {};
-    _setSettingOrDefault(settings, 'highcharts_height', 750);
-    _setSettingOrDefault(settings, 'legend_height', 100);
     _setSettingOrDefault(settings, 'color_outliers', '#FF0000');
     _setSettingOrDefault(settings, 'color_clusters', '#0000FF');
     _setSettingOrDefault(settings, 'color_true_positive', '#008800');
