@@ -1,4 +1,4 @@
-var DatasetPage = function () {
+var DatasetDisplayPage = function () {
 
     // private
     var init = function (dataset_json_url, dataset_download_file_url, selected_button) {

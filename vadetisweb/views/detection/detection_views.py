@@ -9,7 +9,7 @@ from django.contrib import messages
 from django.db.models import Q
 
 from vadetisweb.models import DataSet
-from vadetisweb.serializers import AlgorithmSerializer, ThresholdSerializer, AnomalyInjectionSerializer
+from vadetisweb.serializers import AlgorithmSerializer, ThresholdSerializer, InjectionSerializer
 from vadetisweb.utils import get_highcharts_range_button_preselector, q_public_or_user_is_owner
 from vadetisweb.factory import dataset_not_found_msg
 from vadetisweb.parameters import SYNTHETIC, REAL_WORLD
@@ -58,7 +58,7 @@ class DetectionSyntheticDataset(APIView):
         selected_button = get_highcharts_range_button_preselector(dataset.frequency)
 
         detection_serializer = AlgorithmSerializer()
-        injection_serializer = AnomalyInjectionSerializer(context={'dataset_selected': dataset_id, 'request' : request })
+        injection_serializer = InjectionSerializer(context={'dataset_selected': dataset_id, 'request' : request})
         threshold_serializer = ThresholdSerializer()
 
         return Response({
@@ -87,7 +87,7 @@ class DetectionRealWorldDataset(APIView):
         selected_button = get_highcharts_range_button_preselector(dataset.frequency)
 
         detection_serializer = AlgorithmSerializer()
-        injection_serializer = AnomalyInjectionSerializer(context={'dataset_selected': dataset_id, 'request' : request })
+        injection_serializer = InjectionSerializer(context={'dataset_selected': dataset_id, 'request' : request})
         threshold_serializer = ThresholdSerializer()
 
         return Response({

@@ -11,19 +11,19 @@ from django.shortcuts import reverse
 from django.db.models import Q
 
 from vadetisweb.models import DataSet
-from vadetisweb.serializers import AnomalyInjectionSerializer, MessageSerializer
+from vadetisweb.serializers import InjectionSerializer, MessageSerializer
 from vadetisweb.anomaly_algorithms import anomaly_injection
 from vadetisweb.utils import dataset_to_json, strToBool, get_settings, json_message_utils, q_public_or_user_is_owner
 from vadetisweb.factory import *
 
 
-class AnomalyInjectionView(APIView):
+class InjectionView(APIView):
     """
     Request anomaly injection
     """
     renderer_classes = [JSONRenderer]
 
-    @swagger_auto_schema(request_body=AnomalyInjectionSerializer)
+    @swagger_auto_schema(request_body=InjectionSerializer)
     def post(self, request, dataset_id):
 
         dataset = DataSet.objects.filter(Q(id=dataset_id),
@@ -34,7 +34,7 @@ class AnomalyInjectionView(APIView):
             response['Location'] = reverse('vadetisweb:index')
             return response
 
-        serializer = AnomalyInjectionSerializer(context={'dataset_selected': dataset_id, 'request' : request }, data=request.data)
+        serializer = InjectionSerializer(context={'dataset_selected': dataset_id, 'request' : request}, data=request.data)
 
         if serializer.is_valid():
             show_anomaly = strToBool(request.query_params.get('show_anomaly', 'true'))

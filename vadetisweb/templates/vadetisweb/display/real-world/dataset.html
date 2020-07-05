@@ -170,7 +170,7 @@
     <script src="{% static 'js/page/display/page.init.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
         jQuery(document).ready(function () {
-            DatasetPage.init("{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_download_file' %}", {{ selected_button }});
+            DatasetDisplayPage.init("{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_download_file' %}", {{ selected_button }});
             VadetisDatatables.init("table_training_datasets", "{% url 'vadetisweb:display_training_datasets_datatable-list' %}?format=datatables&main={{ dataset.id }}");
         });
     </script>

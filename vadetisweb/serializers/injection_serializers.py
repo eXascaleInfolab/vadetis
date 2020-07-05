@@ -4,7 +4,7 @@ from vadetisweb.fields import *
 from vadetisweb.parameters import ANOMALY_INJECTION_TYPES, ANOMALY_INJECTION_DEVIATIONS, ANOMALY_INJECTION_DEVIATION_MEDIUM, ANOMALY_INJECTION_REPETITIONS, ANOMALY_INJECTION_REPEAT_SINGLE
 
 
-class AnomalyInjectionSerializer(serializers.Serializer):
+class InjectionSerializer(serializers.Serializer):
 
     dataset = DatasetField(default='overridden')
     dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
@@ -46,4 +46,4 @@ class AnomalyInjectionSerializer(serializers.Serializer):
     range_end = RangeEndHiddenIntegerField(html_id='rangeEndInjection')
 
     def __init__(self, *args, **kwargs):
-        super(AnomalyInjectionSerializer, self).__init__(*args, **kwargs)
+        super(InjectionSerializer, self).__init__(*args, **kwargs)

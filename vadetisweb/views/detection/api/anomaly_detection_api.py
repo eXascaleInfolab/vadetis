@@ -15,7 +15,7 @@ from vadetisweb.anomaly_algorithms.detection import *
 from vadetisweb.factory import dataset_not_found_msg
 
 
-class AnomalyDetectionAlgorithmSelectionView(APIView):
+class DetectionAlgorithmSelectionView(APIView):
     """
     Request anomaly detection form based on selected algorithm
     """
@@ -123,7 +123,7 @@ class AnomalyDetectionAlgorithmSelectionView(APIView):
 
 
 
-class AnomalyDetectionLisaPearson(APIView):
+class DetectionLisaPearson(APIView):
     """
         Request anomaly detection from provided json
     """
@@ -157,7 +157,7 @@ class AnomalyDetectionLisaPearson(APIView):
                 return redirect('vadetisweb:index')
 
 
-class AnomalyDetectionLisaDtwPearson(APIView):
+class DetectionLisaDtwPearson(APIView):
     """
         Request anomaly detection from provided json
     """
@@ -190,7 +190,7 @@ class AnomalyDetectionLisaDtwPearson(APIView):
                 return redirect('vadetisweb:index')
 
 
-class AnomalyDetectionLisaGeoDistance(APIView):
+class DetectionLisaGeoDistance(APIView):
     """
         Request anomaly detection from provided json
     """
@@ -224,7 +224,7 @@ class AnomalyDetectionLisaGeoDistance(APIView):
                 return redirect('vadetisweb:index')
 
 
-class AnomalyDetectionRPCAMEstimatorLoss(APIView):
+class DetectionRPCAMEstimatorLoss(APIView):
     """
         Request anomaly detection from provided json
     """
@@ -258,7 +258,7 @@ class AnomalyDetectionRPCAMEstimatorLoss(APIView):
                 return redirect('vadetisweb:index')
 
 
-class AnomalyDetectionHistogram(APIView):
+class DetectionHistogram(APIView):
     """
         Request anomaly detection from provided json
     """
@@ -292,7 +292,7 @@ class AnomalyDetectionHistogram(APIView):
                 return redirect('vadetisweb:index')
 
 
-class AnomalyDetectionCluster(APIView):
+class DetectionCluster(APIView):
     """
         Request anomaly detection from provided json
     """
@@ -326,7 +326,7 @@ class AnomalyDetectionCluster(APIView):
                 return redirect('vadetisweb:index')
 
 
-class AnomalyDetectionSVM(APIView):
+class DetectionSVM(APIView):
     """
         Request anomaly detection from provided json
     """
@@ -361,7 +361,7 @@ class AnomalyDetectionSVM(APIView):
                 return redirect('vadetisweb:index')
 
 
-class AnomalyDetectionIsolationForest(APIView):
+class DetectionIsolationForest(APIView):
     """
         Request anomaly detection from provided json
     """

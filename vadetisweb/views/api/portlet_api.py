@@ -6,7 +6,34 @@ from drf_yasg.utils import swagger_auto_schema
 
 from django.urls import reverse
 
-from vadetisweb.serializers import ImagePortletSerializer, BasePortletSerializer, ThresholdSerializer
+from vadetisweb.serializers import ImagePortletSerializer, BasePortletSerializer, ThresholdSerializer, InjectionSerializer
+
+
+class InjectionFormPortlet(APIView):
+    """
+    API for a injection form portlet
+    """
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+    template_name = 'vadetisweb/parts/portlet/serializer_portlet.html'
+
+    @swagger_auto_schema(request_body=BasePortletSerializer)
+    def post(self, request, format=None):
+        portlet_serializer = BasePortletSerializer(data=request.data)
+
+        if portlet_serializer.is_valid() and request.accepted_renderer.format == 'html':  # rendered template:
+            validated_data = portlet_serializer.validated_data
+            injection_serializer = InjectionSerializer()
+            return Response({
+                'id': validated_data['id'],
+                'title': validated_data['title'],
+                'serializer_formid' : 'threshold_form',
+                'serializer_url' : reverse('vadetisweb:injection_anomaly'),
+                'serializer' : injection_serializer,
+                'serializer_submit_label' : 'Update',
+            }, status=status.HTTP_200_OK)
+
+        else:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ThresholdFormPortlet(APIView):
