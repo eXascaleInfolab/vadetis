@@ -11,7 +11,8 @@ var VadetisHighchartsReset = function () {
     var init = function (highcharts_container_id, button_id, url, callback) {
         var button = $("#" + button_id), isLoading = false, highchart = $("#" + highcharts_container_id).highcharts();
 
-        button.click(function () {
+        button.click(function (event) {
+            event.preventDefault();
             if (!isLoading) {
                 $(":submit").attr("disabled", true);
                 button.html('Loading...').addClass('disabled');
@@ -41,7 +42,8 @@ var VadetisHighchartsLoad = function () {
     var init = function (highcharts_container_id, button_id, url, type, callback) {
         var button = $("#" + button_id), isLoading = false, highchart = $("#" + highcharts_container_id).highcharts();
         var buttonTxt = type === 'raw' ? 'Raw' : (type === 'zscore' ? "Z-Score" : type);
-        button.click(function () {
+        button.click(function (event) {
+            event.preventDefault();
             if (!isLoading) {
                 $(":submit").attr("disabled", true);
                 button.html('Loading...').addClass('disabled');
@@ -70,7 +72,8 @@ var VadetisHighchartsLoad = function () {
 var VadetisHighchartsFileDownload = function () {
     var init = function (highcharts_container_id, button_id, url, type) {
         var button = $("#" + button_id), isLoading = false, highchart = $("#" + highcharts_container_id).highcharts();
-        button.click(function () {
+        button.click(function (event) {
+            event.preventDefault();
             if (!isLoading) {
                 button.addClass('disabled');
                 downloadDataset(highchart, url, type,function () {

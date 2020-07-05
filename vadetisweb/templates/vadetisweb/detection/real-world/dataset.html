@@ -51,22 +51,8 @@
                                 <a href="#" class="btn btn-outline-brand btn-icon btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="mdi mdi-18px mdi-dots-horizontal"></i>
                                 </a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <ul class="kt-nav">
-                                        <li class="kt-nav__item">
-                                            <a id="download_csv" href="#" class="kt-nav__link">
-                                                <i class="mdi mdi-18px mdi-file-table-outline kt-nav__link-icon"></i>
-                                                <span class="kt-nav__link-text">Download CSV</span>
-                                            </a>
-                                        </li>
-                                        <li class="kt-nav__item">
-                                            <a id="download_json" href="#" class="kt-nav__link">
-                                                <i class="mdi mdi-18px mdi-json kt-nav__link-icon flaticon2-settings"></i>
-                                                <span class="kt-nav__link-text">Download JSON</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                {% url 'vadetisweb:display_real_world_dataset' dataset_id=dataset.id as display_link %}
+                                {% include 'vadetisweb/parts/dropdown/highcharts_dropdown.html' with display_link=display_link %}
                             </div>
                         </div>
                     </div>
