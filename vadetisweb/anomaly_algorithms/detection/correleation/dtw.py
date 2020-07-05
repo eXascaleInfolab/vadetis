@@ -2,7 +2,8 @@ import numpy as np
 from scipy.spatial.distance import cdist
 
 import pyximport; pyximport.install()
-import vadetis.cutil as cutil
+from .cutil import cutil
+#import vadetisweb.anomaly_algorithms.detection.correleation.cutil.cutil as cutil
 
 #########################################################
 # DTW

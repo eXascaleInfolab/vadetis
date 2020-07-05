@@ -17,7 +17,7 @@
         "language": "c++",
         "name": "lisa.cutil",
         "sources": [
-            "vadetis/cutil.pyx"
+            "vadetisweb/anomaly_algorithms/detection/correleation/cutil/cutil.pyx"
         ]
     },
     "module_name": "lisa.cutil"
