@@ -1,3 +1,5 @@
+"use strict";
+
 var DatasetDetectionForm = function () {
 
     var clearInserted = function () {

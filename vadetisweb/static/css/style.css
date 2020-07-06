@@ -45,6 +45,10 @@
     text-transform: capitalize;
 }
 
+.map-location {
+    height: 375px;
+}
+
 :root {
   --blue: #007bff;
   --indigo: #6610f2;

@@ -1,3 +1,5 @@
+"use strict";
+
 var DatasetDisplayPage = function () {
 
     // private

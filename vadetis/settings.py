@@ -249,6 +249,12 @@ EMAIL_HOST_USER = 'lisaexascale@gmail.com'
 EMAIL_HOST_PASSWORD = 'svQcdxXQ'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
+# MAP BOX - ACCOUNT
+MAPBOX_USER = 'vadetis'
+MAPBOX_ACCOUNT = 'lisaexascale@gmail.com'
+MAPBOX_PW = 'J*V6%gsIxWjp'
+MAPBOX_TOKEN = 'pk.eyJ1IjoidmFkZXRpcyIsImEiOiJja2NiMTB4NW8yMHI2MnRvMHk2aDl6ZG5kIn0.5CarskUSNdP8fWdvSx7Omw'
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
