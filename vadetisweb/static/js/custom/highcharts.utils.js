@@ -203,7 +203,9 @@ function generateSeriesFromJson(dataset_series_json, algorithm, time_series) {
 
 function setSeriesData(highchart, series_data_json) {
     series_data_json.forEach(function (series) {
-        highchart.get(series.id).setData(series.data, false, true);
+        highchart_series = highchart.get(series.id);
+        highchart_series.setData(series.data, false, true);
+        highchart_series.options.custom.type = series.type;
     });
     highchart.redraw();
 }
@@ -246,9 +248,9 @@ function loadSeries(chart, data_series) {
     });
 }
 
-function initSeriesForType(highchart, url, type, show_anomaly) {
+function initSeriesForType(highchart, url, type) {
     highchart.showLoading();
-    $.getJSON(url + '?type=' + type + '&show_anomaly=' + show_anomaly, function (data) {
+    $.getJSON(url + '?type=' + type, function (data) {
         var series_data = data['series'];
         var dataset_series = getDatasetSeriesFromJson(series_data);
         loadSeries(highchart, dataset_series);
@@ -256,9 +258,9 @@ function initSeriesForType(highchart, url, type, show_anomaly) {
     });
 }
 
-function loadSeriesForType(highchart, url, type, show_anomaly, callback) {
+function loadSeriesForType(highchart, url, type, callback) {
     highchart.showLoading();
-    $.getJSON(url + '?type=' + type + '&show_anomaly=' + show_anomaly, function (data) {
+    $.getJSON(url + '?type=' + type, function (data) {
         var series_data_json = data['series'];
         setSeriesData(highchart, series_data_json);
         highchart.hideLoading();
@@ -311,7 +313,7 @@ function updateSeriesForType(highchart, url, type, show_anomaly, callback) {
             }
         },
         type: "POST",
-        url: url + '?type=' + type + '&show_anomaly=' + show_anomaly,
+        url: url + '?type=' + type,
         data: formData,
         processData: false,
         contentType: false,

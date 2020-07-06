@@ -128,7 +128,7 @@ var VadetisHighcharts = function () {
         });
 
         // load chart
-        initSeriesForType(highchart, url, "raw", true);
+        initSeriesForType(highchart, url, "raw");
     };
     return {
         init: function (html_id, url, selectedButton) {

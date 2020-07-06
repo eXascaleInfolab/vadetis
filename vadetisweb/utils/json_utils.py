@@ -8,10 +8,22 @@ from .date_utils import unix_time_millis_from_dt
 from .anomaly_detection_utils import get_info
 
 
-def dataset_to_json(dataset, df, df_class, show_anomaly, settings, type):
+def get_type_from_dataset_json(dataset_json):
+    """
+    Although a dataset is either of type 'raw' or 'zscore' we store this information redundant in
+    highcharts' series.options.custom field for each series as it's the most suitable place for it.
+    :param dataset_json: the dataset as json
+    :return: the common type of the series
+    """
+    series = dataset_json['series']
+    if len(series) > 0 and all(x == series[0]['type'] for x in [s['type'] for s in series]):
+        return series[0]['type']
+    raise ValueError('Some series are of different type')
+
+
+def dataset_to_json(dataset, df, df_class, settings, type):
     data_series = []
     time_series = dataset.timeseries_set.all()
-
     outlier_color = settings['color_outliers']
 
     for ts in time_series:
@@ -19,16 +31,10 @@ def dataset_to_json(dataset, df, df_class, show_anomaly, settings, type):
         for index, value in df.loc[:, ts.id].iteritems():
             anomaly_class = 1 if (df_class.loc[index, ts.id] == True) else 0
 
-            if not show_anomaly:
-                if anomaly_class == 0:
-                    data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class': anomaly_class})
-                else:
-                    data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class': anomaly_class})
+            if anomaly_class == 0:
+                data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class': anomaly_class})
             else:
-                if anomaly_class == 0:
-                    data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class': anomaly_class})
-                else:
-                    data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class': anomaly_class, 'marker': {'fillColor': outlier_color, 'radius': 3}})
+                data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class': anomaly_class, 'marker': {'fillColor': outlier_color, 'radius': 3}})
 
         dict_series = {
             'id': ts.id,

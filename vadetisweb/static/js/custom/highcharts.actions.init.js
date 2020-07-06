@@ -16,7 +16,7 @@ var VadetisHighchartsReset = function () {
             if (!isLoading) {
                 $(":submit").attr("disabled", true);
                 button.html('Loading...').addClass('disabled');
-                loadSeriesForType(highchart, url, "raw", true, function () {
+                loadSeriesForType(highchart, url, "raw", function () {
                     isLoading = false;
                     $(":submit").attr("disabled", false);
                     button.html('Reset').removeClass('disabled');
@@ -47,7 +47,7 @@ var VadetisHighchartsLoad = function () {
             if (!isLoading) {
                 $(":submit").attr("disabled", true);
                 button.html('Loading...').addClass('disabled');
-                loadSeriesForType(highchart, url, type, true, function () {
+                loadSeriesForType(highchart, url, type, function () {
                     isLoading = false;
                     $(":submit").attr("disabled", false);
                     button.html(buttonTxt).removeClass('disabled');

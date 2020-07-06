@@ -37,7 +37,6 @@ class DatasetJson(APIView):
 
             # handle query params
             type = request.query_params.get('type', 'raw')
-            show_anomaly = strToBool(request.query_params.get('show_anomaly', 'true'))
 
             df = dataset.dataframe
             df_class = dataset.dataframe_class
@@ -47,7 +46,7 @@ class DatasetJson(APIView):
                 df = df_zscore(df)  # transform raw data to z-score values
 
             data = {}
-            data['series'] = dataset_to_json(dataset, df, df_class, show_anomaly, settings, type)
+            data['series'] = dataset_to_json(dataset, df, df_class, settings, type)
 
             return Response(data)
 

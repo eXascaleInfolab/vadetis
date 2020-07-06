@@ -13,7 +13,7 @@ from django.db.models import Q
 from vadetisweb.models import DataSet
 from vadetisweb.serializers import InjectionSerializer, MessageSerializer
 from vadetisweb.anomaly_algorithms import anomaly_injection
-from vadetisweb.utils import dataset_to_json, strToBool, get_settings, json_message_utils, q_public_or_user_is_owner
+from vadetisweb.utils import dataset_to_json, get_settings, q_public_or_user_is_owner, get_type_from_dataset_json
 from vadetisweb.factory import *
 
 
@@ -37,12 +37,11 @@ class InjectionView(APIView):
         serializer = InjectionSerializer(context={'dataset_selected': dataset_id, 'request' : request}, data=request.data)
 
         if serializer.is_valid():
-            show_anomaly = strToBool(request.query_params.get('show_anomaly', 'true'))
             data = {}
             settings = get_settings(request)
             df_inject, df_inject_class = anomaly_injection(serializer.validated_data)
-
-            data['series'] = dataset_to_json(dataset, df_inject, df_inject_class, show_anomaly, settings, 'raw') #raw todo
+            type = get_type_from_dataset_json(serializer.validated_data['dataset_series_json'])
+            data['series'] = dataset_to_json(dataset, df_inject, df_inject_class, settings, type)
             return Response(data, status=status.HTTP_200_OK)
 
         else:
