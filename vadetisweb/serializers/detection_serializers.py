@@ -301,12 +301,12 @@ class ThresholdSerializer(serializers.Serializer):
                                                   'id': 'dataset_series_json'})
 
     threshold = serializers.FloatField(label='New Threshold', required=True,
+                                       help_text='You can set a new threshold from most suitable value range with the slider or through text input. '
+                                                 'If you manually set a value out of range, the slider will adapt to the new range.',
                                        style={'template': 'vadetisweb/parts/input/text_input_slider.html',
                                               'step': 'any',
                                               'id': 'threshold_value',
-                                              'help_text_in_popover': True},
-                                       help_text='You can set a new threshold from most suitable value range with the slider or through text input. '
-                                                 'If you manually set a value out of range, the slider will adapt to the new range.')
+                                              'help_text_in_popover': False})
 
     def __init__(self, *args, **kwargs):
         super(ThresholdSerializer, self).__init__(*args, **kwargs)

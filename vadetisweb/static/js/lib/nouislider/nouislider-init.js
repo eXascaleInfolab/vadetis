@@ -1,6 +1,6 @@
 var NoUiSliders = function() {
 
-    var thresholdSlider = function(slider_element, value_input_selector, round_digits) {
+    var thresholdSlider = function(slider_element, value_input_selector) {
 
         function updateRange(min, max, value) {
             slider_element.noUiSlider.updateOptions({
@@ -19,10 +19,9 @@ var NoUiSliders = function() {
                 'min': [0],
                 'max': [1],
             },
-            //TODO fix round digits for thresholds with large decimal parts
-            /*format: wNumb({
-                decimals: round_digits,
-            })*/
+            format: wNumb({
+                decimals: 7,
+            })
         });
 
         // slider updates text input
@@ -48,8 +47,8 @@ var NoUiSliders = function() {
 
     return {
         //initiate the slider
-        init: function(slider_element, value_input_selector, round_digits) {
-            thresholdSlider(slider_element, value_input_selector, round_digits);
+        init: function(slider_element, value_input_selector) {
+            thresholdSlider(slider_element, value_input_selector);
         }
     };
 

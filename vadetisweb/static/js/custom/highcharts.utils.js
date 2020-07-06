@@ -317,7 +317,6 @@ function updateSeriesForType(highchart, url, type, show_anomaly, callback) {
         contentType: false,
         success: function (data, status, xhr) {
             if (data !== undefined) {
-                console.log(data);
                 var series_data_json = data['series'];
                 setSeriesData(highchart, series_data_json);
             }
@@ -345,20 +344,15 @@ function updateScores(info) {
 }
 
 function updateThreshold(value) {
-    var settings = settingsFromCookie();
-    var round_digits = settings.round_digits;
-    round_digits = 10;
-
-    var slider_element = $('#threshold_slider')[0]; // extracting the raw element from the jQuery object
     var threshold_input_selector = $('#threshold_value');
+    var slider_element = $('#threshold_slider')[0]; // extracting the raw element from the jQuery object
 
-    // init NoUiSlider or update value
+    // init NoUiSlider if required
     if(!slider_element.noUiSlider) {
-        NoUiSliders.init(slider_element, threshold_input_selector, round_digits);
+        NoUiSliders.init(slider_element, threshold_input_selector);
     }
-
     slider_element.noUiSlider.set(value);
-    $('#current_threshold').html(value.toFixed(round_digits));
+    $('#current_threshold').html(value);
 }
 
 function requestCnfMatrix(portlet_id, img_container_id, info) {

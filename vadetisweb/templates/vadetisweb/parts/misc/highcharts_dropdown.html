@@ -1,6 +1,7 @@
 {% load static %}
 <div class="dropdown-menu dropdown-menu-right">
     <ul class="kt-nav">
+        {% if display_link or detection_link or recommendation_link or outlier_analysis_link %}
         <li class="kt-nav__section kt-nav__section--first">
             <span class="kt-nav__section-text">Navigation</span>
         </li>
@@ -31,6 +32,7 @@
                 <span class="kt-nav__link-text">Outlier Analysis</span>
             </a>
         </li>
+        {% endif %}
         {% endif %}
         <li class="kt-nav__section kt-nav__section--first">
             <span class="kt-nav__section-text">Download</span>
