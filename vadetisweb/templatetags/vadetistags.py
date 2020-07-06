@@ -59,7 +59,7 @@ def is_spatial(dataset):
 def number_of_time_series_anomaly_values(dataset, ts_id):
     return dataset.number_of_time_series_anomaly_values(ts_id)
 
-
+"""
 @register.filter(takes_context=False, is_safe=False, needs_autoescape=False)
 def get_conf_item(dict, key):
 
@@ -93,10 +93,6 @@ def get_conf_item(dict, key):
     if key == 'correlation_algorithm':
         return mark_safe('Correlation: %s<br />' % dict[key])
 
-    """if key == 'window_size':
-        window_size_list = decompress_window_size(dict[key], int_conversion=False)
-        return mark_safe('Window Size: %s<br />' % " ".join(window_size_list))"""
-
     if key == 'min_periods':
         return mark_safe('Min Periods: %s<br />' % dict[key])
 
@@ -115,7 +111,7 @@ def get_conf_item(dict, key):
     if key == 'lisa_cluster_threshold':
         return mark_safe('Cluster Threshold: %s<br />' % dict[key])
 
-    return ''
+    return ''"""
 
 
 @register.simple_tag(takes_context=True)

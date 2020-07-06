@@ -149,7 +149,7 @@ class TaskImportData(Task):
                         raise ValueError(err_msg)
 
                     # check if needed columns are present and check if values complete
-                    required_cols = pd.Series(['l_name', 'lon', 'lat', 'height'])
+                    required_cols = pd.Series(['l_name', 'latitude', 'longitude'])
                     if not required_cols.isin(df.columns).all() or df_loc.loc[
                         ts_names, required_cols].isnull().values.any():
                         err_msg = "Some required values are missing"
@@ -159,18 +159,12 @@ class TaskImportData(Task):
                     for idx, row in df_loc.iterrows():
                         ts = TimeSeries.objects.get(datasets__id=dataset.id, name=idx)
                         l_name = row['l_name']
-                        lon = row['lon']
-                        lat = row['lat']
-                        ch1903_e = row['ch1903_e']
-                        ch1903_n = row['ch1903_n']
-                        height = row['height']
+                        lat = row['latitude']
+                        lon = row['longitude']
 
                         location = Location.objects.create(label=l_name,
-                                                           lon=lon,
-                                                           lat=lat,
-                                                           ch1903_easting=ch1903_e,
-                                                           ch1903_northing=ch1903_n,
-                                                           height=height)
+                                                           latitude=lat,
+                                                           longitude=lon)
                         ts.location = location
                         ts.save()
                         location.save()

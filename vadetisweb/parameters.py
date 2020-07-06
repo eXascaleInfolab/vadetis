@@ -235,16 +235,6 @@ DTW_DISTANCE_FUNCTION = (
     (YULE, YULE),
 )
 
-CH1903 = "Linear distance (CH1903)"
-CH1903_ALT = "Linear distance with altitude (CH1903)"
-HAVERSINE = "Haversine (Lat/Lon)"
-
-GEO_DISTANCE = (
-    (CH1903, CH1903),
-    (CH1903_ALT, CH1903_ALT),
-    (HAVERSINE, HAVERSINE),
-)
-
 #########################################################
 # Defaults for application settings
 #########################################################

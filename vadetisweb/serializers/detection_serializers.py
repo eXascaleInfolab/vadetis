@@ -259,11 +259,6 @@ class LisaGeoDistanceSerializer(serializers.Serializer):
                                   style={'template': 'vadetisweb/parts/input/select_input.html',
                                          'help_text_in_popover': True})
 
-    geo_distance_function = serializers.ChoiceField(choices=GEO_DISTANCE, required=True,
-                                                    help_text='The geographic distance function used for the calculation.',
-                                                    style={'template': 'vadetisweb/parts/input/select_input.html',
-                                                           'help_text_in_popover': True})
-
     time_range = serializers.ChoiceField(label='Time Range', choices=TIME_RANGE, required=True,
                                          help_text='The time range to apply anomaly detection',
                                          style={'template': 'vadetisweb/parts/input/select_input.html',

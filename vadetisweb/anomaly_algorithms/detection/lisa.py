@@ -2,10 +2,9 @@ import datetime
 
 from .helper_functions import *
 from .correleation.pearson import pearson, dtw_pearson
-from .correleation.distance import df_distance, df_corr_geo_distance
+from .correleation.distance import get_df_corr_geo_distance
 
 from vadetisweb.utils import df_zscore, get_info
-
 #########################################################
 # LISA HELPER
 #########################################################
@@ -156,18 +155,6 @@ def df_lisa_time_series(time_series_id_p, df_results, df_mean, df_corr, global_c
     return time_elapsed
 
 
-def get_df_corr_geo_distance(df, distance_function):
-    start_time = datetime.datetime.now()
-
-    df_dist = df_distance(df, distance_function)
-    df_correlation = df_corr_geo_distance(df_dist)
-
-    time_elapsed = (datetime.datetime.now() - start_time).__str__()
-    print("Execution time for geographic correlation values:", time_elapsed)
-
-    return df_correlation, time_elapsed
-
-
 #########################################################
 # PEARSON
 #########################################################
@@ -300,7 +287,7 @@ def lisa_dtw(df, df_class, conf, time_series_id):
 #########################################################
 
 def lisa_geo(df, df_class, conf, time_series_id):
-    df_corr_dist, _ = get_df_corr_geo_distance(df, conf['geo_distance_function'])
+    df_corr_dist, _ = get_df_corr_geo_distance(df)
 
     df_class_copy = df_class.copy()
     df_class_copy = df_class_copy.rename(columns={time_series_id: 'class'})

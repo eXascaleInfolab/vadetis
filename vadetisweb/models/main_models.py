@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 from model_utils.managers import InheritanceManager
 from picklefield.fields import PickledObjectField
@@ -40,11 +41,8 @@ class Location(models.Model):
     """
 
     label = models.CharField(max_length=32, null=False)
-    lon = models.FloatField(null=False)
-    lat = models.FloatField(null=False)
-    ch1903_easting = models.PositiveIntegerField(null=True, blank=True)
-    ch1903_northing = models.PositiveIntegerField(null=True, blank=True)
-    height = models.PositiveIntegerField(null=True, blank=True)
+    latitude = models.FloatField(validators=[MinValueValidator(-90), MaxValueValidator(90)])
+    longitude = models.FloatField(validators=[MinValueValidator(-180), MaxValueValidator(180)])
 
     def __str__(self):
         return '%s' % (self.label)

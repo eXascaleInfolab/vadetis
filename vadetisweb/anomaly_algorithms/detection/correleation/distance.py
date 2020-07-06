@@ -1,10 +1,8 @@
-import datetime
-import pandas as pd
-import numpy as np
+import datetime, logging
+import pandas as pd, numpy as np
 from math import hypot, sin, cos, sqrt, atan2, radians
 
 from vadetisweb.models import TimeSeries
-from vadetisweb.parameters import CH1903, CH1903_ALT, HAVERSINE
 
 
 def linear_distance(x1, y1, x2, y2):
@@ -68,24 +66,23 @@ def haversine_distance(lat1, lon1, lat2, lon2):
     return distance
 
 
-def get_df_corr_geo_distance(df, distance_function):
+def get_df_corr_geo_distance(df):
     start_time = datetime.datetime.now()
 
-    df_dist = df_distance(df, distance_function)
+    df_dist = df_distance(df)
     df_correlation = df_corr_geo_distance(df_dist)
 
     time_elapsed = (datetime.datetime.now() - start_time).__str__()
-    print("Execution time for geographic correlation values:", time_elapsed)
+    logging.debug("Execution time for geographic correlation values:", time_elapsed)
 
     return df_correlation, time_elapsed
 
 
-def df_distance(df, geo_distance_function):
+def df_distance(df):
     """
     Computes a geographical distance matrix where columns and row names represent station ids
 
     :param df: a dataframe of with columns as station names
-    :param geo_distance_function: the function used to calculate the distance
     :return: a distance matrix as dataframe
     """
 
@@ -99,22 +96,7 @@ def df_distance(df, geo_distance_function):
 
             if ts_origin == ts_destination:
                 distance = 0
-
-            elif geo_distance_function == CH1903:
-                distance = linear_distance(ts_origin.location.ch1903_easting,
-                                           ts_origin.location.ch1903_northing,
-                                           ts_destination.location.ch1903_easting,
-                                           ts_destination.location.ch1903_northing)
-
-            elif geo_distance_function == CH1903_ALT:
-                distance_2d = linear_distance(ts_origin.location.ch1903_easting,
-                                              ts_origin.location.ch1903_northing,
-                                              ts_destination.location.ch1903_easting,
-                                              ts_destination.location.ch1903_northing)
-
-                distance = three_dim_distance(distance_2d, ts_origin.location.height, ts_destination.location.height)
-
-            elif geo_distance_function == HAVERSINE:
+            else:
                 distance = haversine_distance(ts_origin.location.lat,
                                               ts_origin.location.lon,
                                               ts_destination.location.lat,
