@@ -17,9 +17,6 @@ from vadetisweb.serializers.dataset.account_dataset_serializer import *
 from vadetisweb.tasks import TaskImportData, TaskImportTrainingData
 from vadetisweb.factory import *
 
-# TODO deprecated
-from vadetisweb.forms.account_forms import *
-
 
 #########################################################
 # Account Views

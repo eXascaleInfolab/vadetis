@@ -15,7 +15,6 @@ def robust_pca_huber_loss(df, df_class, df_train, df_train_class, delta=1, n_com
     X_train, X_test, y_train, y_test = train_test_split(df_train, df_train_class_instances, train_size=train_size, random_state=random_seed, stratify=df_train_class_instances)
 
     # Dimensionality reduction with Robust PCA and Huber Loss Function
-    # TODO create new OBJECT on each call (!!)
     huber_loss = loss.HuberLoss(delta=delta)
     M_rpca = MRobustPCA(n_components, huber_loss)
 
