@@ -327,7 +327,7 @@ def get_window_size_for_percentage(df, percentage):
     return int(round((float(len(df.index)) / float(100)) * int(percentage)))"""
 
 
-def get_dataframes_for_ranges(df, df_class, conf):
+"""def get_dataframes_for_ranges(df, df_class, conf):
 
     range_start = unix_time_millis_to_dt(conf['range_start']) if conf['time_range'] == SELECTION else None
     range_end = unix_time_millis_to_dt(conf['range_end']) if conf['time_range'] == SELECTION else None
@@ -354,7 +354,7 @@ def get_dataframes_for_ranges(df, df_class, conf):
                 df = df.loc[range_start:range_end]
                 df_class = df_class[range_start:range_end]
 
-    return df, df_class
+    return df, df_class"""
 
 
 def get_info(threshold, y_hat_results, y_truth):

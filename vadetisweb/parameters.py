@@ -180,22 +180,6 @@ DATASET_SPATIAL_DATA  = (
 # Correlation Algorithms
 #########################################################
 
-PEARSON = 'Pearson'
-DTW = 'DTW with Pearson'
-GEO = 'Geographical'
-
-#TODO deprecated
-CORRELATION_ALGORITHMS = (
-    (PEARSON, PEARSON),
-    (DTW, DTW),
-    (GEO, GEO),
-)
-
-CORRELATION_ALGORITHMS_NON_SPATIAL = (
-    (PEARSON, PEARSON),
-    (DTW, DTW),
-)
-
 SELECTION = 'as selected in chart'
 FULL = 'full series'
 

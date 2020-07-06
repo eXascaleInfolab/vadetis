@@ -6,7 +6,6 @@ import kombu.five
 from django.urls import reverse, NoReverseMatch, resolve
 from django.utils.safestring import mark_safe
 from django.template import Library
-#from lisa.utils import decompress_window_size TODO
 
 register = Library()
 
