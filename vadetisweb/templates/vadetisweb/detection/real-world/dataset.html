@@ -38,12 +38,7 @@
                         <h3 class="kt-portlet__head-title">Time Series</h3>
                     </div>
                     <div class="kt-portlet__head-toolbar">
-                        <div class="kt-portlet__head-actions">
-                            <div id="color_legend_group" class="btn-group">
-                                <button id="true_positive_btn" type="button" class="btn btn-brand btn-color-legend btn-sm" data-container="body" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="True Positive">TP</button>
-                                <button id="false_positive_btn" type="button" class="btn btn-brand btn-color-legend btn-sm" data-container="body" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="False Positive">FP</button>
-                                <button id="false_negative_btn" type="button" class="btn btn-brand btn-color-legend btn-sm" data-container="body" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="False Negative">FN</button>
-                            </div>
+                        <div id="highcharts_head_actions" class="kt-portlet__head-actions">
                             <a id="raw_btn" href="#" class="btn btn-outline-brand btn-bold btn-sm">Raw</a>
                             <a id="zscore_btn" href="#" class="btn btn-outline-brand btn-bold btn-sm">Z-Score</a>
                             <a id="reset_chart_btn" href="#" class="btn btn-outline-brand btn-bold btn-sm">Reset</a>
@@ -52,7 +47,7 @@
                                     <i class="mdi mdi-18px mdi-dots-horizontal"></i>
                                 </a>
                                 {% url 'vadetisweb:display_real_world_dataset' dataset_id=dataset.id as display_link %}
-                                {% include 'vadetisweb/parts/dropdown/highcharts_dropdown.html' with display_link=display_link %}
+                                {% include 'vadetisweb/parts/misc/highcharts_dropdown.html' with display_link=display_link %}
                             </div>
                         </div>
                     </div>

@@ -31,7 +31,7 @@
                         <h3 class="kt-portlet__head-title">Time Series</h3>
                     </div>
                     <div class="kt-portlet__head-toolbar">
-                        <div class="kt-portlet__head-actions">
+                        <div id="highcharts_head_actions" class="kt-portlet__head-actions">
                             <a id="raw_btn" href="#" class="btn btn-outline-brand btn-bold btn-sm">Raw</a>
                             <a id="zscore_btn" href="#" class="btn btn-outline-brand btn-bold btn-sm">Z-Score</a>
                             <div class="dropdown dropdown-inline">
@@ -39,7 +39,7 @@
                                     <i class="mdi mdi-18px mdi-dots-horizontal"></i>
                                 </a>
                                 {% url 'vadetisweb:detection_synthetic_dataset' dataset_id=dataset.id as detection_link %}
-                                {% include 'vadetisweb/parts/dropdown/highcharts_dropdown.html' with detection_link=detection_link %}
+                                {% include 'vadetisweb/parts/misc/highcharts_dropdown.html' with detection_link=detection_link %}
                             </div>
                         </div>
                     </div>

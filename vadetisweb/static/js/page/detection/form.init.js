@@ -235,6 +235,9 @@ var DatasetDetectionForm = function () {
                     $('#'+injection_portlet_id).remove();
                     clearInserted();
 
+                    // switch legend
+                    switchColorLegend(true);
+
                     // update series
                     var series_data_json = data['series'], info = data['info'];
                     setSeriesData(highchart, series_data_json);
@@ -372,6 +375,7 @@ var DatasetDetectionForm = function () {
             requestInjectionPortlet(injection_portlet_url, injection_portlet_id, "Anomaly Injection", function () {
                 KTApp.initPortlets();
                 initInjection(anomaly_injection_form_id);
+                switchColorLegend(false);
             })
         });
 
@@ -380,6 +384,7 @@ var DatasetDetectionForm = function () {
             requestInjectionPortlet(injection_portlet_url, injection_portlet_id, "Anomaly Injection", function () {
                 KTApp.initPortlets();
                 initInjection(anomaly_injection_form_id);
+                switchColorLegend(false);
             })
         });
 
@@ -388,6 +393,7 @@ var DatasetDetectionForm = function () {
             requestInjectionPortlet(injection_portlet_url, injection_portlet_id, "Anomaly Injection", function () {
                 KTApp.initPortlets();
                 initInjection(anomaly_injection_form_id);
+                switchColorLegend(false);
             })
         });
     }
@@ -397,6 +403,7 @@ var DatasetDetectionForm = function () {
         initButtons(dataset_json_url, "injection_portlet", injection_portlet_url, anomaly_injection_form_id);
         initInjection(anomaly_injection_form_id);
         initOnChangeDetection(select_on_change_id, img_portlet_url, score_portlet_url, threshold_portlet_url);
+        switchColorLegend(false);
     }
 
     return {

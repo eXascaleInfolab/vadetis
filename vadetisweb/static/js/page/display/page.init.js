@@ -9,6 +9,8 @@ var DatasetDisplayPage = function () {
 
         VadetisHighchartsFileDownload.init("highcharts_container", "download_csv", dataset_download_file_url, "csv");
         VadetisHighchartsFileDownload.init("highcharts_container", "download_json", dataset_download_file_url, "json");
+
+        switchColorLegend(false);
     }
     return {
         // public

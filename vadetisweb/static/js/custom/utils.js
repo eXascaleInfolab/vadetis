@@ -216,3 +216,30 @@ function _setSettingOrDefault(setting, cookieName, defaultValue) {
 function getSetting(cookieName) {
     return Cookies.get(cookieName);
 }
+
+function switchColorLegend(to_detection) {
+    var html, colors_detection_selector = $('#colors_detection'), colors_display_selector = $('#colors_display');
+
+    if(to_detection === true && (colors_detection_selector === undefined || colors_detection_selector.length === 0)) {
+        html = '<div id="colors_detection" class="btn-group">'
+            + '<button id="true_positive_btn" type="button" class="btn btn-brand btn-color-legend btn-sm" data-container="body" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="True Positive">TP</button>'
+            + '<button id="false_positive_btn" type="button" class="btn btn-brand btn-color-legend btn-sm" data-container="body" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="False Positive">FP</button>'
+            + '<button id="false_negative_btn" type="button" class="btn btn-brand btn-color-legend btn-sm" data-container="body" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="False Negative">FN</button>'
+            + '</div>';
+            if(colors_display_selector!==undefined)
+                colors_display_selector.remove();
+            $('#highcharts_head_actions').prepend(html);
+            $('#true_positive_btn').css({"background-color": getSetting('color_true_positive')});
+            $('#false_positive_btn').css({"background-color": getSetting('color_false_positive')});
+            $('#false_negative_btn').css({"background-color": getSetting('color_false_negative')});
+            KTApp.initTooltips();
+
+    } else if (to_detection === false && (colors_display_selector === undefined || colors_display_selector.length === 0)) {
+        html = '<div id="colors_display" class="btn-group"><button id="anomaly_btn" type="button" class="btn btn-brand btn-color-legend btn-sm" data-container="body" data-toggle="kt-tooltip" data-placement="top" title="" data-original-title="Anomaly">Anomaly</button></div>';
+        if(colors_detection_selector!==undefined)
+            colors_detection_selector.remove();
+        $('#highcharts_head_actions').prepend(html);
+        $('#anomaly_btn').css({"background-color": getSetting('color_outliers')});
+        KTApp.initTooltips();
+    }
+}
