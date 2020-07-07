@@ -14,6 +14,14 @@ def iso_format_time(dt):
     raise TypeError("Unknown type")
 
 
+def epoch_to_iso8601(unix_millis, timespec=None):
+    """
+    epoch_to_iso8601 - convert the unix epoch time into a iso8601 formatted date
+    """
+    value_sec = float(unix_millis) / 1000
+    return datetime.datetime.fromtimestamp(value_sec).isoformat() if timespec is None else datetime.datetime.fromtimestamp(value_sec).isoformat(timespec=timespec)
+
+
 def unix_time_millis_from_dt(dt):
     """
     Computes the unix time from a given datetime

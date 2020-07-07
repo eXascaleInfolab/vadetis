@@ -14,7 +14,7 @@ def export_to_csv(dataset_series_json):
 
         for series in series_data:
             for point in series['data']:
-                time = unix_time_millis_to_dt_str(point['x'], dense=True)
+                time = epoch_to_iso8601(point['x'], 'milliseconds')
                 row = [series['name'], time, series['unit'], point['y'], point['class']]
                 writer.writerow(row)
 
