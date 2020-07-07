@@ -34,15 +34,14 @@ class FrequentlyAskedQuestion(models.Model):
         return '%s' % (self.question)
 
 
-# todo view in frontend for this class
 class Location(models.Model):
     """
     The Location model holds the information about the location including label of a single time series.
     """
 
     label = models.CharField(max_length=32, null=False)
-    latitude = models.FloatField(validators=[MinValueValidator(-90), MaxValueValidator(90)])
-    longitude = models.FloatField(validators=[MinValueValidator(-180), MaxValueValidator(180)])
+    latitude = models.FloatField(null=False, validators=[MinValueValidator(-90), MaxValueValidator(90)])
+    longitude = models.FloatField(null=False, validators=[MinValueValidator(-180), MaxValueValidator(180)])
 
     def __str__(self):
         return '%s' % (self.label)

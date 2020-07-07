@@ -1,3 +1,5 @@
+"use strict";
+
 /*
  * function to update the curves in highcharts for a new threshold.
  * Data must contain new threshold and series data from highcharts

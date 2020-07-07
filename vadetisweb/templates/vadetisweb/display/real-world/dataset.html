@@ -12,7 +12,7 @@
 {% block css %}
     {{ block.super }}
     {% include 'vadetisweb/parts/includes/highcharts_css.html' %}
-    <link href="{% static 'css/lib/leaflet/leaflet.css' %}" rel="stylesheet" type="text/css" />
+    {% if dataset|is_spatial %}<link href="{% static 'css/lib/leaflet/leaflet.css' %}" rel="stylesheet" type="text/css" />{% endif %}
 {% endblock %}
 
 {% block head_js %}
@@ -159,7 +159,7 @@
 
 {% block additional_bottom_js %}
     <!-- page extensions -->
-    <script src="{% static 'js/lib/leaflet/leaflet.js' %}" type="text/javascript"></script>
+    {% if dataset|is_spatial %}<script src="{% static 'js/lib/leaflet/leaflet.js' %}" type="text/javascript"></script>{% endif %}
     <script src="{% static 'js/lib/highcharts/highstock.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/custom/highcharts.utils.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/custom/highcharts.view.init.js' %}" type="text/javascript"></script>
@@ -173,7 +173,7 @@
         jQuery(document).ready(function () {
             DatasetDisplayPage.init("{% get_host_url request=request %}{% url 'vadetisweb:dataset_json' dataset.id %}", "{% get_host_url request=request %}{% url 'vadetisweb:dataset_download_file' %}", {{ selected_button }});
             VadetisDatatables.init("table_training_datasets", "{% url 'vadetisweb:display_training_datasets_datatable-list' %}?format=datatables&main={{ dataset.id }}");
-            DatasetDisplayMap.init("time_series_location_map");
+            {% if dataset|is_spatial %}DatasetDisplayMap.init("{% url 'vadetisweb:dataset_locations' dataset.id %}", "time_series_location_map");{% endif %}
         });
     </script>
 {% endblock %}

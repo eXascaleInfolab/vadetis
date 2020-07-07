@@ -1,6 +1,5 @@
 "use strict";
 
-
 var IonRangeSliderInitializer = function () {
     var init = function (input_id) {
         $("#" + input_id).ionRangeSlider();

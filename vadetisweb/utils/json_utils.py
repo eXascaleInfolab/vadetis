@@ -189,6 +189,33 @@ def get_datasets_from_json(dataset_series):
     return df, df_class
 
 
+def get_locations_json(timeseries):
+    data = {}
+    points = []
+    locations = []
+    for ts in timeseries:
+        location = ts.location
+        locations.append(location)
+        points.append({ 'ts' : ts.name, 'label' : location.label, 'latitude' : location.latitude, 'longitude' : location.longitude })
+
+    center_latitude, center_longitude = _center_of_locations(locations)
+    data['meta'] = { 'center_latitude' : center_latitude, 'center_longitude' : center_longitude }
+    data['points'] = points
+    return data
+
+
+def _center_of_locations(locations):
+    lat = []
+    long = []
+    for l in locations:
+        lat.append(l.latitude)
+        long.append(l.longitude)
+
+    center_latitude = sum(lat) / len(lat)
+    center_longitude = sum(long) / len(long)
+    return center_latitude, center_longitude
+
+
 def get_updated_dataset_series_for_threshold_json(dataset_series, threshold, settings):
 
     for series in dataset_series['series']:
