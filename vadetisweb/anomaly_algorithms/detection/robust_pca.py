@@ -30,7 +30,9 @@ def robust_pca_huber_loss(df, df_class, df_train, df_train_class, delta=1, n_com
     y_test_scores = normalized_anomaly_scores(X_test, X_test_reconstructed)
     y_test_scores_class = y_test_scores.to_frame().join(y_test)
 
-    lower = 0 #TODO range would get negative
+    # computed scores are always in between 0-1 due to min max normalization
+    # we only have to estimate the higher bound
+    lower = 0
     higher = np.minimum(y_test_scores_class[y_test_scores_class['class'] == True].drop('class', axis=1).values.mean(), 1)
 
     lower_bound, higher_bound = estimate_score_bound(lower, higher)
