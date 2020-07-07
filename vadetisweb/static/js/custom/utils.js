@@ -28,7 +28,7 @@ function loadImage(html_id, url, post_data, callback) {
             callback();
         },
         error: function(data, status, xhr) {
-            printMessages([{'message': "Request failed"}], "error-request");
+            printMessages([{'message': "Request failed: Could not download image."}], "error-request");
             callback();
         }
     });
@@ -145,18 +145,26 @@ function printGroupedMessages(messages) {
     grouped_messages.forEach((value, tag) => printMessages(value, tag));
 }
 
+function uuidv4() {
+      return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+      );
+}
+
 function printMessages(value, tag) {
+    var id = uuidv4();
+
     var message_container = $('#message-container');
-    var html = "<div class=\"messages messages-" + tag + "\">";
+    var html = "<div id=\"" + id + "\" class=\"messages messages-" + tag + "\">";
     html += "<div class=\"message-inner\">";
     html += htmlMessages(value);
     html += "</div>";
     html += "<div class=\"message-button\">";
-    html += "<button id=\"messages-" + tag + "-close\" class=\"close btn-msg-close\"><i class=\"mdi mdi-18px mdi-close\"></i></button>";
+    html += "<button id=\"messages-" + id + "-close\" class=\"close btn-msg-close\"><i class=\"mdi mdi-18px mdi-close\"></i></button>";
     html += "</div>";
     html += "</div>";
     message_container.append(html);
-    $("#messages-" + tag + "-close").click(function() {
+    $("#messages-" + id + "-close").click(function() {
         $(this).parent().parent().fadeOut(800);
     });
 }

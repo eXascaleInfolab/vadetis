@@ -36,7 +36,9 @@ class CnfImage(APIView):
                 return response
             else:
                 return Response({}, status=status.HTTP_400_BAD_REQUEST)
-        except:
+
+        except Exception as e:
+            logging.error(e)
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -66,5 +68,7 @@ class ThresholdsScoresImage(APIView):
                 return response
             else:
                 return Response({}, status=status.HTTP_400_BAD_REQUEST)
-        except:
+
+        except Exception as e:
+            logging.error(e)
             return Response({}, status=status.HTTP_400_BAD_REQUEST)

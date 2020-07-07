@@ -46,7 +46,7 @@ var DatasetDetectionForm = function () {
                     $(":submit").attr("disabled", false);
                 },
                 error: function (data, status, xhr) {
-                    printMessages([{'message': "Request failed"}], "error-request");
+                    printMessages([{'message': "Request failed: Could not inject anomalies."}], "error-request");
                     handleMessages(data);
                     highchart.hideLoading();
                     $(":submit").attr("disabled", false);
@@ -100,7 +100,7 @@ var DatasetDetectionForm = function () {
                     $(":submit").attr("disabled", false);
                 },
                 error: function(data, status, xhr) {
-                    printMessages([{'message': "Request failed"}], "error-request");
+                    printMessages([{'message': "Request failed: Could not update threshold."}], "error-request");
                     handleMessages(data);
 
                     highchart.hideLoading();
@@ -141,7 +141,7 @@ var DatasetDetectionForm = function () {
                 callback();
             },
             error: function (data, status, xhr) {
-                printMessages([{'message': "Request failed"}], "error-request");
+                printMessages([{'message': "Request failed: Could not request rendered HTML."}], "error-request");
                 handleMessages(data);
             }
         });
@@ -170,7 +170,7 @@ var DatasetDetectionForm = function () {
                 callback();
             },
             error: function (data, status, xhr) {
-                printMessages([{'message': "Request failed"}], "error-request");
+                printMessages([{'message': "Request failed: Could not request rendered HTML."}], "error-request");
                 handleMessages(data);
             }
         });
@@ -198,7 +198,7 @@ var DatasetDetectionForm = function () {
                 callback();
             },
             error: function (data, status, xhr) {
-                printMessages([{'message': "Request failed"}], "error-request");
+                printMessages([{'message': "Request failed: Could not request rendered HTML."}], "error-request");
                 handleMessages(data);
             }
         });
@@ -281,7 +281,7 @@ var DatasetDetectionForm = function () {
                     $(":submit").attr("disabled", false);
                 },
                 error: function(data, status, xhr) {
-                    printMessages([{'message': "Request failed"}], "error-request");
+                    printMessages([{'message': "Request failed: Could not perform anomaly detection."}], "error-request");
                     handleMessages(data);
 
                     highchart.hideLoading();
@@ -336,7 +336,7 @@ var DatasetDetectionForm = function () {
                     }
                 },
                 error: function (data, status, xhr) {
-                    printMessages([{'message': "Request failed"}], "error-request");
+                    printMessages([{'message': "Request failed: Could not request form."}], "error-request");
                     handleMessages(data);
                     form_append_container_selector.empty();
                 }
@@ -372,7 +372,7 @@ var DatasetDetectionForm = function () {
                 },
                 error: function (data, status, xhr) {
                     handleRedirect(data, xhr);
-                    printMessages([{'message': "Request failed"}], "error-request");
+                    printMessages([{'message': "Request failed: Could not request rendered HTML."}], "error-request");
                     handleMessages(data);
                 }
             });

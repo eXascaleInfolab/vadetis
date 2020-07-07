@@ -295,7 +295,7 @@ function downloadDataset(highchart, url, type, callback) {
             callback();
         },
         error: function (data, status, xhr) {
-            printMessages([{'message': "Request failed"}], "error-request");
+            printMessages([{'message': "Request failed: Could not download dataset."}], "error-request");
             handleMessages(data);
             callback();
         }

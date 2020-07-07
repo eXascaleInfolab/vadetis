@@ -180,7 +180,7 @@ class DetectionLisaDtwPearson(APIView):
                     data['info'] = info"""
                     return Response(data)
 
-                except:
+                except Exception as e:
                     return Response({}, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({}, status=status.HTTP_400_BAD_REQUEST)

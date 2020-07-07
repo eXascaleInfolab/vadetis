@@ -52,7 +52,8 @@ class DatasetJson(APIView):
 
             return Response(data)
 
-        except:
+        except Exception as e:
+            logging.error(e)
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -89,7 +90,8 @@ class DatasetFileDownload(APIView):
                     return Response({}, status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({}, status=status.HTTP_400_BAD_REQUEST)
-        except:
+        except Exception as e:
+            logging.error(e)
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
