@@ -8,7 +8,7 @@ from django.conf import settings
 from vadetisweb.models import User, Location, TimeSeries, DataSet
 from vadetisweb.parameters import *
 from vadetisweb.utils import iso_format_time, silent_remove
-
+from vadetisweb.anomaly_algorithms import df_anomaly_instances
 
 class TaskImportData(Task):
     """
@@ -52,7 +52,7 @@ class TaskImportData(Task):
             # check number of values (row counts)
             num_values = df_read.shape[0]
             if num_values > settings.DATASET_MAX_VALUES:
-                raise ValueError("Dataset exceeds value limit {} ({} values provided)".format(num_values, settings.DATASET_MAX_VALUES))
+                raise ValueError("Dataset exceeds value limit {} ({} values provided)".format(settings.DATASET_MAX_VALUES, num_values))
 
             # check each series must have same unit
             group_by_ts_name = df_read.groupby('ts_name')
@@ -207,8 +207,8 @@ class TaskImportTrainingData(Task):
 
             # check number of values (row counts)
             num_values = df_read.shape[0]
-            if num_values > settings.DATASET_MAX_VALUES:
-                raise ValueError("Dataset exceeds value limit {} ({} values provided)".format(num_values, settings.DATASET_MAX_VALUES))
+            if df_read.shape[0] > settings.DATASET_MAX_VALUES:
+                raise ValueError("Dataset exceeds value limit {} ({} values provided)".format(settings.DATASET_MAX_VALUES, num_values))
 
             # check each series must have same unit
             group_by_ts_name = df_read.groupby('ts_name')
@@ -245,6 +245,15 @@ class TaskImportTrainingData(Task):
             # get anomaly df
             df_class = df_read.pivot(columns='ts_name', values='class')
             df_class = df_class.applymap(lambda x: True if x == 1 else False)
+
+            df_class_instances = df_anomaly_instances(df_class)
+            num_normal_instances = df_class_instances[df_class_instances['class']==False].shape[0]
+            if num_normal_instances < settings.TRAINING_DATASET_MIN_NORMAL: # check min number of values (row counts)
+                raise ValueError("Dataset deceeds normal value limit {} ({} values provided)".format(settings.TRAINING_DATASET_MIN_NORMAL, num_normal_instances))
+
+            num_outlier_instances = df_class_instances[df_class_instances['class']==True].shape[0]
+            if num_outlier_instances < settings.TRAINING_DATASET_MIN_ANOMALIES:  # check min number of anomalous values (row counts)
+                raise ValueError("Dataset deceeds outlier limit {} ({} values provided)".format(settings.TRAINING_DATASET_MIN_ANOMALIES, num_outlier_instances))
 
             # check for NaN values, we need complete data for some algorithms
             if df.isnull().values.any() or df_class.isnull().values.any():

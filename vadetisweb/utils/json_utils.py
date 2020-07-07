@@ -5,7 +5,7 @@ from vadetisweb.parameters import LISA_PEARSON
 
 from .anomaly_detection_utils import df_zscore
 from .date_utils import unix_time_millis_from_dt
-from .anomaly_detection_utils import get_info
+from .anomaly_detection_utils import get_detection_meta
 
 
 def get_type_from_dataset_json(dataset_json):
@@ -227,7 +227,7 @@ def get_updated_dataset_series_for_threshold_json(dataset_series, threshold, set
     series_first_data = series_first['data']
     scores, truth = _get_scores_and_truth_from_series_data(series_first_data)
     y_hat_results = (scores < threshold).astype(int)
-    info = get_info(threshold, y_hat_results, truth)
+    info = get_detection_meta(threshold, y_hat_results, truth)
 
     return dataset_series, info
 
@@ -244,7 +244,7 @@ def get_updated_dataset_series_for_threshold_with_marker_json(threshold, dataset
         series_first_measurements = series_first['measurements']
         scores, truth = _get_scores_and_truth_from_series_data(series_first_measurements)
         y_hat_results = (scores < threshold).astype(int)
-        new_info = get_info(threshold, y_hat_results, truth)
+        new_info = get_detection_meta(threshold, y_hat_results, truth)
         new_info['thresholds'] = info['thresholds']
         new_info['training_threshold_scores'] = info['training_threshold_scores']
     else:

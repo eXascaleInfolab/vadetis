@@ -73,7 +73,7 @@ def get_df_corr_geo_distance(df):
     df_correlation = df_corr_geo_distance(df_dist)
 
     time_elapsed = (datetime.datetime.now() - start_time).__str__()
-    logging.debug("Execution time for geographic correlation values:", time_elapsed)
+    logging.debug("Execution time for geographic correlation values: %s" % time_elapsed)
 
     return df_correlation, time_elapsed
 

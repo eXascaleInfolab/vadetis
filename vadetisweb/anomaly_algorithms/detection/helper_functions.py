@@ -83,9 +83,9 @@ def get_threshold_scores(thresholds, y_scores, valid, upper_boundary=False):
             if y_hat.ndim > 1:
                 y_hat = np.apply_along_axis(arrElemContainsTrue, 1, y_hat)
 
-            scores.append([recall_score(y_true=valid['class'].values, y_pred=y_hat),
-                           precision_score(y_true=valid['class'].values, y_pred=y_hat),
-                           fbeta_score(y_true=valid['class'].values, y_pred=y_hat, beta=1),
+            scores.append([recall_score(y_true=valid['class'].values, y_pred=y_hat, zero_division=0),
+                           precision_score(y_true=valid['class'].values, y_pred=y_hat, zero_division=0),
+                           fbeta_score(y_true=valid['class'].values, y_pred=y_hat, beta=1, zero_division=0),
                            accuracy_score(y_true=valid['class'].values, y_pred=y_hat)])
 
     return np.array(scores)
@@ -150,7 +150,7 @@ def get_train_valid_test_sets(df_train, train_size=0.5, random_seed=10):
     as those models should be trained with only normal data.
 
     :param df_train: training data set with normal and anomalous data, should contain a class column to indicate anomalies
-    :param train_size: the proportion of the dataset to include in the train split
+    :param train_size: the proportion of the dataset to include in the split
     :param random_seed: the seed used by the random number generator
 
     :return: a train set of normal data, a valid test set of normal and anomalous data, a test set of normal and anomalous data
@@ -174,11 +174,11 @@ def get_train_valid_test_sets(df_train, train_size=0.5, random_seed=10):
     valid = normal_valid.append(anormal_valid).sample(frac=1, random_state=random_seed)
     test = normal_test.append(anormal_test).sample(frac=1, random_state=random_seed)
 
-    logging.debug('Train shape: ', train.shape)
+    logging.debug('Train shape: %s' % repr(train.shape))
     logging.debug('Proportion of anomaly in training set: %.2f\n' % train['class'].mean())
-    logging.debug('Valid shape: ', valid.shape)
+    logging.debug('Valid shape: %s' % repr(valid.shape))
     logging.debug('Proportion of anomaly in validation set: %.2f\n' % valid['class'].mean())
-    logging.debug('Test shape:, ', test.shape)
+    logging.debug('Test shape:, %s' % repr(test.shape))
     logging.debug('Proportion of anomaly in test set: %.2f\n' % test['class'].mean())
 
     return train, valid, test

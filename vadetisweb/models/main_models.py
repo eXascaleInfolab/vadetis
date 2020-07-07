@@ -93,13 +93,21 @@ class DataSet(models.Model):
 
     def number_of_anomaly_values(self):
         df_class_count = self.dataframe_class.apply(pd.Series.value_counts).sum(axis=1)
-        np_num_values = df_class_count.loc[True]
-        return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
+        try:
+            np_num_values = df_class_count.loc[True]
+            return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
+        except KeyError:
+            # if no True keys exists this dataset does not have anomalies
+            return 0
 
     def number_of_time_series_anomaly_values(self, ts_id):
         df_class_count = self.dataframe_class[ts_id].value_counts()
-        np_num_values = df_class_count.loc[True]
-        return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
+        try:
+            np_num_values = df_class_count.loc[True]
+            return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
+        except KeyError:
+            # if no True keys exists this dataset does not have anomalies
+            return 0
 
     def number_of_training_datasets(self):
         return self.training_dataset.count()

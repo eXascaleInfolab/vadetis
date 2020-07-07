@@ -357,15 +357,16 @@ def get_window_size_for_percentage(df, percentage):
     return df, df_class"""
 
 
-def get_info(threshold, y_hat_results, y_truth):
+def get_detection_meta(threshold, y_hat_results, y_truth):
     info = {}
 
     accuracy = accuracy_score(y_pred=y_hat_results, y_true=y_truth)
-    recall = recall_score(y_pred=y_hat_results, y_true=y_truth)
-    precision = precision_score(y_pred=y_hat_results, y_true=y_truth)
-    f1_score = fbeta_score(y_pred=y_hat_results, y_true=y_truth, beta=1)
+    recall = recall_score(y_pred=y_hat_results, y_true=y_truth, zero_division=0)
+    precision = precision_score(y_pred=y_hat_results, y_true=y_truth, zero_division=0)
+    f1_score = fbeta_score(y_pred=y_hat_results, y_true=y_truth, beta=1, zero_division=0)
 
-    cnf_matrix = confusion_matrix(y_truth, y_hat_results)
+    # we set labels 0,1 manually because the dataset could contain only one class
+    cnf_matrix = confusion_matrix(y_truth, y_hat_results, labels=[0,1])
     info['cnf_matrix'] = cnf_matrix.tolist()
 
     info['threshold'] = threshold

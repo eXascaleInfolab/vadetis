@@ -4,7 +4,7 @@ from .helper_functions import *
 from .correleation.pearson import pearson, dtw_pearson
 from .correleation.distance import get_df_corr_geo_distance
 
-from vadetisweb.utils import df_zscore, get_info
+from vadetisweb.utils import df_zscore, get_detection_meta
 #########################################################
 # LISA HELPER
 #########################################################
@@ -206,7 +206,7 @@ def lisa_pearson(df, df_class, validated_data):
 
         y_truth = df_class_instances['class'].values.astype(int)
 
-        info = get_info(selected_threshold, y_hat_results, y_truth)
+        info = get_detection_meta(selected_threshold, y_hat_results, y_truth)
         info['thresholds'] = thresholds.tolist()
         info['detection_threshold_scores'] = threshold_scores.tolist()
 
@@ -273,7 +273,7 @@ def lisa_dtw(df, df_class, conf, time_series_id):
     scores = df_lisa_results.values
     y_hat_results = (scores < selected_threshold).astype(int)
     y_truth = df_class_copy['class'].values.astype(int)
-    info = get_info(selected_threshold, y_hat_results, y_truth)
+    info = get_detection_meta(selected_threshold, y_hat_results, y_truth)
 
     info['thresholds'] = thresholds.tolist()
     info['training_threshold_scores'] = threshold_scores.tolist()
@@ -313,7 +313,7 @@ def lisa_geo(df, df_class, conf, time_series_id):
     scores = df_lisa_results.values
     y_hat_results = (scores < selected_threshold).astype(int)
     y_truth = df_class_copy['class'].values.astype(int)
-    info = get_info(selected_threshold, y_hat_results, y_truth)
+    info = get_detection_meta(selected_threshold, y_hat_results, y_truth)
 
     info['thresholds'] = thresholds.tolist()
     info['training_threshold_scores'] = threshold_scores.tolist()

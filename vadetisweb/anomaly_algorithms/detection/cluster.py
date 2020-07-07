@@ -2,7 +2,7 @@ from sklearn.mixture import GaussianMixture
 
 from .helper_functions import *
 
-from vadetisweb.utils import get_info
+from vadetisweb.utils import get_detection_meta
 
 #########################################################
 # CLUSTER
@@ -36,7 +36,7 @@ def cluster_gaussian_mixture(df, df_class, df_train, df_train_class, maximize_sc
     y_hat_results = (scores < selected_threshold).astype(int)
     y_truth = df_with_class_instances['class'].values.astype(int)
     detection_threshold_scores = get_threshold_scores(thresholds, scores, df_with_class_instances)
-    info = get_info(selected_threshold, y_hat_results, y_truth)
+    info = get_detection_meta(selected_threshold, y_hat_results, y_truth)
 
     info['thresholds'] = thresholds.tolist()
     info['training_threshold_scores'] = training_threshold_scores.tolist()

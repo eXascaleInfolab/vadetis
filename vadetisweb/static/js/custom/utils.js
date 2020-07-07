@@ -191,8 +191,8 @@ function htmlMessages(messages) {
 
 function printFormErrors(form_errors) {
     for (const [key, val] of Object.entries(form_errors)) {
-        input_element = $("[name=" + key + "]");
-        html = "<div class=\"invalid-feedback\">" + val[0] + "</div>";
+        var input_element = $("[name=" + key + "]");
+        var html = "<div class=\"invalid-feedback\">" + val[0] + "</div>";
         input_element.parent().addClass("validated");
         input_element.after(html);
     }

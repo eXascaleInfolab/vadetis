@@ -45,7 +45,7 @@ var NoUiSliders = function() {
                 setValueAndUpdateRange(val, max, val);
             } else if (this.value > max) {
                 setValueAndUpdateRange(min, val, val);
-            } else {
+            } else 
                 slider_element.noUiSlider.set(this.value);
             }
         });

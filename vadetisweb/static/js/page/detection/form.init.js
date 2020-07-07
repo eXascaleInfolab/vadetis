@@ -80,8 +80,6 @@ var DatasetDetectionForm = function () {
                 contentType: false,
                 success: function(data, status, xhr) {
                     handleMessages(data);
-
-                    console.log(data);
                     // update series
                     var series_data_json = data['series'];
                     setSeriesData(highchart, series_data_json);
@@ -105,7 +103,7 @@ var DatasetDetectionForm = function () {
 
                     highchart.hideLoading();
 
-                   clearInserted();
+                    clearInserted();
                     $(":submit").attr("disabled", false);
                 }
             });
