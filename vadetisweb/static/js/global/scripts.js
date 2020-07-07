@@ -9390,7 +9390,7 @@ var KTQuickSearch = function() {
         return html;
     }
 
-    var processSearch = function() {
+    var processSearch = function(url) {
         if (hasResult && query === input.value) {  
             hideProgress();
             KTUtil.addClass(target, resultClass);
@@ -9407,7 +9407,7 @@ var KTQuickSearch = function() {
 
         setTimeout(function() {
             $.ajax({
-                url: 'http://localhost:8000/api/dataset/search/', // todo inject url
+                url: url,
                 data: {
                     search: query
                 },
@@ -9442,7 +9442,7 @@ var KTQuickSearch = function() {
         hideDropdown();
     }
 
-    var handleSearch = function() {
+    var handleSearch = function(url) {
         if (input.value.length < minLength) {
             hideProgress();
             hideDropdown();
@@ -9450,7 +9450,7 @@ var KTQuickSearch = function() {
             return;
         }
 
-        if (isProcessing == true) {
+        if (isProcessing === true) {
             return;
         }
 
@@ -9459,12 +9459,12 @@ var KTQuickSearch = function() {
         }
 
         timeout = setTimeout(function() {
-            processSearch();
+            processSearch(url);
         }, requestTimeout);     
     }
 
     return {     
-        init: function(element) { 
+        init: function(element, url) {
             // Init
             target = element;
             form = KTUtil.find(target, '.kt-quick-search__form');
@@ -9476,8 +9476,12 @@ var KTQuickSearch = function() {
             inputGroup = KTUtil.find(target, '.input-group');           
 
             // Attach input keyup handler
-            KTUtil.addEvent(input, 'keyup', handleSearch);
-            KTUtil.addEvent(input, 'focus', handleSearch);
+            KTUtil.addEvent(input, 'keyup', function() {
+                handleSearch(url);
+            });
+            KTUtil.addEvent(input, 'focus', function() {
+                handleSearch(url);
+            });
 
             // Prevent enter click
             form.onkeypress = function(e) {
@@ -9500,19 +9504,7 @@ var KTQuickSearch = function() {
     };
 };
 
-var KTQuickSearchMobile = KTQuickSearch;
-
-$(document).ready(function() {
-    if (KTUtil.get('kt_quick_search_default')) {
-        KTQuickSearch().init(KTUtil.get('kt_quick_search_default'));
-    }
-
-    if (KTUtil.get('kt_quick_search_inline')) {
-        KTQuickSearchMobile().init(KTUtil.get('kt_quick_search_inline'));
-    }
-});
 "use strict";
-
 var KTLayout = function() {
     var body;
 

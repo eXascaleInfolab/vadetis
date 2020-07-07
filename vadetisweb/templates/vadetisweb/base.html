@@ -1,4 +1,4 @@
-<!DOCTYPE html>{% load static %}{% load django_bootstrap_breadcrumbs %}
+<!DOCTYPE html>{% load static %}{% load vadetistags %}{% load django_bootstrap_breadcrumbs %}
 <html lang="en">
 <head>
     <title>Vadetis | Validator for Anomaly Detection in Times Series</title>
@@ -325,6 +325,17 @@
     <!-- end::Scrolltop -->
     {% block bottom_js %}
         {% include 'vadetisweb/parts/includes/bottom_js.html' %}
+        <script type="text/javascript">
+            var KTQuickSearchMobile = KTQuickSearch;
+            jQuery(document).ready(function () {
+                if (KTUtil.get('kt_quick_search_default')) {
+                    KTQuickSearch().init(KTUtil.get('kt_quick_search_default'), "{% url 'vadetisweb:dataset_search' %}");
+                }
+                if (KTUtil.get('kt_quick_search_inline')) {
+                    KTQuickSearchMobile().init(KTUtil.get('kt_quick_search_inline'), "{% url 'vadetisweb:dataset_search' %}");
+                }
+            });
+        </script>
 	{% endblock %}
     {% block additional_bottom_js %}
     {% endblock %}
