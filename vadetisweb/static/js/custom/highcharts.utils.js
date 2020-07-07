@@ -205,7 +205,7 @@ function generateSeriesFromJson(dataset_series_json, algorithm, time_series) {
 
 function setSeriesData(highchart, series_data_json) {
     series_data_json.forEach(function (series) {
-        highchart_series = highchart.get(series.id);
+        var highchart_series = highchart.get(series.id);
         highchart_series.setData(series.data, false, true);
         highchart_series.options.custom.type = series.type;
     });

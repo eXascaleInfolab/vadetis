@@ -116,21 +116,21 @@ def get_anomaly_detection_single_ts_results_json(dataset, ts_id, df_with_class_i
     return data
 
 
-def get_anomaly_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings):
+def get_anomaly_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings, type):
     data = []
     time_series = dataset.timeseries_set.all()
 
     for ts in time_series:
         data_series = get_predicted_series_data_json(ts.id, df_with_class_instances, scores, y_hat_results, settings)
 
-        dict_series = {'id' : ts.id,
-                       'name' : ts.name, #todo
-                       'unit' : ts.unit, #todo
-                       'is_spatial' : ts.is_spatial(), #todo
-                       'type' : 'raw', #todo
-                       'data' : data_series
-                       }
-
+        dict_series = {
+            'id' : ts.id,
+            'name' : ts.name,
+            'unit' : ts.unit,
+            'is_spatial' : ts.is_spatial(),
+            'type' : type,
+            'data' : data_series
+        }
         data.append(dict_series)
 
     return data
