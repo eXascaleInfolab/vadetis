@@ -38,8 +38,8 @@ def robust_pca_huber_loss(df, df_class, df_train, df_train_class, delta=1, n_com
     lower_bound, higher_bound = estimate_score_bound(lower, higher)
     thresholds = np.linspace(lower_bound, higher_bound, 100)
 
-    threshold_scores = get_threshold_scores(thresholds, y_test_scores, y_test, upper_boundary=True)
-    selected_index = get_max_score_index_for_score_type(threshold_scores, maximize_score)
+    training_threshold_scores = get_threshold_scores(thresholds, y_test_scores, y_test, upper_boundary=True)
+    selected_index = get_max_score_index_for_score_type(training_threshold_scores, maximize_score)
     selected_threshold = thresholds[selected_index]
 
     # Run on Dataset
@@ -48,13 +48,16 @@ def robust_pca_huber_loss(df, df_class, df_train, df_train_class, delta=1, n_com
     X_df_reconstructed = M_rpca.inverse_transform(X_df_reduced)
     X_df_reconstructed = pd.DataFrame(data=X_df_reconstructed, index=df.index)
 
+    # detection on dataset
     scores = normalized_anomaly_scores(df, X_df_reconstructed)
     y_hat_results = (scores > selected_threshold).astype(int)
     y_truth = df_class_instances.values.astype(int)
+    detection_threshold_scores = get_threshold_scores(thresholds, scores, df_with_class_instances)
     info = get_info(selected_threshold, y_hat_results, y_truth)
 
     info['thresholds'] = thresholds.tolist()
-    info['threshold_scores'] = threshold_scores.tolist()
+    info['training_threshold_scores'] = training_threshold_scores.tolist()
+    info['detection_threshold_scores'] = detection_threshold_scores.tolist()
 
     return scores, y_hat_results, df_with_class_instances, info
 

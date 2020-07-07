@@ -265,10 +265,18 @@ var DatasetDetectionForm = function () {
                         requestCnfMatrix("cnf_portlet", "cnf_matrix_img", info);
                     });
 
-                    // plot
-                    requestImagePortlet(img_portlet_url, "plot_portlet", "Threshold / Score Plot", "plot_img", "img-container", false,
-                        function () {
-                        requestPlot("plot_portlet", "plot_img", info);
+                    // training plot
+                    if(info.training_threshold_scores !== undefined) {
+                        requestImagePortlet(img_portlet_url, "training_plot_portlet", "Threshold / Score Plot (Training)", "training_plot_img", "img-container", false,
+                            function () {
+                            requestPlot("training_plot_portlet", "training_plot_img", info.thresholds, info.training_threshold_scores);
+                        });
+                    }
+
+                    // detection plot
+                    requestImagePortlet(img_portlet_url, "detection_plot_portlet", "Threshold / Score Plot (Detection)", "detection_plot_img", "img-container", false,
+                            function () {
+                            requestPlot("detection_plot_portlet", "detection_plot_img", info.thresholds, info.detection_threshold_scores);
                     });
                     $(":submit").attr("disabled", false);
                 },

@@ -367,11 +367,11 @@ function requestCnfMatrix(portlet_id, img_container_id, info) {
     });
 }
 
-function requestPlot(portlet_id, img_container_id, info) {
+function requestPlot(portlet_id, img_container_id, thresholds, threshold_scores) {
     // note: url is taken from global const
     var plot_data = {
-        thresholds: info.thresholds,
-        threshold_scores: info.threshold_scores
+        thresholds: thresholds,
+        threshold_scores: threshold_scores
     };
     var plotData = {'plot_data' : JSON.stringify(plot_data) };
     loadImage(img_container_id, plot_url, plotData, function () {

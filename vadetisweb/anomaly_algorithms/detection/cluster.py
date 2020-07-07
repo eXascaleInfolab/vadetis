@@ -27,16 +27,19 @@ def cluster_gaussian_mixture(df, df_class, df_train, df_train_class, maximize_sc
     thresholds = np.linspace(lower_bound, higher_bound, 100)
 
     y_scores = gmm.score_samples(valid.drop('class', axis=1).values)
-    threshold_scores = get_threshold_scores(thresholds, y_scores, valid)
-    selected_index = get_max_score_index_for_score_type(threshold_scores, maximize_score)
+    training_threshold_scores = get_threshold_scores(thresholds, y_scores, valid)
+    selected_index = get_max_score_index_for_score_type(training_threshold_scores, maximize_score)
     selected_threshold = thresholds[selected_index]
 
+    # detection on dataset
     scores = gmm.score_samples(df_with_class_instances.drop('class', axis=1).values)
     y_hat_results = (scores < selected_threshold).astype(int)
     y_truth = df_with_class_instances['class'].values.astype(int)
+    detection_threshold_scores = get_threshold_scores(thresholds, scores, df_with_class_instances)
     info = get_info(selected_threshold, y_hat_results, y_truth)
 
     info['thresholds'] = thresholds.tolist()
-    info['threshold_scores'] = threshold_scores.tolist()
+    info['training_threshold_scores'] = training_threshold_scores.tolist()
+    info['detection_threshold_scores'] = detection_threshold_scores.tolist()
 
     return scores, y_hat_results, df_with_class_instances, info

@@ -246,7 +246,7 @@ def get_updated_dataset_series_for_threshold_with_marker_json(threshold, dataset
         y_hat_results = (scores < threshold).astype(int)
         new_info = get_info(threshold, y_hat_results, truth)
         new_info['thresholds'] = info['thresholds']
-        new_info['threshold_scores'] = info['threshold_scores']
+        new_info['training_threshold_scores'] = info['training_threshold_scores']
     else:
         #todo
         info = {}

@@ -208,7 +208,7 @@ def lisa_pearson(df, df_class, validated_data):
 
         info = get_info(selected_threshold, y_hat_results, y_truth)
         info['thresholds'] = thresholds.tolist()
-        info['threshold_scores'] = threshold_scores.tolist()
+        info['detection_threshold_scores'] = threshold_scores.tolist()
 
         df_with_class_instances = df_anomaly_instances(df_class)
 
@@ -228,7 +228,7 @@ def lisa_pearson(df, df_class, validated_data):
     info = get_info(selected_threshold, y_hat_results, y_truth)
 
     info['thresholds'] = thresholds.tolist()
-    info['threshold_scores'] = threshold_scores.tolist()"""
+    info['training_threshold_scores'] = threshold_scores.tolist()"""
 
     return scores, y_hat_results, df_with_class_instances, info
 
@@ -276,7 +276,7 @@ def lisa_dtw(df, df_class, conf, time_series_id):
     info = get_info(selected_threshold, y_hat_results, y_truth)
 
     info['thresholds'] = thresholds.tolist()
-    info['threshold_scores'] = threshold_scores.tolist()
+    info['training_threshold_scores'] = threshold_scores.tolist()
 
     return scores, y_hat_results, df_with_class_instances, info
 
@@ -316,6 +316,6 @@ def lisa_geo(df, df_class, conf, time_series_id):
     info = get_info(selected_threshold, y_hat_results, y_truth)
 
     info['thresholds'] = thresholds.tolist()
-    info['threshold_scores'] = threshold_scores.tolist()
+    info['training_threshold_scores'] = threshold_scores.tolist()
 
     return scores, y_hat_results, df_with_class_instances, info
