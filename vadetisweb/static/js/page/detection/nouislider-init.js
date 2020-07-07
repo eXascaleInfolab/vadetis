@@ -1,23 +1,29 @@
+"use strict";
+
 var NoUiSliders = function() {
 
-    var thresholdSlider = function(slider_element, value_input_selector) {
+    var thresholdSlider = function(slider_element, value_input_selector, min, max) {
 
-        function updateRange(min, max, value) {
+        function setValueAndUpdateRange(min, max, value) {
+            updateRange(min, max);
+            slider_element.noUiSlider.set(value);
+        }
+
+        function updateRange(min, max) {
             slider_element.noUiSlider.updateOptions({
                 range : {
                     'min': min,
                     'max': max
                 }
             });
-            slider_element.noUiSlider.set(value);
         }
 
         noUiSlider.create(slider_element, {
-            start: [0],
+            start: [0.5],
             connect: false,
             range: {
-                'min': [0],
-                'max': [1],
+                'min': [min],
+                'max': [max],
             },
             format: wNumb({
                 decimals: 7,
@@ -36,9 +42,9 @@ var NoUiSliders = function() {
             var max = slider_element.noUiSlider.options.range.max;
             var val = Number(this.value);
             if(this.value < min) {
-                updateRange(val, max, val);
+                setValueAndUpdateRange(val, max, val);
             } else if (this.value > max) {
-                updateRange(min, val, val);
+                setValueAndUpdateRange(min, val, val);
             } else {
                 slider_element.noUiSlider.set(this.value);
             }
@@ -47,8 +53,8 @@ var NoUiSliders = function() {
 
     return {
         //initiate the slider
-        init: function(slider_element, value_input_selector) {
-            thresholdSlider(slider_element, value_input_selector);
+        init: function(slider_element, value_input_selector, min, max) {
+            thresholdSlider(slider_element, value_input_selector, min, max);
         }
     };
 

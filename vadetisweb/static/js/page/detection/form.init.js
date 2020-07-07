@@ -92,7 +92,7 @@ var DatasetDetectionForm = function () {
                     updateScores(info);
 
                     // threshold
-                    updateThreshold(info.threshold);
+                    updateThreshold(info.thresholds, info.threshold);
 
                     // cnf
                     requestCnfMatrix("cnf_portlet", "cnf_matrix_img", info);
@@ -256,7 +256,7 @@ var DatasetDetectionForm = function () {
                         function () {
                         KTApp.initPortlets();
                         registerThresholdUpdateForm('threshold_form');
-                        updateThreshold(info.threshold);
+                        updateThreshold(info.thresholds, info.threshold);
                     });
 
                     // cnf

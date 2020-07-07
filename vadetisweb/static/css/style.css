@@ -22974,7 +22974,7 @@ strong {
     .typeahead .tt-menu .tt-dataset .tt-suggestion:hover {
       background: #f7f8fa; }
 
-.noUi-target.noUi-horizontal {
+/*.noUi-target.noUi-horizontal {
   height: 15px; }
   .noUi-target.noUi-horizontal .noUi-handle {
     width: 24px;
@@ -22986,7 +22986,7 @@ strong {
     .noUi-target.noUi-horizontal .noUi-handle::before {
       display: none; }
     .noUi-target.noUi-horizontal .noUi-handle::after {
-      display: none; }
+      display: none; }*/
 
 .noUi-target.noUi-vertical {
   height: 150px;

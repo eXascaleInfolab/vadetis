@@ -347,13 +347,13 @@ function updateScores(info) {
     RoundSliders.updateValue("#roundslider_recall", info.recall.toFixed(round_digits));
 }
 
-function updateThreshold(value) {
-    var threshold_input_selector = $('#threshold_value');
+function updateThreshold(thresholds, value) {
     var slider_element = $('#threshold_slider')[0]; // extracting the raw element from the jQuery object
-
+    var threshold_input_selector = $('#threshold_value');
     // init NoUiSlider if required
     if(!slider_element.noUiSlider) {
-        NoUiSliders.init(slider_element, threshold_input_selector);
+        var min = thresholds[0], max = thresholds[thresholds.length - 1]
+        NoUiSliders.init(slider_element, threshold_input_selector, min, max);
     }
     slider_element.noUiSlider.set(value);
     $('#current_threshold').html(value);
