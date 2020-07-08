@@ -4,6 +4,21 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import fbeta_score, precision_score, recall_score, accuracy_score, confusion_matrix
 
 from vadetisweb.parameters import F1_SCORE, PRECISION, RECALL, ACCURACY
+from vadetisweb.utils.date_utils import unix_time_millis_to_dt
+
+
+def df_range(df, df_class, range_start_millis, range_end_millis):
+
+    range_start = unix_time_millis_to_dt(range_start_millis)
+    range_end = unix_time_millis_to_dt(range_end_millis)
+
+    if range_start is not None and range_end is not None:
+        df_range = df.loc[range_start:range_end]
+        df_class_range = df_class[range_start:range_end]
+    else:
+        raise ValueError("Timestamps could not be converted")
+
+    return df_range, df_class_range
 
 
 def df_row_standardized(df):

@@ -326,7 +326,7 @@ def df_zscore(df, skipna=True):
 def get_window_size_for_percentage(df, percentage):
     return int(round((float(len(df.index)) / float(100)) * int(percentage)))"""
 
-
+#TODO
 """def get_dataframes_for_ranges(df, df_class, conf):
 
     range_start = unix_time_millis_to_dt(conf['range_start']) if conf['time_range'] == SELECTION else None

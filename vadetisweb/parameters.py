@@ -179,12 +179,12 @@ DATASET_SPATIAL_DATA  = (
 # Correlation Algorithms
 #########################################################
 
-SELECTION = 'as selected in chart'
-FULL = 'full series'
+TIME_RANGE_SELECTION = 'selection'
+TIME_RANGE_FULL = 'full range'
 
 TIME_RANGE = (
-    (FULL, FULL),
-    (SELECTION, SELECTION),
+    (TIME_RANGE_FULL, TIME_RANGE_FULL),
+    (TIME_RANGE_SELECTION, TIME_RANGE_SELECTION),
 )
 
 EUCLIDEAN = "euclidean"

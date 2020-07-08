@@ -241,7 +241,7 @@ class DetectionRPCAMEstimatorLoss(APIView):
                 try:
                     data = {}
                     settings = get_settings(request)
-                    data_series, info = rpca_from_validated_data(df_from_json, df_class_from_json, serializer.validated_data, settings)
+                    data_series, info = rpca_detection(df_from_json, df_class_from_json, serializer.validated_data, settings)
 
                     data['series'] = data_series
                     data['info'] = info
@@ -275,7 +275,7 @@ class DetectionHistogram(APIView):
                 try:
                     data = {}
                     settings = get_settings(request)
-                    data_series, info = histogram_from_validated_data(df_from_json, df_class_from_json, serializer.validated_data, settings)
+                    data_series, info = histogram_detection(df_from_json, df_class_from_json, serializer.validated_data, settings)
 
                     data['series'] = data_series
                     data['info'] = info
@@ -309,7 +309,7 @@ class DetectionCluster(APIView):
                 try:
                     data = {}
                     settings = get_settings(request)
-                    data_series, info = cluster_from_validated_data(df_from_json, df_class_from_json, serializer.validated_data, settings)
+                    data_series, info = cluster_detection(df_from_json, df_class_from_json, serializer.validated_data, settings)
 
                     data['series'] = data_series
                     data['info'] = info
@@ -343,7 +343,7 @@ class DetectionSVM(APIView):
                 try:
                     data = {}
                     settings = get_settings(request)
-                    data_series, info = svm_from_validated_data(df_from_json, df_class_from_json, serializer.validated_data, settings)
+                    data_series, info = svm_detection(df_from_json, df_class_from_json, serializer.validated_data, settings)
 
                     data['series'] = data_series
                     data['info'] = info
@@ -378,7 +378,7 @@ class DetectionIsolationForest(APIView):
                 try:
                     data = {}
                     settings = get_settings(request)
-                    data_series, info = isolation_forest_from_validated_data(df_from_json, df_class_from_json, serializer.validated_data, settings)
+                    data_series, info = isolation_forest_detection(df_from_json, df_class_from_json, serializer.validated_data, settings)
 
                     data['series'] = data_series
                     data['info'] = info

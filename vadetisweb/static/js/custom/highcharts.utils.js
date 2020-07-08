@@ -97,7 +97,7 @@ function _getExtremesForDetection(highchart, timeRangeSelector) {
     var timeRangeVal = timeRangeSelector.val();
     var extremes_x = highchart.xAxis[0].getExtremes();
     var range = {};
-    if (timeRangeVal.toLowerCase() === 'as selected in chart') {
+    if (timeRangeVal.toLowerCase() === 'selection') {
         range.min = Math.round(extremes_x.min);
         range.max = Math.round(extremes_x.max);
     } else {
