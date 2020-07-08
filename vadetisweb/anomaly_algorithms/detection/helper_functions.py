@@ -12,7 +12,7 @@ def df_range(df, df_class, range_start_millis, range_end_millis, start_offset=No
     range_start = unix_time_millis_to_dt(range_start_millis)
     if start_offset is not None:
         range_start = next_earlier_dt(range_start, df.index.inferred_freq, start_offset - 1)
-        if range_start > df.index[0]:
+        if range_start < df.index[0]:
             raise ValueError("You selected a window size of {}, but first timestamp {} is out of bounds.".format(start_offset, range_start))
 
     range_end = unix_time_millis_to_dt(range_end_millis)
@@ -99,9 +99,9 @@ def get_threshold_scores(thresholds, y_scores, valid, upper_boundary=False):
         for threshold in thresholds:
             y_hat = np.array(y_scores < threshold).astype(int) if upper_boundary == False else np.array(y_scores > threshold).astype(int)
 
-            # check if multidim array
+            """# check if multidim array
             if y_hat.ndim > 1:
-                y_hat = np.apply_along_axis(arrElemContainsTrue, 1, y_hat)
+                y_hat = np.apply_along_axis(arrElemContainsTrue, 1, y_hat)"""
 
             scores.append([recall_score(y_true=valid['class'].values, y_pred=y_hat, zero_division=0),
                            precision_score(y_true=valid['class'].values, y_pred=y_hat, zero_division=0),

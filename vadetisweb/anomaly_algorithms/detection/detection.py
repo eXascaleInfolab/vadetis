@@ -10,33 +10,54 @@ from .helper_functions import df_range
 from vadetisweb.utils import get_anomaly_detection_single_ts_results_json, get_anomaly_detection_results_json, get_type_from_dataset_json
 from vadetisweb.parameters import TIME_RANGE_SELECTION
 
-def lisa_pearson_from_validated_data(df, df_class, validated_data, settings):
+def lisa_pearson_detection(df, df_class, validated_data, settings):
     dataset = validated_data['dataset']
+    window_size=validated_data['window_size']
+
+    if validated_data['time_range'] == TIME_RANGE_SELECTION:
+        df, df_class = df_range(df, df_class, validated_data['range_start'], validated_data['range_end'], start_offset=window_size)
 
     scores, y_hat_results, df_with_class_instances, info = lisa_pearson(df, df_class, validated_data)
 
+    # leave out the first x values (window size-1) from the beginning of the datasets as we cannot compute LISA for these values
+    offset = window_size - 1
+    scores = scores[offset:]
+    y_hat_results = y_hat_results[offset:]
+    df_with_class_instances = df_with_class_instances.iloc[offset:]
+
+    type = get_type_from_dataset_json(validated_data['dataset_series_json'])
     """data_series = get_anomaly_detection_single_ts_results_json(dataset, time_series_id,
                                                                df_with_class_instances, scores, y_hat_results,
                                                                settings)"""
 
-    data_series = get_anomaly_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings)
+    data_series = get_anomaly_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings, type)
 
     return data_series, info
 
 
-def perform_lisa_person(df, df_class, conf, time_series_id, dataset, settings):
-    scores, y_hat_results, df_with_class_instances, info = lisa_pearson(df, df_class, conf, time_series_id)
-    data_series = get_anomaly_detection_single_ts_results_json(dataset, time_series_id,
+def lisa_dtw_detection(df, df_class, validated_data, settings):
+    dataset = validated_data['dataset']
+    window_size = validated_data['window_size']
+
+    if validated_data['time_range'] == TIME_RANGE_SELECTION:
+        df, df_class = df_range(df, df_class, validated_data['range_start'], validated_data['range_end'], start_offset=window_size)
+
+    scores, y_hat_results, df_with_class_instances, info = lisa_dtw(df, df_class, validated_data)
+
+    # leave out the first x values (window size-1) from the beginning of the datasets as we cannot compute LISA for these values
+    offset = window_size - 1
+    scores = scores[offset:]
+    y_hat_results = y_hat_results[offset:]
+    df_with_class_instances = df_with_class_instances.iloc[offset:]
+
+    type = get_type_from_dataset_json(validated_data['dataset_series_json'])
+
+    """data_series = get_anomaly_detection_single_ts_results_json(dataset, time_series_id,
                                                                df_with_class_instances, scores, y_hat_results,
-                                                               settings)
-    return data_series, info
+                                                               settings)"""
+    data_series = get_anomaly_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings, type)
 
 
-def perform_lisa_dtw(df, df_class, conf, time_series_id, dataset, settings):
-    scores, y_hat_results, df_with_class_instances, info = lisa_dtw(df, df_class, conf, time_series_id)
-    data_series = get_anomaly_detection_single_ts_results_json(dataset, time_series_id,
-                                                               df_with_class_instances, scores, y_hat_results,
-                                                               settings)
     return data_series, info
 
 

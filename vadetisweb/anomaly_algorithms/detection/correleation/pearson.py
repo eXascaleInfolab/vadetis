@@ -1,5 +1,5 @@
 import numpy as np, pandas as pd
-import datetime
+import datetime, logging
 
 from .dtw import dtw
 
@@ -44,7 +44,7 @@ def pearson_matrix(df, min_periods=None):
     start_time = datetime.datetime.now()
     df_pm = df.corr(method='pearson', min_periods=min_periods)
     time_elapsed = (datetime.datetime.now() - start_time).__str__()
-    print("Execution time for pearson matrix:", time_elapsed)
+    logging.debug("Execution time for pearson matrix:", time_elapsed)
     return df_pm
 
 
@@ -73,7 +73,7 @@ def pearson(df, time_series_id, window_size=2, min_periods=None, absolute_values
     del df_corr[time_series_id]
 
     time_elapsed = (datetime.datetime.now() - start_time).__str__()
-    print("Execution time for pearson values for series:", time_elapsed)
+    logging.debug("Execution time for pearson values for series:", time_elapsed)
 
     if absolute_values:
         return df_corr.abs(), time_elapsed
@@ -143,15 +143,13 @@ def pearson_corr_coeff(X, Y):
     return weight
 
 
-
-
-def dtw_pearson(df_z, station_id, distance, window_size=2, absolute_values=True):
+def dtw_pearson(df, time_series_id, distance, window_size=2, absolute_values=True):
     """
     Computes the Pearson correlation using DTW for a given station id to all other time series of the same dataset.
     The DTW path defines the mapping of the values.
 
     :param df: time indexed dataframe containing all time series values
-    :param station_id: the station ID to calculate the Pearson correlation for
+    :param time_series_id: the ID of the time series to calculate the Pearson correlation for
     :param string or func distance: distance parameter for cdist, see method dtw()
     :param window_size: the size of the moving window
     :return: a dataframe containing the DTW with Pearson correlation values
@@ -163,41 +161,35 @@ def dtw_pearson(df_z, station_id, distance, window_size=2, absolute_values=True)
     start_time = datetime.datetime.now()
 
     # empty correlation dataframe
-    df_corr = pd.DataFrame(index=df_z.index, columns=df_z.columns)
+    df_corr = pd.DataFrame(index=df.index, columns=df.columns)
 
-    #to make row standardization possible
-    #df_corr.loc[:,station_id] = 0 #set to 0
-    del df_corr[station_id]
+    # to make row standardization possible
+    # df_corr.loc[:,time_series_id] = 0 #set to 0
+    del df_corr[time_series_id]
 
-    # get station ids and indexes before adding column for mean and lisa
-    station_ids = list()
-    for column_name in df_z.columns.values:
-        # add only the station ids
-        if not isinstance(column_name, str) and column_name != station_id:
-            station_ids.append(column_name)
+    # get time series ids before adding column for mean and lisa
+    time_series_ids = df_corr.columns.tolist()
 
-    index_dts = list(df_z.index.values)
+    index_dts = list(df_corr.index.values)
 
-    #iterate over all time frames
+    # iterate over all time frames
     for index_dt in index_dts:
         win_end_index_dt = pd.to_datetime(index_dt)
-        win_start_index_dt = next_earlier_dt(win_end_index_dt, df_z.index.inferred_freq, past_size)
+        win_start_index_dt = next_earlier_dt(win_end_index_dt, df.index.inferred_freq, past_size)
 
-        df_z_part = df_z.loc[win_start_index_dt : win_end_index_dt]
+        df_part = df.loc[win_start_index_dt: win_end_index_dt]
 
-        #print(df_part)
+        if df_part.shape[0] == window_size: #window must be of size
 
-        if df_z_part.shape[0] == window_size: #window must be of size
+            x = df_part[time_series_id].dropna().values
 
-            x = df_z_part[station_id].dropna().values
-
-            #check if x is empty (as all entries are NaN)
+            # check if x is empty (as all entries are NaN)
             if len(x) == 0:
                 continue
 
-            for station in station_ids:
+            for ts_id in time_series_ids:
 
-                y = df_z_part[station].dropna().values
+                y = df_part[ts_id].dropna().values
 
                 # check if y is empty (as all entries are NaN)
                 if len(y) == 0:
@@ -213,11 +205,9 @@ def dtw_pearson(df_z, station_id, distance, window_size=2, absolute_values=True)
                     weight = np.absolute(weight)
 
                 #df_corr.loc[win_end_index_dt, station] = weight #faster
-                df_corr.set_value(win_end_index_dt, station, weight)
+                df_corr.at[win_end_index_dt, ts_id] = weight
 
     time_elapsed = (datetime.datetime.now() - start_time).__str__()
 
-    #print(df_corr)
-
-    print("Execution time for pearson values using dtw:", time_elapsed)
+    logging.debug("Execution time for pearson values using dtw:", time_elapsed)
     return df_corr, time_elapsed
