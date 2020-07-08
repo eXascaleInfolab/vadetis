@@ -17,3 +17,16 @@ def response_invalid_form(serializer, json_messages):
         'messages': MessageSerializer(json_messages, many=True).data,
         'form_errors': serializer.errors
     }, status=status.HTTP_400_BAD_REQUEST)
+
+
+def exception_message_response(e):
+    message = getattr(e, 'message', str(e))
+    if message is not None and message != '':
+        json_messages = []
+        json_message_utils.error(json_messages, getattr(e, 'message', str(e)))
+        return Response({
+            'status': 'error',
+            'messages': MessageSerializer(json_messages, many=True).data,
+        }, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response({}, status=status.HTTP_400_BAD_REQUEST)

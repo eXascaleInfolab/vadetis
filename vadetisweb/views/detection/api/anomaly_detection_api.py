@@ -12,7 +12,7 @@ from vadetisweb.serializers.detection_serializers import *
 from vadetisweb.models import DataSet
 from vadetisweb.utils import *
 from vadetisweb.anomaly_algorithms.detection import *
-from vadetisweb.factory import dataset_not_found_msg
+from vadetisweb.factory import dataset_not_found_msg, exception_message_response
 
 
 class DetectionAlgorithmSelectionView(APIView):
@@ -148,7 +148,7 @@ class DetectionLisaPearson(APIView):
 
                 except Exception as e:
                     logging.debug(e)
-                    return Response({}, status=status.HTTP_400_BAD_REQUEST)
+                    return exception_message_response(e)
             else:
                 return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -181,7 +181,7 @@ class DetectionLisaDtwPearson(APIView):
                     return Response(data)
 
                 except Exception as e:
-                    return Response({}, status=status.HTTP_400_BAD_REQUEST)
+                    return exception_message_response(e)
             else:
                 return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -215,7 +215,7 @@ class DetectionLisaGeoDistance(APIView):
 
                 except Exception as e:
                     logging.debug(e)
-                    return Response({}, status=status.HTTP_400_BAD_REQUEST)
+                    return exception_message_response(e)
             else:
                 return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -249,7 +249,7 @@ class DetectionRPCAMEstimatorLoss(APIView):
 
                 except Exception as e:
                     logging.debug(e)
-                    return Response({}, status=status.HTTP_400_BAD_REQUEST)
+                    return exception_message_response(e)
             else:
                 return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -283,7 +283,7 @@ class DetectionHistogram(APIView):
 
                 except Exception as e:
                     logging.debug(e)
-                    return Response({}, status=status.HTTP_400_BAD_REQUEST)
+                    return exception_message_response(e)
             else:
                 return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -317,7 +317,7 @@ class DetectionCluster(APIView):
 
                 except Exception as e:
                     logging.debug(e)
-                    return Response({}, status=status.HTTP_400_BAD_REQUEST)
+                    return exception_message_response(e)
             else:
                 return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -352,7 +352,7 @@ class DetectionSVM(APIView):
 
                 except Exception as e:
                     logging.debug(e)
-                    return Response({}, status=status.HTTP_400_BAD_REQUEST)
+                    return exception_message_response(e)
             else:
                 return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -386,7 +386,7 @@ class DetectionIsolationForest(APIView):
 
                 except Exception as e:
                     logging.debug(e)
-                    return Response({}, status=status.HTTP_400_BAD_REQUEST)
+                    return exception_message_response(e)
             else:
                 return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -416,9 +416,8 @@ class DatasetThresholdUpdateJson(APIView):
                 data['info'] = info
                 return Response(data)
 
-
             except Exception as e:
                 logging.debug(e)
-                return Response({}, status=status.HTTP_400_BAD_REQUEST)
+                return exception_message_response(e)
         else:
             return Response({}, status=status.HTTP_400_BAD_REQUEST)

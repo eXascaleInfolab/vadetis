@@ -4,12 +4,17 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import fbeta_score, precision_score, recall_score, accuracy_score, confusion_matrix
 
 from vadetisweb.parameters import F1_SCORE, PRECISION, RECALL, ACCURACY
-from vadetisweb.utils.date_utils import unix_time_millis_to_dt
+from vadetisweb.utils import unix_time_millis_to_dt, next_earlier_dt
 
 
-def df_range(df, df_class, range_start_millis, range_end_millis):
+def df_range(df, df_class, range_start_millis, range_end_millis, start_offset=None):
 
     range_start = unix_time_millis_to_dt(range_start_millis)
+    if start_offset is not None:
+        range_start = next_earlier_dt(range_start, df.index.inferred_freq, start_offset - 1)
+        if range_start > df.index[0]:
+            raise ValueError("You selected a window size of {}, but first timestamp {} is out of bounds.".format(start_offset, range_start))
+
     range_end = unix_time_millis_to_dt(range_end_millis)
 
     if range_start is not None and range_end is not None:
