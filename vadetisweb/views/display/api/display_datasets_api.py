@@ -6,7 +6,7 @@ from django.db.models import Q
 from vadetisweb.models import DataSet
 from vadetisweb.parameters import REAL_WORLD, SYNTHETIC
 from vadetisweb.serializers.dataset.display_dataset_serializer import *
-
+from vadetisweb.utils import q_public_or_user_is_owner
 
 class DisplaySyntheticDatasetDataTableViewSet(viewsets.ModelViewSet):
     """
@@ -19,7 +19,7 @@ class DisplaySyntheticDatasetDataTableViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = self.queryset
         query_set = queryset.filter(Q(type=SYNTHETIC, training_data=False),
-                                    Q(public=True) | Q(owner=self.request.user))
+                                    q_public_or_user_is_owner(self.request))
         return query_set
 
     def get_permissions(self):
@@ -44,7 +44,7 @@ class DisplayRealWorldDatasetDataTableViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = self.queryset
         query_set = queryset.filter(Q(type=REAL_WORLD, training_data=False),
-                                    Q(public=True) | Q(owner=self.request.user))
+                                    q_public_or_user_is_owner(self.request))
         return query_set
 
     def get_permissions(self):
@@ -71,10 +71,10 @@ class DisplayTrainingDatasetDataTableViewSet(viewsets.ModelViewSet):
         main_dataset_id = self.request.query_params.get('main', None)
         if main_dataset_id is not None:
             query_set = queryset.filter(Q(main_dataset_id=main_dataset_id, training_data=True),
-                                        Q(public=True) | Q(owner=self.request.user))
+                                        q_public_or_user_is_owner(self.request))
         else:
             query_set = queryset.filter(Q(training_data=True),
-                                        Q(public=True) | Q(owner=self.request.user))
+                                        q_public_or_user_is_owner(self.request))
         return query_set
 
     def get_permissions(self):
