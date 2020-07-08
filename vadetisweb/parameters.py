@@ -179,8 +179,8 @@ DATASET_SPATIAL_DATA  = (
 # Correlation Algorithms
 #########################################################
 
-TIME_RANGE_SELECTION = 'selection'
-TIME_RANGE_FULL = 'full range'
+TIME_RANGE_SELECTION = 'Selection'
+TIME_RANGE_FULL = 'Full Range'
 
 TIME_RANGE = (
     (TIME_RANGE_FULL, TIME_RANGE_FULL),
