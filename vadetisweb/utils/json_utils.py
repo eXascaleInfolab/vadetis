@@ -24,17 +24,9 @@ def get_type_from_dataset_json(dataset_json):
 def dataset_to_json(dataset, df, df_class, settings, type):
     data_series = []
     time_series = dataset.timeseries_set.all()
-    outlier_color = settings['color_outliers']
 
     for ts in time_series:
-        data = []
-        for index, value in df.loc[:, ts.id].iteritems():
-            anomaly_class = 1 if (df_class.loc[index, ts.id] == True) else 0
-
-            if anomaly_class == 0:
-                data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class': anomaly_class})
-            else:
-                data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class': anomaly_class, 'marker': {'fillColor': outlier_color, 'radius': 3}})
+        data = _get_series_data_json(ts.id, df, df_class, settings)
 
         dict_series = {
             'id': ts.id,
@@ -42,37 +34,75 @@ def dataset_to_json(dataset, df, df_class, settings, type):
             'unit': ts.unit,
             'is_spatial': ts.is_spatial(),
             'type': type,
-            'data': data
+            'dashStyle': 'Solid',
+            'data': data,
         }
         data_series.append(dict_series)
 
     return data_series
 
 
-def get_predicted_series_data_json(series_id, df_with_class_instances, scores, y_hat_results, settings):
+def _get_series_data_json(time_series_id, df, df_class, settings):
+    data = []
+    outlier_color = settings['color_outliers']
+    for index, value in df.loc[:, time_series_id].iteritems():
+        anomaly_class = 1 if (df_class.loc[index, time_series_id] == True) else 0
+
+        if anomaly_class == 0:
+            data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class': anomaly_class})
+        else:
+            data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'class': anomaly_class, 'marker': {'fillColor': outlier_color, 'radius': 3}})
+
+    return data
+
+
+def get_detection_instance_series_data_json(time_series_id, df_with_class_instances, scores, y_hat_results, settings):
 
     data = []
-    for index, value in df_with_class_instances.loc[:, series_id].iteritems():
+    for index, value in df_with_class_instances.loc[:, time_series_id].iteritems():
 
         integer_index = df_with_class_instances.index.get_loc(index)
         predicted_result = y_hat_results[integer_index]
         score = scores[integer_index]
 
-        anomaly_class = 1 if (df_with_class_instances.loc[index, 'class'] == True) else 0
+        class_truth = df_with_class_instances.loc[index, 'class'].astype(int)
 
-        if df_with_class_instances.loc[index, 'class'] == True and predicted_result == True: # true positive
-            data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': anomaly_class, 'marker': {'fillColor': settings['color_true_positive'], 'radius': 3}})
-
-        elif df_with_class_instances.loc[index, 'class'] == True and predicted_result == False: # false negative
-            data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': anomaly_class, 'marker': {'fillColor': settings['color_false_negative'], 'radius': 3}})
-
-        elif df_with_class_instances.loc[index, 'class'] == False and predicted_result == True: # false positive
-            data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': anomaly_class, 'marker': {'fillColor': settings['color_false_positive'], 'radius': 3}})
-
-        elif df_with_class_instances.loc[index, 'class'] == False and predicted_result == False: # true negative
-            data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': anomaly_class, 'marker': {'enabled': False }})
+        _append_detection_point(data, index, value, score, class_truth, predicted_result, settings)
 
     return data
+
+
+def get_detection_single_series_data_json(time_series_id, df, df_class, scores, y_hat_results, settings):
+    data = []
+    for index, value in df.loc[:, time_series_id].iteritems():
+
+        integer_index = df.index.get_loc(index)
+        predicted_result = y_hat_results[integer_index]
+        score = scores[integer_index]
+
+        class_truth = df_class.loc[index, time_series_id].astype(int)
+
+        _append_detection_point(data, index, value, score, class_truth, predicted_result, settings)
+
+    return data
+
+
+def _append_detection_point(data, index, value, score, class_truth, predicted_result, settings):
+
+    if class_truth == 1 and predicted_result == True:  # true positive
+        data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': class_truth,
+                     'marker': {'fillColor': settings['color_true_positive'], 'radius': 3}})
+
+    elif class_truth == 1 and predicted_result == False:  # false negative
+        data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': class_truth,
+                     'marker': {'fillColor': settings['color_false_negative'], 'radius': 3}})
+
+    elif class_truth == 0 and predicted_result == True:  # false positive
+        data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': class_truth,
+                     'marker': {'fillColor': settings['color_false_positive'], 'radius': 3}})
+
+    elif class_truth == 0 and predicted_result == False:  # true negative
+        data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': class_truth, 'marker': {'enabled': False}})
 
 
 def get_data_series_measurements(id, df_with_class_instances, y_hat_results):
@@ -84,44 +114,37 @@ def get_data_series_measurements(id, df_with_class_instances, y_hat_results):
     return measurements
 
 
-def get_anomaly_detection_single_ts_results_json(dataset, ts_id, df_with_class_instances, scores, y_hat_results, settings):
-    data = {}
-    data_series = []
+def get_detection_single_ts_results_json(dataset, df, df_class, time_series_id, scores, y_hat_results, settings, type):
+    data = []
 
-    df_z = df_zscore(df_with_class_instances.drop('class', axis=1))
-    df_z_with_class_instances = df_z.join(df_with_class_instances['class'])
+    time_series = dataset.timeseries_set.all()
+    for ts in time_series:
 
-    corr_time_series = dataset.timeseries_set.all().exclude(id=ts_id)
-    ts = TimeSeries.objects.get(id=ts_id)
+        if ts.id == time_series_id:
+            data_series = get_detection_single_series_data_json(ts.id, df, df_class, scores, y_hat_results, settings)
+        else:
+            data_series = _get_series_data_json(ts.id, df, df_class, settings)
 
-    # ts
-    raw_measurements = get_predicted_series_data_json(ts.id, df_with_class_instances, scores, y_hat_results, settings)
-    z_measurements = get_predicted_series_data_json(ts.id, df_z_with_class_instances, scores, y_hat_results, settings)
-
-    dict_series = {'id': ts.id, 'name': ts.name, 'unit': ts.unit, 'is_spatial': ts.is_spatial(),
-                   'measurements': {'raw': raw_measurements, 'zscore': z_measurements}}
-    data_series.append(dict_series)
-
-    #correlated ts
-    for corr_ts in corr_time_series:
-        raw_measurements = get_data_series_measurements(corr_ts.id, df_with_class_instances.drop('class', axis=1), y_hat_results)
-        z_measurements = get_data_series_measurements(corr_ts.id, df_z, y_hat_results)
-
-        dict_series = {'id': corr_ts.id, 'name': corr_ts.name, 'unit': corr_ts.unit, 'is_spatial': corr_ts.is_spatial(),
-                       'measurements': {'raw': raw_measurements, 'zscore': z_measurements}}
-        data_series.append(dict_series)
-
-    data['series'] = data_series
+        dict_series = {
+            'id': ts.id,
+            'name': ts.name,
+            'unit': ts.unit,
+            'is_spatial': ts.is_spatial(),
+            'type': type,
+            'dashStyle': 'Dot' if ts.id == time_series_id else 'Solid',
+            'data': data_series,
+        }
+        data.append(dict_series)
 
     return data
 
 
-def get_anomaly_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings, type):
+def get_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings, type):
     data = []
     time_series = dataset.timeseries_set.all()
 
     for ts in time_series:
-        data_series = get_predicted_series_data_json(ts.id, df_with_class_instances, scores, y_hat_results, settings)
+        data_series = get_detection_instance_series_data_json(ts.id, df_with_class_instances, scores, y_hat_results, settings)
 
         dict_series = {
             'id' : ts.id,
@@ -129,7 +152,8 @@ def get_anomaly_detection_results_json(dataset, df_with_class_instances, scores,
             'unit' : ts.unit,
             'is_spatial' : ts.is_spatial(),
             'type' : type,
-            'data' : data_series
+            'dashStyle': 'Solid',
+            'data' : data_series,
         }
         data.append(dict_series)
 

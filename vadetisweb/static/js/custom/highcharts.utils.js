@@ -148,7 +148,7 @@ function updateHighchartsSeriesForType(highchart, url, post_data, callback) {
 }
 
 function generateSeriesFromJson(dataset_series_json, algorithm, time_series) {
-    dataset_series_data = [];
+    var dataset_series_data = [];
 
     dataset_series_json.series.forEach(function (series) {
         if (algorithm === 'LISA') {
@@ -208,6 +208,9 @@ function setSeriesData(highchart, series_data_json) {
         var highchart_series = highchart.get(series.id);
         highchart_series.setData(series.data, false, true);
         highchart_series.options.custom.type = series.type;
+        if(series.dashStyle !== undefined) {
+            highchart_series.update({dashStyle: series.dashStyle});
+        }
     });
     highchart.redraw();
 }
@@ -222,6 +225,7 @@ function getDatasetSeriesFromJson(series_data) {
             name: series.name,
             lineWidth: 1,
             data: series.data,
+            /*dashStyle: series.dashStyle,*/
             marker: {
                 enabled: true,
                 symbol: 'circle',

@@ -7,30 +7,29 @@ from .isolation_forest import isolation_forest
 from .robust_pca import robust_pca_huber_loss
 from .helper_functions import df_range
 
-from vadetisweb.utils import get_anomaly_detection_single_ts_results_json, get_anomaly_detection_results_json, get_type_from_dataset_json
+from vadetisweb.utils import get_detection_single_ts_results_json, get_detection_results_json, get_type_from_dataset_json
 from vadetisweb.parameters import TIME_RANGE_SELECTION
 
 def lisa_pearson_detection(df, df_class, validated_data, settings):
     dataset = validated_data['dataset']
     window_size=validated_data['window_size']
+    time_series_id = validated_data['time_series'].id
 
     if validated_data['time_range'] == TIME_RANGE_SELECTION:
         df, df_class = df_range(df, df_class, validated_data['range_start'], validated_data['range_end'], start_offset=window_size)
 
-    scores, y_hat_results, df_with_class_instances, info = lisa_pearson(df, df_class, validated_data)
+    scores, y_hat_results, info = lisa_pearson(df, df_class, validated_data)
 
     # leave out the first x values (window size-1) from the beginning of the datasets as we cannot compute LISA for these values
     offset = window_size - 1
     scores = scores[offset:]
     y_hat_results = y_hat_results[offset:]
-    df_with_class_instances = df_with_class_instances.iloc[offset:]
+    df_response = df.iloc[offset:]
+    df_class_response = df_class.iloc[offset:]
 
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
-    """data_series = get_anomaly_detection_single_ts_results_json(dataset, time_series_id,
-                                                               df_with_class_instances, scores, y_hat_results,
-                                                               settings)"""
 
-    data_series = get_anomaly_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings, type)
+    data_series = get_detection_single_ts_results_json(dataset, df_response, df_class_response, time_series_id, scores, y_hat_results, settings, type)
 
     return data_series, info
 
@@ -38,35 +37,37 @@ def lisa_pearson_detection(df, df_class, validated_data, settings):
 def lisa_dtw_detection(df, df_class, validated_data, settings):
     dataset = validated_data['dataset']
     window_size = validated_data['window_size']
+    time_series_id = validated_data['time_series'].id
 
     if validated_data['time_range'] == TIME_RANGE_SELECTION:
         df, df_class = df_range(df, df_class, validated_data['range_start'], validated_data['range_end'], start_offset=window_size)
 
-    scores, y_hat_results, df_with_class_instances, info = lisa_dtw(df, df_class, validated_data)
+    scores, y_hat_results, info = lisa_dtw(df, df_class, validated_data)
 
     # leave out the first x values (window size-1) from the beginning of the datasets as we cannot compute LISA for these values
     offset = window_size - 1
     scores = scores[offset:]
     y_hat_results = y_hat_results[offset:]
-    df_with_class_instances = df_with_class_instances.iloc[offset:]
+    df_response = df.iloc[offset:]
+    df_class_response = df_class.iloc[offset:]
 
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
 
-    """data_series = get_anomaly_detection_single_ts_results_json(dataset, time_series_id,
-                                                               df_with_class_instances, scores, y_hat_results,
-                                                               settings)"""
-    data_series = get_anomaly_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings, type)
-
+    data_series = get_detection_single_ts_results_json(dataset, df_response, df_class_response, time_series_id, scores, y_hat_results, settings, type)
 
     return data_series, info
 
 
-def perform_lisa_geo(df, df_class, conf, time_series_id, dataset, settings):
-    scores, y_hat_results, df_with_class_instances, info = lisa_geo(df, df_class, conf,
-                                                                    time_series_id)
-    data_series = get_anomaly_detection_single_ts_results_json(dataset, time_series_id,
-                                                               df_with_class_instances, scores,
-                                                               y_hat_results, settings)
+def lisa_geo_detection(df, df_class, validated_data, settings):
+    dataset = validated_data['dataset']
+    time_series_id = validated_data['time_series'].id
+
+    scores, y_hat_results, info = lisa_geo(df, df_class, validated_data, settings)
+
+    type = get_type_from_dataset_json(validated_data['dataset_series_json'])
+
+    data_series = get_detection_single_ts_results_json(dataset, df, df_class, time_series_id, scores, y_hat_results, settings, type)
+
     return data_series, info
 
 
@@ -87,7 +88,7 @@ def rpca_detection(df, df_class, validated_data, settings):
                                                                                  train_size=validated_data['train_size'],
                                                                                  random_seed=validated_data['random_seed']                                                                                 )
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
-    data_series = get_anomaly_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings, type)
+    data_series = get_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings, type)
     return data_series, info
 
 
@@ -105,7 +106,7 @@ def histogram_detection(df, df_class, validated_data, settings):
                                                                      train_size=validated_data['train_size'],
                                                                      random_seed=validated_data['random_seed'])
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
-    data_series = get_anomaly_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings, type)
+    data_series = get_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings, type)
     return data_series, info
 
 
@@ -126,7 +127,7 @@ def cluster_detection(df, df_class, validated_data, settings):
                                                                                     train_size=validated_data['train_size'],
                                                                                     random_seed=validated_data['random_seed'])
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
-    data_series = get_anomaly_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings, type)
+    data_series = get_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings, type)
     return data_series, info
 
 
@@ -148,7 +149,7 @@ def svm_detection(df, df_class, validated_data, settings):
                                                                train_size=validated_data['train_size'],
                                                                random_seed=validated_data['random_seed'])
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
-    data_series = get_anomaly_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings, type)
+    data_series = get_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings, type)
     return data_series, info
 
 
@@ -172,5 +173,5 @@ def isolation_forest_detection(df, df_class, validated_data, settings):
                                                                             random_seed=validated_data['random_seed'])
 
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
-    data_series = get_anomaly_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings, type)
+    data_series = get_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings, type)
     return data_series, info

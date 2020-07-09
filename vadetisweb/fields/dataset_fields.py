@@ -48,6 +48,10 @@ class DatasetJsonField(serializers.JSONField):
                                 title='type',
                                 type=openapi.TYPE_STRING,
                             ),
+                            'dashStyle': openapi.Schema(
+                                title='dashStyle',
+                                type=openapi.TYPE_STRING,
+                            ),
                             'data' : openapi.Schema(
                                 title='data',
                                 type=openapi.TYPE_ARRAY,
@@ -74,10 +78,10 @@ class DatasetJsonField(serializers.JSONField):
                                     },
                                     required=['x', 'y', 'class'],
                                 )
-                            )
+                            ),
                         },
                         required=['id', 'type', 'data']
-                    )
+                    ),
                 ),
             },
             'required': ['series']

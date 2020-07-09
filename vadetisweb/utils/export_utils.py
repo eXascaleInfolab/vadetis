@@ -3,6 +3,7 @@ from django.core.files.temp import NamedTemporaryFile
 
 from .date_utils import *
 
+
 def export_to_csv(dataset_series_json):
     export_file = NamedTemporaryFile(suffix='.csv')
     series_data = dataset_series_json['series']

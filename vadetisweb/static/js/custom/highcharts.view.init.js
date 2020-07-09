@@ -3,8 +3,6 @@
 var VadetisHighcharts = function () {
 
     var initHighcharts = function (html_id, url, selectedButton) {
-        var shows_anomalies = true;
-        var current_type = 'raw';
         var dataset_series = [];
         var settings = settingsFromCookie();
 
@@ -63,7 +61,6 @@ var VadetisHighcharts = function () {
             legend: {
                 enabled: true,
                 layout: 'horizontal',
-                /*maxHeight: 100,*/
             },
 
             rangeSelector: {

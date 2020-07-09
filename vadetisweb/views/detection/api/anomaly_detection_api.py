@@ -206,11 +206,11 @@ class DetectionLisaGeoDistance(APIView):
                 df_from_json, df_class_from_json = get_datasets_from_json(serializer.validated_data['dataset_series_json'])
                 try:
                     data = {}
-                    """settings = get_settings(request)
-                    data_series, info = histogram_from_validated_data(df_from_json, df_class_from_json, serializer.validated_data, settings)
+                    settings = get_settings(request)
+                    data_series, info = lisa_geo_detection(df_from_json, df_class_from_json, serializer.validated_data, settings)
 
                     data['series'] = data_series
-                    data['info'] = info"""
+                    data['info'] = info
                     return Response(data)
 
                 except Exception as e:

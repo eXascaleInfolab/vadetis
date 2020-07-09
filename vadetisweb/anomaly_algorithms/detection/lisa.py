@@ -128,9 +128,6 @@ def df_lisa_time_series(time_series_id_p, df_mean, df_corr, global_correlation=F
     index_dts = list(df_mean.index)
 
     for index_dt in index_dts:
-        # converted_index_dt = pd.to_datetime(index_dt)
-        # converted_index_dt = index_dt
-
         if global_correlation:
             df_results.loc[index_dt, time_series_id_p] = lisa_for_df_row(df_mean.loc[index_dt],
                                                                       time_series_id_p,
@@ -143,7 +140,7 @@ def df_lisa_time_series(time_series_id_p, df_mean, df_corr, global_correlation=F
                                                                       skipna=skipna)
 
     time_elapsed = (datetime.datetime.now() - start_time).__str__()
-    print("Execution time for lisa values:", time_elapsed)
+    logging.debug("Execution time for lisa values:", time_elapsed)
 
     return df_results
 
@@ -191,7 +188,7 @@ def lisa_pearson(df, df_class, validated_data):
     info['thresholds'] = thresholds.tolist()
     info['detection_threshold_scores'] = threshold_scores.tolist()
 
-    return scores, y_hat_results, df_with_class_instances, info
+    return scores, y_hat_results, info
 
 
 #########################################################
@@ -238,44 +235,43 @@ def lisa_dtw(df, df_class, validated_data):
     info['thresholds'] = thresholds.tolist()
     info['detection_threshold_scores'] = threshold_scores.tolist()
 
-    return scores, y_hat_results, df_with_class_instances, info
-
+    return scores, y_hat_results, info
 
 
 #########################################################
 # GEO Distance
 #########################################################
 
-def lisa_geo(df, df_class, conf, time_series_id):
-    df_corr_dist, _ = get_df_corr_geo_distance(df)
+def lisa_geo(df, df_class, validated_data, settings):
+    time_series = validated_data['time_series']
+
+    df_corr_dist = get_df_corr_geo_distance(df)
 
     df_class_copy = df_class.copy()
-    df_class_copy = df_class_copy.rename(columns={time_series_id: 'class'})
+    df_class_copy = df_class_copy.rename(columns={time_series.id: 'class'})
     df_with_class_instances = df.join(df_class_copy['class'])
 
     # append mean values of each row to dataframe
     df_val_mean = df_copy_with_mean(df)
 
-    print(df_corr_dist)
-
     # LISA Time Series
-    df_lisa_results, lisa_time_elapsed = df_lisa_time_series(time_series_id, df_val_mean, df_corr_dist, global_correlation=True)
+    df_results = df_lisa_time_series(time_series.id, df_val_mean, df_corr_dist, global_correlation=True)
 
     # get highest and lowest lisa values
-    higher = df_lisa_results.max()[time_series_id]
-    lower = df_lisa_results.min()[time_series_id]
+    higher = df_results.max()[time_series.id]
+    lower = df_results.min()[time_series.id]
     thresholds = np.linspace(lower, higher, 100)
 
-    threshold_scores = get_threshold_scores(thresholds, df_lisa_results.values, df_with_class_instances)
+    threshold_scores = get_threshold_scores(thresholds, df_results[time_series.id].values, df_with_class_instances)
     selected_index = get_max_score_index_for_score_type(threshold_scores, F1_SCORE)
     selected_threshold = thresholds[selected_index]
 
-    scores = df_lisa_results.values
+    scores = df_results[time_series.id].values
     y_hat_results = (scores < selected_threshold).astype(int)
     y_truth = df_class_copy['class'].values.astype(int)
     info = get_detection_meta(selected_threshold, y_hat_results, y_truth)
 
     info['thresholds'] = thresholds.tolist()
-    info['training_threshold_scores'] = threshold_scores.tolist()
+    info['detection_threshold_scores'] = threshold_scores.tolist()
 
-    return scores, y_hat_results, df_with_class_instances, info
+    return scores, y_hat_results, info
