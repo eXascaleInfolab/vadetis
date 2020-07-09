@@ -2,7 +2,7 @@ import logging
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.parsers import MultiPartParser
 from rest_framework.views import APIView
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from celery.utils import uuid
 
@@ -128,7 +128,7 @@ class AccountUploadDataset(APIView):
     """
     Upload a new dataset
     """
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
     parser_classes = [MultiPartParser]
@@ -204,7 +204,7 @@ class AccountUploadTrainingDataset(APIView):
     """
     Upload a new dataset
     """
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
     parser_classes = [MultiPartParser]
@@ -271,7 +271,7 @@ class AccountDatasetEdit(APIView):
     """
     View for dataset editing
     """
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'vadetisweb/account/datasets/account_dataset_edit.html'
@@ -300,7 +300,7 @@ class AccountTrainingDatasetEdit(APIView):
     """
     View for dataset editing
     """
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'vadetisweb/account/training_datasets/account_training_dataset_edit.html'

@@ -1,6 +1,6 @@
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
@@ -20,7 +20,7 @@ class AccountUserUpdate(APIView):
     """
     renderer_classes = [JSONRenderer]
     permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [SessionAuthentication]
 
     def post(self, request):
         user_serializer = AccountUserSerializer(instance=request.user, data=request.data)
@@ -45,7 +45,7 @@ class AccountPasswordUpdate(APIView):
     """
     renderer_classes = [JSONRenderer]
     permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [SessionAuthentication]
 
     def post(self, request):
         password_update_serializer = AccountPasswordSerializer(context={"request": self.request, }, data=request.data)
@@ -72,7 +72,7 @@ class AccountSocialDisconnectUpdate(APIView):
     """
     renderer_classes = [JSONRenderer]
     permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [SessionAuthentication]
 
     def post(self, request):
         social_disconnect_serializer = AccountSocialDisconnectSerializer(data=request.data)
@@ -97,7 +97,7 @@ class AccountDelete(APIView):
     """
     renderer_classes = [JSONRenderer]
     permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [SessionAuthentication]
 
     def post(self, request):
         account_delete_serializer = AccountDeleteSerializer(instance=request.user, data=request.data)

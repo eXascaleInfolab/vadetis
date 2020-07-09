@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import SessionAuthentication
 
 from drf_yasg.utils import swagger_auto_schema
 
@@ -23,7 +23,7 @@ class AccountDatasetDataTableViewSet(viewsets.ModelViewSet):
     Request information about datasets of current user
     """
     permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [SessionAuthentication]
     queryset = DataSet.objects.all()
     serializer_class = AccountDatasetDataTablesSerializer
     http_method_names = ['get', 'head'] # disable http put, delete etc. from ViewSet
@@ -49,7 +49,7 @@ class AccountTrainingDatasetDataTableViewSet(viewsets.ModelViewSet):
     Request information about datasets of current user
     """
     permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [SessionAuthentication]
     queryset = DataSet.objects.all()
     serializer_class = AccountTrainingDatasetDataTablesSerializer
     http_method_names = ['get', 'head'] # disable http put, delete etc. from ViewSet
@@ -76,7 +76,7 @@ class AccountDatasetUpdate(APIView):
     """
     renderer_classes = [JSONRenderer]
     permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [SessionAuthentication]
 
     @swagger_auto_schema(request_body=AccountDatasetUpdateSerializer)
     def post(self, request, dataset_id):
@@ -110,7 +110,7 @@ class AccountDatasetDelete(APIView):
     """
     renderer_classes = [JSONRenderer]
     permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [SessionAuthentication]
 
     @swagger_auto_schema(request_body=AccountDatasetDeleteSerializer)
     def post(self, request, dataset_id):
@@ -151,7 +151,7 @@ class AccountTrainingDatasetUpdate(APIView):
     """
     renderer_classes = [JSONRenderer]
     permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [SessionAuthentication]
 
     @swagger_auto_schema(request_body=AccountDatasetUpdateSerializer)
     def post(self, request, dataset_id):
@@ -185,7 +185,7 @@ class AccountTrainingDatasetDelete(APIView):
     """
     renderer_classes = [JSONRenderer]
     permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    authentication_classes = [SessionAuthentication]
 
     @swagger_auto_schema(request_body=AccountDatasetDeleteSerializer)
     def post(self, request, dataset_id):
