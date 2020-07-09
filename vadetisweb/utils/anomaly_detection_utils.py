@@ -357,7 +357,7 @@ def get_window_size_for_percentage(df, percentage):
     return df, df_class"""
 
 
-def get_detection_meta(threshold, y_hat_results, y_truth):
+def get_detection_meta(threshold, y_hat_results, y_truth, upper_boundary=False):
     info = {}
 
     accuracy = accuracy_score(y_pred=y_hat_results, y_true=y_truth)
@@ -374,6 +374,8 @@ def get_detection_meta(threshold, y_hat_results, y_truth):
     info['recall'] = recall
     info['precision'] = precision
     info['f1_score'] = f1_score
+
+    info['upper_boundary'] = upper_boundary
 
     logging.debug('Threshold: %.3f' % threshold)
     logging.debug('Accuracy Score: %.3f' % accuracy)

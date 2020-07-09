@@ -1,4 +1,3 @@
-
 from .lisa import lisa_pearson, lisa_dtw, lisa_geo
 from .histogram import histogram
 from .cluster import cluster_gaussian_mixture
@@ -10,9 +9,10 @@ from .helper_functions import df_range
 from vadetisweb.utils import get_detection_single_ts_results_json, get_detection_results_json, get_type_from_dataset_json
 from vadetisweb.parameters import TIME_RANGE_SELECTION
 
+
 def lisa_pearson_detection(df, df_class, validated_data, settings):
     dataset = validated_data['dataset']
-    window_size=validated_data['window_size']
+    window_size = validated_data['window_size']
     time_series_id = validated_data['time_series'].id
 
     if validated_data['time_range'] == TIME_RANGE_SELECTION:
@@ -81,14 +81,14 @@ def rpca_detection(df, df_class, validated_data, settings):
     if validated_data['time_range'] == TIME_RANGE_SELECTION:
         df, df_class = df_range(df, df_class, validated_data['range_start'], validated_data['range_end'])
 
-    scores, y_hat_results, df_with_class_instances, info = robust_pca_huber_loss(df, df_class, df_train, df_train_class,
-                                                                                 delta=validated_data['delta'],
-                                                                                 n_components=validated_data['n_components'],
-                                                                                 maximize_score=validated_data['maximize_score'],
-                                                                                 train_size=validated_data['train_size'],
-                                                                                 random_seed=validated_data['random_seed']                                                                                 )
+    scores, y_hat_results, df_common_class, info = robust_pca_huber_loss(df, df_class, df_train, df_train_class,
+                                                                         delta=validated_data['delta'],
+                                                                         n_components=validated_data['n_components'],
+                                                                         maximize_score=validated_data['maximize_score'],
+                                                                         train_size=validated_data['train_size'],
+                                                                         random_seed=validated_data['random_seed'])
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
-    data_series = get_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings, type)
+    data_series = get_detection_results_json(dataset, df, df_class, df_common_class, scores, y_hat_results, settings, type)
     return data_series, info
 
 
@@ -101,12 +101,12 @@ def histogram_detection(df, df_class, validated_data, settings):
     if validated_data['time_range'] == TIME_RANGE_SELECTION:
         df, df_class = df_range(df, df_class, validated_data['range_start'], validated_data['range_end'])
 
-    scores, y_hat_results, df_with_class_instances, info = histogram(df, df_class, df_train, df_train_class,
-                                                                     maximize_score=validated_data['maximize_score'],
-                                                                     train_size=validated_data['train_size'],
-                                                                     random_seed=validated_data['random_seed'])
+    scores, y_hat_results, df_common_class, info = histogram(df, df_class, df_train, df_train_class,
+                                                             maximize_score=validated_data['maximize_score'],
+                                                             train_size=validated_data['train_size'],
+                                                             random_seed=validated_data['random_seed'])
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
-    data_series = get_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings, type)
+    data_series = get_detection_results_json(dataset, df, df_class, df_common_class, scores, y_hat_results, settings, type)
     return data_series, info
 
 
@@ -120,14 +120,14 @@ def cluster_detection(df, df_class, validated_data, settings):
     if validated_data['time_range'] == TIME_RANGE_SELECTION:
         df, df_class = df_range(df, df_class, validated_data['range_start'], validated_data['range_end'])
 
-    scores, y_hat_results, df_with_class_instances, info = cluster_gaussian_mixture(df, df_class, df_train, df_train_class,
-                                                                                    maximize_score=validated_data['maximize_score'],
-                                                                                    n_components=validated_data['n_components'],
-                                                                                    n_init=validated_data['n_init'],
-                                                                                    train_size=validated_data['train_size'],
-                                                                                    random_seed=validated_data['random_seed'])
+    scores, y_hat_results, df_common_class, info = cluster_gaussian_mixture(df, df_class, df_train, df_train_class,
+                                                                            maximize_score=validated_data['maximize_score'],
+                                                                            n_components=validated_data['n_components'],
+                                                                            n_init=validated_data['n_init'],
+                                                                            train_size=validated_data['train_size'],
+                                                                            random_seed=validated_data['random_seed'])
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
-    data_series = get_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings, type)
+    data_series = get_detection_results_json(dataset, df, df_class, df_common_class, scores, y_hat_results, settings, type)
     return data_series, info
 
 
@@ -141,15 +141,15 @@ def svm_detection(df, df_class, validated_data, settings):
     if validated_data['time_range'] == TIME_RANGE_SELECTION:
         df, df_class = df_range(df, df_class, validated_data['range_start'], validated_data['range_end'])
 
-    scores, y_hat_results, df_with_class_instances, info = svm(df, df_class, df_train, df_train_class,
-                                                               maximize_score=validated_data['maximize_score'],
-                                                               gamma=validated_data['gamma'],
-                                                               nu=validated_data['nu'],
-                                                               kernel=validated_data['kernel'],
-                                                               train_size=validated_data['train_size'],
-                                                               random_seed=validated_data['random_seed'])
+    scores, y_hat_results, df_common_class, info = svm(df, df_class, df_train, df_train_class,
+                                                       maximize_score=validated_data['maximize_score'],
+                                                       gamma=validated_data['gamma'],
+                                                       nu=validated_data['nu'],
+                                                       kernel=validated_data['kernel'],
+                                                       train_size=validated_data['train_size'],
+                                                       random_seed=validated_data['random_seed'])
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
-    data_series = get_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings, type)
+    data_series = get_detection_results_json(dataset, df, df_class, df_common_class, scores, y_hat_results, settings, type)
     return data_series, info
 
 
@@ -163,15 +163,15 @@ def isolation_forest_detection(df, df_class, validated_data, settings):
     if validated_data['time_range'] == TIME_RANGE_SELECTION:
         df, df_class = df_range(df, df_class, validated_data['range_start'], validated_data['range_end'])
 
-    scores, y_hat_results, df_with_class_instances, info = isolation_forest(df, df_class, df_train,
-                                                                            df_train_class,
-                                                                            maximize_score=validated_data['maximize_score'],
-                                                                            n_jobs=-1,
-                                                                            bootstrap=validated_data['bootstrap'],
-                                                                            n_estimators=validated_data['n_estimators'],
-                                                                            train_size=validated_data['train_size'],
-                                                                            random_seed=validated_data['random_seed'])
+    scores, y_hat_results, df_common_class, info = isolation_forest(df, df_class, df_train,
+                                                                    df_train_class,
+                                                                    maximize_score=validated_data['maximize_score'],
+                                                                    n_jobs=-1,
+                                                                    bootstrap=validated_data['bootstrap'],
+                                                                    n_estimators=validated_data['n_estimators'],
+                                                                    train_size=validated_data['train_size'],
+                                                                    random_seed=validated_data['random_seed'])
 
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
-    data_series = get_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings, type)
+    data_series = get_detection_results_json(dataset, df, df_class, df_common_class, scores, y_hat_results, settings, type)
     return data_series, info

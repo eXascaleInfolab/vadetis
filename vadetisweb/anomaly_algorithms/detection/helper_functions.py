@@ -78,7 +78,6 @@ def _df_remove_column(df, column_name):
 def get_threshold_scores(thresholds, y_scores, valid, upper_boundary=False):
     """
     Computes for each possible threshold the score for the performance metrics
-    TODO only compute the score we aim for??
 
     :param thresholds: a list of possible thresholds
     :param y_scores: the list of computed scores by the detection algorithm
@@ -89,22 +88,17 @@ def get_threshold_scores(thresholds, y_scores, valid, upper_boundary=False):
     """
     scores = []
 
-    # its possible that y_scores is a multidim array containing NaN
-    # however, any comparison (other than !=) of a NaN to a non-NaN value will always return False,
+    # any comparison (other than !=) of a NaN to a non-NaN value will always return False,
     # and therefore will not be detected as anomaly
     with np.errstate(invalid='ignore'):
 
         for threshold in thresholds:
             y_hat = np.array(y_scores < threshold).astype(int) if upper_boundary == False else np.array(y_scores > threshold).astype(int)
 
-            """# check if multidim array
-            if y_hat.ndim > 1:
-                y_hat = np.apply_along_axis(arrElemContainsTrue, 1, y_hat)"""
-
-            scores.append([recall_score(y_true=valid['class'].values, y_pred=y_hat, zero_division=0),
-                           precision_score(y_true=valid['class'].values, y_pred=y_hat, zero_division=0),
-                           fbeta_score(y_true=valid['class'].values, y_pred=y_hat, beta=1, zero_division=0),
-                           accuracy_score(y_true=valid['class'].values, y_pred=y_hat)])
+            scores.append([recall_score(y_true=valid.values, y_pred=y_hat, zero_division=0),
+                           precision_score(y_true=valid.values, y_pred=y_hat, zero_division=0),
+                           fbeta_score(y_true=valid.values, y_pred=y_hat, beta=1, zero_division=0),
+                           accuracy_score(y_true=valid.values, y_pred=y_hat)])
 
     return np.array(scores)
 

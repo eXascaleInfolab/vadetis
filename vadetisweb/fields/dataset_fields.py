@@ -71,6 +71,11 @@ class DatasetJsonField(serializers.JSONField):
                                             type=openapi.TYPE_INTEGER,
                                             default=0
                                         ),
+                                        'class_common': openapi.Schema(
+                                            title='class_common',
+                                            type=openapi.TYPE_INTEGER,
+                                            default=0
+                                        ),
                                         'score': openapi.Schema(
                                             title='score',
                                             type=openapi.TYPE_NUMBER,

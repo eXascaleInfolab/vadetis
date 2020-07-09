@@ -55,7 +55,7 @@ var DatasetDetectionForm = function () {
         });
     }
 
-    var registerThresholdUpdateForm = function(form_id) {
+    var registerThresholdUpdateForm = function(form_id, upper_boundary) {
         var html_id = '#' + form_id;
         $(html_id).on('submit', function (event) {
             event.preventDefault();
@@ -64,6 +64,7 @@ var DatasetDetectionForm = function () {
             clearMessages();
             var highchart = $('#highcharts_container').highcharts(), formData = new FormData(this), dataset_series_json = getDatasetSeriesJson(highchart), csrftoken = Cookies.get('csrftoken');
             formData.append('dataset_series_json', JSON.stringify(dataset_series_json));
+            formData.set('upper_boundary', upper_boundary);
             highchart.showLoading();
 
             $.ajax({
@@ -253,7 +254,8 @@ var DatasetDetectionForm = function () {
                     requestThresholdPortlet(threshold_portlet_url, "threshold_form_portlet", "Threshold",
                         function () {
                         KTApp.initPortlets();
-                        registerThresholdUpdateForm('threshold_form');
+                        console.log(info.upper_boundary);
+                        registerThresholdUpdateForm('threshold_form', info.upper_boundary);
                         updateThreshold(info.thresholds, info.threshold);
                     });
 

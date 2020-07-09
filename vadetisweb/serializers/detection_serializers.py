@@ -10,7 +10,7 @@ class AlgorithmSerializer(serializers.Serializer):
                                         required=True,
                                         help_text='The type of anomaly detection algorithm',
                                         style={'template': 'vadetisweb/parts/input/select_input.html',
-                                               'id' : 'detectionOnChange',
+                                               'id': 'detectionOnChange',
                                                'help_text_in_popover': True})
 
     def __init__(self, *args, **kwargs):
@@ -28,11 +28,11 @@ class RPCAMEstimatorLossSerializer(serializers.Serializer):
                                             queryset=DataSet.objects.none())
 
     delta = serializers.FloatField(initial=1.0, label='Delta', required=True,
-                                     help_text='Delta for Huber Loss function. The value of delta depends on the contamination level of the data. '
-                                               'The higher the contamination, the lower the value should be chosen.',
-                                     style={'template': 'vadetisweb/parts/input/text_input.html',
-                                            'step': 'any',
-                                            'help_text_in_popover': True})
+                                   help_text='Delta for Huber Loss function. The value of delta depends on the contamination level of the data. '
+                                             'The higher the contamination, the lower the value should be chosen.',
+                                   style={'template': 'vadetisweb/parts/input/text_input.html',
+                                          'step': 'any',
+                                          'help_text_in_popover': True})
 
     n_components = serializers.IntegerField(initial=2, label='Number of components', min_value=2, required=True,
                                             help_text='The number of components for dimensionality reduction.',
@@ -195,9 +195,9 @@ class LisaPearsonSerializer(serializers.Serializer):
     window_size = WindowSizeIntegerField(initial=10, required=True, min_value=1, max_value=19)
 
     normalize = serializers.BooleanField(initial=True, label='Apply Normalisation', required=False,
-                                                help_text='Each sample of the correlation values is rescaled independently of other samples so that its L1 norm equals one.',
-                                                style={'help_text_in_popover': False,
-                                                       'template': 'vadetisweb/parts/input/checkbox_input.html'})
+                                         help_text='Each sample of the correlation values is rescaled independently of other samples so that its L1 norm equals one.',
+                                         style={'help_text_in_popover': False,
+                                                'template': 'vadetisweb/parts/input/checkbox_input.html'})
 
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
@@ -231,9 +231,9 @@ class LisaDtwPearsonSerializer(serializers.Serializer):
                                                     style={'template': 'vadetisweb/parts/input/select_input.html',
                                                            'help_text_in_popover': True})
     normalize = serializers.BooleanField(initial=True, label='Apply Normalisation', required=False,
-                                                help_text='Each sample of the correlation values is rescaled independently of other samples so that its L1 norm equals one.',
-                                                style={'help_text_in_popover': False,
-                                                       'template': 'vadetisweb/parts/input/checkbox_input.html'})
+                                         help_text='Each sample of the correlation values is rescaled independently of other samples so that its L1 norm equals one.',
+                                         style={'help_text_in_popover': False,
+                                                'template': 'vadetisweb/parts/input/checkbox_input.html'})
 
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
@@ -274,8 +274,8 @@ class LisaGeoDistanceSerializer(serializers.Serializer):
     def __init__(self, *args, **kwargs):
         # post_data = args[0]
         super(LisaGeoDistanceSerializer, self).__init__(*args, **kwargs)
+        #TODO
         """time_series = TimeSeries.objects.filter(datasets__in=[post_data['dataset_selected']])
-
         all_have_ch1903 = True
         all_have_height = True
         for ts in time_series:
@@ -302,6 +302,10 @@ class ThresholdSerializer(serializers.Serializer):
                                               'step': 'any',
                                               'id': 'threshold_value',
                                               'help_text_in_popover': False})
+
+    upper_boundary = serializers.BooleanField(default=False, initial=False,
+                                              style={'template': 'vadetisweb/parts/input/hidden_input.html',
+                                                     'id': 'upper_boundary'})
 
     def __init__(self, *args, **kwargs):
         super(ThresholdSerializer, self).__init__(*args, **kwargs)

@@ -3,16 +3,14 @@ from vadetisweb.utils import get_detection_meta
 from .rpca import *
 from .helper_functions import *
 
+
 def robust_pca_huber_loss(df, df_class, df_train, df_train_class, delta=1, n_components=2, maximize_score=F1_SCORE, train_size=0.5, random_seed=10):
 
-    df_train_class_instances = df_anomaly_instances(df_train_class)
-    #df_train = df_train.join(df_train_class_instances)
-
-    df_class_instances = df_anomaly_instances(df_class)
-    df_with_class_instances = df.join(df_class_instances)
+    df_train_common_class = df_anomaly_instances(df_train_class)
+    df_common_class = df_anomaly_instances(df_class)
 
     # stratify parameter makes a split so that the proportion of values in the sample produced will be the same as the proportion of values provided to parameter stratify
-    X_train, X_test, y_train, y_test = train_test_split(df_train, df_train_class_instances, train_size=train_size, random_state=random_seed, stratify=df_train_class_instances)
+    X_train, X_test, y_train, y_test = train_test_split(df_train, df_train_common_class, train_size=train_size, random_state=random_seed, stratify=df_train_common_class)
 
     # Dimensionality reduction with Robust PCA and Huber Loss Function
     huber_loss = loss.HuberLoss(delta=delta)
@@ -51,15 +49,15 @@ def robust_pca_huber_loss(df, df_class, df_train, df_train_class, delta=1, n_com
     # detection on dataset
     scores = normalized_anomaly_scores(df, X_df_reconstructed)
     y_hat_results = (scores > selected_threshold).astype(int)
-    y_truth = df_class_instances.values.astype(int)
-    detection_threshold_scores = get_threshold_scores(thresholds, scores, df_with_class_instances)
-    info = get_detection_meta(selected_threshold, y_hat_results, y_truth)
+    y_truth = df_common_class.values.astype(int)
+    detection_threshold_scores = get_threshold_scores(thresholds, scores, df_common_class['class'])
+    info = get_detection_meta(selected_threshold, y_hat_results, y_truth, upper_boundary=True)
 
     info['thresholds'] = thresholds.tolist()
     info['training_threshold_scores'] = training_threshold_scores.tolist()
     info['detection_threshold_scores'] = detection_threshold_scores.tolist()
 
-    return scores, y_hat_results, df_with_class_instances, info
+    return scores, y_hat_results, df_common_class, info
 
 
 def normalized_anomaly_scores(df_original, df_reconstructed):

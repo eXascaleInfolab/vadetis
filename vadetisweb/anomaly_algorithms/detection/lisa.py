@@ -160,7 +160,6 @@ def lisa_pearson(df, df_class, validated_data):
 
     df_class_copy = df_class.copy()
     df_class_copy = df_class_copy.rename(columns={time_series.id: 'class'})
-    df_with_class_instances = df.join(df_class_copy['class'])
 
     df_correlation = pearson(df, time_series.id, window_size=window_size)
 
@@ -176,7 +175,7 @@ def lisa_pearson(df, df_class, validated_data):
     higher = df_results.max()[time_series.id]
     thresholds = np.linspace(lower, higher, 100)
 
-    threshold_scores = get_threshold_scores(thresholds, df_results[time_series.id].values, df_with_class_instances)
+    threshold_scores = get_threshold_scores(thresholds, df_results[time_series.id].values, df_class_copy['class'])
     selected_index = get_max_score_index_for_score_type(threshold_scores, F1_SCORE)
     selected_threshold = thresholds[selected_index]
 
@@ -207,7 +206,6 @@ def lisa_dtw(df, df_class, validated_data):
 
     df_class_copy = df_class.copy()
     df_class_copy = df_class_copy.rename(columns={time_series.id: 'class'})
-    df_with_class_instances = df.join(df_class_copy['class'])
 
     df_correlation = dtw_pearson(df, time_series.id, distance_function, window_size=window_size)
 
@@ -223,7 +221,7 @@ def lisa_dtw(df, df_class, validated_data):
     higher = df_results.max()[time_series.id]
     thresholds = np.linspace(lower, higher, 100)
 
-    threshold_scores = get_threshold_scores(thresholds, df_results[time_series.id].values, df_with_class_instances)
+    threshold_scores = get_threshold_scores(thresholds, df_results[time_series.id].values, df_class_copy['class'])
     selected_index = get_max_score_index_for_score_type(threshold_scores, F1_SCORE)
     selected_threshold = thresholds[selected_index]
 
@@ -249,7 +247,6 @@ def lisa_geo(df, df_class, validated_data, settings):
 
     df_class_copy = df_class.copy()
     df_class_copy = df_class_copy.rename(columns={time_series.id: 'class'})
-    df_with_class_instances = df.join(df_class_copy['class'])
 
     # append mean values of each row to dataframe
     df_val_mean = df_copy_with_mean(df)
@@ -262,7 +259,7 @@ def lisa_geo(df, df_class, validated_data, settings):
     lower = df_results.min()[time_series.id]
     thresholds = np.linspace(lower, higher, 100)
 
-    threshold_scores = get_threshold_scores(thresholds, df_results[time_series.id].values, df_with_class_instances)
+    threshold_scores = get_threshold_scores(thresholds, df_results[time_series.id].values, df_class_copy['class'])
     selected_index = get_max_score_index_for_score_type(threshold_scores, F1_SCORE)
     selected_threshold = thresholds[selected_index]
 

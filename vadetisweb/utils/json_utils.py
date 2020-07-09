@@ -56,62 +56,76 @@ def _get_series_data_json(time_series_id, df, df_class, settings):
     return data
 
 
-def get_detection_instance_series_data_json(time_series_id, df_with_class_instances, scores, y_hat_results, settings):
-
+def get_common_detection_series_data_json(time_series_id, df, df_class, df_common_class, scores, y_hat_results, settings):
     data = []
-    for index, value in df_with_class_instances.loc[:, time_series_id].iteritems():
-
-        integer_index = df_with_class_instances.index.get_loc(index)
+    for index, value in df.loc[:, time_series_id].iteritems():
+        integer_index = df.index.get_loc(index)
         predicted_result = y_hat_results[integer_index]
         score = scores[integer_index]
 
-        class_truth = df_with_class_instances.loc[index, 'class'].astype(int)
+        class_truth = df_class.loc[index, time_series_id].astype(int)
+        class_common = df_common_class.loc[index, 'class'].astype(int)
 
-        _append_detection_point(data, index, value, score, class_truth, predicted_result, settings)
+        _append_common_detection_point(data, index, value, score, class_truth, class_common, predicted_result, settings)
 
     return data
+
+def _append_common_detection_point(data, index, value, score, class_truth, class_common, predicted_result, settings):
+    if class_common == 1 and predicted_result == True:  # true positive
+        point = {'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': class_truth, 'class_common': class_common,
+                 'marker': {'fillColor': settings['color_true_positive'], 'radius': 3}}
+        data.append(point)
+
+    elif class_common == 1 and predicted_result == False:  # false negative
+        point = {'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': class_truth, 'class_common': class_common,
+                 'marker': {'fillColor': settings['color_false_negative'], 'radius': 3}}
+        data.append(point)
+
+    elif class_common == 0 and predicted_result == True:  # false positive
+        point = {'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': class_truth, 'class_common': class_common,
+                 'marker': {'fillColor': settings['color_false_positive'], 'radius': 3}}
+        data.append(point)
+
+    elif class_common == 0 and predicted_result == False:  # true negative
+        point = {'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': class_truth, 'class_common': class_common,
+                 'marker': {'enabled': False}}
+        data.append(point)
 
 
 def get_detection_single_series_data_json(time_series_id, df, df_class, scores, y_hat_results, settings):
     data = []
     for index, value in df.loc[:, time_series_id].iteritems():
-
         integer_index = df.index.get_loc(index)
         predicted_result = y_hat_results[integer_index]
         score = scores[integer_index]
 
         class_truth = df_class.loc[index, time_series_id].astype(int)
 
-        _append_detection_point(data, index, value, score, class_truth, predicted_result, settings)
+        _append_single_detection_point(data, index, value, score, class_truth, predicted_result, settings)
 
     return data
 
 
-def _append_detection_point(data, index, value, score, class_truth, predicted_result, settings):
-
+def _append_single_detection_point(data, index, value, score, class_truth, predicted_result, settings, class_common=None):
     if class_truth == 1 and predicted_result == True:  # true positive
-        data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': class_truth,
-                     'marker': {'fillColor': settings['color_true_positive'], 'radius': 3}})
+        point = {'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': class_truth,
+                 'marker': {'fillColor': settings['color_true_positive'], 'radius': 3}}
+        data.append(point)
 
     elif class_truth == 1 and predicted_result == False:  # false negative
-        data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': class_truth,
-                     'marker': {'fillColor': settings['color_false_negative'], 'radius': 3}})
+        point = {'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': class_truth,
+                 'marker': {'fillColor': settings['color_false_negative'], 'radius': 3}}
+        data.append(point)
 
     elif class_truth == 0 and predicted_result == True:  # false positive
-        data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': class_truth,
-                     'marker': {'fillColor': settings['color_false_positive'], 'radius': 3}})
+        point = {'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': class_truth,
+                 'marker': {'fillColor': settings['color_false_positive'], 'radius': 3}}
+        data.append(point)
 
     elif class_truth == 0 and predicted_result == False:  # true negative
-        data.append({'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': class_truth, 'marker': {'enabled': False}})
-
-
-def get_data_series_measurements(id, df_with_class_instances, y_hat_results):
-
-    measurements = []
-    for index, value in df_with_class_instances.loc[:, id].iteritems():
-        measurements.append({'x': unix_time_millis_from_dt(index), 'y': value, 'marker': {'radius': 0}})
-
-    return measurements
+        point = {'x': unix_time_millis_from_dt(index), 'y': value, 'score': score, 'class': class_truth,
+                 'marker': {'enabled': False}}
+        data.append(point)
 
 
 def get_detection_single_ts_results_json(dataset, df, df_class, time_series_id, scores, y_hat_results, settings, type):
@@ -139,21 +153,21 @@ def get_detection_single_ts_results_json(dataset, df, df_class, time_series_id, 
     return data
 
 
-def get_detection_results_json(dataset, df_with_class_instances, scores, y_hat_results, settings, type):
+def get_detection_results_json(dataset, df, df_class, df_common_class, scores, y_hat_results, settings, type):
     data = []
     time_series = dataset.timeseries_set.all()
 
     for ts in time_series:
-        data_series = get_detection_instance_series_data_json(ts.id, df_with_class_instances, scores, y_hat_results, settings)
+        data_series = get_common_detection_series_data_json(ts.id, df, df_class, df_common_class, scores, y_hat_results, settings)
 
         dict_series = {
-            'id' : ts.id,
-            'name' : ts.name,
-            'unit' : ts.unit,
-            'is_spatial' : ts.is_spatial(),
-            'type' : type,
+            'id': ts.id,
+            'name': ts.name,
+            'unit': ts.unit,
+            'is_spatial': ts.is_spatial(),
+            'type': type,
             'dashStyle': 'Solid',
-            'data' : data_series,
+            'data': data_series,
         }
         data.append(dict_series)
 
@@ -162,31 +176,66 @@ def get_detection_results_json(dataset, df_with_class_instances, scores, y_hat_r
 
 def _set_marker_for_threshold(point, threshold, settings, upper_boundary=False):
     """
-    :param point:
-    :param threshold:
-    :param settings:
-    :param upper_boundary: determines if score higher than thresholds are anomalies or not
+    :param point: a single point in the time series
+    :param threshold: the threshold we run against the marking
+    :param settings: settings containing color information
+
+    :param upper_boundary: determines if score higher than threshold are anomalies or if they are when they are lower than the threshold
     """
-    if upper_boundary:
-        if point['class'] == 1 and point['score'] > threshold: #true positive
-            point['marker'] = {'fillColor': settings['color_true_positive'], 'radius': 3}
-        elif point['class'] == 1 and point['score'] <= threshold: #false negative
-            point['marker'] = {'fillColor': settings['color_false_negative'], 'radius': 3}
-        elif point['class'] == 0 and point['score'] > threshold:  #false positive
-            point['marker'] = {'fillColor': settings['color_false_positive'], 'radius': 3}
-        elif point['class'] == 0 and point['score'] <= threshold:  # true negative
-            point['marker'] = {'enabled': False }
-
+    if 'class_common' in point:
+        if upper_boundary == True:
+            _set_common_marker_upper_boundary(point, threshold, settings)
+        else:
+            _set_common_marker_lower_boundary(point, threshold, settings)
     else:
-        if point['class'] == 1 and point['score'] < threshold: #true positive
-            point['marker'] = {'fillColor': settings['color_true_positive'], 'radius': 3}
-        elif point['class'] == 1 and point['score'] >= threshold: #false negative
-            point['marker'] = {'fillColor': settings['color_false_negative'], 'radius': 3}
-        elif point['class'] == 0 and point['score'] < threshold:  #false positive
-            point['marker'] = {'fillColor': settings['color_false_positive'], 'radius': 3}
-        elif point['class'] == 0 and point['score'] >= threshold:  # true negative
-            point['marker'] = {'enabled': False }
+        if upper_boundary == True:
+            _set_single_marker_upper_boundary(point, threshold, settings)
+        else:
+            _set_single_marker_lower_boundary(point, threshold, settings)
 
+
+def _set_common_marker_upper_boundary(point, threshold, settings):
+    if point['class_common'] == 1 and point['score'] > threshold:  # true positive
+        point['marker'] = {'fillColor': settings['color_true_positive'], 'radius': 3}
+    elif point['class_common'] == 1 and point['score'] <= threshold:  # false negative
+        point['marker'] = {'fillColor': settings['color_false_negative'], 'radius': 3}
+    elif point['class_common'] == 0 and point['score'] > threshold:  # false positive
+        point['marker'] = {'fillColor': settings['color_false_positive'], 'radius': 3}
+    elif point['class_common'] == 0 and point['score'] <= threshold:  # true negative
+        point['marker'] = {'enabled': False}
+
+
+def _set_common_marker_lower_boundary(point, threshold, settings):
+    if point['class_common'] == 1 and point['score'] < threshold:  # true positive
+        point['marker'] = {'fillColor': settings['color_true_positive'], 'radius': 3}
+    elif point['class_common'] == 1 and point['score'] >= threshold:  # false negative
+        point['marker'] = {'fillColor': settings['color_false_negative'], 'radius': 3}
+    elif point['class_common'] == 0 and point['score'] < threshold:  # false positive
+        point['marker'] = {'fillColor': settings['color_false_positive'], 'radius': 3}
+    elif point['class_common'] == 0 and point['score'] >= threshold:  # true negative
+        point['marker'] = {'enabled': False}
+
+
+def _set_single_marker_upper_boundary(point, threshold, settings):
+    if point['class'] == 1 and point['score'] > threshold:  # true positive
+        point['marker'] = {'fillColor': settings['color_true_positive'], 'radius': 3}
+    elif point['class'] == 1 and point['score'] <= threshold:  # false negative
+        point['marker'] = {'fillColor': settings['color_false_negative'], 'radius': 3}
+    elif point['class'] == 0 and point['score'] > threshold:  # false positive
+        point['marker'] = {'fillColor': settings['color_false_positive'], 'radius': 3}
+    elif point['class'] == 0 and point['score'] <= threshold:  # true negative
+        point['marker'] = {'enabled': False}
+
+
+def _set_single_marker_lower_boundary(point, threshold, settings):
+    if point['class'] == 1 and point['score'] < threshold:  # true positive
+        point['marker'] = {'fillColor': settings['color_true_positive'], 'radius': 3}
+    elif point['class'] == 1 and point['score'] >= threshold:  # false negative
+        point['marker'] = {'fillColor': settings['color_false_negative'], 'radius': 3}
+    elif point['class'] == 0 and point['score'] < threshold:  # false positive
+        point['marker'] = {'fillColor': settings['color_false_positive'], 'radius': 3}
+    elif point['class'] == 0 and point['score'] >= threshold:  # true negative
+        point['marker'] = {'enabled': False}
 
 
 def _get_scores_and_truth_from_series_data(series_data):
@@ -200,7 +249,6 @@ def _get_scores_and_truth_from_series_data(series_data):
 
 
 def get_datasets_from_json(dataset_series):
-    
     df_raw = pd.json_normalize(dataset_series['series'], record_path=['data'], meta=['id', 'type'])
 
     # transform raw df into dataset df and class df
@@ -220,10 +268,10 @@ def get_locations_json(timeseries):
     for ts in timeseries:
         location = ts.location
         locations.append(location)
-        points.append({ 'ts' : ts.name, 'label' : location.label, 'latitude' : location.latitude, 'longitude' : location.longitude })
+        points.append({'ts': ts.name, 'label': location.label, 'latitude': location.latitude, 'longitude': location.longitude})
 
     center_latitude, center_longitude = _center_of_locations(locations)
-    data['meta'] = { 'center_latitude' : center_latitude, 'center_longitude' : center_longitude }
+    data['meta'] = {'center_latitude': center_latitude, 'center_longitude': center_longitude}
     data['points'] = points
     return data
 
@@ -240,15 +288,15 @@ def _center_of_locations(locations):
     return center_latitude, center_longitude
 
 
-def get_updated_dataset_series_for_threshold_json(dataset_series, threshold, settings):
-
+def get_updated_dataset_series_for_threshold_json(dataset_series, threshold, upper_boundary, settings):
     for series in dataset_series['series']:
         for point in series['data']:
-            _set_marker_for_threshold(point, threshold, settings)
+            _set_marker_for_threshold(point, threshold, settings, upper_boundary=upper_boundary)
 
     # todo if not lisa we detected anomalous instance not point, so points at the same timestamp have the same truth and score
     series_first = dataset_series['series'][0]
     series_first_data = series_first['data']
+
     scores, truth = _get_scores_and_truth_from_series_data(series_first_data)
     y_hat_results = (scores < threshold).astype(int)
     info = get_detection_meta(threshold, y_hat_results, truth)
@@ -258,12 +306,11 @@ def get_updated_dataset_series_for_threshold_json(dataset_series, threshold, set
 
 @DeprecationWarning
 def get_updated_dataset_series_for_threshold_with_marker_json(threshold, dataset_series, info, algorithm, settings):
-
     for series in dataset_series:
         for measurement in series['measurements']:
             _set_marker_for_threshold(measurement, threshold, settings)
 
-    if algorithm != LISA_PEARSON: #todo if not lisa we detected anomalous instance not point, so points at the same timestamp have the same truth and score
+    if algorithm != LISA_PEARSON:  # todo if not lisa we detected anomalous instance not point, so points at the same timestamp have the same truth and score
         series_first = dataset_series[0]
         series_first_measurements = series_first['measurements']
         scores, truth = _get_scores_and_truth_from_series_data(series_first_measurements)
@@ -272,7 +319,7 @@ def get_updated_dataset_series_for_threshold_with_marker_json(threshold, dataset
         new_info['thresholds'] = info['thresholds']
         new_info['training_threshold_scores'] = info['training_threshold_scores']
     else:
-        #todo
+        # todo
         info = {}
 
     return dataset_series, new_info

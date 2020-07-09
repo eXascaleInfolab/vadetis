@@ -411,7 +411,11 @@ class DatasetThresholdUpdateJson(APIView):
                 data = {}
                 settings = get_settings(request)
 
-                data_series, info = get_updated_dataset_series_for_threshold_json(serializer.validated_data['dataset_series_json'], serializer.validated_data['threshold'], settings)
+                dataset_series_json = serializer.validated_data['dataset_series_json']
+                threshold = serializer.validated_data['threshold']
+                upper_boundary = serializer.validated_data['upper_boundary']
+
+                data_series, info = get_updated_dataset_series_for_threshold_json(dataset_series_json, threshold, upper_boundary, settings)
                 data['series'] = data_series['series']
                 data['info'] = info
                 return Response(data)
