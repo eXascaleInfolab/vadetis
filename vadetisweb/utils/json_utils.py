@@ -34,6 +34,7 @@ def dataset_to_json(dataset, df, df_class, settings, type):
             'unit': ts.unit,
             'is_spatial': ts.is_spatial(),
             'type': type,
+            'detection': False,
             'dashStyle': 'Solid',
             'data': data,
         }
@@ -145,6 +146,7 @@ def get_detection_single_ts_results_json(dataset, df, df_class, time_series_id, 
             'unit': ts.unit,
             'is_spatial': ts.is_spatial(),
             'type': type,
+            'detection': True if ts.id == time_series_id else False,
             'dashStyle': 'Dot' if ts.id == time_series_id else 'Solid',
             'data': data_series,
         }
@@ -153,7 +155,7 @@ def get_detection_single_ts_results_json(dataset, df, df_class, time_series_id, 
     return data
 
 
-def get_detection_results_json(dataset, df, df_class, df_common_class, scores, y_hat_results, settings, type):
+def get_common_detection_results_json(dataset, df, df_class, df_common_class, scores, y_hat_results, settings, type):
     data = []
     time_series = dataset.timeseries_set.all()
 
@@ -166,6 +168,7 @@ def get_detection_results_json(dataset, df, df_class, df_common_class, scores, y
             'unit': ts.unit,
             'is_spatial': ts.is_spatial(),
             'type': type,
+            'detection': True,
             'dashStyle': 'Solid',
             'data': data_series,
         }
@@ -174,7 +177,7 @@ def get_detection_results_json(dataset, df, df_class, df_common_class, scores, y
     return data
 
 
-def _set_marker_for_threshold(point, threshold, settings, upper_boundary=False):
+def _set_common_marker_for_threshold(point, threshold, settings, upper_boundary=False):
     """
     :param point: a single point in the time series
     :param threshold: the threshold we run against the marking
@@ -188,10 +191,14 @@ def _set_marker_for_threshold(point, threshold, settings, upper_boundary=False):
         else:
             _set_common_marker_lower_boundary(point, threshold, settings)
     else:
-        if upper_boundary == True:
-            _set_single_marker_upper_boundary(point, threshold, settings)
-        else:
-            _set_single_marker_lower_boundary(point, threshold, settings)
+        raise ValueError("The common class for a point at is missing.")
+
+
+def _set_single_marker_for_threshold(point, threshold, settings, upper_boundary=False):
+    if upper_boundary == True:
+        _set_single_marker_upper_boundary(point, threshold, settings)
+    else:
+        _set_single_marker_lower_boundary(point, threshold, settings)
 
 
 def _set_common_marker_upper_boundary(point, threshold, settings):
@@ -248,6 +255,17 @@ def _get_scores_and_truth_from_series_data(series_data):
     return np.array(scores), np.array(truth)
 
 
+def _all_series_detection_flag(series):
+    return all(time_series['detection'] is True for time_series in series)
+
+
+def _get_detection_series(series):
+    for time_series in series:
+        if 'detection' in time_series and time_series['detection'] == True:
+            return time_series
+    raise ValueError("Could not find the series to which outlier detection have been applied.")
+
+
 def get_datasets_from_json(dataset_series):
     df_raw = pd.json_normalize(dataset_series['series'], record_path=['data'], meta=['id', 'type'])
 
@@ -289,37 +307,25 @@ def _center_of_locations(locations):
 
 
 def get_updated_dataset_series_for_threshold_json(dataset_series, threshold, upper_boundary, settings):
-    for series in dataset_series['series']:
-        for point in series['data']:
-            _set_marker_for_threshold(point, threshold, settings, upper_boundary=upper_boundary)
+    series = dataset_series['series']
+    # detection can be applied to either one series for LISA or for all together using the other algorithms
+    # to update the cnf matrix we have to check for the 'detection' flag
+    if _all_series_detection_flag(series):
+        for s in series:
+            for point in s['data']:
+                _set_common_marker_for_threshold(point, threshold, settings, upper_boundary=upper_boundary)
 
-    # todo if not lisa we detected anomalous instance not point, so points at the same timestamp have the same truth and score
-    series_first = dataset_series['series'][0]
-    series_first_data = series_first['data']
+        time_series = series[0]
+        time_series_data = time_series['data']
 
-    scores, truth = _get_scores_and_truth_from_series_data(series_first_data)
-    y_hat_results = (scores < threshold).astype(int)
+    else:
+        time_series = _get_detection_series(series)
+        time_series_data = time_series['data']
+        for point in time_series_data:
+            _set_single_marker_for_threshold(point, threshold, settings, upper_boundary=upper_boundary)
+
+    scores, truth = _get_scores_and_truth_from_series_data(time_series_data)
+    y_hat_results = (scores < threshold).astype(int) if upper_boundary else (scores > threshold).astype(int)
     info = get_detection_meta(threshold, y_hat_results, truth)
 
     return dataset_series, info
-
-
-@DeprecationWarning
-def get_updated_dataset_series_for_threshold_with_marker_json(threshold, dataset_series, info, algorithm, settings):
-    for series in dataset_series:
-        for measurement in series['measurements']:
-            _set_marker_for_threshold(measurement, threshold, settings)
-
-    if algorithm != LISA_PEARSON:  # todo if not lisa we detected anomalous instance not point, so points at the same timestamp have the same truth and score
-        series_first = dataset_series[0]
-        series_first_measurements = series_first['measurements']
-        scores, truth = _get_scores_and_truth_from_series_data(series_first_measurements)
-        y_hat_results = (scores < threshold).astype(int)
-        new_info = get_detection_meta(threshold, y_hat_results, truth)
-        new_info['thresholds'] = info['thresholds']
-        new_info['training_threshold_scores'] = info['training_threshold_scores']
-    else:
-        # todo
-        info = {}
-
-    return dataset_series, new_info

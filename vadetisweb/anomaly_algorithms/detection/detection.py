@@ -6,7 +6,7 @@ from .isolation_forest import isolation_forest
 from .robust_pca import robust_pca_huber_loss
 from .helper_functions import df_range
 
-from vadetisweb.utils import get_detection_single_ts_results_json, get_detection_results_json, get_type_from_dataset_json
+from vadetisweb.utils import get_detection_single_ts_results_json, get_common_detection_results_json, get_type_from_dataset_json
 from vadetisweb.parameters import TIME_RANGE_SELECTION
 
 
@@ -88,7 +88,7 @@ def rpca_detection(df, df_class, validated_data, settings):
                                                                          train_size=validated_data['train_size'],
                                                                          random_seed=validated_data['random_seed'])
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
-    data_series = get_detection_results_json(dataset, df, df_class, df_common_class, scores, y_hat_results, settings, type)
+    data_series = get_common_detection_results_json(dataset, df, df_class, df_common_class, scores, y_hat_results, settings, type)
     return data_series, info
 
 
@@ -106,7 +106,7 @@ def histogram_detection(df, df_class, validated_data, settings):
                                                              train_size=validated_data['train_size'],
                                                              random_seed=validated_data['random_seed'])
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
-    data_series = get_detection_results_json(dataset, df, df_class, df_common_class, scores, y_hat_results, settings, type)
+    data_series = get_common_detection_results_json(dataset, df, df_class, df_common_class, scores, y_hat_results, settings, type)
     return data_series, info
 
 
@@ -127,7 +127,7 @@ def cluster_detection(df, df_class, validated_data, settings):
                                                                             train_size=validated_data['train_size'],
                                                                             random_seed=validated_data['random_seed'])
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
-    data_series = get_detection_results_json(dataset, df, df_class, df_common_class, scores, y_hat_results, settings, type)
+    data_series = get_common_detection_results_json(dataset, df, df_class, df_common_class, scores, y_hat_results, settings, type)
     return data_series, info
 
 
@@ -149,7 +149,7 @@ def svm_detection(df, df_class, validated_data, settings):
                                                        train_size=validated_data['train_size'],
                                                        random_seed=validated_data['random_seed'])
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
-    data_series = get_detection_results_json(dataset, df, df_class, df_common_class, scores, y_hat_results, settings, type)
+    data_series = get_common_detection_results_json(dataset, df, df_class, df_common_class, scores, y_hat_results, settings, type)
     return data_series, info
 
 
@@ -173,5 +173,5 @@ def isolation_forest_detection(df, df_class, validated_data, settings):
                                                                     random_seed=validated_data['random_seed'])
 
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
-    data_series = get_detection_results_json(dataset, df, df_class, df_common_class, scores, y_hat_results, settings, type)
+    data_series = get_common_detection_results_json(dataset, df, df_class, df_common_class, scores, y_hat_results, settings, type)
     return data_series, info

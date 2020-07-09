@@ -254,7 +254,6 @@ var DatasetDetectionForm = function () {
                     requestThresholdPortlet(threshold_portlet_url, "threshold_form_portlet", "Threshold",
                         function () {
                         KTApp.initPortlets();
-                        console.log(info.upper_boundary);
                         registerThresholdUpdateForm('threshold_form', info.upper_boundary);
                         updateThreshold(info.thresholds, info.threshold);
                     });

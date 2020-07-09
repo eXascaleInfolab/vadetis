@@ -27,8 +27,8 @@ function updateHighchartsSeriesForThreshold(highchart, url, post_data, callback)
             callback(dataset_series_new_json, new_info);
         },
         error: function(data, status, xhr) {
-                printMessages([{'message': "Request failed"}], "error-request");
-                handleMessages(data);
+            printMessages([{'message': "Request failed"}], "error-request");
+            handleMessages(data);
         }
     });
 }
@@ -43,6 +43,7 @@ function getDatasetSeriesJson(highchart){
             series_json.name = series.options.name;
             series_json.unit = series.options.custom.unit;
             series_json.is_spatial = series.options.custom.is_spatial;
+            series_json.detection = series.options.custom.detection;
             series_json.type = series.options.custom.type;
             series_json.data = getCleanedSeriesData(series.options.data);
             dataset_series_json.series.push(series_json);
@@ -207,7 +208,13 @@ function setSeriesData(highchart, series_data_json) {
     series_data_json.forEach(function (series) {
         var highchart_series = highchart.get(series.id);
         highchart_series.setData(series.data, false, true);
-        highchart_series.options.custom.type = series.type;
+        highchart_series.update({ custom: {
+                type: series.type,
+                is_spatial: series.is_spatial,
+                unit: series.unit,
+                detection: series.detection,
+            }
+        });
         if(series.dashStyle !== undefined) {
             highchart_series.update({dashStyle: series.dashStyle});
         }
@@ -225,7 +232,7 @@ function getDatasetSeriesFromJson(series_data) {
             name: series.name,
             lineWidth: 1,
             data: series.data,
-            /*dashStyle: series.dashStyle,*/
+            dashStyle: series.dashStyle,
             marker: {
                 enabled: true,
                 symbol: 'circle',
@@ -234,6 +241,7 @@ function getDatasetSeriesFromJson(series_data) {
                 type: series.type,
                 is_spatial: series.is_spatial,
                 unit: series.unit,
+                detection: series.detection,
             },
             /*tooltip: {
                 valueSuffix: ' ' + series.unit,

@@ -48,6 +48,10 @@ class DatasetJsonField(serializers.JSONField):
                                 title='type',
                                 type=openapi.TYPE_STRING,
                             ),
+                            'detection': openapi.Schema(
+                                title='detection',
+                                type=openapi.TYPE_BOOLEAN,
+                            ),
                             'dashStyle': openapi.Schema(
                                 title='dashStyle',
                                 type=openapi.TYPE_STRING,
