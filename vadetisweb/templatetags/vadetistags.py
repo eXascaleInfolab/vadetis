@@ -96,7 +96,7 @@ def get_conf_item(dict, key):
     if key == 'min_periods':
         return mark_safe('Min Periods: %s<br />' % dict[key])
 
-    if key == 'row_standardized':
+    if key == 'normalize':
         return mark_safe('Row Standardized: %s<br />' % dict[key])
 
     if key == 'dtw_distance_function':

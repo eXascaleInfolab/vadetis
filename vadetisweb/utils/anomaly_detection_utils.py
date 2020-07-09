@@ -36,7 +36,7 @@ def is_valid_conf(conf):
                 elif not isNone(conf['min_periods']):
                     return False
 
-                if not isBoolean(conf['row_standardized']):
+                if not isBoolean(conf['normalize']):
                     return False
 
                 if not isValidSelection(conf['time_range'], TIME_RANGE):
@@ -71,7 +71,7 @@ def is_valid_conf(conf):
                 if not isValidSelection(conf['dtw_distance_function'], DTW_DISTANCE_FUNCTION):
                     return False
 
-                if not isBoolean(conf['row_standardized']):
+                if not isBoolean(conf['normalize']):
                     return False
 
                 if not isValidSelection(conf['time_range'], TIME_RANGE):
@@ -94,7 +94,7 @@ def is_valid_conf(conf):
                 if not isValidSelection(conf['geo_distance_function'], GEO_DISTANCE):
                     return False
 
-                if not isBoolean(conf['row_standardized']):
+                if not isBoolean(conf['normalize']):
                     return False
 
                 if not isValidSelection(conf['time_range'], TIME_RANGE):

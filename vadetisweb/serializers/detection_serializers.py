@@ -194,8 +194,8 @@ class LisaPearsonSerializer(serializers.Serializer):
 
     window_size = WindowSizeIntegerField(initial=10, required=True, min_value=1, max_value=19)
 
-    row_standardized = serializers.BooleanField(initial=True, label='Apply Row Standardization', required=False,
-                                                help_text='Determines if row standardization is applied to the correlation values',
+    normalize = serializers.BooleanField(initial=True, label='Apply Normalisation', required=False,
+                                                help_text='Each sample of the correlation values is rescaled independently of other samples so that its L1 norm equals one.',
                                                 style={'help_text_in_popover': False,
                                                        'template': 'vadetisweb/parts/input/checkbox_input.html'})
 
@@ -230,8 +230,8 @@ class LisaDtwPearsonSerializer(serializers.Serializer):
                                                     help_text='The distance function used to calculate the cost between values.',
                                                     style={'template': 'vadetisweb/parts/input/select_input.html',
                                                            'help_text_in_popover': True})
-    row_standardized = serializers.BooleanField(initial=True, label='Apply Row Standardization', required=False,
-                                                help_text='Determines if row standardization is applied to the correlation values',
+    normalize = serializers.BooleanField(initial=True, label='Apply Normalisation', required=False,
+                                                help_text='Each sample of the correlation values is rescaled independently of other samples so that its L1 norm equals one.',
                                                 style={'help_text_in_popover': False,
                                                        'template': 'vadetisweb/parts/input/checkbox_input.html'})
 

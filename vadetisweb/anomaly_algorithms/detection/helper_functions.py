@@ -1,5 +1,6 @@
 import pandas as pd, numpy as np, logging
 
+from sklearn.preprocessing import Normalizer
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import fbeta_score, precision_score, recall_score, accuracy_score, confusion_matrix
 
@@ -26,19 +27,16 @@ def df_range(df, df_class, range_start_millis, range_end_millis, start_offset=No
     return df_range, df_class_range
 
 
-def df_row_standardized(df):
+def df_normalize(df, norm='l1'):
     """
-    Makes a dataframe row standardized (rows sum to one), denumerator must be absolute value as
-    signs should not be changed by division.
+    Each sample (row) with at least one non zero component is rescaled independently of other samples so that its norm (l1, l2 or inf) equals one.
 
-    :param df: the dataframe to apply row standardization
-    :return: a row standardized dataframe
+    :param df: the dataframe to apply normalization
+    :param norm: ‘l1’, ‘l2’, or ‘max’
+    :return: a normalized dataframe
     """
-    #todo division by zero, replace({ 0 : np.nan })?, example: series 2, gaussian distr ts
-    #https://stackoverflow.com/questions/44241521/dataframe-element-wise-divide-by-sum-of-row-inplace
-    df_std = df.div((df.abs().sum(axis=1)), axis=0)
-
-    return df_std
+    df.iloc[:, :] = Normalizer(norm=norm).fit_transform(df.fillna(0))
+    return df
 
 
 def df_copy_with_mean(df, axis=1, skipna=True):

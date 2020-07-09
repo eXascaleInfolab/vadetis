@@ -76,9 +76,9 @@ def pearson(df, time_series_id, window_size=2, min_periods=None, absolute_values
     logging.debug("Execution time for pearson values for series:", time_elapsed)
 
     if absolute_values:
-        return df_corr.abs(), time_elapsed
+        return df_corr.abs()
 
-    return df_corr, time_elapsed
+    return df_corr
 
 
 def most_correlated(df, station_id, num=3):
@@ -136,7 +136,7 @@ def pearson_corr_coeff(X, Y):
         weight = r_numerator / r_denominator
     except ZeroDivisionError:
         pass
-        print("Division by Zero occurred")
+        logging.warning("Division by zero occurred")
         weight = np.nan
 
     #print("weight:", weight)
@@ -210,4 +210,4 @@ def dtw_pearson(df, time_series_id, distance, window_size=2, absolute_values=Tru
     time_elapsed = (datetime.datetime.now() - start_time).__str__()
 
     logging.debug("Execution time for pearson values using dtw:", time_elapsed)
-    return df_corr, time_elapsed
+    return df_corr
