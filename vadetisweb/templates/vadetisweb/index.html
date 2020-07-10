@@ -8,17 +8,75 @@
 {% endblock %}
 
 {% block breadcrumbs %}
-{% clear_breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "Vadetis" "vadetisweb:index" %}
 {% endblock %}
 
 {% block page_title %}
-<h3 class="kt-subheader__title">Vadetis - Overview</h3>
+<h3 class="kt-subheader__title">Vadetis</h3>
 {% endblock %}
 
 {% block content %}
 {{ block.super }}
-<div>
-	Content
-</div>
+<div class="kt-portlet">
+    <div class="kt-portlet__head">
+        <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">Validator for Anomaly Detection in Time Series</h3>
+        </div>
+    </div>
+    <div class="kt-portlet__body">
+        <p>
+            Vadetis is web application to perform, compare and validate various anomaly detection algorithms using different configurations. It allows users to upload their own datasets
+            as well as training data in order to perform outlier detection. The datasets can either be shared with other users or only be used by yourself.
+            The datasets can be altered by injecting additional outliers.
+            Look into the FAQ page for more information about the usage of this application.
+        </p>
 
+        <h5>Features</h5>
+        <div class="row">
+            <div class="col-md-3">
+                <p><b>Supported algorithms:</b></p>
+                <ul>
+                    <li>LISA
+                        <ul>
+                            <li>Pearson Correlation</li>
+                            <li>Dynamic Time Warping with Pearson</li>
+                            <li>Spatial Correlation</li>
+                        </ul>
+                    </li>
+                    <li>Robust PCA (Huber Loss Function)</li>
+                    <li>Histogram</li>
+                    <li>Cluster (Gaussian Mixture)</li>
+                    <li>Support Vector Machine</li>
+                    <li>Isolation Forest</li>
+                </ul>
+            </div>
+            <div class="col-md-5">
+                <p><b>Main Parts:</b></p>
+                <ul>
+                    <li>Display
+                        <ul>
+                            <li><a href="{% url 'vadetisweb:display_real_world_datasets' %}">Real-World Datasets</a></li>
+                            <li><a href="{% url 'vadetisweb:display_synthetic_datasets' %}">Synthetic Datasets</a></li>
+                        </ul>
+                    </li>
+                    <li>Detection
+                        <ul>
+                            <li><a href="{% url 'vadetisweb:detection_real_world_datasets' %}">Real-World Datasets</a></li>
+                            <li><a href="{% url 'vadetisweb:detection_synthetic_datasets' %}">Synthetic Datasets</a></li>
+                        </ul>
+                    </li>
+                    <li>Recommendation
+                        <ul>
+                            <li><a href="">Real-World Datasets</a></li>
+                            <li><a href="">Synthetic Datasets</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <p>This application was implemented at the at the <a href="http://exascale.info/" target="_blank">eXascale Infolab</a>, a research group at the <a href="http://www.unifr.ch/" target="_blank">University of Fribourg</a>, Switzerland.</p>
+    </div>
+</div>
 {% endblock %}

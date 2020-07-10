@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.core.validators import FileExtensionValidator
 
 from vadetisweb.models import DataSet
-from vadetisweb.parameters import REAL_WORLD, DATASET_TYPE, BOOLEAN_SELECTION
+from vadetisweb.parameters import REAL_WORLD, SYNTHETIC, DATASET_TYPE, BOOLEAN_SELECTION
 from vadetisweb.fields import MainDatasetField
 from vadetisweb.serializers.account_serializers import UserSerializer
 
@@ -196,13 +196,13 @@ class DatasetImportSerializer(serializers.Serializer):
     title = serializers.CharField(required=True, max_length=64, help_text='Human readable title of the dataset',
                                   style={'template': 'vadetisweb/parts/input/text_input.html'})
 
-    csv_file = serializers.FileField(required=True, label='CSV File', help_text='The csv file of the dataset',
+    csv_file = serializers.FileField(required=True, label='CSV File', help_text='The csv file of the dataset. As anomaly detection is computationally expensive, the dataset must not exceed 100\'000 values.',
                                      validators=[FileExtensionValidator(allowed_extensions=['csv'])],
                                      style={'template': 'vadetisweb/parts/input/file_input.html'})
 
     owner = UserSerializer(read_only=True, default=serializers.CurrentUserDefault())
 
-    type = serializers.ChoiceField(choices=DATASET_TYPE, default=REAL_WORLD,
+    type = serializers.ChoiceField(choices=DATASET_TYPE, default=SYNTHETIC,
                                    help_text='Determines whether this dataset is real world or synthetic data.',
                                    style={'template': 'vadetisweb/parts/input/select_input.html'})
 
@@ -241,7 +241,7 @@ class TrainingDatasetImportSerializer(serializers.Serializer):
                                       help_text='Determines if this dataset is available to other users',
                                       style={'template': 'vadetisweb/parts/input/checkbox_input.html'})
 
-    csv_file = serializers.FileField(required=True, label='CSV File', help_text='The csv file of the dataset',
+    csv_file = serializers.FileField(required=True, label='CSV File', help_text='The csv file of the dataset. As anomaly detection is computationally expensive, the dataset must not exceed 100\'000 values.',
                                      validators=[FileExtensionValidator(allowed_extensions=['csv'])],
                                      style={'template': 'vadetisweb/parts/input/file_input.html'})
 
