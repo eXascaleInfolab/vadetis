@@ -90,7 +90,7 @@ class WindowSizeIntegerField(serializers.IntegerField):
         self.style = {'template': 'vadetisweb/parts/input/ion_slider_input.html',
                       'id': 'window_size',
                       'data_type': "single",
-                      'data_grid': "true",
+                      'data_grid': "false",
                       'data_min': self.min_value,
                       'data_max': self.max_value,
                       'data_from': self.initial,

@@ -192,7 +192,7 @@ class LisaPearsonSerializer(serializers.Serializer):
                                   style={'template': 'vadetisweb/parts/input/select_input.html',
                                          'help_text_in_popover': True})
 
-    window_size = WindowSizeIntegerField(initial=10, required=True, min_value=1, max_value=19)
+    window_size = WindowSizeIntegerField(initial=10, required=True, min_value=2, max_value=20)
 
     normalize = serializers.BooleanField(initial=True, label='Apply Normalisation', required=False,
                                          help_text='Each sample of the correlation values is rescaled independently of other samples so that its L1 norm equals one.',
@@ -223,7 +223,7 @@ class LisaDtwPearsonSerializer(serializers.Serializer):
                                   style={'template': 'vadetisweb/parts/input/select_input.html',
                                          'help_text_in_popover': True})
 
-    window_size = WindowSizeIntegerField(initial=10, required=True, min_value=1, max_value=19)
+    window_size = WindowSizeIntegerField(initial=10, required=True, min_value=2, max_value=20)
 
     dtw_distance_function = serializers.ChoiceField(label='DTW Distance Function', choices=DTW_DISTANCE_FUNCTION,
                                                     required=True,
