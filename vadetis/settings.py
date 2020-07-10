@@ -198,7 +198,7 @@ ACCOUNT_FORMS = {
     'login': 'vadetisweb.forms.AccountLoginForm',
     'signup': 'vadetisweb.forms.AccountSignUpForm',
     'reset_password': 'vadetisweb.forms.AccountResetPasswordForm',
-    'reset_password_from_key': 'allauth.account.forms.ResetPasswordKeyForm',
+    'reset_password_from_key': 'vadetisweb.forms.AccountResetPasswordKeyForm',
     'disconnect': 'vadetisweb.forms.AccountSocialDisconnectForm',
 }
 

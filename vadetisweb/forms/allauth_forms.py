@@ -1,7 +1,7 @@
 from django.forms import CharField, PasswordInput, BooleanField, EmailField
 from vadetisweb.widgets import FormCheckboxInput, UserTextInput
 from allauth.account import app_settings
-from allauth.account.forms import LoginForm, ResetPasswordForm, ChangePasswordForm, SetPasswordForm, get_username_max_length, set_form_field_order, filter_users_by_email
+from allauth.account.forms import LoginForm, ResetPasswordForm, ChangePasswordForm, SetPasswordForm, ResetPasswordKeyForm, get_username_max_length, set_form_field_order, filter_users_by_email
 
 from allauth.account.forms import SignupForm as AllauthAccountSignupForm, get_adapter as get_account_adapter
 from allauth.socialaccount.forms import SignupForm as AllauthSocialSignupForm, get_adapter as get_socialaccount_adapter
@@ -116,6 +116,17 @@ class AccountChangePasswordForm(ChangePasswordForm):
         # Ensure you call the parent classes save
         # .save() does not return anything
         super(AccountChangePasswordForm, self).save()
+
+
+class AccountResetPasswordKeyForm(ResetPasswordKeyForm):
+
+    def __init__(self, *args, **kwargs):
+        super(AccountResetPasswordKeyForm, self).__init__(*args, **kwargs)
+        for field in ('password1', 'password2'):
+            self.fields[field].widget.attrs = {'class': 'form-control'}
+
+    def save(self):
+        super(AccountResetPasswordKeyForm, self).save()
 
 
 class AccountSetPasswordForm(SetPasswordForm):
