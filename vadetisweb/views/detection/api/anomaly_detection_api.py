@@ -29,8 +29,7 @@ class DetectionAlgorithmSelectionView(APIView):
             messages.error(request, dataset_not_found_msg(dataset_id))
             return redirect('vadetisweb:index')
 
-
-        serializer = AlgorithmSerializer(data=request.data)
+        serializer = AlgorithmSerializer(context={'dataset': dataset}, data=request.data)
         if serializer.is_valid():
             algorithm = serializer.validated_data['algorithm']
             formid = 'anomaly_detection_form'
@@ -40,8 +39,8 @@ class DetectionAlgorithmSelectionView(APIView):
                     'dataset': dataset,
                     'formid': formid,
                     'url': reverse('vadetisweb:detection_lisa_person', args=[dataset_id]),
-                    'class' : 'pt-0',
-                    'serializer': LisaPearsonSerializer(context={'dataset_selected': dataset_id, 'request' : request }),
+                    'class': 'pt-0',
+                    'serializer': LisaPearsonSerializer(context={'dataset_selected': dataset_id, 'request': request}),
                     'submit_label': 'Run',
                 }, status=status.HTTP_200_OK)
 
@@ -51,8 +50,8 @@ class DetectionAlgorithmSelectionView(APIView):
                     'formid': formid,
                     'url': reverse('vadetisweb:detection_lisa_dtw_person', args=[dataset_id]),
                     'class': 'pt-0',
-                    'serializer': LisaDtwPearsonSerializer(context={'dataset_selected': dataset_id, 'request' : request }),
-                    'submit_label' : 'Run',
+                    'serializer': LisaDtwPearsonSerializer(context={'dataset_selected': dataset_id, 'request': request}),
+                    'submit_label': 'Run',
                 }, status=status.HTTP_200_OK)
 
             elif algorithm == LISA_GEO:
@@ -61,8 +60,8 @@ class DetectionAlgorithmSelectionView(APIView):
                     'formid': formid,
                     'url': reverse('vadetisweb:detection_lisa_geo', args=[dataset_id]),
                     'class': 'pt-0',
-                    'serializer': LisaGeoDistanceSerializer(context={'dataset_selected': dataset_id, 'request' : request }),
-                    'submit_label' : 'Run',
+                    'serializer': LisaGeoDistanceSerializer(context={'dataset_selected': dataset_id, 'request': request}),
+                    'submit_label': 'Run',
                 }, status=status.HTTP_200_OK)
 
             elif algorithm == RPCA_HUBER_LOSS:
@@ -71,8 +70,8 @@ class DetectionAlgorithmSelectionView(APIView):
                     'formid': formid,
                     'url': reverse('vadetisweb:detection_rpca_mestimator', args=[dataset_id]),
                     'class': 'pt-0',
-                    'serializer': RPCAMEstimatorLossSerializer(context={'dataset_selected': dataset_id, 'request' : request }),
-                    'submit_label' : 'Run',
+                    'serializer': RPCAMEstimatorLossSerializer(context={'dataset_selected': dataset_id, 'request': request}),
+                    'submit_label': 'Run',
                 }, status=status.HTTP_200_OK)
 
             elif algorithm == HISTOGRAM:
@@ -81,8 +80,8 @@ class DetectionAlgorithmSelectionView(APIView):
                     'formid': formid,
                     'url': reverse('vadetisweb:detection_histogram', args=[dataset_id]),
                     'class': 'pt-0',
-                    'serializer': HistogramSerializer(context={'dataset_selected': dataset_id, 'request' : request }),
-                    'submit_label' : 'Run',
+                    'serializer': HistogramSerializer(context={'dataset_selected': dataset_id, 'request': request}),
+                    'submit_label': 'Run',
                 }, status=status.HTTP_200_OK)
 
             elif algorithm == CLUSTER_GAUSSIAN_MIXTURE:
@@ -91,7 +90,7 @@ class DetectionAlgorithmSelectionView(APIView):
                     'formid': formid,
                     'url': reverse('vadetisweb:detection_cluster', args=[dataset_id]),
                     'class': 'pt-0',
-                    'serializer': ClusterSerializer(context={'dataset_selected': dataset_id, 'request' : request }),
+                    'serializer': ClusterSerializer(context={'dataset_selected': dataset_id, 'request': request}),
                     'submit_label': 'Run',
                 }, status=status.HTTP_200_OK)
 
@@ -101,7 +100,7 @@ class DetectionAlgorithmSelectionView(APIView):
                     'formid': formid,
                     'url': reverse('vadetisweb:detection_svm', args=[dataset_id]),
                     'class': 'pt-0',
-                    'serializer': SVMSerializer(context={'dataset_selected': dataset_id, 'request' : request }),
+                    'serializer': SVMSerializer(context={'dataset_selected': dataset_id, 'request': request}),
                     'submit_label': 'Run',
                 }, status=status.HTTP_200_OK)
 
@@ -111,7 +110,7 @@ class DetectionAlgorithmSelectionView(APIView):
                     'formid': formid,
                     'url': reverse('vadetisweb:detection_isolation_forest', args=[dataset_id]),
                     'class': 'pt-0',
-                    'serializer': IsolationForestSerializer(context={'dataset_selected': dataset_id, 'request' : request }),
+                    'serializer': IsolationForestSerializer(context={'dataset_selected': dataset_id, 'request': request}),
                     'submit_label': 'Run',
                 }, status=status.HTTP_200_OK)
 
@@ -119,8 +118,7 @@ class DetectionAlgorithmSelectionView(APIView):
                 return Response(template_name='vadetisweb/parts/forms/empty.html', status=status.HTTP_204_NO_CONTENT)
         else:
             logging.error('Algorithm selection form was not valid')
-            return Response(template_name='vadetisweb/parts/forms/empty.html', status = status.HTTP_204_NO_CONTENT)
-
+            return Response(template_name='vadetisweb/parts/forms/empty.html', status=status.HTTP_204_NO_CONTENT)
 
 
 class DetectionLisaPearson(APIView):
@@ -133,7 +131,7 @@ class DetectionLisaPearson(APIView):
     def post(self, request, dataset_id):
 
         try:
-            serializer = LisaPearsonSerializer(context={'dataset_selected': dataset_id, 'request' : request }, data=request.data)
+            serializer = LisaPearsonSerializer(context={'dataset_selected': dataset_id, 'request': request}, data=request.data)
 
             if serializer.is_valid():
                 df_from_json, df_class_from_json = get_datasets_from_json(serializer.validated_data['dataset_series_json'])
@@ -150,11 +148,13 @@ class DetectionLisaPearson(APIView):
                     logging.debug(e)
                     return exception_message_response(e)
             else:
-                return Response({}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({
+                    'form_errors': serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
 
         except DataSet.DoesNotExist:
-                messages.error(request, dataset_not_found_msg(dataset_id))
-                return redirect('vadetisweb:index')
+            messages.error(request, dataset_not_found_msg(dataset_id))
+            return redirect('vadetisweb:index')
 
 
 class DetectionLisaDtwPearson(APIView):
@@ -167,7 +167,7 @@ class DetectionLisaDtwPearson(APIView):
     def post(self, request, dataset_id):
 
         try:
-            serializer = LisaDtwPearsonSerializer(context={'dataset_selected': dataset_id, 'request' : request }, data=request.data)
+            serializer = LisaDtwPearsonSerializer(context={'dataset_selected': dataset_id, 'request': request}, data=request.data)
 
             if serializer.is_valid():
                 df_from_json, df_class_from_json = get_datasets_from_json(serializer.validated_data['dataset_series_json'])
@@ -183,11 +183,13 @@ class DetectionLisaDtwPearson(APIView):
                 except Exception as e:
                     return exception_message_response(e)
             else:
-                return Response({}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({
+                    'form_errors': serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
 
         except DataSet.DoesNotExist:
-                messages.error(request, dataset_not_found_msg(dataset_id))
-                return redirect('vadetisweb:index')
+            messages.error(request, dataset_not_found_msg(dataset_id))
+            return redirect('vadetisweb:index')
 
 
 class DetectionLisaGeoDistance(APIView):
@@ -200,7 +202,7 @@ class DetectionLisaGeoDistance(APIView):
     def post(self, request, dataset_id):
 
         try:
-            serializer = LisaGeoDistanceSerializer(context={'dataset_selected': dataset_id, 'request' : request }, data=request.data)
+            serializer = LisaGeoDistanceSerializer(context={'dataset_selected': dataset_id, 'request': request}, data=request.data)
 
             if serializer.is_valid():
                 df_from_json, df_class_from_json = get_datasets_from_json(serializer.validated_data['dataset_series_json'])
@@ -217,11 +219,13 @@ class DetectionLisaGeoDistance(APIView):
                     logging.debug(e)
                     return exception_message_response(e)
             else:
-                return Response({}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({
+                    'form_errors': serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
 
         except DataSet.DoesNotExist:
-                messages.error(request, dataset_not_found_msg(dataset_id))
-                return redirect('vadetisweb:index')
+            messages.error(request, dataset_not_found_msg(dataset_id))
+            return redirect('vadetisweb:index')
 
 
 class DetectionRPCAMEstimatorLoss(APIView):
@@ -234,7 +238,7 @@ class DetectionRPCAMEstimatorLoss(APIView):
     def post(self, request, dataset_id):
 
         try:
-            serializer = RPCAMEstimatorLossSerializer(context={'dataset_selected': dataset_id, 'request' : request }, data=request.data)
+            serializer = RPCAMEstimatorLossSerializer(context={'dataset_selected': dataset_id, 'request': request}, data=request.data)
 
             if serializer.is_valid():
                 df_from_json, df_class_from_json = get_datasets_from_json(serializer.validated_data['dataset_series_json'])
@@ -251,11 +255,13 @@ class DetectionRPCAMEstimatorLoss(APIView):
                     logging.debug(e)
                     return exception_message_response(e)
             else:
-                return Response({}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({
+                    'form_errors': serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
 
         except DataSet.DoesNotExist:
-                messages.error(request, dataset_not_found_msg(dataset_id))
-                return redirect('vadetisweb:index')
+            messages.error(request, dataset_not_found_msg(dataset_id))
+            return redirect('vadetisweb:index')
 
 
 class DetectionHistogram(APIView):
@@ -268,7 +274,7 @@ class DetectionHistogram(APIView):
     def post(self, request, dataset_id):
 
         try:
-            serializer = HistogramSerializer(context={'dataset_selected': dataset_id, 'request' : request }, data=request.data)
+            serializer = HistogramSerializer(context={'dataset_selected': dataset_id, 'request': request}, data=request.data)
 
             if serializer.is_valid():
                 df_from_json, df_class_from_json = get_datasets_from_json(serializer.validated_data['dataset_series_json'])
@@ -285,11 +291,13 @@ class DetectionHistogram(APIView):
                     logging.debug(e)
                     return exception_message_response(e)
             else:
-                return Response({}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({
+                    'form_errors': serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
 
         except DataSet.DoesNotExist:
-                messages.error(request, dataset_not_found_msg(dataset_id))
-                return redirect('vadetisweb:index')
+            messages.error(request, dataset_not_found_msg(dataset_id))
+            return redirect('vadetisweb:index')
 
 
 class DetectionCluster(APIView):
@@ -302,7 +310,7 @@ class DetectionCluster(APIView):
     def post(self, request, dataset_id):
 
         try:
-            serializer = ClusterSerializer(context={'dataset_selected': dataset_id, 'request' : request }, data=request.data)
+            serializer = ClusterSerializer(context={'dataset_selected': dataset_id, 'request': request}, data=request.data)
 
             if serializer.is_valid():
                 df_from_json, df_class_from_json = get_datasets_from_json(serializer.validated_data['dataset_series_json'])
@@ -319,11 +327,13 @@ class DetectionCluster(APIView):
                     logging.debug(e)
                     return exception_message_response(e)
             else:
-                return Response({}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({
+                    'form_errors': serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
 
         except DataSet.DoesNotExist:
-                messages.error(request, dataset_not_found_msg(dataset_id))
-                return redirect('vadetisweb:index')
+            messages.error(request, dataset_not_found_msg(dataset_id))
+            return redirect('vadetisweb:index')
 
 
 class DetectionSVM(APIView):
@@ -336,7 +346,7 @@ class DetectionSVM(APIView):
     def post(self, request, dataset_id):
 
         try:
-            serializer = SVMSerializer(context={'dataset_selected': dataset_id, 'request' : request }, data=request.data)
+            serializer = SVMSerializer(context={'dataset_selected': dataset_id, 'request': request}, data=request.data)
 
             if serializer.is_valid():
                 df_from_json, df_class_from_json = get_datasets_from_json(serializer.validated_data['dataset_series_json'])
@@ -354,11 +364,13 @@ class DetectionSVM(APIView):
                     logging.debug(e)
                     return exception_message_response(e)
             else:
-                return Response({}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({
+                    'form_errors': serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
 
         except DataSet.DoesNotExist:
-                messages.error(request, dataset_not_found_msg(dataset_id))
-                return redirect('vadetisweb:index')
+            messages.error(request, dataset_not_found_msg(dataset_id))
+            return redirect('vadetisweb:index')
 
 
 class DetectionIsolationForest(APIView):
@@ -371,7 +383,7 @@ class DetectionIsolationForest(APIView):
     def post(self, request, dataset_id):
 
         try:
-            serializer = IsolationForestSerializer(context={'dataset_selected': dataset_id, 'request' : request }, data=request.data)
+            serializer = IsolationForestSerializer(context={'dataset_selected': dataset_id, 'request': request}, data=request.data)
 
             if serializer.is_valid():
                 df_from_json, df_class_from_json = get_datasets_from_json(serializer.validated_data['dataset_series_json'])
@@ -388,11 +400,13 @@ class DetectionIsolationForest(APIView):
                     logging.debug(e)
                     return exception_message_response(e)
             else:
-                return Response({}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({
+                    'form_errors': serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
 
         except DataSet.DoesNotExist:
-                messages.error(request, dataset_not_found_msg(dataset_id))
-                return redirect('vadetisweb:index')
+            messages.error(request, dataset_not_found_msg(dataset_id))
+            return redirect('vadetisweb:index')
 
 
 class DatasetThresholdUpdateJson(APIView):

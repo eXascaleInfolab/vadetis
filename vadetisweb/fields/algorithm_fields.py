@@ -27,14 +27,6 @@ class DatasetField(serializers.HiddenField):
             raise ObjectDoesNotExist
 
 
-class AlgorithmChoiceField(serializers.ChoiceField):
-    def __init__(self, **kwargs):
-        super(AlgorithmChoiceField, self).__init__(**kwargs)
-        self.style = {'template': 'vadetisweb/parts/input/select_input.html',
-                      'id': 'detectionOnChange',
-                      'help_text_in_popover': True}
-
-
 class TrainingDatasetField(serializers.PrimaryKeyRelatedField):
     def __init__(self, **kwargs):
         super(TrainingDatasetField, self).__init__(**kwargs)

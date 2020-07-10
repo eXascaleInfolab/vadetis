@@ -2,10 +2,14 @@ from vadetisweb.models import *
 from vadetisweb.fields import *
 from vadetisweb.utils.anomaly_detection_utils import get_detection_choices
 
+
 class AlgorithmSerializer(serializers.Serializer):
     empty_choice = ('', '----')
     # choices are loaded from context
-    algorithm = AlgorithmChoiceField(choices=empty_choice, required=True, )
+    algorithm = serializers.ChoiceField(choices=empty_choice, required=True,
+                                        style={'template': 'vadetisweb/parts/input/select_input.html',
+                                               'id': 'detectionOnChange',
+                                               'help_text_in_popover': True})
 
     def __init__(self, *args, **kwargs):
         super(AlgorithmSerializer, self).__init__(*args, **kwargs)
