@@ -14,6 +14,7 @@ from vadetisweb.serializers.account_serializers import *
 from vadetisweb.utils import json_message_utils
 from vadetisweb.factory import response_invalid_form
 
+
 class AccountUserUpdate(APIView):
     """
     View for account setting update processing
