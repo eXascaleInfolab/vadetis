@@ -39,32 +39,35 @@ var VadetisHighchartsReset = function () {
 }();
 
 var VadetisHighchartsLoad = function () {
-    var init = function (highcharts_container_id, button_id, url, type, callback) {
-        var button = $("#" + button_id), isLoading = false, highchart = $("#" + highcharts_container_id).highcharts();
+    var init = function (highcharts_container_id, html_id, url, type, callback) {
+        var selector = $("#" + html_id), isLoading = false, highchart = $("#" + highcharts_container_id).highcharts();
         var buttonTxt = type === 'raw' ? 'Raw' : (type === 'zscore' ? "Z-Score" : type);
-        button.click(function (event) {
+        selector.click(function (event) {
             event.preventDefault();
             if (!isLoading) {
                 $(":submit").attr("disabled", true);
-                button.html('Loading...').addClass('disabled');
+                selector.addClass('disabled');
+                $("#" + html_id + " span").html('Loading...');
                 loadSeriesForType(highchart, url, type, function () {
                     isLoading = false;
                     $(":submit").attr("disabled", false);
-                    button.html(buttonTxt).removeClass('disabled');
+                    selector.removeClass('disabled');
+                    $("#" + html_id + " span").html(buttonTxt);
                     clearInserted();
                     callback();
                 });
             } else {
                 $(":submit").attr("disabled", false);
-                button.html(buttonTxt).removeClass('disabled');
+                selector.removeClass('disabled');
+                $("#" + html_id + " span").html(buttonTxt);
                 clearInserted();
                 callback();
             }
         });
     };
     return {
-        init: function (highcharts_container_id, button_id, url, type, callback) {
-            init(highcharts_container_id, button_id, url, type, callback);
+        init: function (highcharts_container_id, html_id, url, type, callback) {
+            init(highcharts_container_id, html_id, url, type, callback);
         }
     };
 }();

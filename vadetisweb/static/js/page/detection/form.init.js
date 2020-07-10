@@ -378,7 +378,8 @@ var DatasetDetectionForm = function () {
         }
     }
 
-    var initButtons = function (dataset_json_url, injection_portlet_id, injection_portlet_url, anomaly_injection_form_id) {
+    var initActions = function (dataset_json_url, injection_portlet_id, injection_portlet_url, anomaly_injection_form_id) {
+
         VadetisHighchartsLoad.init("highcharts_container", "raw_btn", dataset_json_url, "raw",
             function() {
             requestInjectionPortlet(injection_portlet_url, injection_portlet_id, "Anomaly Injection", function () {
@@ -409,7 +410,7 @@ var DatasetDetectionForm = function () {
 
     // private
     var init = function (dataset_json_url, anomaly_injection_form_id, select_on_change_id, img_portlet_url, score_portlet_url, threshold_portlet_url, injection_portlet_url) {
-        initButtons(dataset_json_url, "injection_portlet", injection_portlet_url, anomaly_injection_form_id);
+        initActions(dataset_json_url, "injection_portlet", injection_portlet_url, anomaly_injection_form_id);
         initInjection(anomaly_injection_form_id);
         initOnChangeDetection(select_on_change_id, img_portlet_url, score_portlet_url, threshold_portlet_url);
         switchColorLegend(false);

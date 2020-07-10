@@ -1,7 +1,7 @@
 {% load static %}
 <div class="dropdown-menu dropdown-menu-right">
     <ul class="kt-nav">
-        {% if display_link or detection_link or recommendation_link or outlier_analysis_link %}
+        {% if display_link or detection_link or recommendation_link %}
         <li class="kt-nav__section kt-nav__section--first">
             <span class="kt-nav__section-text">Navigation</span>
         </li>
@@ -26,26 +26,30 @@
             </a>
         </li>
         {% endif %}
-        {% if outlier_analysis_link %}
+        {% endif %}
+        <li class="kt-nav__section kt-nav__section--first">
+            <span class="kt-nav__section-text">Load Data</span>
+        </li>
         <li class="kt-nav__item">
-            <a href="{{ outlier_analysis_link }}" class="kt-nav__link">
-                <span class="kt-nav__link-text">Outlier Analysis</span>
+            <a id="raw_btn" href="#" class="kt-nav__link">
+                <span class="kt-nav__link-text">Raw</span>
             </a>
         </li>
-        {% endif %}
-        {% endif %}
+        <li class="kt-nav__item">
+            <a id="zscore_btn" href="#" class="kt-nav__link">
+                <span class="kt-nav__link-text">Z-Score</span>
+            </a>
+        </li>
         <li class="kt-nav__section kt-nav__section--first">
             <span class="kt-nav__section-text">Download</span>
         </li>
         <li class="kt-nav__item">
             <a id="download_csv" href="#" class="kt-nav__link">
-                <i class="mdi mdi-18px mdi-file-table-outline kt-nav__link-icon"></i>
                 <span class="kt-nav__link-text">Download CSV</span>
             </a>
         </li>
         <li class="kt-nav__item">
             <a id="download_json" href="#" class="kt-nav__link">
-                <i class="mdi mdi-18px mdi-json kt-nav__link-icon flaticon2-settings"></i>
                 <span class="kt-nav__link-text">Download JSON</span>
             </a>
         </li>
