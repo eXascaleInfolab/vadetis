@@ -3,7 +3,7 @@ from rest_framework import serializers
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 
-from vadetisweb.parameters import TIME_RANGE, ANOMALY_DETECTION_SCORE_TYPES
+from vadetisweb.parameters import TIME_RANGE, ANOMALY_DETECTION_SCORE_TYPES, ANOMALY_DETECTION_ALGORITHMS, ANOMALY_DETECTION_ALGORITHMS_NON_SPATIAL
 from vadetisweb.models import DataSet, TimeSeries
 from vadetisweb.utils.request_utils import q_public_or_user_is_owner, q_related_public_or_user_is_owner
 
@@ -25,6 +25,14 @@ class DatasetField(serializers.HiddenField):
             return dataset
         else:
             raise ObjectDoesNotExist
+
+
+class AlgorithmChoiceField(serializers.ChoiceField):
+    def __init__(self, **kwargs):
+        super(AlgorithmChoiceField, self).__init__(**kwargs)
+        self.style = {'template': 'vadetisweb/parts/input/select_input.html',
+                      'id': 'detectionOnChange',
+                      'help_text_in_popover': True}
 
 
 class TrainingDatasetField(serializers.PrimaryKeyRelatedField):
@@ -134,7 +142,7 @@ class RangeStartHiddenIntegerField(serializers.IntegerField):
         self.required = True
         self.min_value = 0
         self.style = {'template': 'vadetisweb/parts/input/hidden_input.html',
-                      'id': html_id }
+                      'id': html_id}
 
 
 class RangeEndHiddenIntegerField(serializers.IntegerField):
@@ -144,4 +152,4 @@ class RangeEndHiddenIntegerField(serializers.IntegerField):
         self.required = True
         self.min_value = 0
         self.style = {'template': 'vadetisweb/parts/input/hidden_input.html',
-                      'id': html_id }
+                      'id': html_id}

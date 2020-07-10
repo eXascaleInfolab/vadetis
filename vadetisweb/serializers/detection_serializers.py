@@ -1,20 +1,16 @@
 from vadetisweb.models import *
 from vadetisweb.fields import *
-
+from vadetisweb.utils.anomaly_detection_utils import get_detection_choices
 
 class AlgorithmSerializer(serializers.Serializer):
     empty_choice = ('', '----')
-    ANOMALY_DETECTION_ALGORITHMS_EMPTY = (empty_choice,) + ANOMALY_DETECTION_ALGORITHMS
-
-    algorithm = serializers.ChoiceField(choices=ANOMALY_DETECTION_ALGORITHMS_EMPTY,
-                                        required=True,
-                                        help_text='The type of anomaly detection algorithm',
-                                        style={'template': 'vadetisweb/parts/input/select_input.html',
-                                               'id': 'detectionOnChange',
-                                               'help_text_in_popover': True})
+    # choices are loaded from context
+    algorithm = AlgorithmChoiceField(choices=empty_choice, required=True, )
 
     def __init__(self, *args, **kwargs):
         super(AlgorithmSerializer, self).__init__(*args, **kwargs)
+        dataset = self.context.get('dataset', None)
+        self.fields['algorithm'].choices = get_detection_choices(dataset)
 
 
 class RPCAMEstimatorLossSerializer(serializers.Serializer):
@@ -274,20 +270,6 @@ class LisaGeoDistanceSerializer(serializers.Serializer):
     def __init__(self, *args, **kwargs):
         # post_data = args[0]
         super(LisaGeoDistanceSerializer, self).__init__(*args, **kwargs)
-        #TODO
-        """time_series = TimeSeries.objects.filter(datasets__in=[post_data['dataset_selected']])
-        all_have_ch1903 = True
-        all_have_height = True
-        for ts in time_series:
-            if ts.location.ch1903_easting == None or ts.location.ch1903_northing == None:
-                all_have_ch1903 = False
-            if ts.location.height == None:
-                all_have_height = False
-
-        if not all_have_ch1903:
-            self.fields['geo_distance_function'].choices = ((HAVERSINE, HAVERSINE),)
-        elif not all_have_height:
-            self.fields['geo_distance_function'].choices = ((CH1903, CH1903), (HAVERSINE, HAVERSINE),)"""
 
 
 class ThresholdSerializer(serializers.Serializer):

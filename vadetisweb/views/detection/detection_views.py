@@ -57,7 +57,7 @@ class DetectionSyntheticDataset(APIView):
 
         selected_button = get_highcharts_range_button_preselector(dataset.frequency)
 
-        detection_serializer = AlgorithmSerializer()
+        detection_serializer = AlgorithmSerializer(context={'dataset': dataset})
         injection_serializer = InjectionSerializer(context={'dataset_selected': dataset_id, 'request' : request})
         threshold_serializer = ThresholdSerializer()
 
@@ -86,7 +86,7 @@ class DetectionRealWorldDataset(APIView):
 
         selected_button = get_highcharts_range_button_preselector(dataset.frequency)
 
-        detection_serializer = AlgorithmSerializer()
+        detection_serializer = AlgorithmSerializer(context={'dataset': dataset})
         injection_serializer = InjectionSerializer(context={'dataset_selected': dataset_id, 'request' : request})
         threshold_serializer = ThresholdSerializer()
 

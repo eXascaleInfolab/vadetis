@@ -23,6 +23,16 @@ ANOMALY_DETECTION_ALGORITHMS = (
     (ISOLATION_FOREST, ISOLATION_FOREST),
 )
 
+ANOMALY_DETECTION_ALGORITHMS_NON_SPATIAL = (
+    (LISA_PEARSON, LISA_PEARSON),
+    (LISA_DTW_PEARSON, LISA_DTW_PEARSON),
+    (RPCA_HUBER_LOSS, RPCA_HUBER_LOSS),
+    (HISTOGRAM, HISTOGRAM),
+    (CLUSTER_GAUSSIAN_MIXTURE, CLUSTER_GAUSSIAN_MIXTURE),
+    (SVM, SVM),
+    (ISOLATION_FOREST, ISOLATION_FOREST),
+)
+
 #########################################################
 # Anomaly Detection Score Types
 #########################################################
