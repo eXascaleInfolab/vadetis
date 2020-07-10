@@ -3,6 +3,11 @@
 {% load django_bootstrap_breadcrumbs %}
 {% load rest_framework %}
 
+{% block css %}
+    {{ block.super }}
+    <link href="{% static 'css/lib/ion-rangeslider/ion.rangeSlider.min.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
 {% block form_media_css %}
     {{ block.super }}
 {% endblock %}
@@ -34,5 +39,17 @@
 
 {% block additional_bottom_js %}
     {{ block.super }}
+    <!-- page extensions -->
+    {% include 'vadetisweb/parts/includes/ion_rangeslider_js.html' %}
+    <script src="{% static 'js/custom/form.extensions.js' %}" type="text/javascript"></script>
     {% include "vadetisweb/parts/js/ajax_form_js.html" with formid="application_setting_form" format="json" %}
+
+    <!-- page init -->
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            $('#application_setting_form' + ' [data-type="single"]').each(function () {
+                IonRangeSliderInitializer.init(this.id);
+            });
+        });
+    </script>
 {% endblock %}

@@ -239,7 +239,7 @@ DTW_DISTANCE_FUNCTION = (
 # Defaults for application settings
 #########################################################
 
-DEFAULT_COLOR_OUTLIERS = '#FF0000'
+DEFAULT_COLOR_OUTLIERS = '#C30000'
 DEFAULT_COLOR_CLUSTERS = '#0000FF'
 DEFAULT_COLOR_TRUE_POSITIVES = '#008800'
 DEFAULT_COLOR_FALSE_POSITIVES = '#FF0000'
@@ -248,7 +248,6 @@ DEFAULT_ROUND_DIGITS = 3
 
 DEFAULT_SETTINGS = (
     ('color_outliers', DEFAULT_COLOR_OUTLIERS),
-    ('color_clusters', DEFAULT_COLOR_CLUSTERS),
     ('color_true_positive', DEFAULT_COLOR_TRUE_POSITIVES),
     ('color_false_positive', DEFAULT_COLOR_FALSE_POSITIVES),
     ('color_false_negative', DEFAULT_COLOR_FALSE_NEGATIVES),

@@ -10,6 +10,8 @@ from django.core.validators import MaxLengthValidator, MaxValueValidator, MinVal
 
 from vadetisweb.models import UserSetting, User
 from vadetisweb.validators import username_validators, email_validators, alphabetic_validator
+from vadetisweb.fields import RoundDigitsField
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,19 +24,11 @@ class UserSettingSerializer(serializers.ModelSerializer):
     The form for the settings of the user
     """
 
-    round_digits = serializers.IntegerField(default=3,
-                                            help_text='Must be a number between 1 and 6',
-                                            validators=[MinValueValidator(1), MaxValueValidator(6)],
-                                            style={'template': 'vadetisweb/parts/input/text_input.html',})
+    round_digits = RoundDigitsField(default=3, min_value=1, max_value=6,
+                                    validators=[MinValueValidator(1), MaxValueValidator(6)], )
 
     color_outliers = serializers.CharField(max_length=7, default="#FF0000",
                                            help_text='Default: #FF0000, the RGB color used to mark outliers',
-                                           validators=[RegexValidator(regex='^#(?:[0-9a-fA-F]{3}){1,2}$')],
-                                           style={'template': 'vadetisweb/parts/input/text_input.html',
-                                                  'input_type': 'color'})
-
-    color_clusters = serializers.CharField(max_length=7, default="#0000FF",
-                                           help_text='Default: #0000FF, the RGB color used to mark LISA clusters of high or low values',
                                            validators=[RegexValidator(regex='^#(?:[0-9a-fA-F]{3}){1,2}$')],
                                            style={'template': 'vadetisweb/parts/input/text_input.html',
                                                   'input_type': 'color'})
@@ -60,7 +54,7 @@ class UserSettingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserSetting
-        fields = ('round_digits', 'color_outliers', 'color_clusters',
+        fields = ('round_digits', 'color_outliers',
                   'color_true_positive', 'color_false_positive', 'color_false_negative')
 
 

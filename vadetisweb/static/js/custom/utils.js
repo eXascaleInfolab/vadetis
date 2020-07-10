@@ -204,7 +204,6 @@ function printFormErrors(form_errors) {
 function settingsFromCookie() {
     var settings = {};
     _setSettingOrDefault(settings, 'color_outliers', '#FF0000');
-    _setSettingOrDefault(settings, 'color_clusters', '#0000FF');
     _setSettingOrDefault(settings, 'color_true_positive', '#008800');
     _setSettingOrDefault(settings, 'color_false_positive', '#FF0000');
     _setSettingOrDefault(settings, 'color_false_negative', '#0000FF');

@@ -37,7 +37,6 @@ def settings_from_request_or_default_dict(request):
     missing_keys = []
 
     _get_str_setting_from_cookie(settings, missing_keys, request, 'color_outliers', DEFAULT_COLOR_OUTLIERS)
-    _get_str_setting_from_cookie(settings, missing_keys, request, 'color_clusters', DEFAULT_COLOR_CLUSTERS)
     _get_str_setting_from_cookie(settings, missing_keys, request, 'color_true_positive', DEFAULT_COLOR_TRUE_POSITIVES)
     _get_str_setting_from_cookie(settings, missing_keys, request, 'color_false_positive', DEFAULT_COLOR_FALSE_POSITIVES)
     _get_str_setting_from_cookie(settings, missing_keys, request, 'color_false_negative', DEFAULT_COLOR_FALSE_NEGATIVES)

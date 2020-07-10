@@ -26,11 +26,7 @@ class UserSetting(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
 
     color_outliers = models.CharField('Color outliers', max_length=7, null=False, default=DEFAULT_COLOR_OUTLIERS,
-                                      help_text='Default: #FF0000, the RGB color used to mark outliers',
-                                      validators=[RegexValidator(regex='^#(?:[0-9a-fA-F]{3}){1,2}$')])
-
-    color_clusters = models.CharField('Color for LISA clusters', max_length=7, null=False, default=DEFAULT_COLOR_CLUSTERS,
-                                      help_text='Default: #0000FF, the RGB color used to mark LISA clusters of high or low values',
+                                      help_text='Default: #C30000, the RGB color used to mark outliers',
                                       validators=[RegexValidator(regex='^#(?:[0-9a-fA-F]{3}){1,2}$')])
 
     color_true_positive = models.CharField('Color for True Positives', max_length=7, null=False, default=DEFAULT_COLOR_TRUE_POSITIVES,
@@ -45,9 +41,9 @@ class UserSetting(models.Model):
                                             help_text='Default: #0000FF, the RGB color used to mark false negatives',
                                             validators=[RegexValidator(regex='^#(?:[0-9a-fA-F]{3}){1,2}$')])
 
-    round_digits = models.PositiveIntegerField('Number of digits for results', null=False, default=DEFAULT_ROUND_DIGITS,
-                                               help_text='Must be a number between 1 and 10',
-                                               validators=[MinValueValidator(1), MaxValueValidator(10)])
+    round_digits = models.PositiveIntegerField('Round digits', null=False, default=DEFAULT_ROUND_DIGITS,
+                                               help_text='Used to set the decimal places for the presentation. Must be a number between 1 and 6',
+                                               validators=[MinValueValidator(1), MaxValueValidator(6)])
 
     # Override the __unicode__() method to return out something meaningful!
     def __str__(self):
