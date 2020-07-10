@@ -262,7 +262,7 @@ MAPBOX_TOKEN = 'pk.eyJ1IjoidmFkZXRpcyIsImEiOiJja2NiMTB4NW8yMHI2MnRvMHk2aDl6ZG5kI
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Zurich'
 USE_I18N = False
 USE_L10N = True
 USE_TZ = True
@@ -273,7 +273,6 @@ REGISTRATION_OPEN = True  # set to False to disable User registration
 REGISTRATION_SALT = 'encoded_username:timestamp:signature'
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
 
