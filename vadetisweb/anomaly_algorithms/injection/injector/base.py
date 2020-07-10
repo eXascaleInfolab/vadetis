@@ -71,14 +71,22 @@ class OutlierInjector:
 
     def _number_of_splits(self):
         anomaly_deviation = self.validated_data['anomaly_repetition']
+
+        range_length = len(self.df.loc[self.get_range_start_dt():self.get_range_end_dt()].index)
+        # 30 values is the minimum range in which we inject anomalies
+        if range_length < 30:
+            return 1
+
+        max_splits = int(range_length / 30)
+
         if anomaly_deviation == ANOMALY_INJECTION_REPEAT_INTERVAL_LOW:
-            return 4
+            return min(4, max_splits)
 
         elif anomaly_deviation == ANOMALY_INJECTION_REPEAT_INTERVAL_MEDIUM:
-            return 8
+            return min(8, max_splits)
 
         elif anomaly_deviation == ANOMALY_INJECTION_REPEAT_INTERVAL_HIGH:
-            return 16
+            return min(16, max_splits)
 
         elif anomaly_deviation == ANOMALY_INJECTION_REPEAT_SINGLE:
             return 1
@@ -94,6 +102,7 @@ class OutlierInjector:
         """
         split = np.array_split(range, n)
         return split
+
 
     def get_split_ranges(self):
         return self.split(self.df.loc[self.get_range_start_dt():self.get_range_end_dt()].index, self._number_of_splits())

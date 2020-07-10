@@ -30,7 +30,7 @@ class InjectionSerializer(serializers.Serializer):
                                                 required=False,
                                                 choices=ANOMALY_INJECTION_REPETITIONS,
                                                 default=ANOMALY_INJECTION_REPEAT_SINGLE,
-                                                help_text='Anomalies are inserted into the selected area of the chart. Anomalies can be inserted individually or in intervals.',
+                                                help_text='Anomalies are inserted into the selected area of the chart. Anomalies can be inserted individually or in intervals within the selected range. If the selected range is too small, it may insert only one outlier.',
                                                 style={'template': 'vadetisweb/parts/input/select_input.html',
                                                        'help_text_in_popover': True})
 
