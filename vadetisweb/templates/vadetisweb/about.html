@@ -1,0 +1,55 @@
+{% extends 'vadetisweb/base.html' %}
+{% load django_bootstrap_breadcrumbs %}{% load static %}
+
+{% block head %}
+{% endblock %}
+
+{% block js_content %}
+{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "About" "vadetisweb:about" %}
+{% endblock %}
+
+{% block page_title %}
+    <h3 class="kt-subheader__title">About</h3>
+{% endblock %}
+
+{% block content %}
+    {{ block.super }}
+    <div class="kt-portlet">
+        <div class="kt-portlet__body">
+            <div class="row">
+                <div class="col-md-12">
+                    <p><b>Technology</b><br>
+                        Vadetis is a web-based client-server application.
+                        The client-side is implemented using native <a href="https://www.javascript.com/" target="_blank">JavaScript</a>, <a
+                                href="https://jquery.com/" target="_blank">jQuery</a> and
+                        <a href="https://www.highcharts.com/" target="_blank">Highcharts</a> (a JavaScript library for charts and plots),
+                        as well as some JavaScript slider libraries (<a href="https://refreshless.com/nouislider/" target="_blank">noUiSlider</a>, <a
+                                href="https://roundsliderui.com/" target="_blank">RoundSlider</a>, and <a href="http://ionden.com/a/plugins/ion.rangeSlider/" target="_blank">Ion.RangeSlider</a>).
+                        The server-side implementation uses <a href="https://www.djangoproject.com/" target="_blank">Django</a>, a Python web framework, along with several extensions and provides a <a href="https://www.django-rest-framework.org/" target="_blank">Django REST Framework</a> API.
+                        The data is stored in a <a href="https://www.mysql.com" target="_blank">MySQL</a> database.
+                    </p>
+                    <p><b>Contact</b><br>
+                        <a href="https://exascale.info/members/mourad-khayati/">Mourad Khayati, PhD</a>
+                    </p>
+                    <p><b>Contributors</b><br>
+                    <ul>
+                        <li><a href="https://exascale.info/members/mourad-khayati/">Mourad Khayati, PhD</a></li>
+                        <li>Adrian H&auml;nni</li>
+                    </ul>
+                    </p>
+                    <p>
+
+                        <a href="https://exascale.info/"><img style="max-width: 350px; width: auto; height: auto;" src="{% static 'img/global/Xi_logo.svg' %}"/></a>
+                    </p>
+                </div>
+            </div>
+
+            <p>This application was implemented at the at the <a href="http://exascale.info/" target="_blank">eXascale Infolab</a>, a research group at the <a
+                    href="http://www.unifr.ch/" target="_blank">University of Fribourg</a>, Switzerland.</p>
+        </div>
+    </div>
+{% endblock %}
