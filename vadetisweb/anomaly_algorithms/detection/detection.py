@@ -61,7 +61,7 @@ def lisa_geo_detection(df, df_class, validated_data, settings):
     dataset = validated_data['dataset']
     time_series_id = validated_data['time_series'].id
 
-    scores, y_hat_results, info = lisa_geo(df, df_class, validated_data, settings)
+    scores, y_hat_results, info = lisa_geo(df, df_class, validated_data)
 
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
 

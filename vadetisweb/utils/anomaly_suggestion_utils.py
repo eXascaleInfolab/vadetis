@@ -84,7 +84,7 @@ def _lisa_pearson_default(dataset):
 
     return {
         'dataset': dataset,
-        'time_series': time_series,
+        'time_series': time_series.id,
         'window_size': 10,
         'normalize': True,
         'time_range': TIME_RANGE_SELECTION,
@@ -100,9 +100,9 @@ def _lisa_dtw_default(dataset):
 
     return {
         'dataset': dataset,
-        'time_series': time_series,
+        'time_series': time_series.id,
         'window_size': 10,
-        'distance_function': EUCLIDEAN,
+        'dtw_distance_function': EUCLIDEAN,
         'normalize': True,
         'time_range': TIME_RANGE_SELECTION,
         'maximize_score': F1_SCORE,
@@ -117,7 +117,7 @@ def _lisa_geo_default(dataset):
 
     return {
         'dataset': dataset,
-        'time_series': time_series,
+        'time_series': time_series.id,
         'time_range': TIME_RANGE_SELECTION,
         'maximize_score': F1_SCORE,
         'range_start': range_start,
@@ -131,7 +131,7 @@ def _rpca_default(dataset):
 
     return {
         'dataset': dataset,
-        'training_dataset': training_dataset,
+        'training_dataset': training_dataset.id,
         'delta': 1.0,
         'n_components': 2,
         'train_size': 0.5,
@@ -149,7 +149,7 @@ def _histogram_default(dataset):
 
     return {
         'dataset': dataset,
-        'training_dataset': training_dataset,
+        'training_dataset': training_dataset.id,
         'train_size': 0.5,
         'random_seed': 10,
         'time_range': TIME_RANGE_SELECTION,
@@ -165,7 +165,7 @@ def _cluster_default(dataset):
 
     return {
         'dataset': dataset,
-        'training_dataset': training_dataset,
+        'training_dataset': training_dataset.id,
         'n_components': 3,
         'n_init': 3,
         'train_size': 0.5,
@@ -183,7 +183,7 @@ def _svm_default(dataset):
 
     return {
         'dataset': dataset,
-        'training_dataset': training_dataset,
+        'training_dataset': training_dataset.id,
         'kernel': KERNEL_RBF,
         'gamma': 0.0005,
         'nu' : 0.95,
@@ -202,7 +202,7 @@ def _isolation_forest_default(dataset):
 
     return {
         'dataset': dataset,
-        'training_dataset': training_dataset,
+        'training_dataset': training_dataset.id,
         'bootstrap': False,
         'n_estimators' : 40,
         'train_size': 0.5,

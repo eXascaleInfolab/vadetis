@@ -25,8 +25,8 @@ def lisa_dtw_suggestion(df, df_class, validated_data):
     return info
 
 
-def lisa_geo_suggestion(df, df_class, validated_data, settings):
-    scores, y_hat_results, info = lisa_geo(df, df_class, validated_data, settings)
+def lisa_geo_suggestion(df, df_class, validated_data):
+    scores, y_hat_results, info = lisa_geo(df, df_class, validated_data)
 
     return info
 

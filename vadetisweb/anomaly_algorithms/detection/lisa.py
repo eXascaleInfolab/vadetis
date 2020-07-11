@@ -240,7 +240,7 @@ def lisa_dtw(df, df_class, validated_data):
 # GEO Distance
 #########################################################
 
-def lisa_geo(df, df_class, validated_data, settings):
+def lisa_geo(df, df_class, validated_data):
     time_series = validated_data['time_series']
 
     df_corr_dist = get_df_corr_geo_distance(df)

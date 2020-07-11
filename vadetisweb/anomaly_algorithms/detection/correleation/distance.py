@@ -97,10 +97,10 @@ def df_distance(df):
             if ts_origin == ts_destination:
                 distance = 0
             else:
-                distance = haversine_distance(ts_origin.location.lat,
-                                              ts_origin.location.lon,
-                                              ts_destination.location.lat,
-                                              ts_destination.location.lon)
+                distance = haversine_distance(ts_origin.location.latitude,
+                                              ts_origin.location.longitude,
+                                              ts_destination.location.latitude,
+                                              ts_destination.location.longitude)
             # set distance value
             df_dist.loc[ts_id_origin, ts_id_destination] = distance
 
