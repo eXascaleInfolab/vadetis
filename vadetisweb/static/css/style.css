@@ -27278,6 +27278,7 @@ body.swal2-height-auto {
       list-style-type: none;
       -ms-flex-wrap: wrap;
       flex-wrap: wrap;
+        font-size: 13px;
       margin: 0;
       padding: 0; }
       .kt-subheader .kt-subheader__main .kt-subheader__breadcrumbs .kt-subheader__breadcrumbs-home {
@@ -27295,7 +27296,7 @@ body.swal2-height-auto {
           color: #283593; }
       .kt-subheader .kt-subheader__main .kt-subheader__breadcrumbs .kt-subheader__breadcrumbs-link {
         padding: 0 0.35rem 0 0;
-        font-size: 1rem;
+        font-size: 13px;
         font-weight: 500;
         color: #959cb6;
         -webkit-transition: all 0.3s;

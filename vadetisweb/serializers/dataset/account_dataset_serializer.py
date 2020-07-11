@@ -36,14 +36,16 @@ class AccountDatasetDataTablesSerializer(serializers.ModelSerializer):
         if obj.type == REAL_WORLD:
             view_link = reverse('vadetisweb:display_real_world_dataset', args=[obj.id])
             detection_link = reverse('vadetisweb:detection_real_world_dataset', args=[obj.id])
+            suggestion_link = reverse('vadetisweb:suggestion_real_world_dataset', args=[obj.id])
         else:
             view_link = reverse('vadetisweb:display_synthetic_dataset', args=[obj.id])
             detection_link = reverse('vadetisweb:detection_synthetic_dataset', args=[obj.id])
+            suggestion_link = reverse('vadetisweb:suggestion_synthetic_dataset', args=[obj.id])
 
         edit_link = reverse('vadetisweb:account_dataset_edit', args=[obj.id])
 
-        return '<a href="%s">Display</a> <a href="%s">Detection</a> <a href="%s">Edit</a>' % (
-        view_link, detection_link, edit_link)
+        return '<a href="%s">Display</a> <a href="%s">Detection</a> <a href="%s">Suggestion</a> <a href="%s">Edit</a>' % (
+        view_link, detection_link, suggestion_link, edit_link)
 
     class Meta:
         model = DataSet

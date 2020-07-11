@@ -1,0 +1,61 @@
+{% extends 'vadetisweb/base.html' %}
+{% load static %}
+{% load django_bootstrap_breadcrumbs %}
+{% load rest_framework %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "Synthetic Datasets" "vadetisweb:suggestion_synthetic_datasets" %}
+{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+    <link href="{% static 'css/lib/datatables/datatables.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block page_title %}
+    <h3 class="kt-subheader__title">Suggestion</h3>
+{% endblock %}
+
+{% block content %}
+    <div class="kt-portlet">
+        <div class="kt-portlet__head kt-portlet__head--lg">
+            <div class="kt-portlet__head-label">
+                <span class="kt-portlet__head-icon">
+                    <i class="mdi mdi-chart-timeline-variant mdi-24px kt-font-brand"></i>
+                </span>
+                <h3 class="kt-portlet__head-title">
+                    Table of Synthetic Datasets
+                </h3>
+            </div>
+        </div>
+        <div class="kt-portlet__body">
+            <div class="kt-portlet shadow-none kt-portlet--fit kt-portlet--collapsed mb-0" data-ktportlet="true">
+                <div class="kt-portlet__head border-bottom-0">
+                    <div class="kt-portlet__head-toolbar">
+                        <div class="kt-portlet__head-group">
+                            <span class="font-weight-bold">Search Table</span> <a href="#" data-ktportlet-tool="toggle" class="btn btn-sm btn-icon btn-default btn-icon-md"><i class="mdi mdi-chevron-down mdi-18px"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="kt-portlet__body mt-3">
+                    {% include 'vadetisweb/parts/forms/serializer_datatables_search_form.html' with serializer=search_serializer %}
+                </div>
+            </div>
+            <!--begin: Datatable -->
+            <table id="table_synthetic_datasets" class="table table-bordered table-hover table-checkable"></table>
+            <!--end: Datatable -->
+        </div>
+    </div>
+{% endblock %}
+
+{% block additional_bottom_js %}
+    {{ block.super }}
+    <script src="{% static 'js/lib/datatables/datatables.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/custom/datatables.init.js' %}" type="text/javascript"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            VadetisDatatables.init("table_synthetic_datasets", "{% url 'vadetisweb:suggestion_synthetic_datasets_datatable-list' %}?format=datatables");
+        });
+    </script>
+{% endblock %}

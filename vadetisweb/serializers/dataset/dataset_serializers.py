@@ -20,6 +20,7 @@ class DatasetSearchSerializer(serializers.ModelSerializer):
     owner = serializers.StringRelatedField(read_only=True, label="username", many=False)
     display = serializers.SerializerMethodField()
     detection = serializers.SerializerMethodField()
+    suggestion = serializers.SerializerMethodField()
 
     def get_display(self, obj):
         if obj.type == REAL_WORLD:
@@ -35,6 +36,13 @@ class DatasetSearchSerializer(serializers.ModelSerializer):
             detection_link = reverse('vadetisweb:detection_synthetic_dataset', args=[obj.id])
         return detection_link
 
+    def get_suggestion(self, obj):
+        if obj.type == REAL_WORLD:
+            suggestion_link = reverse('vadetisweb:suggestion_real_world_dataset', args=[obj.id])
+        else:
+            suggestion_link = reverse('vadetisweb:suggestion_synthetic_dataset', args=[obj.id])
+        return suggestion_link
+
     class Meta:
         model = DataSet
-        fields = ('title', 'owner', 'display', 'detection', )
+        fields = ('title', 'owner', 'display', 'detection', 'suggestion', )

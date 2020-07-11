@@ -21,6 +21,8 @@ router.register(r'display/datasets/real-world', views.DisplayRealWorldDatasetDat
 router.register(r'display/training-datasets', views.DisplayTrainingDatasetDataTableViewSet, basename='display_training_datasets_datatable')
 router.register(r'detection/datasets/synthetic', views.DetectionSyntheticDatasetDataTableViewSet, basename='detection_synthetic_datasets_datatable')
 router.register(r'detection/datasets/real-world', views.DetectionRealWorldDatasetDataTableViewSet, basename='detection_real_world_datasets_datatable')
+router.register(r'suggestion/datasets/synthetic', views.SuggestionSyntheticDatasetDataTableViewSet, basename='suggestion_synthetic_datasets_datatable')
+router.register(r'suggestion/datasets/real-world', views.SuggestionRealWorldDatasetDataTableViewSet, basename='suggestion_real_world_datasets_datatable')
 
 apipatterns = [
     path('api/', include((router.urls))),
@@ -72,6 +74,11 @@ urlpatterns = apipatterns + [
     path('detection/real-world/<int:dataset_id>/', views.DetectionRealWorldDataset.as_view(), name='detection_real_world_dataset'),
     path('detection/synthetic/', views.DetectionSyntheticDatasets.as_view(), name='detection_synthetic_datasets'),
     path('detection/synthetic/<int:dataset_id>/', views.DetectionSyntheticDataset.as_view(), name='detection_synthetic_dataset'),
+
+    path('suggestion/real-world/', views.SuggestionRealWorldDatasets.as_view(), name='suggestion_real_world_datasets'),
+    path('suggestion/real-world/<int:dataset_id>/', views.SuggestionRealWorldDataset.as_view(), name='suggestion_real_world_dataset'),
+    path('suggestion/synthetic/', views.SuggestionSyntheticDatasets.as_view(), name='suggestion_synthetic_datasets'),
+    path('suggestion/synthetic/<int:dataset_id>/', views.SuggestionSyntheticDataset.as_view(), name='suggestion_synthetic_dataset'),
 
     path('account/application-setting/', views.ApplicationSetting.as_view(), name='application_setting'),
     path('account/datasets/', views.account_datasets, name='account_datasets'),

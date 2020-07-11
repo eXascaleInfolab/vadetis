@@ -1,7 +1,7 @@
 {% load static %}
 <div class="dropdown-menu dropdown-menu-right">
     <ul class="kt-nav">
-        {% if display_link or detection_link or recommendation_link %}
+        {% if display_link or detection_link or suggestion_link %}
         <li class="kt-nav__section kt-nav__section--first">
             <span class="kt-nav__section-text">Navigation</span>
         </li>
@@ -19,10 +19,10 @@
             </a>
         </li>
         {% endif %}
-        {% if recommendation_link %}
+        {% if suggestion_link %}
         <li class="kt-nav__item">
-            <a href="{{ recommendation_link }}" class="kt-nav__link">
-                <span class="kt-nav__link-text">Recommendation</span>
+            <a href="{{ suggestion_link }}" class="kt-nav__link">
+                <span class="kt-nav__link-text">Suggestion</span>
             </a>
         </li>
         {% endif %}
