@@ -68,61 +68,6 @@ def number_of_time_series_anomaly_values(dataset, ts_id):
 def contamination_level_of_time_series(dataset, ts_id):
     return dataset.contamination_level_of_time_series(ts_id)
 
-"""
-@register.filter(takes_context=False, is_safe=False, needs_autoescape=False)
-def get_conf_item(dict, key):
-
-    if key == 'algorithm':
-        return mark_safe('Algorithm: %s<br />' % dict[key])
-
-    if key == 'n_components':
-        return mark_safe('Number of Components: %s<br />' % dict[key])
-
-    if key == 'n_init':
-        return mark_safe('Number of Inits: %s<br />' % dict[key])
-
-    if key == 'gamma':
-        return mark_safe('Gamma: %s<br />' % dict[key])
-
-    if key == 'nu':
-        return mark_safe('Nu: %s<br />' % dict[key])
-
-    if key == 'bootstrap':
-        return mark_safe('Bootstrap: %s<br />' % dict[key])
-
-    if key == 'n_estimators':
-        return mark_safe('Number of Estimators: %s<br />' % dict[key])
-
-    if key == 'train_size':
-        return mark_safe('Train Size: %s<br />' % dict[key])
-
-    if key == 'random_seed':
-        return mark_safe('Random Seed: %s<br />' % dict[key])
-
-    if key == 'correlation_algorithm':
-        return mark_safe('Correlation: %s<br />' % dict[key])
-
-    if key == 'min_periods':
-        return mark_safe('Min Periods: %s<br />' % dict[key])
-
-    if key == 'normalize':
-        return mark_safe('Row Standardized: %s<br />' % dict[key])
-
-    if key == 'dtw_distance_function':
-        return mark_safe('DTW Distance Function: %s<br />' % dict[key])
-
-    if key == 'geo_distance_function':
-        return mark_safe('Geographic Distance Function: %s<br />' % dict[key])
-
-    if key == 'lisa_outlier_threshold':
-        return mark_safe('Outlier Threshold: %s<br />' % dict[key])
-
-    if key == 'lisa_cluster_threshold':
-        return mark_safe('Cluster Threshold: %s<br />' % dict[key])
-
-    return ''"""
-
-
 @register.simple_tag(takes_context=True)
 def active_tree(context, pattern_or_urlname):
     try:
@@ -186,8 +131,8 @@ def addcss(field, css):
    return field.as_widget(attrs={"class":css})
 
 
-@register.filter(name='print_timestamp')
-def print_timestamp(timestamp):
+@register.filter(name='float_as_timestamp')
+def float_as_timestamp(timestamp):
     try:
         #assume, that timestamp is given in seconds with decimal point
         ts = float(timestamp)

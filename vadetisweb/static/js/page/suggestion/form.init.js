@@ -45,14 +45,14 @@ var DatasetSuggestionForm = function () {
     }
 
     // private
-    var init = function (suggestion_url) {
+    var init = function (suggestion_url, suggestion_form_id) {
 
     }
 
     return {
         // public
-        init: function(suggestion_url) {
-            init(suggestion_url);
+        init: function(suggestion_url, suggestion_form_id) {
+            init(suggestion_url, suggestion_form_id);
         }
     };
 }();
