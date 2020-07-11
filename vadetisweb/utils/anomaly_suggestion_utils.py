@@ -52,12 +52,12 @@ def get_time_range(dataset, offset, max_range=500):
     index_length = len(dataset.dataframe.index)
     if index_length <= max_range + offset:
         if offset == 0:
-            return dt_to_unix_time_millis(df.iloc[0].index), dt_to_unix_time_millis(df.iloc[-1].index)
+            return dt_to_unix_time_millis(df.index[0]), dt_to_unix_time_millis(df.index[-1])
         else:
-            return dt_to_unix_time_millis(df.iloc[offset-1].index), dt_to_unix_time_millis(df.iloc[-1].index)
+            return dt_to_unix_time_millis(df.index[offset-1]), dt_to_unix_time_millis(df.index[-1])
     else:
         start_index = max_range + offset
-        return dt_to_unix_time_millis(df.iloc[-start_index].index), dt_to_unix_time_millis(df.iloc[-1].index)
+        return dt_to_unix_time_millis(df.index[-start_index]), dt_to_unix_time_millis(df.index[-1])
 
 
 def get_training_dataset(dataset):
