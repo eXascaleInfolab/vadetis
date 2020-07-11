@@ -45,7 +45,8 @@
                                     <i class="mdi mdi-18px mdi-dots-horizontal"></i>
                                 </a>
                                 {% url 'vadetisweb:display_synthetic_dataset' dataset_id=dataset.id as display_link %}
-                                {% include 'vadetisweb/parts/misc/highcharts_dropdown.html' with display_link=display_link %}
+                                {% url 'vadetisweb:suggestion_synthetic_dataset' dataset_id=dataset.id as suggestion_link %}
+                                {% include 'vadetisweb/parts/misc/highcharts_line_dropdown.html' with display_link=display_link suggestion_link=suggestion_link %}
                             </div>
                         </div>
                     </div>

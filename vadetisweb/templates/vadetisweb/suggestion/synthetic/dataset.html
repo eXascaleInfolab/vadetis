@@ -34,7 +34,18 @@
                     <div class="kt-portlet__head-label">
                         <h3 class="kt-portlet__head-title">{{ dataset.title }}</h3>
                     </div>
-
+                    <div class="kt-portlet__head-toolbar">
+                        <div id="highcharts_head_actions" class="kt-portlet__head-actions">
+                            <div class="dropdown dropdown-inline">
+                                <a href="#" class="btn btn-outline-brand btn-icon btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="mdi mdi-18px mdi-dots-horizontal"></i>
+                                </a>
+                                {% url 'vadetisweb:display_synthetic_dataset' dataset_id=dataset.id as display_link %}
+                                {% url 'vadetisweb:detection_synthetic_dataset' dataset_id=dataset.id as detection_link %}
+                                {% include 'vadetisweb/parts/misc/highcharts_column_dropdown.html' with display_link=display_link detection_link=detection_link %}
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="kt-portlet__body kt-portlet__body--fit">
                     <!--begin: Highcharts -->

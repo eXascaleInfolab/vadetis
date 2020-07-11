@@ -38,7 +38,8 @@
                                     <i class="mdi mdi-18px mdi-dots-horizontal"></i>
                                 </a>
                                 {% url 'vadetisweb:detection_real_world_dataset' dataset_id=dataset.id as detection_link %}
-                                {% include 'vadetisweb/parts/misc/highcharts_dropdown.html' with detection_link=detection_link %}
+                                {% url 'vadetisweb:suggestion_real_world_dataset' dataset_id=dataset.id as suggestion_link %}
+                                {% include 'vadetisweb/parts/misc/highcharts_line_dropdown.html' with detection_link=detection_link suggestion_link=suggestion_link %}
                             </div>
                         </div>
                     </div>
