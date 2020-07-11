@@ -68,7 +68,7 @@ def get_training_dataset(dataset):
     max_contamination_level = 0
     selected_training_dataset = None
     for training_dataset in dataset.training_dataset.all():
-        contamination = training_dataset.number_of_anomaly_values() / training_dataset.number_of_normal_values()
+        contamination = training_dataset.contamination_level()
         if contamination > max_contamination_level:
             max_contamination_level = contamination
             selected_training_dataset = training_dataset

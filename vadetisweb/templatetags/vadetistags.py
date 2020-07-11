@@ -42,6 +42,11 @@ def number_of_dataset_anomaly_values(dataset):
 
 
 @register.filter
+def contamination_level(dataset):
+    return dataset.contamination_level()
+
+
+@register.filter
 def number_of_training_datasets(dataset):
     return dataset.number_of_training_datasets()
 
@@ -58,6 +63,10 @@ def is_spatial(dataset):
 @register.simple_tag
 def number_of_time_series_anomaly_values(dataset, ts_id):
     return dataset.number_of_time_series_anomaly_values(ts_id)
+
+@register.simple_tag
+def contamination_level_of_time_series(dataset, ts_id):
+    return dataset.contamination_level_of_time_series(ts_id)
 
 """
 @register.filter(takes_context=False, is_safe=False, needs_autoescape=False)

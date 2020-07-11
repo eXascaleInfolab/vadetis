@@ -88,8 +88,12 @@ class DataSet(models.Model):
 
     def number_of_normal_values(self):
         df_class_count = self.dataframe_class.apply(pd.Series.value_counts).sum(axis=1)
-        np_num_values = df_class_count.loc[False]
-        return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
+        try:
+            np_num_values = df_class_count.loc[False]
+            return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
+        except KeyError:
+            # if no False keys exists, this dataset does not have normal data
+            return 0
 
     def number_of_anomaly_values(self):
         df_class_count = self.dataframe_class.apply(pd.Series.value_counts).sum(axis=1)
@@ -97,7 +101,19 @@ class DataSet(models.Model):
             np_num_values = df_class_count.loc[True]
             return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
         except KeyError:
-            # if no True keys exists this dataset does not have anomalies
+            # if no True keys exists, this dataset does not have anomalies
+            return 0
+
+    def contamination_level(self):
+        return self.number_of_anomaly_values() / self.number_of_dataframe_values()
+
+    def number_of_time_series_normal_values(self, ts_id):
+        df_class_count = self.dataframe_class[ts_id].value_counts()
+        try:
+            np_num_values = df_class_count.loc[False]
+            return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
+        except KeyError:
+            # if no False keys exists, this series does not have anomalies
             return 0
 
     def number_of_time_series_anomaly_values(self, ts_id):
@@ -106,8 +122,15 @@ class DataSet(models.Model):
             np_num_values = df_class_count.loc[True]
             return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
         except KeyError:
-            # if no True keys exists this dataset does not have anomalies
+            # if no True keys exists, this series does not have anomalies
             return 0
+
+    def number_of_time_series_values(self, ts_id):
+        np_num_values = self.dataframe[ts_id].count().sum()
+        return int(np_num_values) if isinstance(np_num_values, np.integer) else np_num_values
+
+    def contamination_level_of_time_series(self, ts_id):
+        return self.number_of_time_series_anomaly_values(ts_id) / self.number_of_time_series_values(ts_id)
 
     def number_of_training_datasets(self):
         return self.training_dataset.count()

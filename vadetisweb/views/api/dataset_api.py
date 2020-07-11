@@ -15,7 +15,7 @@ from django.http import HttpResponse
 from django.db.models import Q
 
 from vadetisweb.models import DataSet
-from vadetisweb.utils import strToBool, get_settings, dataset_to_json, get_datasets_from_json, df_zscore, export_to_csv, export_to_json, get_locations_json
+from vadetisweb.utils import get_settings, dataset_to_json, get_datasets_from_json, df_zscore, export_to_csv, export_to_json, get_locations_json
 from vadetisweb.serializers import DatasetExportSerializer, DatasetSearchSerializer
 from vadetisweb.factory import dataset_not_found_msg
 from vadetisweb.utils.request_utils import q_public_or_user_is_owner

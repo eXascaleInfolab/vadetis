@@ -35,6 +35,10 @@
                         <td>{{ dataset|number_of_dataset_anomaly_values }}</td>
                     </tr>
                     <tr>
+                        <td>Contamination</td>
+                        <td>{{ dataset|contamination_level }}</td>
+                    </tr>
+                    <tr>
                         <td>Frequency</td>
                         <td>{{ dataset.frequency }}</td>
                     </tr>
@@ -54,6 +58,7 @@
                         <th>Time Series</th>
                         <th>Unit</th>
                         <th>Number of anomalies</th>
+                        <th>Contamination</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -61,7 +66,8 @@
                     <tr>
                         <td>{{ timeseries.name }}</td>
                         <td>{{ timeseries.unit }}</td>
-                        <td>{% number_of_time_series_anomaly_values dataset timeseries.id %}</td>
+                        <td>{% number_of_time_series_anomaly_values dataset timeseries.id as num_ts_outlier %}{{ num_ts_outlier|floatformat:"-3" }}</td>
+                        <td>{% contamination_level_of_time_series dataset timeseries.id as cont_level_ts %}{{ cont_level_ts|floatformat:"-3" }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
