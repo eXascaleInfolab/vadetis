@@ -198,6 +198,23 @@ function printFormErrors(form_errors) {
     }
 }
 
+function getAlgorithms(is_spatial) {
+    /**
+     * algorithm names must be equal as on the server side
+     */
+    var lisaPearson = 'LISA (Pearson)'
+    var lisaDtw = 'LISA (DTW with Pearson)'
+    var lisaGeo = 'LISA (Geographical)'
+    var rpca = 'RPCA (Huber Loss Function)'
+    var histogram = 'Histogram'
+    var clusterGaussianMixture = 'Cluster (Gaussian Mixture)'
+    var svm = 'SVM'
+    var isolationForest = 'Isolation Forest'
+
+    var spatialAlgorithms = [lisaGeo];
+    return [lisaPearson, lisaDtw, (is_spatial ? spatialAlgorithms : []), rpca, histogram, clusterGaussianMixture, svm, isolationForest];
+}
+
 /**
  * Get settings from Cookie, or set them with default value
  */

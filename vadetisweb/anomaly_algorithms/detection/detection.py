@@ -28,7 +28,6 @@ def lisa_pearson_detection(df, df_class, validated_data, settings):
     df_class_response = df_class.iloc[offset:]
 
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
-
     data_series = get_detection_single_ts_results_json(dataset, df_response, df_class_response, time_series_id, scores, y_hat_results, settings, type)
 
     return data_series, info

@@ -2,6 +2,17 @@ from vadetisweb.models import *
 from vadetisweb.fields import *
 from vadetisweb.utils.anomaly_detection_utils import get_detection_choices
 
+class ConditionalRequiredFieldMixin:
+    """
+    Allows to use serializer methods to allow change field is required or not
+    """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            method_name = f'is_{field_name}_required'
+            if hasattr(self, method_name):
+                field.required = getattr(self, method_name)()
+
 
 class AlgorithmSerializer(serializers.Serializer):
     empty_choice = ('', '----')
@@ -17,7 +28,7 @@ class AlgorithmSerializer(serializers.Serializer):
         self.fields['algorithm'].choices = get_detection_choices(dataset)
 
 
-class RPCAMEstimatorLossSerializer(serializers.Serializer):
+class RPCAMEstimatorLossSerializer(ConditionalRequiredFieldMixin, serializers.Serializer):
     dataset = DatasetField(default='overridden')
     dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
                                            style={'template': 'vadetisweb/parts/input/hidden_input.html',
@@ -48,11 +59,17 @@ class RPCAMEstimatorLossSerializer(serializers.Serializer):
     range_start = RangeStartHiddenIntegerField()
     range_end = RangeEndHiddenIntegerField()
 
+    def is_dataset_series_json_required(self):
+        required = self.context.get('dataset_series_json_required', True)
+        if not required:
+            return False
+        return True
+
     def __init__(self, *args, **kwargs):
         super(RPCAMEstimatorLossSerializer, self).__init__(*args, **kwargs)
 
 
-class HistogramSerializer(serializers.Serializer):
+class HistogramSerializer(ConditionalRequiredFieldMixin, serializers.Serializer):
     dataset = DatasetField(default='overridden')
     dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
                                            style={'template': 'vadetisweb/parts/input/hidden_input.html',
@@ -68,11 +85,17 @@ class HistogramSerializer(serializers.Serializer):
     range_start = RangeStartHiddenIntegerField()
     range_end = RangeEndHiddenIntegerField()
 
+    def is_dataset_series_json_required(self):
+        required = self.context.get('dataset_series_json_required', True)
+        if not required:
+            return False
+        return True
+
     def __init__(self, *args, **kwargs):
         super(HistogramSerializer, self).__init__(*args, **kwargs)
 
 
-class ClusterSerializer(serializers.Serializer):
+class ClusterSerializer(ConditionalRequiredFieldMixin, serializers.Serializer):
     dataset = DatasetField(default='overridden')
     dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
                                            style={'template': 'vadetisweb/parts/input/hidden_input.html',
@@ -99,11 +122,17 @@ class ClusterSerializer(serializers.Serializer):
     range_start = RangeStartHiddenIntegerField()
     range_end = RangeEndHiddenIntegerField()
 
+    def is_dataset_series_json_required(self):
+        required = self.context.get('dataset_series_json_required', True)
+        if not required:
+            return False
+        return True
+
     def __init__(self, *args, **kwargs):
         super(ClusterSerializer, self).__init__(*args, **kwargs)
 
 
-class SVMSerializer(serializers.Serializer):
+class SVMSerializer(ConditionalRequiredFieldMixin, serializers.Serializer):
     dataset = DatasetField(default='overridden')
     dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
                                            style={'template': 'vadetisweb/parts/input/hidden_input.html',
@@ -138,11 +167,17 @@ class SVMSerializer(serializers.Serializer):
     range_start = RangeStartHiddenIntegerField()
     range_end = RangeEndHiddenIntegerField()
 
+    def is_dataset_series_json_required(self):
+        required = self.context.get('dataset_series_json_required', True)
+        if not required:
+            return False
+        return True
+
     def __init__(self, *args, **kwargs):
         super(SVMSerializer, self).__init__(*args, **kwargs)
 
 
-class IsolationForestSerializer(serializers.Serializer):
+class IsolationForestSerializer(ConditionalRequiredFieldMixin, serializers.Serializer):
     dataset = DatasetField(default='overridden')
     dataset_series_json = DatasetJsonField(initial=None, binary=False, encoder=None,
                                            style={'template': 'vadetisweb/parts/input/hidden_input.html',
@@ -169,11 +204,17 @@ class IsolationForestSerializer(serializers.Serializer):
     range_start = RangeStartHiddenIntegerField()
     range_end = RangeEndHiddenIntegerField()
 
+    def is_dataset_series_json_required(self):
+        required = self.context.get('dataset_series_json_required', True)
+        if not required:
+            return False
+        return True
+
     def __init__(self, *args, **kwargs):
         super(IsolationForestSerializer, self).__init__(*args, **kwargs)
 
 
-class LisaPearsonSerializer(serializers.Serializer):
+class LisaPearsonSerializer(ConditionalRequiredFieldMixin, serializers.Serializer):
     """
     The serializer for the parameters for Pearson correlation algorithm
     """
@@ -204,8 +245,16 @@ class LisaPearsonSerializer(serializers.Serializer):
     range_start = RangeStartHiddenIntegerField()
     range_end = RangeEndHiddenIntegerField()
 
+    def is_dataset_series_json_required(self):
+        required = self.context.get('dataset_series_json_required', True)
+        if not required:
+            return False
+        return True
 
-class LisaDtwPearsonSerializer(serializers.Serializer):
+    def __init__(self, *args, **kwargs):
+        super(LisaPearsonSerializer, self).__init__(*args, **kwargs)
+
+class LisaDtwPearsonSerializer(ConditionalRequiredFieldMixin, serializers.Serializer):
     """
     The serializer for the parameters for DTW with Pearson correlation algorithm
     """
@@ -240,8 +289,17 @@ class LisaDtwPearsonSerializer(serializers.Serializer):
     range_start = RangeStartHiddenIntegerField()
     range_end = RangeEndHiddenIntegerField()
 
+    def is_dataset_series_json_required(self):
+        required = self.context.get('dataset_series_json_required', True)
+        if not required:
+            return False
+        return True
 
-class LisaGeoDistanceSerializer(serializers.Serializer):
+    def __init__(self, *args, **kwargs):
+        super(LisaDtwPearsonSerializer, self).__init__(*args, **kwargs)
+
+
+class LisaGeoDistanceSerializer(ConditionalRequiredFieldMixin, serializers.Serializer):
     """
     The serializer for the parameters for geographical correlation algorithm
     """
@@ -270,6 +328,12 @@ class LisaGeoDistanceSerializer(serializers.Serializer):
                                                     'help_text_in_popover': True})
     range_start = RangeStartHiddenIntegerField()
     range_end = RangeEndHiddenIntegerField()
+
+    def is_dataset_series_json_required(self):
+        required = self.context.get('dataset_series_json_required', True)
+        if not required:
+            return False
+        return True
 
     def __init__(self, *args, **kwargs):
         # post_data = args[0]

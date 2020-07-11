@@ -2,7 +2,7 @@
 
 var VadetisColumnHighcharts = function () {
 
-    var initHighcharts = function (html_id, url) {
+    var initHighcharts = function (html_id, url, is_spatial) {
         var dataset_series = [];
         var settings = settingsFromCookie();
 
@@ -16,7 +16,7 @@ var VadetisColumnHighcharts = function () {
         var highchart = new Highcharts.chart(html_id, {
             chart: {
                 type: 'column',
-                height: 750,
+                height: 650,
             },
 
             title: {
@@ -43,7 +43,7 @@ var VadetisColumnHighcharts = function () {
                 }
             },
             tooltip: {
-                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                headerFormat: '<span style="font-size:10px"><strong>{point.key}</strong></span><table>',
                 pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
                     '<td style="padding:0"><b>{point.y:.3f}</b></td></tr>',
                 footerFormat: '</table>',
@@ -52,7 +52,7 @@ var VadetisColumnHighcharts = function () {
             },
             plotOptions: {
                 column: {
-                    pointPadding: 0.2,
+                    pointPadding: 0.1,
                     borderWidth: 0
                 }
             },
@@ -76,11 +76,11 @@ var VadetisColumnHighcharts = function () {
         });
 
         // load chart
-        //initSeriesForType(highchart, url, "raw");
+        initAlgorithmScores(highchart, url, is_spatial);
     };
     return {
-        init: function (html_id, url) {
-            initHighcharts(html_id, url);
+        init: function (html_id, url, is_spatial) {
+            initHighcharts(html_id, url, is_spatial);
         }
     };
 }();

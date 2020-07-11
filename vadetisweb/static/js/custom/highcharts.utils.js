@@ -390,3 +390,37 @@ function requestPlot(portlet_id, img_container_id, thresholds, threshold_scores)
         $('#' + portlet_id).show();
     });
 }
+
+function initAlgorithmScores(highchart, url, is_spatial) {
+    var algorithms = getAlgorithms(is_spatial);
+    algorithms.forEach(a => {
+        loadSuggestion(url, a, function () {
+            console.log('loaded');
+        })
+    });
+}
+
+function loadSuggestion(url, algorithm, callback) {
+    var formData = new FormData(), csrfToken = Cookies.get('csrftoken');
+    formData.append("algorithm", algorithm);
+    $.ajax({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrfToken);
+            }
+        },
+        type: "POST",
+        url: url,
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (data, status, xhr) {
+            handleMessages(data);
+            callback();
+        },
+        error: function (data, status, xhr) {
+            handleMessages(data);
+            callback();
+        }
+    });
+}
