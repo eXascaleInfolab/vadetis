@@ -64,3 +64,12 @@ def unix_time_millis_to_dt(unix_millis):
     value_sec = float(unix_millis) / 1000
     dt = datetime.datetime.fromtimestamp(value_sec)
     return dt
+
+
+def dt_to_unix_time_millis(dt):
+    """
+    Converts a datetime into unix time with millisecond precision
+    :param dt: the datetime to convert
+    :return: unix time with millisecond percision
+    """
+    return dt.timestamp() * 1e3
