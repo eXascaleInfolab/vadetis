@@ -12,6 +12,7 @@ from vadetisweb.utils import get_highcharts_range_button_preselector, q_public_o
 from vadetisweb.factory import dataset_not_found_msg
 from vadetisweb.parameters import SYNTHETIC, REAL_WORLD
 from vadetisweb.serializers.dataset.suggestion_dataset_serializer import SuggestionDatasetSearchSerializer
+from vadetisweb.serializers.suggestion_serializers import SuggestionSerializer
 
 class SuggestionSyntheticDatasets(APIView):
     """
@@ -52,10 +53,11 @@ class SuggestionSyntheticDataset(APIView):
             messages.error(request, dataset_not_found_msg(dataset_id))
             return redirect('vadetisweb:suggestion_synthetic_datasets')
 
-        selected_button = get_highcharts_range_button_preselector(dataset.frequency)
+        suggestion_serializer = SuggestionSerializer(context={'dataset': dataset})
 
         return Response({
             'dataset': dataset,
+            'suggestion_serializer' : suggestion_serializer,
         }, status=status.HTTP_200_OK)
 
 
@@ -73,8 +75,9 @@ class SuggestionRealWorldDataset(APIView):
             messages.error(request, dataset_not_found_msg(dataset_id))
             return redirect('vadetisweb:suggestion_real_world_datasets')
 
-        selected_button = get_highcharts_range_button_preselector(dataset.frequency)
+        suggestion_serializer = SuggestionSerializer(context={'dataset': dataset})
 
         return Response({
             'dataset': dataset,
+            'suggestion_serializer' : suggestion_serializer,
         }, status=status.HTTP_200_OK)

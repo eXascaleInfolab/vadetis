@@ -57,11 +57,21 @@ var VadetisColumnHighcharts = function () {
                     borderWidth: 0
                 }
             },
+            lang: {
+                noData: "No data to display"
+            },
+            noData: {
+                style: {
+                    fontWeight: 'bold',
+                    fontSize: '15px',
+                    color: '#303030'
+                }
+            },
             series: []
         });
 
         // load chart
-        initAlgorithmScores(highchart, url, is_spatial);
+        //initAlgorithmScores(highchart, url, is_spatial);
     };
     return {
         init: function (html_id, url, is_spatial) {

@@ -6,15 +6,24 @@ from vadetisweb.parameters import *
 from .helper_function_utils import *
 
 
-def get_detection_choices(dataset):
+def get_detection_choices(dataset, with_empty=True):
     empty_choice = ('', '----')
     if dataset is not None:
         if dataset.is_spatial():
-            return (empty_choice,) + ANOMALY_DETECTION_ALGORITHMS
+            if with_empty:
+                return (empty_choice,) + ANOMALY_DETECTION_ALGORITHMS
+            else:
+                return ANOMALY_DETECTION_ALGORITHMS
         else:
-            return (empty_choice,) + ANOMALY_DETECTION_ALGORITHMS_NON_SPATIAL
+            if with_empty:
+                return (empty_choice,) + ANOMALY_DETECTION_ALGORITHMS_NON_SPATIAL
+            else:
+                return ANOMALY_DETECTION_ALGORITHMS_NON_SPATIAL
     else:
-        return empty_choice
+        if with_empty:
+            return empty_choice
+        else:
+            raise ValueError('Could not determine supported outlier algorithms.')
 
 
 def _add(x, y):
