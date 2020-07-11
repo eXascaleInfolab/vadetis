@@ -1,5 +1,17 @@
 "use strict";
 
+/**
+ * algorithm names must be equal as on the server side
+ */
+const lisaPearson = 'LISA (Pearson)';
+const lisaDtw = 'LISA (DTW with Pearson)';
+const lisaSpatial = 'LISA (Spatial)';
+const rpca = 'RPCA (Huber Loss Function)';
+const histogram = 'Histogram';
+const clusterGaussianMixture = 'Cluster (Gaussian Mixture)';
+const svm = 'SVM';
+const isolationForest = 'Isolation Forest';
+
 function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
@@ -199,20 +211,31 @@ function printFormErrors(form_errors) {
 }
 
 function getAlgorithms(is_spatial) {
-    /**
-     * algorithm names must be equal as on the server side
-     */
-    var lisaPearson = 'LISA (Pearson)'
-    var lisaDtw = 'LISA (DTW with Pearson)'
-    var lisaGeo = 'LISA (Geographical)'
-    var rpca = 'RPCA (Huber Loss Function)'
-    var histogram = 'Histogram'
-    var clusterGaussianMixture = 'Cluster (Gaussian Mixture)'
-    var svm = 'SVM'
-    var isolationForest = 'Isolation Forest'
+    if (is_spatial) {
+        return [lisaPearson, lisaDtw, lisaSpatial, rpca, histogram, clusterGaussianMixture, svm, isolationForest];
+    } else {
+        return [lisaPearson, lisaDtw, rpca, histogram, clusterGaussianMixture, svm, isolationForest];
+    }
+}
 
-    var spatialAlgorithms = [lisaGeo];
-    return [lisaPearson, lisaDtw, (is_spatial ? spatialAlgorithms : []), rpca, histogram, clusterGaussianMixture, svm, isolationForest];
+function getIndexForAlgorithm(algorithm) {
+    if(algorithm === lisaPearson) {
+        return 0;
+    } else if(algorithm === lisaDtw) {
+        return 1;
+    } else if(algorithm === lisaSpatial) {
+        return 2;
+    } else if(algorithm === rpca) {
+        return 3;
+    } else if(algorithm === histogram) {
+        return 4;
+    } else if(algorithm === clusterGaussianMixture) {
+        return 5;
+    } else if(algorithm === svm) {
+        return 6;
+    } else if(algorithm === isolationForest) {
+        return 7;
+    }
 }
 
 /**

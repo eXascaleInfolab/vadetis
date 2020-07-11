@@ -3,7 +3,6 @@
 var VadetisHighcharts = function () {
 
     var initHighcharts = function (html_id, url, selectedButton) {
-        var dataset_series = [];
         var settings = settingsFromCookie();
 
         Highcharts.setOptions({
@@ -121,7 +120,7 @@ var VadetisHighcharts = function () {
             exporting: {
                 enabled: false
             },
-            series: dataset_series,
+            series: [],
         });
 
         // load chart

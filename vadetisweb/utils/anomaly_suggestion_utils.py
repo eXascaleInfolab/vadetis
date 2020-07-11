@@ -6,7 +6,7 @@ def get_default_configuration(algorithm, dataset):
         return _lisa_pearson_default(dataset)
     elif algorithm == LISA_DTW_PEARSON:
         return _lisa_dtw_default(dataset)
-    elif algorithm == LISA_GEO:
+    elif algorithm == LISA_SPATIAL:
         return _lisa_geo_default(dataset)
     elif algorithm == RPCA_HUBER_LOSS:
         return _rpca_default(dataset)
@@ -38,7 +38,7 @@ def get_time_series_lisa_suggestion(dataset):
     return time_series
 
 
-def get_time_range(dataset, offset, max_range=500):
+def get_time_range(dataset, offset=0, max_range=500):
     """
     For suggestion we do not compute over the whole dataset, as we have several algorithms and each dataset could contain up to 100'000 points
     the computation would take too long. Therefore we compute for a max index range of 500 values
@@ -51,12 +51,10 @@ def get_time_range(dataset, offset, max_range=500):
     df = dataset.dataframe
     index_length = len(dataset.dataframe.index)
     if index_length <= max_range + offset:
-        if offset == 0:
-            return dt_to_unix_time_millis(df.index[0]), dt_to_unix_time_millis(df.index[-1])
-        else:
-            return dt_to_unix_time_millis(df.index[offset-1]), dt_to_unix_time_millis(df.index[-1])
+        start_index = 0 if offset == 0 else offset - 1
+        return dt_to_unix_time_millis(df.index[start_index]), dt_to_unix_time_millis(df.index[-1])
     else:
-        start_index = max_range + offset
+        start_index = max_range + offset if offset != 0 else max_range + 1
         return dt_to_unix_time_millis(df.index[-start_index]), dt_to_unix_time_millis(df.index[-1])
 
 
@@ -127,7 +125,7 @@ def _lisa_geo_default(dataset):
 
 def _rpca_default(dataset):
     training_dataset = get_training_dataset(dataset)
-    range_start, range_end = get_time_range(dataset, offset=10)
+    range_start, range_end = get_time_range(dataset)
 
     return {
         'dataset': dataset,
@@ -145,7 +143,7 @@ def _rpca_default(dataset):
 
 def _histogram_default(dataset):
     training_dataset = get_training_dataset(dataset)
-    range_start, range_end = get_time_range(dataset, offset=10)
+    range_start, range_end = get_time_range(dataset)
 
     return {
         'dataset': dataset,
@@ -161,7 +159,7 @@ def _histogram_default(dataset):
 
 def _cluster_default(dataset):
     training_dataset = get_training_dataset(dataset)
-    range_start, range_end = get_time_range(dataset, offset=10)
+    range_start, range_end = get_time_range(dataset)
 
     return {
         'dataset': dataset,
@@ -179,7 +177,7 @@ def _cluster_default(dataset):
 
 def _svm_default(dataset):
     training_dataset = get_training_dataset(dataset)
-    range_start, range_end = get_time_range(dataset, offset=10)
+    range_start, range_end = get_time_range(dataset)
 
     return {
         'dataset': dataset,
@@ -198,7 +196,7 @@ def _svm_default(dataset):
 
 def _isolation_forest_default(dataset):
     training_dataset = get_training_dataset(dataset)
-    range_start, range_end = get_time_range(dataset, offset=10)
+    range_start, range_end = get_time_range(dataset)
 
     return {
         'dataset': dataset,

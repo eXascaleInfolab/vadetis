@@ -54,7 +54,7 @@ class DetectionAlgorithmSelectionView(APIView):
                     'submit_label': 'Run',
                 }, status=status.HTTP_200_OK)
 
-            elif algorithm == LISA_GEO:
+            elif algorithm == LISA_SPATIAL:
                 return Response({
                     'dataset': dataset,
                     'formid': formid,

@@ -61,7 +61,7 @@ class SuggestionView(APIView):
                     else:
                         return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
-                elif algorithm == LISA_GEO:
+                elif algorithm == LISA_SPATIAL:
                     serializer = LisaGeoDistanceSerializer(context={'dataset_selected': dataset_id, 'dataset_series_json_required' : False, 'request': request}, data=default_configuration)
                     if serializer.is_valid():
                         info = lisa_geo_suggestion(dataset.dataframe, dataset.dataframe_class, serializer.validated_data)

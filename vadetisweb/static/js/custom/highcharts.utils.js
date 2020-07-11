@@ -26,18 +26,18 @@ function updateHighchartsSeriesForThreshold(highchart, url, post_data, callback)
             highchart.hideLoading();
             callback(dataset_series_new_json, new_info);
         },
-        error: function(data, status, xhr) {
+        error: function (data, status, xhr) {
             printMessages([{'message': "Request failed"}], "error-request");
             handleMessages(data);
         }
     });
 }
 
-function getDatasetSeriesJson(highchart){
-    var dataset_series_json = { 'series' : [] };
-    highchart.series.forEach(function(series) {
+function getDatasetSeriesJson(highchart) {
+    var dataset_series_json = {'series': []};
+    highchart.series.forEach(function (series) {
         // the series of the navigator have to be excluded
-        if(highchart.navigator !== undefined && !containsObject(series, highchart.navigator.series)) {
+        if (highchart.navigator !== undefined && !containsObject(series, highchart.navigator.series)) {
             var series_json = {};
             series_json.id = series.options.id;
             series_json.name = series.options.name;
@@ -52,9 +52,9 @@ function getDatasetSeriesJson(highchart){
     return dataset_series_json;
 }
 
-function getCleanedSeriesData(series_data){
+function getCleanedSeriesData(series_data) {
     var data = [];
-    series_data.forEach(function(point) {
+    series_data.forEach(function (point) {
         var p = _objectWithoutProperties(point, ['marker']);
         data.push(p);
     });
@@ -88,7 +88,7 @@ function updateTimeRange(highchart, form_id, rangeStartId, rangeEndId) {
     var rangeStartSelector = $('#' + rangeStartId);
     var rangeEndSelector = $('#' + rangeEndId);
     var extremes_x = highchart.xAxis[0].getExtremes();
-    var range = { min : Math.round(extremes_x.min), max : Math.round(extremes_x.max) }
+    var range = {min: Math.round(extremes_x.min), max: Math.round(extremes_x.max)}
 
     _addOrReplaceRangeInput(form_id, rangeStartSelector, rangeStartId, "range_start", range.min);
     _addOrReplaceRangeInput(form_id, rangeEndSelector, rangeEndId, "range_end", range.max);
@@ -208,15 +208,16 @@ function setSeriesData(highchart, series_data_json) {
     series_data_json.forEach(function (series) {
         var highchart_series = highchart.get(series.id);
         highchart_series.setData(series.data, false, true);
-        highchart_series.update({ custom: {
+        highchart_series.update({
+            custom: {
                 type: series.type,
                 is_spatial: series.is_spatial,
                 unit: series.unit,
                 detection: series.detection,
             }
-        });
-        if(series.dashStyle !== undefined) {
-            highchart_series.update({dashStyle: series.dashStyle});
+        }, false);
+        if (series.dashStyle !== undefined) {
+            highchart_series.update({dashStyle: series.dashStyle}, false);
         }
     });
     highchart.redraw();
@@ -363,7 +364,7 @@ function updateThreshold(thresholds, value) {
     var slider_element = $('#threshold_slider')[0]; // extracting the raw element from the jQuery object
     var threshold_input_selector = $('#threshold_value');
     // init NoUiSlider if required
-    if(!slider_element.noUiSlider) {
+    if (!slider_element.noUiSlider) {
         var min = thresholds[0], max = thresholds[thresholds.length - 1]
         NoUiSliders.init(slider_element, threshold_input_selector, min, max);
     }
@@ -373,7 +374,7 @@ function updateThreshold(thresholds, value) {
 
 function requestCnfMatrix(portlet_id, img_container_id, info) {
     // note: url is taken from global const
-    var cnf_data = { 'cnf' : JSON.stringify(info.cnf_matrix) };
+    var cnf_data = {'cnf': JSON.stringify(info.cnf_matrix)};
     loadImage(img_container_id, cnf_url, cnf_data, function () {
         $('#' + portlet_id).show();
     });
@@ -385,17 +386,50 @@ function requestPlot(portlet_id, img_container_id, thresholds, threshold_scores)
         thresholds: thresholds,
         threshold_scores: threshold_scores
     };
-    var plotData = {'plot_data' : JSON.stringify(plot_data) };
+    var plotData = {'plot_data': JSON.stringify(plot_data)};
     loadImage(img_container_id, plot_url, plotData, function () {
         $('#' + portlet_id).show();
     });
 }
 
+function setColumnSeriesData(highchart, data) {
+    var highchart_series = highchart.get(series.id);
+    highchart_series.setData(data, false, true);
+}
+
+function addColumnSeries(highchart, algorithm, data) {
+    highchart.addSeries({
+        name: algorithm,
+        data: data,
+        index: getIndexForAlgorithm(algorithm),
+    });
+
+    // reindex order
+    highchart.series.forEach(function (series) {
+        var index = getIndexForAlgorithm(series.name);
+
+        console.log("name " + series.name);
+        console.log("index " + index);
+
+        series.update({index: index}, false);
+    });
+    highchart.redraw();
+}
+
 function initAlgorithmScores(highchart, url, is_spatial) {
+    var settings = settingsFromCookie();
+    var round_digits = settings.round_digits;
     var algorithms = getAlgorithms(is_spatial);
     algorithms.forEach(a => {
-        loadSuggestion(url, a, function () {
-            console.log('loaded');
+        loadSuggestion(url, a, function (data) {
+            var info = data['info'];
+            var series_data = [
+                parseFloat((info.accuracy * 100).toFixed(round_digits)),
+                parseFloat((info.f1_score * 100).toFixed(round_digits)),
+                parseFloat((info.precision * 100).toFixed(round_digits)),
+                parseFloat((info.recall * 100).toFixed(round_digits)),
+            ];
+            addColumnSeries(highchart, a, series_data);
         })
     });
 }
@@ -416,11 +450,10 @@ function loadSuggestion(url, algorithm, callback) {
         contentType: false,
         success: function (data, status, xhr) {
             handleMessages(data);
-            callback();
+            callback(data);
         },
         error: function (data, status, xhr) {
             handleMessages(data);
-            callback();
         }
     });
 }
