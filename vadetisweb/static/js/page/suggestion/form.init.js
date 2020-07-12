@@ -69,6 +69,7 @@ var DatasetSuggestionForm = function () {
                             suggestions.forEach(s => {
                                 var info = s.info;
                                 var responseAlgorithm = s.algorithm;
+                                var maximizedScore = s.maximize_score;
                                 var series_data = [
                                     parseFloat((info.accuracy * 100).toFixed(round_digits)),
                                     parseFloat((info.f1_score * 100).toFixed(round_digits)),
@@ -77,9 +78,14 @@ var DatasetSuggestionForm = function () {
                                 ];
                                 var existingSeries = getSeriesByName(highchart, responseAlgorithm);
                                 if(existingSeries !== undefined) {
+                                    existingSeries.update({
+                                        custom: {
+                                            maximize_score: maximizedScore,
+                                        }
+                                    }, false);
                                     existingSeries.setData(series_data, true, true);
                                 } else {
-                                    addColumnSeries(highchart, s.algorithm, series_data);
+                                    addColumnSeries(highchart, responseAlgorithm, maximizedScore, series_data);
                                 }
                             });
                         },
@@ -89,6 +95,7 @@ var DatasetSuggestionForm = function () {
                                 highchart.hideLoading();
                                 $(":submit").attr("disabled", false);
                             }
+                            // todo add legend
                         });
                 }
             }

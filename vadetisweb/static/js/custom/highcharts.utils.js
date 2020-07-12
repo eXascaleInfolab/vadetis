@@ -397,11 +397,14 @@ function setColumnSeriesData(highchart, data) {
     highchart_series.setData(data, false, true);
 }
 
-function addColumnSeries(highchart, algorithm, data) {
+function addColumnSeries(highchart, algorithm, maximize_score, data) {
     highchart.addSeries({
         name: algorithm,
         data: data,
         index: getIndexForAlgorithm(algorithm),
+        custom: {
+            maximize_score: maximize_score
+        }
     });
 
     // reindex order
@@ -423,44 +426,44 @@ function getSeriesByName(highchart, name) {
     return undefined;
 }
 
-function initAlgorithmScores(highchart, url, is_spatial) {
-    var settings = settingsFromCookie();
-    var round_digits = settings.round_digits;
-    var algorithms = getAlgorithms(is_spatial);
-    algorithms.forEach(a => {
-        loadSuggestion(url, a, function (data) {
-            var info = data['info'];
-            var series_data = [
-                parseFloat((info.accuracy * 100).toFixed(round_digits)),
-                parseFloat((info.f1_score * 100).toFixed(round_digits)),
-                parseFloat((info.precision * 100).toFixed(round_digits)),
-                parseFloat((info.recall * 100).toFixed(round_digits)),
-            ];
-            addColumnSeries(highchart, a, series_data);
-        })
-    });
-}
-
-function loadSuggestion(url, algorithm, callback) {
-    var formData = new FormData(), csrfToken = Cookies.get('csrftoken');
-    formData.append("algorithm", algorithm);
-    $.ajax({
-        beforeSend: function (xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrfToken);
-            }
-        },
-        type: "POST",
-        url: url,
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function (data, status, xhr) {
-            handleMessages(data);
-            callback(data);
-        },
-        error: function (data, status, xhr) {
-            handleMessages(data);
-        }
-    });
-}
+// function initAlgorithmScores(highchart, url, is_spatial) {
+//     var settings = settingsFromCookie();
+//     var round_digits = settings.round_digits;
+//     var algorithms = getAlgorithms(is_spatial);
+//     algorithms.forEach(a => {
+//         loadSuggestion(url, a, function (data) {
+//             var info = data['info'];
+//             var series_data = [
+//                 parseFloat((info.accuracy * 100).toFixed(round_digits)),
+//                 parseFloat((info.f1_score * 100).toFixed(round_digits)),
+//                 parseFloat((info.precision * 100).toFixed(round_digits)),
+//                 parseFloat((info.recall * 100).toFixed(round_digits)),
+//             ];
+//             addColumnSeries(highchart, a, series_data);
+//         })
+//     });
+// }
+//
+// function loadSuggestion(url, algorithm, callback) {
+//     var formData = new FormData(), csrfToken = Cookies.get('csrftoken');
+//     formData.append("algorithm", algorithm);
+//     $.ajax({
+//         beforeSend: function (xhr, settings) {
+//             if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+//                 xhr.setRequestHeader("X-CSRFToken", csrfToken);
+//             }
+//         },
+//         type: "POST",
+//         url: url,
+//         data: formData,
+//         processData: false,
+//         contentType: false,
+//         success: function (data, status, xhr) {
+//             handleMessages(data);
+//             callback(data);
+//         },
+//         error: function (data, status, xhr) {
+//             handleMessages(data);
+//         }
+//     });
+// }

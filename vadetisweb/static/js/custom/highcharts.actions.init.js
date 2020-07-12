@@ -6,6 +6,26 @@ var clearInserted = function () {
     $('#score_portlets').empty();
 }
 
+var VadetisHighchartsClear = function () {
+    var init = function (highcharts_container_id, button_id, callback) {
+        var button = $("#" + button_id), highchart = $("#" + highcharts_container_id).highcharts();
+
+        button.click(function (event) {
+            event.preventDefault();
+            while (highchart.series.length > 0) {
+                highchart.series[0].remove(false);
+            }
+            highchart.redraw();
+            callback();
+        });
+    };
+    return {
+        init: function (highcharts_container_id, button_id, callback) {
+            init(highcharts_container_id, button_id, callback);
+        }
+    };
+}();
+
 var VadetisHighchartsReset = function () {
 
     var init = function (highcharts_container_id, button_id, url, callback) {
@@ -79,7 +99,7 @@ var VadetisHighchartsFileDownload = function () {
             event.preventDefault();
             if (!isLoading) {
                 button.addClass('disabled');
-                downloadDataset(highchart, url, type,function () {
+                downloadDataset(highchart, url, type, function () {
                     isLoading = false;
                     button.removeClass('disabled');
                 });

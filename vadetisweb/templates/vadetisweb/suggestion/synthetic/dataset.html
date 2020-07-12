@@ -36,6 +36,7 @@
                     </div>
                     <div class="kt-portlet__head-toolbar">
                         <div id="highcharts_head_actions" class="kt-portlet__head-actions">
+                            <a id="clear_chart_btn" href="#" class="btn btn-outline-brand btn-bold btn-sm">Clear</a>
                             <div class="dropdown dropdown-inline">
                                 <a href="#" class="btn btn-outline-brand btn-icon btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="mdi mdi-18px mdi-dots-horizontal"></i>
@@ -81,6 +82,7 @@
     <script src="{% static 'js/lib/highcharts/highstock.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/lib/highcharts/modules/no-data-to-display.js' %}"></script>
     <script src="{% static 'js/custom/highcharts.utils.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/custom/highcharts.actions.init.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/custom/highcharts.column.view.init.js' %}" type="text/javascript"></script>
     <!-- page init -->
     <script src="{% static 'js/page/suggestion/form.init.js' %}" type="text/javascript"></script>
@@ -88,7 +90,7 @@
     <script type="text/javascript">
         jQuery(document).ready(function () {
             DatasetSuggestionForm.init("suggestion_form");
-            DatasetSuggestionPage.init();
+            DatasetSuggestionPage.init("clear_chart_btn");
         });
     </script>
 {% endblock %}
