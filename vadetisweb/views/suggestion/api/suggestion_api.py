@@ -51,49 +51,49 @@ class SuggestionView(APIView):
                         serializer = LisaPearsonSerializer(context={'dataset_selected': dataset_id, 'dataset_series_json_required' : False, 'request': request}, data=default_configuration)
                         if serializer.is_valid():
                             info = lisa_pearson_suggestion(dataset.dataframe, dataset.dataframe_class, serializer.validated_data)
-                            data['suggestions'].append({ 'algorithm' : algorithm, 'maximize_score' : maximize_score, 'info' : info })
+                            data['suggestions'].append({ 'algorithm' : algorithm, 'info' : info , 'conf' : serializer.data})
 
                     elif algorithm == LISA_DTW_PEARSON:
                         serializer = LisaDtwPearsonSerializer(context={'dataset_selected': dataset_id, 'dataset_series_json_required' : False, 'request': request}, data=default_configuration)
                         if serializer.is_valid():
                             info = lisa_dtw_suggestion(dataset.dataframe, dataset.dataframe_class, serializer.validated_data)
-                            data['suggestions'].append({ 'algorithm' : algorithm, 'maximize_score' : maximize_score, 'info' : info })
+                            data['suggestions'].append({ 'algorithm' : algorithm, 'info' : info , 'conf' : serializer.data})
 
                     elif algorithm == LISA_SPATIAL:
                         serializer = LisaGeoDistanceSerializer(context={'dataset_selected': dataset_id, 'dataset_series_json_required' : False, 'request': request}, data=default_configuration)
                         if serializer.is_valid():
                             info = lisa_geo_suggestion(dataset.dataframe, dataset.dataframe_class, serializer.validated_data)
-                            data['suggestions'].append({ 'algorithm' : algorithm, 'maximize_score' : maximize_score, 'info' : info })
+                            data['suggestions'].append({ 'algorithm' : algorithm, 'info' : info , 'conf' : serializer.data})
 
                     elif algorithm == RPCA_HUBER_LOSS:
                         serializer = RPCAMEstimatorLossSerializer(context={'dataset_selected': dataset_id, 'dataset_series_json_required' : False, 'request': request}, data=default_configuration)
                         if serializer.is_valid():
                             info = rpca_suggestion(dataset.dataframe, dataset.dataframe_class, serializer.validated_data)
-                            data['suggestions'].append({ 'algorithm' : algorithm, 'maximize_score' : maximize_score, 'info' : info })
+                            data['suggestions'].append({ 'algorithm' : algorithm, 'info' : info , 'conf' : serializer.data})
 
                     elif algorithm == HISTOGRAM:
                         serializer = HistogramSerializer(context={'dataset_selected': dataset_id, 'dataset_series_json_required' : False, 'request': request}, data=default_configuration)
                         if serializer.is_valid():
                             info = histogram_suggestion(dataset.dataframe, dataset.dataframe_class, serializer.validated_data)
-                            data['suggestions'].append({ 'algorithm' : algorithm, 'maximize_score' : maximize_score, 'info' : info })
+                            data['suggestions'].append({ 'algorithm' : algorithm, 'info' : info , 'conf' : serializer.data})
 
                     elif algorithm == CLUSTER_GAUSSIAN_MIXTURE:
                         serializer = ClusterSerializer(context={'dataset_selected': dataset_id, 'dataset_series_json_required' : False, 'request': request}, data=default_configuration)
                         if serializer.is_valid():
                             info = cluster_suggestion(dataset.dataframe, dataset.dataframe_class, serializer.validated_data)
-                            data['suggestions'].append({ 'algorithm' : algorithm, 'maximize_score' : maximize_score, 'info' : info })
+                            data['suggestions'].append({ 'algorithm' : algorithm, 'info' : info , 'conf' : serializer.data})
 
                     elif algorithm == SVM:
                         serializer = SVMSerializer(context={'dataset_selected': dataset_id, 'dataset_series_json_required' : False, 'request': request}, data=default_configuration)
                         if serializer.is_valid():
                             info = svm_suggestion(dataset.dataframe, dataset.dataframe_class, serializer.validated_data)
-                            data['suggestions'].append({ 'algorithm' : algorithm, 'maximize_score' : maximize_score, 'info' : info })
+                            data['suggestions'].append({ 'algorithm' : algorithm, 'info' : info , 'conf' : serializer.data})
 
                     elif algorithm == ISOLATION_FOREST:
                         serializer = IsolationForestSerializer(context={'dataset_selected': dataset_id, 'dataset_series_json_required' : False, 'request': request}, data=default_configuration)
                         if serializer.is_valid():
                             info = isolation_forest_suggestion(dataset.dataframe, dataset.dataframe_class, serializer.validated_data)
-                            data['suggestions'].append({ 'algorithm' : algorithm, 'maximize_score' : maximize_score, 'info' : info })
+                            data['suggestions'].append({ 'algorithm' : algorithm, 'info' : info , 'conf' : serializer.data})
 
                 except Exception as e:
                     logging.error(e)

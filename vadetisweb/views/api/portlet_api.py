@@ -144,7 +144,7 @@ class SuggestionPortlet(APIView):
             return Response({
                 'id': validated_data['id'],
                 'title': validated_data['title'],
-                'maximized_score': validated_data['maximized_score'],
+                'conf': validated_data['conf'],
                 'threshold': threshold,
                 'img_1_id': validated_data['img_1_id'],
                 'img_2_id': validated_data['img_2_id'],

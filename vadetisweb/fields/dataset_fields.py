@@ -95,3 +95,6 @@ class DatasetJsonField(serializers.JSONField):
             },
             'required': ['series']
         }
+
+    def __init__(self, **kwargs):
+        super(DatasetJsonField, self).__init__(**kwargs)

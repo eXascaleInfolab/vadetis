@@ -7,11 +7,11 @@ var DatasetSuggestionForm = function () {
         requestPlot(portlet_id, portlet_id + "_plot", info.thresholds, info.detection_threshold_scores);
     }
 
-    var requestSuggestionPortlet = function (portlet_url, portlet_id, title, maximized_score, threshold, callback) {
+    var requestSuggestionPortlet = function (portlet_url, portlet_id, title, conf, threshold, callback) {
         var data = {
             id: portlet_id,
             title: title,
-            maximized_score: maximized_score,
+            conf: JSON.stringify(conf),
             threshold: threshold,
             img_1_id: portlet_id + "_cnf",
             img_2_id: portlet_id + "_plot",
@@ -31,7 +31,7 @@ var DatasetSuggestionForm = function () {
             enctype: "multipart/form-data",
             success: function(data, status, xhr) {
                 var column = '<div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">' + data + '</div>';
-                $('#suggestion_portlets').append(column);
+                $('#suggestion_portlets').prepend(column);
                 callback();
             },
             error: function (data, status, xhr) {
@@ -108,7 +108,8 @@ var DatasetSuggestionForm = function () {
                             suggestions.forEach(s => {
                                 var info = s.info;
                                 var responseAlgorithm = s.algorithm;
-                                var maximizedScore = s.maximize_score;
+                                var conf = s.conf;
+                                var maximizedScore = conf.maximize_score;
                                 var series_data = [
                                     parseFloat((info.accuracy * 100).toFixed(round_digits)),
                                     parseFloat((info.f1_score * 100).toFixed(round_digits)),
@@ -129,17 +130,14 @@ var DatasetSuggestionForm = function () {
 
                                 var portlet_id = makeHtmlId(responseAlgorithm);
                                 if($('#' + portlet_id).length > 0) {
-                                    $('#' + portlet_id + '_maximized_score').html(maximizedScore);
-                                    $('#' + portlet_id + '_threshold').html(info.threshold.toFixed(round_digits));
-                                    loadImages(portlet_id, info);
-                                } else {
-                                    requestSuggestionPortlet(suggestion_portlet_url, portlet_id, responseAlgorithm, maximizedScore, info.threshold,
-                                        function () {
-                                            KTApp.initPortlets();
-                                            KTApp.initTooltips();
-                                            loadImages(portlet_id, info);
-                                        });
+                                    $('#' + portlet_id).remove();
                                 }
+                                requestSuggestionPortlet(suggestion_portlet_url, portlet_id, responseAlgorithm, conf, info.threshold,
+                                    function () {
+                                        KTApp.initPortlets();
+                                        KTApp.initTooltips();
+                                        loadImages(portlet_id, info);
+                                    });
                             });
                         },
                         function () {

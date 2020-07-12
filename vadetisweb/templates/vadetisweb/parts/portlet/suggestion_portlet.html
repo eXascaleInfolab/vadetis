@@ -18,13 +18,19 @@
                 <table class="table table-sm table-head-bg-brand">
                 <thead class="thead-inverse">
                     <tr>
-                        <th>Maximize Score</th>
-                        <th>Selected Threshold</th>
+                        <th>Setting</th>
+                        <th>Value</th>
                     </tr>
                 </thead>
                 <tbody>
+                {% for key, value in conf.items %}
                     <tr>
-                        <td id="{{ id }}_maximized_score">{{ maximized_score }}</td>
+                        <td>{{ key }}</td>
+                        <td{% if key == 'maximize_score' %} id="{{ id }}_maximized_score"{% endif %}>{{ value }}</td>
+                    </tr>
+                {% endfor %}
+                    <tr>
+                        <td>Threshold</td>
                         <td id="{{ id }}_threshold">{{ threshold }}</td>
                     </tr>
                 </tbody>
