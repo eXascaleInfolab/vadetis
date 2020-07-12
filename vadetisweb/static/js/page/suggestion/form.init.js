@@ -8,9 +8,7 @@ var DatasetSuggestionForm = function () {
     }
 
     var requestRecommendationPortlet = function (portlet_url, portlet_id, callback) {
-        var highchart = $('#highcharts_container').highcharts();
-        var scores = getScoresFromColumnChart(highchart);
-        console.log(scores);
+        var highchart = $('#highcharts_container').highcharts(), scores = getScoresFromColumnChart(highchart);
         if ($("#" + portlet_id).length === 0) {
             var data = {
                 id: portlet_id,
@@ -30,8 +28,7 @@ var DatasetSuggestionForm = function () {
                 type: 'POST',
                 enctype: "multipart/form-data",
                 success: function (data, status, xhr) {
-                    $('#form_portlets').append(data);
-                    callback();
+                    callback(data);
                 },
                 error: function (data, status, xhr) {
                     printMessages([{'message': "Request failed: Could not request rendered HTML."}], "error-request");
@@ -187,7 +184,12 @@ var DatasetSuggestionForm = function () {
                             if (numResponses === numRequests) {
                                 highchart.hideLoading();
                                 $(":submit").attr("disabled", false);
-                                requestRecommendationPortlet(recommendation_portlet_url, "recommendation_portlet");
+                                requestRecommendationPortlet(recommendation_portlet_url, "recommendation_portlet", function (data) {
+                                    $('#recommendation_portlet').remove();
+                                    $('#form_portlets').append(data);
+                                    KTApp.initPortlet();
+                                    KTApp.initTooltips();
+                                });
                             }
                         });
                 }

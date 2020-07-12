@@ -12,22 +12,71 @@
     </div>
     <div class="kt-portlet__body kt-portlet__body--fit">
         <div class="kt-padding-25">
-            {% with recommendation|get_item:'f1_score' as f1_score %}
-                <p>The best overall <strong>F1-Score</strong> is achieved with <strong>{{ f1_score|get_item:'algorithm' }}</strong> at a score of
-                    <strong>{{ f1_score|get_item:'score' }}</strong>.</p>
+            {% with recommendation|get_item:'f1_scores' as f1_scores %}
+                <p>The best overall <strong>F1-Score</strong> is achieved with
+                    {% for f1_score in f1_scores %}
+                        {% if f1_scores|length > 1 %}
+                            {% if forloop.last %}and {% else %}{% if forloop.first %}{% else %}, {% endif %}{% endif %}
+                        {% endif %}
+                    <strong>{{ f1_score|get_item:'algorithm' }}</strong> at a score of
+                    <strong>{{ f1_score|get_item:'f1_score' }}</strong>{% endfor %}.
+                </p>
             {% endwith %}
 
-            {% with recommendation|get_item:'accuracy' as accuracy %}
-                <p><strong>{{ accuracy|get_item:'algorithm' }}</strong> provides highest <strong>Accuracy</strong> with a score of
-                    <strong>{{ accuracy|get_item:'score' }}</strong>.</p>
+            {% with recommendation|get_item:'accuracies' as accuracies %}
+                <table class="table table-xs table-head-bg-brand">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th>Highest Accuracy</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for accuracy in accuracies %}
+                        <tr>
+                            <td>{{ accuracy|get_item:'algorithm' }}</td>
+                            <td>{{ accuracy|get_item:'accuracy' }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             {% endwith %}
-            {% with recommendation|get_item:'precision' as precision %}
-                <p><strong>{{ precision|get_item:'algorithm' }}</strong> provides highest <strong>Precision</strong> with a score of
-                    <strong>{{ precision|get_item:'score' }}</strong>.</p>
+
+            {% with recommendation|get_item:'precisions' as precisions %}
+                <table class="table table-xs table-head-bg-brand">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th>Highest Precision</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for precision in precisions %}
+                        <tr>
+                            <td>{{ precision|get_item:'algorithm' }}</td>
+                            <td>{{ precision|get_item:'precision' }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             {% endwith %}
-            {% with recommendation|get_item:'recall' as recall %}
-                <p><strong>{{ recall|get_item:'algorithm' }}</strong> provides highest <strong>Recall</strong> with a score of
-                    <strong>{{ recall|get_item:'score' }}</strong>.</p>
+            {% with recommendation|get_item:'recalls' as recalls %}
+                <table class="table table-xs table-head-bg-brand">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th>Highest Recall</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for recall in recalls %}
+                        <tr>
+                            <td>{{ recall|get_item:'algorithm' }}</td>
+                            <td>{{ recall|get_item:'recall' }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             {% endwith %}
         </div>
     </div>

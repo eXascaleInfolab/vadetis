@@ -6,29 +6,23 @@ from vadetisweb.models import *
 
 def get_recommendation(scores):
 
-    best_f1_score = {'algorithm': None, 'score': None}
-    best_accuracy = {'algorithm': None, 'score': None}
-    best_precision = {'algorithm': None, 'score': None}
-    best_recall = {'algorithm': None, 'score': None}
+    entries = scores['scores']
+    max_f1_score = max([x['f1_score'] for x in entries])
+    max_accuracy = max([x['accuracy'] for x in entries])
+    max_precision = max([x['precision'] for x in entries])
+    max_recall = max([x['recall'] for x in entries])
 
-    for score in scores['scores']:
-        _check_recommendation(best_f1_score, score['algorithm'], score['f1_score'])
-        _check_recommendation(best_accuracy, score['algorithm'], score['accuracy'])
-        _check_recommendation(best_precision, score['algorithm'], score['precision'])
-        _check_recommendation(best_recall, score['algorithm'], score['recall'])
+    best_f1_scores = [item for item in entries if item['f1_score'] == max_f1_score]
+    best_accuracies = [item for item in entries if item['accuracy'] == max_accuracy]
+    best_precisions = [item for item in entries if item['precision'] == max_precision]
+    best_recalls = [item for item in entries if item['recall'] == max_recall]
 
     return {
-        'f1_score': best_f1_score,
-        'accuracy': best_accuracy,
-        'precision': best_precision,
-        'recall': best_recall,
+        'f1_scores': best_f1_scores,
+        'accuracies': best_accuracies,
+        'precisions': best_precisions,
+        'recalls': best_recalls,
     }
-
-
-def _check_recommendation(recommendation, algorithm, score):
-    if recommendation['score'] is None or recommendation['score'] < score:
-        recommendation['algorithm'] = algorithm
-        recommendation['score'] = score
 
 
 def get_transformed_conf(conf):
