@@ -88,7 +88,7 @@
     <script type="text/javascript">
         jQuery(document).ready(function () {
             DatasetSuggestionForm.init("suggestion_form");
-            DatasetSuggestionPage.init("{% url 'vadetisweb:suggestion_scores' dataset_id=dataset.id %}", {{ dataset|is_spatial|yesno:"true,false" }});
+            DatasetSuggestionPage.init();
         });
     </script>
 {% endblock %}

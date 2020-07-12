@@ -2,10 +2,11 @@
 
 var DatasetSuggestionForm = function () {
 
-    var submitSingleSuggestion = function (url, action, method, enctype, algorithm, callbackData, callback) {
+    var submitSingleSuggestion = function (url, action, method, enctype, algorithm, maximizeScore, callbackData, callback) {
         var csrftoken = Cookies.get('csrftoken');
         var formData = new FormData();
         formData.append('algorithm', algorithm);
+        formData.append('maximize_score', maximizeScore);
         $.ajax({
             beforeSend: function (xhr, settings) {
                 if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -27,7 +28,7 @@ var DatasetSuggestionForm = function () {
             error: function (data, status, xhr) {
                 printMessages([{'message': "Request failed: Could not request suggestions."}], "error-request");
                 handleMessages(data);
-                callback_fail();
+                callback();
             }
         });
     }
@@ -50,14 +51,20 @@ var DatasetSuggestionForm = function () {
             var round_digits = settings.round_digits;
 
             // Iterate through values and send each as own request
-            var entries = formData.entries();
             var numRequests = Array.from(formData.entries()).filter(array => array[0] === 'algorithm').length;
             var numResponses = 0;
-            for (var pair of entries) {
+            var maximizeScore = 'F1-Score';
+            for (var entry of formData.entries()) {
+                var entryKey = entry[0];
+                if (entryKey === 'maximize_score') {
+                    maximizeScore = entry[1];
+                }
+            }
+            for (var pair of formData.entries()) {
                 var key = pair[0];
                 var algorithm = pair[1];
                 if (key === 'algorithm') {
-                    submitSingleSuggestion(url, action, method, enctype, algorithm, function (data) {
+                    submitSingleSuggestion(url, action, method, enctype, algorithm, maximizeScore, function (data) {
                             var suggestions = data.suggestions
                             suggestions.forEach(s => {
                                 var info = s.info;

@@ -2,9 +2,7 @@
 
 var VadetisColumnHighcharts = function () {
 
-    var initHighcharts = function (html_id, url, is_spatial) {
-        var dataset_series = [];
-        var settings = settingsFromCookie();
+    var initHighcharts = function (html_id) {
 
         Highcharts.setOptions({
             global: {
@@ -70,12 +68,10 @@ var VadetisColumnHighcharts = function () {
             series: []
         });
 
-        // load chart
-        //initAlgorithmScores(highchart, url, is_spatial);
     };
     return {
-        init: function (html_id, url, is_spatial) {
-            initHighcharts(html_id, url, is_spatial);
+        init: function (html_id) {
+            initHighcharts(html_id);
         }
     };
 }();

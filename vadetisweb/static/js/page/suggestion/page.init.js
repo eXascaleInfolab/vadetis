@@ -3,13 +3,13 @@
 var DatasetSuggestionPage = function () {
 
     // private
-    var init = function (url, is_spatial) {
-        VadetisColumnHighcharts.init("highcharts_container", url, is_spatial);
+    var init = function (url) {
+        VadetisColumnHighcharts.init("highcharts_container");
     }
     return {
         // public
-        init: function(url, is_spatial) {
-            init(url, is_spatial);
+        init: function(url) {
+            init(url);
         }
     };
 }();

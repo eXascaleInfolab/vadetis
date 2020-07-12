@@ -41,10 +41,10 @@ class SuggestionView(APIView):
 
         if serializer.is_valid():
             algorithms = serializer.validated_data['algorithm']
-
+            maximize_score = serializer.validated_data['maximize_score']
             data = { 'suggestions' : [] }
             for algorithm in algorithms:
-                default_configuration = get_default_configuration(algorithm, dataset)
+                default_configuration = get_default_configuration(algorithm, maximize_score, dataset)
 
                 try:
                     if algorithm == LISA_PEARSON:

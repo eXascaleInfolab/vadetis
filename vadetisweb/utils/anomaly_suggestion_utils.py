@@ -1,23 +1,24 @@
 from vadetisweb.parameters import *
 from vadetisweb.utils.date_utils import dt_to_unix_time_millis
 
-def get_default_configuration(algorithm, dataset):
+
+def get_default_configuration(algorithm, maximize_score, dataset):
     if algorithm == LISA_PEARSON:
-        return _lisa_pearson_default(dataset)
+        return _lisa_pearson_default(maximize_score, dataset)
     elif algorithm == LISA_DTW_PEARSON:
-        return _lisa_dtw_default(dataset)
+        return _lisa_dtw_default(maximize_score, dataset)
     elif algorithm == LISA_SPATIAL:
-        return _lisa_geo_default(dataset)
+        return _lisa_geo_default(maximize_score, dataset)
     elif algorithm == RPCA_HUBER_LOSS:
-        return _rpca_default(dataset)
+        return _rpca_default(maximize_score, dataset)
     elif algorithm == HISTOGRAM:
-        return _histogram_default(dataset)
+        return _histogram_default(maximize_score, dataset)
     elif algorithm == CLUSTER_GAUSSIAN_MIXTURE:
-        return _cluster_default(dataset)
+        return _cluster_default(maximize_score, dataset)
     elif algorithm == SVM:
-        return _svm_default(dataset)
+        return _svm_default(maximize_score, dataset)
     elif algorithm == ISOLATION_FOREST:
-        return _isolation_forest_default(dataset)
+        return _isolation_forest_default(maximize_score, dataset)
 
 
 def get_time_series_lisa_suggestion(dataset):
@@ -76,7 +77,7 @@ def get_training_dataset(dataset):
     return selected_training_dataset
 
 
-def _lisa_pearson_default(dataset):
+def _lisa_pearson_default(maximize_score, dataset):
     time_series = get_time_series_lisa_suggestion(dataset)
     range_start, range_end = get_time_range(dataset, offset=10)
 
@@ -86,13 +87,13 @@ def _lisa_pearson_default(dataset):
         'window_size': 10,
         'normalize': True,
         'time_range': TIME_RANGE_SELECTION,
-        'maximize_score': F1_SCORE,
+        'maximize_score': maximize_score,
         'range_start': range_start,
         'range_end': range_end
     }
 
 
-def _lisa_dtw_default(dataset):
+def _lisa_dtw_default(maximize_score, dataset):
     time_series = get_time_series_lisa_suggestion(dataset)
     range_start, range_end = get_time_range(dataset, offset=10)
 
@@ -103,13 +104,13 @@ def _lisa_dtw_default(dataset):
         'dtw_distance_function': EUCLIDEAN,
         'normalize': True,
         'time_range': TIME_RANGE_SELECTION,
-        'maximize_score': F1_SCORE,
+        'maximize_score': maximize_score,
         'range_start': range_start,
         'range_end': range_end
     }
 
 
-def _lisa_geo_default(dataset):
+def _lisa_geo_default(maximize_score, dataset):
     time_series = get_time_series_lisa_suggestion(dataset)
     range_start, range_end = get_time_range(dataset, offset=10)
 
@@ -117,13 +118,13 @@ def _lisa_geo_default(dataset):
         'dataset': dataset,
         'time_series': time_series.id,
         'time_range': TIME_RANGE_SELECTION,
-        'maximize_score': F1_SCORE,
+        'maximize_score': maximize_score,
         'range_start': range_start,
         'range_end': range_end
     }
 
 
-def _rpca_default(dataset):
+def _rpca_default(maximize_score, dataset):
     training_dataset = get_training_dataset(dataset)
     range_start, range_end = get_time_range(dataset)
 
@@ -135,13 +136,13 @@ def _rpca_default(dataset):
         'train_size': 0.5,
         'random_seed': 10,
         'time_range': TIME_RANGE_SELECTION,
-        'maximize_score': F1_SCORE,
+        'maximize_score': maximize_score,
         'range_start': range_start,
         'range_end': range_end
     }
 
 
-def _histogram_default(dataset):
+def _histogram_default(maximize_score, dataset):
     training_dataset = get_training_dataset(dataset)
     range_start, range_end = get_time_range(dataset)
 
@@ -151,13 +152,13 @@ def _histogram_default(dataset):
         'train_size': 0.5,
         'random_seed': 10,
         'time_range': TIME_RANGE_SELECTION,
-        'maximize_score': F1_SCORE,
+        'maximize_score': maximize_score,
         'range_start': range_start,
         'range_end': range_end
     }
 
 
-def _cluster_default(dataset):
+def _cluster_default(maximize_score, dataset):
     training_dataset = get_training_dataset(dataset)
     range_start, range_end = get_time_range(dataset)
 
@@ -169,13 +170,13 @@ def _cluster_default(dataset):
         'train_size': 0.5,
         'random_seed': 10,
         'time_range': TIME_RANGE_SELECTION,
-        'maximize_score': F1_SCORE,
+        'maximize_score': maximize_score,
         'range_start': range_start,
         'range_end': range_end
     }
 
 
-def _svm_default(dataset):
+def _svm_default(maximize_score, dataset):
     training_dataset = get_training_dataset(dataset)
     range_start, range_end = get_time_range(dataset)
 
@@ -188,13 +189,13 @@ def _svm_default(dataset):
         'train_size': 0.5,
         'random_seed': 10,
         'time_range': TIME_RANGE_SELECTION,
-        'maximize_score': F1_SCORE,
+        'maximize_score': maximize_score,
         'range_start': range_start,
         'range_end': range_end
     }
 
 
-def _isolation_forest_default(dataset):
+def _isolation_forest_default(maximize_score, dataset):
     training_dataset = get_training_dataset(dataset)
     range_start, range_end = get_time_range(dataset)
 
@@ -206,7 +207,7 @@ def _isolation_forest_default(dataset):
         'train_size': 0.5,
         'random_seed': 10,
         'time_range': TIME_RANGE_SELECTION,
-        'maximize_score': F1_SCORE,
+        'maximize_score': maximize_score,
         'range_start': range_start,
         'range_end': range_end
     }
