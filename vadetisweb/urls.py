@@ -97,6 +97,7 @@ urlpatterns = apipatterns + [
     path('account/', views.account, name='account'),
 
 
+    path('faq/', views.faq, name='faq'),
     path('about/', views.about, name='about'),
     path('', views.index, name='index'),
 ]
