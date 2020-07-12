@@ -67,7 +67,12 @@ var DatasetSuggestionForm = function () {
                                     parseFloat((info.precision * 100).toFixed(round_digits)),
                                     parseFloat((info.recall * 100).toFixed(round_digits)),
                                 ];
-                                addColumnSeries(highchart, s.algorithm, series_data);
+                                var existingSeries = getSeriesByName(highchart, algorithm);
+                                if(existingSeries !== undefined) {
+                                    existingSeries.setData(series_data, true, true);
+                                } else {
+                                    addColumnSeries(highchart, s.algorithm, series_data);
+                                }
                             });
                         },
                         function () {

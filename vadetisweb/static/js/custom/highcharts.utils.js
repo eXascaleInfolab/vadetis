@@ -412,6 +412,17 @@ function addColumnSeries(highchart, algorithm, data) {
     highchart.redraw();
 }
 
+function getSeriesByName(highchart, name) {
+    var highchartSeries = highchart.series;
+    for (var i = 0; i < highchartSeries.length; i++) {
+        var series = highchartSeries[i];
+        if (series.hasOwnProperty('name') && series.name === name) {
+            return series;
+        }
+    }
+    return undefined;
+}
+
 function initAlgorithmScores(highchart, url, is_spatial) {
     var settings = settingsFromCookie();
     var round_digits = settings.round_digits;
