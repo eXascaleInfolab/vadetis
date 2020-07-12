@@ -8,34 +8,31 @@ var DatasetSuggestionForm = function () {
     }
 
     var requestRecommendationPortlet = function (portlet_url, portlet_id, callback) {
-        var highchart = $('#highcharts_container').highcharts(), scores = getScoresFromColumnChart(highchart);
-        if ($("#" + portlet_id).length === 0) {
-            var data = {
-                id: portlet_id,
-                title: "Recommendation",
-                scores: JSON.stringify(scores),
-            }
-            var csrftoken = Cookies.get('csrftoken');
-            $.ajax({
-                beforeSend: function (xhr, settings) {
-                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                    }
-                },
-                url: portlet_url,
-                data: data,
-                dataType: "html",
-                type: 'POST',
-                enctype: "multipart/form-data",
-                success: function (data, status, xhr) {
-                    callback(data);
-                },
-                error: function (data, status, xhr) {
-                    printMessages([{'message': "Request failed: Could not request rendered HTML."}], "error-request");
-                    handleMessages(data);
-                }
-            });
+        var highchart = $('#highcharts_container').highcharts(), scores = getScoresFromColumnChart(highchart), csrftoken = Cookies.get('csrftoken');
+        var data = {
+            id: portlet_id,
+            title: "Recommendation",
+            scores: JSON.stringify(scores),
         }
+        $.ajax({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            },
+            url: portlet_url,
+            data: data,
+            dataType: "html",
+            type: 'POST',
+            enctype: "multipart/form-data",
+            success: function (data, status, xhr) {
+                callback(data);
+            },
+            error: function (data, status, xhr) {
+                printMessages([{'message': "Request failed: Could not request rendered HTML."}], "error-request");
+                handleMessages(data);
+            }
+        });
     }
 
     var requestSuggestionPortlet = function (portlet_url, portlet_id, title, conf, threshold, callback) {
