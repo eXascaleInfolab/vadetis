@@ -52,6 +52,7 @@ apipatterns = [
     path('api/portlet/image/', views.ImagePortlet.as_view(), name='image_portlet'),
     path('api/portlet/score/', views.ScorePortlet.as_view(), name='score_portlet'),
     path('api/portlet/suggestion/', views.SuggestionPortlet.as_view(), name='suggestion_portlet'),
+    path('api/portlet/recommendation/', views.SuggestionRecommendationPortlet.as_view(), name='suggestion_recommendation_portlet'),
     path('api/portlet/threshold/', views.ThresholdFormPortlet.as_view(), name='threshold_portlet'),
     path('api/portlet/injection/<int:dataset_id>/', views.InjectionFormPortlet.as_view(), name='injection_form_portlet'),
 

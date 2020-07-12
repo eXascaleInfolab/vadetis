@@ -93,3 +93,49 @@ class ConfJsonField(serializers.JSONField):
 
     def __init__(self, **kwargs):
         super(ConfJsonField, self).__init__(**kwargs)
+
+
+class SuggestionScoresJsonField(serializers.JSONField):
+    """
+        JSON Field to format the resulting scores for suggestion.
+    """
+    class Meta:
+        swagger_schema_fields = {
+            'type': openapi.TYPE_OBJECT,
+            'properties': {
+                'scores': openapi.Schema(
+                    title='scores',
+                    type=openapi.TYPE_ARRAY,
+                    items=openapi.Schema(
+                        type=openapi.TYPE_OBJECT,
+                        properties={
+                            'algorithm': openapi.Schema(
+                                title='algorithm',
+                                type=openapi.TYPE_STRING,
+                            ),
+                            'accuracy': openapi.Schema(
+                                title='accuracy',
+                                type=openapi.TYPE_STRING,
+                            ),
+                            'f1_score': openapi.Schema(
+                                title='f1_score',
+                                type=openapi.TYPE_STRING,
+                            ),
+                            'precision': openapi.Schema(
+                                title='precision',
+                                type=openapi.TYPE_STRING,
+                            ),
+                            'recall': openapi.Schema(
+                                title='recall',
+                                type=openapi.TYPE_STRING,
+                            ),
+                        },
+                        required=['algorithm', 'accuracy', 'f1_score', 'precision', 'recall'],
+                    )
+                ),
+            },
+            'required': ['scores']
+        }
+
+    def __init__(self, **kwargs):
+        super(SuggestionScoresJsonField, self).__init__(**kwargs)

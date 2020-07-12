@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.db.models import Q
 from django.contrib import messages
 
-from vadetisweb.utils import q_public_or_user_is_owner, get_settings, get_transformed_conf
+from vadetisweb.utils import q_public_or_user_is_owner, get_settings, get_transformed_conf, get_recommendation
 from vadetisweb.serializers.portlet_serializers import *
 from vadetisweb.serializers import ThresholdSerializer, InjectionSerializer
 from vadetisweb.models import DataSet
@@ -151,6 +151,32 @@ class SuggestionPortlet(APIView):
                 'img_1_id': validated_data['img_1_id'],
                 'img_2_id': validated_data['img_2_id'],
                 'content_class': validated_data['content_class'],
+            }, status=status.HTTP_200_OK)
+
+        else:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SuggestionRecommendationPortlet(APIView):
+    """
+    API for a suggestion portlet
+    """
+    renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+    template_name = 'vadetisweb/parts/portlet/suggestion_recommendation_portlet.html'
+
+    @swagger_auto_schema(request_body=RecommendationPortletSerializer)
+    def post(self, request, format=None):
+        portlet_serializer = RecommendationPortletSerializer(data=request.data)
+
+        if portlet_serializer.is_valid() and request.accepted_renderer.format == 'html':  # rendered template:
+            validated_data = portlet_serializer.validated_data
+
+            recommendation = get_recommendation(validated_data['scores'])
+
+            return Response({
+                'id': validated_data['id'],
+                'title': validated_data['title'],
+                'recommendation': recommendation,
             }, status=status.HTTP_200_OK)
 
         else:

@@ -4,6 +4,33 @@ from vadetisweb.utils.date_utils import dt_to_unix_time_millis, unix_time_millis
 from vadetisweb.models import *
 
 
+def get_recommendation(scores):
+
+    best_f1_score = {'algorithm': None, 'score': None}
+    best_accuracy = {'algorithm': None, 'score': None}
+    best_precision = {'algorithm': None, 'score': None}
+    best_recall = {'algorithm': None, 'score': None}
+
+    for score in scores['scores']:
+        _check_recommendation(best_f1_score, score['algorithm'], score['f1_score'])
+        _check_recommendation(best_accuracy, score['algorithm'], score['accuracy'])
+        _check_recommendation(best_precision, score['algorithm'], score['precision'])
+        _check_recommendation(best_recall, score['algorithm'], score['recall'])
+
+    return {
+        'f1_score': best_f1_score,
+        'accuracy': best_accuracy,
+        'precision': best_precision,
+        'recall': best_recall,
+    }
+
+
+def _check_recommendation(recommendation, algorithm, score):
+    if recommendation['score'] is None or recommendation['score'] < score:
+        recommendation['algorithm'] = algorithm
+        recommendation['score'] = score
+
+
 def get_transformed_conf(conf):
     if 'time_series' in conf:
         conf['time_series'] = TimeSeries.objects.get(id=conf['time_series']).name
@@ -203,7 +230,7 @@ def _svm_default(maximize_score, dataset):
         'training_dataset': training_dataset.id,
         'kernel': KERNEL_RBF,
         'gamma': 0.0005,
-        'nu' : 0.95,
+        'nu': 0.95,
         'train_size': 0.5,
         'random_seed': 10,
         'time_range': TIME_RANGE_SELECTION,
@@ -221,7 +248,7 @@ def _isolation_forest_default(maximize_score, dataset):
         'dataset': dataset,
         'training_dataset': training_dataset.id,
         'bootstrap': False,
-        'n_estimators' : 40,
+        'n_estimators': 40,
         'train_size': 0.5,
         'random_seed': 10,
         'time_range': TIME_RANGE_SELECTION,

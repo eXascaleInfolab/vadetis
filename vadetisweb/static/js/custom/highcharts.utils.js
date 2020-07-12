@@ -37,7 +37,7 @@ function getDatasetSeriesJson(highchart) {
     var dataset_series_json = {'series': []};
     highchart.series.forEach(function (series) {
         // the series of the navigator have to be excluded
-        if (highchart.navigator !== undefined && !containsObject(series, highchart.navigator.series)) {
+        if (highchart.navigator === undefined || !containsObject(series, highchart.navigator.series)) {
             var series_json = {};
             series_json.id = series.options.id;
             series_json.name = series.options.name;
@@ -424,6 +424,24 @@ function getSeriesByName(highchart, name) {
         }
     }
     return undefined;
+}
+
+function getScoresFromColumnChart(highchart) {
+    var scores = {'scores': []};
+
+    highchart.series.forEach(function (series) {
+        // the series of the navigator have to be excluded
+        if (highchart.navigator === undefined || !containsObject(series, highchart.navigator.series)) {
+            var score_json = {};
+            score_json.algorithm = series.options.name;
+            score_json.accuracy = series.options.data[0];
+            score_json.f1_score = series.options.data[1];
+            score_json.precision = series.options.data[2];
+            score_json.recall = series.options.data[3];
+            scores.scores.push(score_json);
+        }
+    });
+    return scores;
 }
 
 // function initAlgorithmScores(highchart, url, is_spatial) {

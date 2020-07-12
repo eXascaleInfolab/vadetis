@@ -7,6 +7,40 @@ var DatasetSuggestionForm = function () {
         requestPlot(portlet_id, portlet_id + "_plot", info.thresholds, info.detection_threshold_scores);
     }
 
+    var requestRecommendationPortlet = function (portlet_url, portlet_id, callback) {
+        var highchart = $('#highcharts_container').highcharts();
+        var scores = getScoresFromColumnChart(highchart);
+        console.log(scores);
+        if ($("#" + portlet_id).length === 0) {
+            var data = {
+                id: portlet_id,
+                title: "Recommendation",
+                scores: JSON.stringify(scores),
+            }
+            var csrftoken = Cookies.get('csrftoken');
+            $.ajax({
+                beforeSend: function (xhr, settings) {
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                },
+                url: portlet_url,
+                data: data,
+                dataType: "html",
+                type: 'POST',
+                enctype: "multipart/form-data",
+                success: function (data, status, xhr) {
+                    $('#form_portlets').append(data);
+                    callback();
+                },
+                error: function (data, status, xhr) {
+                    printMessages([{'message': "Request failed: Could not request rendered HTML."}], "error-request");
+                    handleMessages(data);
+                }
+            });
+        }
+    }
+
     var requestSuggestionPortlet = function (portlet_url, portlet_id, title, conf, threshold, callback) {
         var data = {
             id: portlet_id,
@@ -72,7 +106,7 @@ var DatasetSuggestionForm = function () {
         });
     }
 
-    var initSuggestion = function (form_id, suggestion_portlet_url) {
+    var initSuggestion = function (form_id, suggestion_portlet_url, recommendation_portlet_url) {
         var html_id = '#' + form_id;
         $(html_id).on('submit', function (event) {
             event.preventDefault();
@@ -153,6 +187,7 @@ var DatasetSuggestionForm = function () {
                             if (numResponses === numRequests) {
                                 highchart.hideLoading();
                                 $(":submit").attr("disabled", false);
+                                requestRecommendationPortlet(recommendation_portlet_url, "recommendation_portlet");
                             }
                         });
                 }
@@ -161,14 +196,14 @@ var DatasetSuggestionForm = function () {
     }
 
     // private
-    var init = function (suggestion_form_id, suggestion_portlet_url) {
-        initSuggestion(suggestion_form_id, suggestion_portlet_url);
+    var init = function (suggestion_form_id, suggestion_portlet_url, recommendation_portlet_url) {
+        initSuggestion(suggestion_form_id, suggestion_portlet_url, recommendation_portlet_url);
     }
 
     return {
         // public
-        init: function (suggestion_form_id, suggestion_portlet_url) {
-            init(suggestion_form_id, suggestion_portlet_url);
+        init: function (suggestion_form_id, suggestion_portlet_url, recommendation_portlet_url) {
+            init(suggestion_form_id, suggestion_portlet_url, recommendation_portlet_url);
         }
     };
 }();
