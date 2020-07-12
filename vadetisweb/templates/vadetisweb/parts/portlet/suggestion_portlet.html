@@ -1,3 +1,4 @@
+{% load vadetistags %}
 <div id="{{ id }}" class="kt-portlet kt-portlet--collapsed" data-ktportlet="true">
     <div class="kt-portlet__head">
         <div class="kt-portlet__head-label">
@@ -25,8 +26,8 @@
                 <tbody>
                 {% for key, value in conf.items %}
                     <tr>
-                        <td>{{ key }}</td>
-                        <td{% if key == 'maximize_score' %} id="{{ id }}_maximized_score"{% endif %}>{{ value }}</td>
+                        <td>{{ key|human_readable_title }}</td>
+                        <td>{{ value }}</td>
                     </tr>
                 {% endfor %}
                     <tr>

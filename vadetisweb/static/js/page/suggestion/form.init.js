@@ -2,7 +2,7 @@
 
 var DatasetSuggestionForm = function () {
 
-    var loadImages = function(portlet_id, info) {
+    var loadImages = function (portlet_id, info) {
         requestCnfMatrix(portlet_id, portlet_id + "_cnf", info);
         requestPlot(portlet_id, portlet_id + "_plot", info.thresholds, info.detection_threshold_scores);
     }
@@ -29,7 +29,7 @@ var DatasetSuggestionForm = function () {
             dataType: "html",
             type: 'POST',
             enctype: "multipart/form-data",
-            success: function(data, status, xhr) {
+            success: function (data, status, xhr) {
                 var column = '<div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">' + data + '</div>';
                 $('#suggestion_portlets').prepend(column);
                 callback();
@@ -91,12 +91,20 @@ var DatasetSuggestionForm = function () {
 
             // Iterate through values and send each as own request
             var numRequests = Array.from(formData.entries()).filter(array => array[0] === 'algorithm').length;
+            if (numRequests === 0) {
+                printMessages([{'message': "Form is invalid"}], "error");
+                highchart.hideLoading();
+                $(":submit").attr("disabled", false);
+                return;
+            }
+
             var numResponses = 0;
             var maximizeScore = 'F1-Score';
             for (var entry of formData.entries()) {
                 var entryKey = entry[0];
                 if (entryKey === 'maximize_score') {
                     maximizeScore = entry[1];
+                    break;
                 }
             }
             for (var pair of formData.entries()) {
@@ -117,7 +125,7 @@ var DatasetSuggestionForm = function () {
                                     parseFloat((info.recall * 100).toFixed(round_digits)),
                                 ];
                                 var existingSeries = getSeriesByName(highchart, responseAlgorithm);
-                                if(existingSeries !== undefined) {
+                                if (existingSeries !== undefined) {
                                     existingSeries.update({
                                         custom: {
                                             maximize_score: maximizedScore,
@@ -129,7 +137,7 @@ var DatasetSuggestionForm = function () {
                                 }
 
                                 var portlet_id = makeHtmlId(responseAlgorithm);
-                                if($('#' + portlet_id).length > 0) {
+                                if ($('#' + portlet_id).length > 0) {
                                     $('#' + portlet_id).remove();
                                 }
                                 requestSuggestionPortlet(suggestion_portlet_url, portlet_id, responseAlgorithm, conf, info.threshold,

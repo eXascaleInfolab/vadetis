@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.db.models import Q
 from django.contrib import messages
 
-from vadetisweb.utils import q_public_or_user_is_owner, get_settings
+from vadetisweb.utils import q_public_or_user_is_owner, get_settings, get_transformed_conf
 from vadetisweb.serializers.portlet_serializers import *
 from vadetisweb.serializers import ThresholdSerializer, InjectionSerializer
 from vadetisweb.models import DataSet
@@ -141,10 +141,12 @@ class SuggestionPortlet(APIView):
             round_digits = settings['round_digits']
             threshold = round(validated_data['threshold'], round_digits)
 
+            transformed_conf = get_transformed_conf(validated_data['conf'])
+
             return Response({
                 'id': validated_data['id'],
                 'title': validated_data['title'],
-                'conf': validated_data['conf'],
+                'conf': transformed_conf,
                 'threshold': threshold,
                 'img_1_id': validated_data['img_1_id'],
                 'img_2_id': validated_data['img_2_id'],

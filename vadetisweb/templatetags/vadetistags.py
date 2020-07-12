@@ -21,6 +21,11 @@ def cookie(context, cookie_name):
     return result
 
 
+@register.filter
+def human_readable_title(string):
+    return re.sub(r"[^a-zA-Z0-9]+", ' ', string).title()
+
+
 @register.filter(takes_context=False)
 def get_item(dict, key):
     return dict.get(key)
@@ -130,8 +135,11 @@ def date_range(lower_date, higher_date):
 def addcss(field, css):
    return field.as_widget(attrs={"class":css})
 
+@register.filter()
+def isoformat(dt):
+    return dt.isoformat()
 
-@register.filter(name='float_as_timestamp')
+@register.filter()
 def float_as_timestamp(timestamp):
     try:
         #assume, that timestamp is given in seconds with decimal point

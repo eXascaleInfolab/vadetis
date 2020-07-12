@@ -1,5 +1,23 @@
+import pytz
 from vadetisweb.parameters import *
-from vadetisweb.utils.date_utils import dt_to_unix_time_millis
+from vadetisweb.utils.date_utils import dt_to_unix_time_millis, unix_time_millis_to_dt
+from vadetisweb.models import *
+
+
+def get_transformed_conf(conf):
+    if 'time_series' in conf:
+        conf['time_series'] = TimeSeries.objects.get(id=conf['time_series']).name
+
+    if 'training_dataset' in conf:
+        conf['training_dataset'] = DataSet.objects.get(id=conf['training_dataset']).title
+
+    if 'range_start' in conf:
+        conf['range_start'] = unix_time_millis_to_dt(conf['range_start']).astimezone(pytz.utc).isoformat()
+
+    if 'range_end' in conf:
+        conf['range_end'] = unix_time_millis_to_dt(conf['range_end']).astimezone(pytz.utc).isoformat()
+
+    return conf
 
 
 def get_default_configuration(algorithm, maximize_score, dataset):
