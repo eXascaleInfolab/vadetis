@@ -38,7 +38,8 @@ var VadetisHighcharts = function () {
                 formatter: function () {
                     var tooltip = '<span style="font-size: 10px;">' + Highcharts.dateFormat('%A, %b %e %Y, %H:%M', new Date(this.x)) + '</span>';
 
-                    tooltip += '<table>';
+                    var hasScore = false;
+                    tooltip += '<table style="margin-top: 4px;">';
                     $.each(this.points, function (i, point) {
                         var value_color = '#000000';
                         if (point.point.marker) {
@@ -46,13 +47,29 @@ var VadetisHighcharts = function () {
                                 value_color = point.point.marker.fillColor;
                             }
                         }
-                        tooltip += '<tr>' +
-                            '<td><span style="color:' + this.series.color + '">\u25CF</span> ' + this.series.name + ': </td>' +
-                            '<td style="text-align: right;"><strong style="color: ' + value_color + ';">' + this.y.toFixed(settings.round_digits) + '</strong></td>' +
-                            //'<td>' + this.series.tooltipOptions.valueSuffix + '</td>' +
-                            '</tr>';
+                        tooltip += '<tr>';
+                        tooltip += '<td><span style="color:' + this.series.color + '">\u25CF</span> ' + this.series.name + ': </td>'
+                            + '<td style="text-align: right;"><strong style="color: ' + value_color + ';">' + this.y.toFixed(settings.round_digits) + '</strong></td>';
+
+                        if(point.point.score !== undefined) {
+                            hasScore = true;
+                        }
+                        tooltip += '</tr>';
                     });
                     tooltip += '</table>';
+
+                    if(hasScore) {
+                        tooltip += '<table style="margin-top: 4px;">';
+                        for (var i = 0; i < this.points.length; i++) {
+                            var point = this.points[i];
+                            if(point.hasOwnProperty('point') && point.point.score !== undefined) {
+                                tooltip += '<tr><td><strong>Score:</strong></td><td>' + point.point.score.toFixed(settings.round_digits) + '</td></tr>';
+                                break;
+                            }
+                        }
+                        tooltip += '</table>';
+                    }
+
                     return tooltip;
                 }
             },
