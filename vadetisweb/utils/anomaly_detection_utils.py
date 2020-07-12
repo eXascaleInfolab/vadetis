@@ -8,17 +8,31 @@ from .helper_function_utils import *
 
 def get_detection_choices(dataset, with_empty=True):
     empty_choice = ('', '----')
+    has_training_data = dataset.number_of_training_datasets() > 0
     if dataset is not None:
-        if dataset.is_spatial():
+        if dataset.is_spatial() and has_training_data:
             if with_empty:
                 return (empty_choice,) + ANOMALY_DETECTION_ALGORITHMS
             else:
                 return ANOMALY_DETECTION_ALGORITHMS
-        else:
+
+        elif dataset.is_spatial() and not has_training_data:
+            if with_empty:
+                return (empty_choice,) + ANOMALY_DETECTION_ALGORITHMS_NON_TRAINING
+            else:
+                return ANOMALY_DETECTION_ALGORITHMS_NON_TRAINING
+
+        elif not dataset.is_spatial() and has_training_data:
             if with_empty:
                 return (empty_choice,) + ANOMALY_DETECTION_ALGORITHMS_NON_SPATIAL
             else:
                 return ANOMALY_DETECTION_ALGORITHMS_NON_SPATIAL
+
+        else:
+            if with_empty:
+                return (empty_choice,) + ANOMALY_DETECTION_ALGORITHMS_NON_SPATIAL_NON_TRAINING
+            else:
+                return ANOMALY_DETECTION_ALGORITHMS_NON_SPATIAL_NON_TRAINING
     else:
         if with_empty:
             return empty_choice

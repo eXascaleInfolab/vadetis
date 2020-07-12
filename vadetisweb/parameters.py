@@ -33,6 +33,17 @@ ANOMALY_DETECTION_ALGORITHMS_NON_SPATIAL = (
     (ISOLATION_FOREST, ISOLATION_FOREST),
 )
 
+ANOMALY_DETECTION_ALGORITHMS_NON_SPATIAL_NON_TRAINING = (
+    (LISA_PEARSON, LISA_PEARSON),
+    (LISA_DTW_PEARSON, LISA_DTW_PEARSON),
+)
+
+ANOMALY_DETECTION_ALGORITHMS_NON_TRAINING = (
+    (LISA_PEARSON, LISA_PEARSON),
+    (LISA_DTW_PEARSON, LISA_DTW_PEARSON),
+    (LISA_SPATIAL, LISA_SPATIAL),
+)
+
 #########################################################
 # Anomaly Detection Score Types
 #########################################################
