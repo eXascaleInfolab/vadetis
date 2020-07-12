@@ -50,7 +50,7 @@ class TaskImportData(Task):
                                   index_col='time')
 
             # check number of values (row counts)
-            num_values = df_read.shape[0]
+            num_values = sum(df_read.count(axis='rows'))
             if num_values > settings.DATASET_MAX_VALUES:
                 raise ValueError("Dataset exceeds value limit {} ({} values provided)".format(settings.DATASET_MAX_VALUES, num_values))
 
@@ -206,9 +206,12 @@ class TaskImportTrainingData(Task):
                                   index_col='time')
 
             # check number of values (row counts)
-            num_values = df_read.shape[0]
-            if df_read.shape[0] > settings.DATASET_MAX_VALUES:
-                raise ValueError("Dataset exceeds value limit {} ({} values provided)".format(settings.DATASET_MAX_VALUES, num_values))
+            num_values = sum(df_read.count(axis='rows'))
+            if num_values > settings.TRAINING_DATA_MAX_SIZE:
+                raise ValueError("Dataset exceeds value limit {} ({} values provided)".format(settings.TRAINING_DATA_MAX_SIZE, num_values))
+
+            elif num_values < settings.TRAINING_DATA_MIN_SIZE:
+                raise ValueError("Dataset deceeds value limit {} ({} values provided)".format(settings.TRAINING_DATA_MIN_SIZE, num_values))
 
             # check each series must have same unit
             group_by_ts_name = df_read.groupby('ts_name')
