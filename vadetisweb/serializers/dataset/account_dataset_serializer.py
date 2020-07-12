@@ -261,12 +261,17 @@ class AccountDatasetUpdateSerializer(serializers.ModelSerializer):
     title = serializers.CharField(required=True, max_length=64, help_text='Human readable title of the dataset',
                                   style={'template': 'vadetisweb/parts/input/text_input.html'})
 
+    type = serializers.ChoiceField(choices=DATASET_TYPE, default=SYNTHETIC,
+                                   help_text='Specify whether this dataset is real-world or synthetic data. Note: Main datasets and their training data share the same type and get updated as well.',
+                                   style={'template': 'vadetisweb/parts/input/select_input.html',
+                                          'help_text_in_popover': False})
+
     public = serializers.BooleanField(required=True, help_text='Determines if this dataset is available to other users',
                                       style={'template': 'vadetisweb/parts/input/checkbox_input.html'})
 
     class Meta:
         model = DataSet
-        fields = ('title', 'public')
+        fields = ('title', 'type', 'public')
 
 
 class AccountDatasetDeleteSerializer(serializers.Serializer):

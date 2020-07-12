@@ -86,6 +86,9 @@ class AccountDatasetUpdate(APIView):
 
             if dataset_edit_serializer.is_valid():
                 dataset_edit_serializer.save()
+                for t in dataset.training_dataset.all():
+                    t.type = dataset.type
+                    t.save()
 
                 messages.success(request, dataset_saved_msg(dataset_id))
                 response = Response({}, status=status.HTTP_200_OK)
@@ -161,6 +164,12 @@ class AccountTrainingDatasetUpdate(APIView):
 
             if training_dataset_edit_serializer.is_valid():
                 training_dataset_edit_serializer.save()
+                main_dataset = training_dataset.main_dataset
+                main_dataset.type = training_dataset.type
+                main_dataset.save()
+                for t in main_dataset.training_dataset.all():
+                    t.type = training_dataset.type
+                    t.save()
 
                 messages.success(request, dataset_saved_msg(dataset_id))
                 response = Response({}, status=status.HTTP_200_OK)

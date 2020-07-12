@@ -59,8 +59,8 @@ class DataSet(models.Model):
     owner = models.ForeignKey(User, null=False, on_delete=models.CASCADE)
 
     # real world or synthetic
-    type = models.CharField(null=False, max_length=32, choices=DATASET_TYPE, default=REAL_WORLD,
-                            help_text='Determines whether this dataset is real world or synthetic data.')
+    type = models.CharField(null=False, max_length=32, choices=DATASET_TYPE, default=SYNTHETIC,
+                            help_text='Determines whether this dataset is real-world or synthetic data.')
 
     # pickled object field for the dataframe of values
     dataframe = PickledObjectField(null=True, compress=True)
