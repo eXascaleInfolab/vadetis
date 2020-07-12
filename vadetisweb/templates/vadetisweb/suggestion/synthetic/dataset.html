@@ -54,6 +54,9 @@
                     <!--end: Highcharts -->
                 </div>
             </div>
+            <!--begin: Inner Row -->
+            <div id="suggestion_portlets" class="row"></div>
+            <!--end: Inner Row -->
         </div>
         <div id="form_portlets" class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <div class="kt-portlet" data-ktportlet="true">
@@ -70,7 +73,6 @@
                 <div class="kt-portlet__body kt-portlet__body--fit">
                     {% url 'vadetisweb:suggestion_scores' dataset_id=dataset.id  as suggestion_url %}
                     {% include 'vadetisweb/parts/forms/serializer_variable_form.html' with formid="suggestion_form" url=suggestion_url form_serializer=suggestion_serializer submit_label="Compute" %}
-                    <div id="form_append_container"></div>
                 </div>
             </div>
         </div>
@@ -79,6 +81,7 @@
 
 {% block additional_bottom_js %}
     <!-- page extensions -->
+    <script src="{% static 'js/lib/binarytransport/jquery.binarytransport.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/lib/highcharts/highstock.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/lib/highcharts/modules/no-data-to-display.js' %}"></script>
     <script src="{% static 'js/custom/highcharts.utils.js' %}" type="text/javascript"></script>
@@ -89,7 +92,7 @@
     <script src="{% static 'js/page/suggestion/page.init.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
         jQuery(document).ready(function () {
-            DatasetSuggestionForm.init("suggestion_form");
+            DatasetSuggestionForm.init("suggestion_form", "{% url 'vadetisweb:suggestion_portlet' %}");
             DatasetSuggestionPage.init("clear_chart_btn");
         });
     </script>

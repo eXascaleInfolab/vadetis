@@ -8,3 +8,8 @@ class BasePortletSerializer(serializers.Serializer):
 class ImagePortletSerializer(BasePortletSerializer):
     content_id = serializers.CharField(required=True)
     content_class = serializers.CharField(required=False)
+
+class SuggestionPortletSerializer(BasePortletSerializer):
+    img_1_id = serializers.CharField(required=True)
+    img_2_id = serializers.CharField(required=True)
+    content_class = serializers.CharField(required=False)

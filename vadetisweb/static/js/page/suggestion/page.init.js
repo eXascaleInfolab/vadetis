@@ -6,7 +6,7 @@ var DatasetSuggestionPage = function () {
     var init = function (clear_button_id) {
         VadetisColumnHighcharts.init("highcharts_container");
         VadetisHighchartsClear.init("highcharts_container", clear_button_id, function () {
-
+            $('#suggestion_portlets').empty();
         });
     }
     return {

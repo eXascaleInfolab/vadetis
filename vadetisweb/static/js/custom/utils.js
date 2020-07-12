@@ -238,6 +238,10 @@ function getIndexForAlgorithm(algorithm) {
     }
 }
 
+function makeHtmlId(str) {
+    return str.replace(/[^a-zA-Z]/g, "").toLowerCase();
+}
+
 /**
  * Get settings from Cookie, or set them with default value
  */

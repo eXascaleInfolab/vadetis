@@ -392,10 +392,10 @@ function requestPlot(portlet_id, img_container_id, thresholds, threshold_scores)
     });
 }
 
-function setColumnSeriesData(highchart, data) {
+/*function setColumnSeriesData(highchart, data) {
     var highchart_series = highchart.get(series.id);
     highchart_series.setData(data, false, true);
-}
+}*/
 
 function addColumnSeries(highchart, algorithm, maximize_score, data) {
     highchart.addSeries({

@@ -2,6 +2,38 @@
 
 var DatasetSuggestionForm = function () {
 
+    var requestSuggestionPortlet = function (portlet_url, portlet_id, title, callback) {
+        var data = {
+            id: portlet_id,
+            title: title,
+            img_1_id: portlet_id + "_cnf",
+            img_2_id: portlet_id + "_plot",
+            content_class: "img-container",
+        }
+        var csrftoken = Cookies.get('csrftoken');
+        $.ajax({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            },
+            url: portlet_url,
+            data: data,
+            dataType: "html",
+            type: 'POST',
+            enctype: "multipart/form-data",
+            success: function(data, status, xhr) {
+                var column = '<div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">' + data + '</div>';
+                $('#suggestion_portlets').append(column);
+                callback();
+            },
+            error: function (data, status, xhr) {
+                printMessages([{'message': "Request failed: Could not request rendered HTML."}], "error-request");
+                handleMessages(data);
+            }
+        });
+    }
+
     var submitSingleSuggestion = function (url, action, method, enctype, algorithm, maximizeScore, callbackData, callback) {
         var csrftoken = Cookies.get('csrftoken');
         var formData = new FormData();
@@ -33,7 +65,7 @@ var DatasetSuggestionForm = function () {
         });
     }
 
-    var initSuggestion = function (form_id) {
+    var initSuggestion = function (form_id, suggestion_portlet_url) {
         var html_id = '#' + form_id;
         $(html_id).on('submit', function (event) {
             event.preventDefault();
@@ -87,6 +119,19 @@ var DatasetSuggestionForm = function () {
                                 } else {
                                     addColumnSeries(highchart, responseAlgorithm, maximizedScore, series_data);
                                 }
+
+                                var portlet_id = makeHtmlId(responseAlgorithm);
+                                if($('#' + portlet_id).length > 0) {
+                                    requestCnfMatrix(portlet_id, portlet_id + "_cnf", info);
+                                    requestPlot(portlet_id, portlet_id + "_plot", info.thresholds, info.detection_threshold_scores);
+                                } else {
+                                    requestSuggestionPortlet(suggestion_portlet_url, portlet_id, responseAlgorithm,
+                                        function () {
+                                            KTApp.initPortlets();
+                                            requestCnfMatrix(portlet_id, portlet_id + "_cnf", info);
+                                            requestPlot(portlet_id, portlet_id + "_plot", info.thresholds, info.detection_threshold_scores);
+                                        });
+                                }
                             });
                         },
                         function () {
@@ -95,7 +140,6 @@ var DatasetSuggestionForm = function () {
                                 highchart.hideLoading();
                                 $(":submit").attr("disabled", false);
                             }
-                            // todo add legend
                         });
                 }
             }
@@ -103,14 +147,14 @@ var DatasetSuggestionForm = function () {
     }
 
     // private
-    var init = function (suggestion_form_id) {
-        initSuggestion(suggestion_form_id);
+    var init = function (suggestion_form_id, suggestion_portlet_url) {
+        initSuggestion(suggestion_form_id, suggestion_portlet_url);
     }
 
     return {
         // public
-        init: function (suggestion_form_id) {
-            init(suggestion_form_id);
+        init: function (suggestion_form_id, suggestion_portlet_url) {
+            init(suggestion_form_id, suggestion_portlet_url);
         }
     };
 }();
