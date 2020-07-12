@@ -2,10 +2,17 @@
 
 var DatasetSuggestionForm = function () {
 
-    var requestSuggestionPortlet = function (portlet_url, portlet_id, title, callback) {
+    var loadImages = function(portlet_id, info) {
+        requestCnfMatrix(portlet_id, portlet_id + "_cnf", info);
+        requestPlot(portlet_id, portlet_id + "_plot", info.thresholds, info.detection_threshold_scores);
+    }
+
+    var requestSuggestionPortlet = function (portlet_url, portlet_id, title, maximized_score, threshold, callback) {
         var data = {
             id: portlet_id,
             title: title,
+            maximized_score: maximized_score,
+            threshold: threshold,
             img_1_id: portlet_id + "_cnf",
             img_2_id: portlet_id + "_plot",
             content_class: "img-container",
@@ -122,14 +129,15 @@ var DatasetSuggestionForm = function () {
 
                                 var portlet_id = makeHtmlId(responseAlgorithm);
                                 if($('#' + portlet_id).length > 0) {
-                                    requestCnfMatrix(portlet_id, portlet_id + "_cnf", info);
-                                    requestPlot(portlet_id, portlet_id + "_plot", info.thresholds, info.detection_threshold_scores);
+                                    $('#' + portlet_id + '_maximized_score').html(maximizedScore);
+                                    $('#' + portlet_id + '_threshold').html(info.threshold.toFixed(round_digits));
+                                    loadImages(portlet_id, info);
                                 } else {
-                                    requestSuggestionPortlet(suggestion_portlet_url, portlet_id, responseAlgorithm,
+                                    requestSuggestionPortlet(suggestion_portlet_url, portlet_id, responseAlgorithm, maximizedScore, info.threshold,
                                         function () {
                                             KTApp.initPortlets();
-                                            requestCnfMatrix(portlet_id, portlet_id + "_cnf", info);
-                                            requestPlot(portlet_id, portlet_id + "_plot", info.thresholds, info.detection_threshold_scores);
+                                            KTApp.initTooltips();
+                                            loadImages(portlet_id, info);
                                         });
                                 }
                             });
