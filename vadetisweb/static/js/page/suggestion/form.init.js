@@ -61,13 +61,14 @@ var DatasetSuggestionForm = function () {
                             var suggestions = data.suggestions
                             suggestions.forEach(s => {
                                 var info = s.info;
+                                var responseAlgorithm = s.algorithm;
                                 var series_data = [
                                     parseFloat((info.accuracy * 100).toFixed(round_digits)),
                                     parseFloat((info.f1_score * 100).toFixed(round_digits)),
                                     parseFloat((info.precision * 100).toFixed(round_digits)),
                                     parseFloat((info.recall * 100).toFixed(round_digits)),
                                 ];
-                                var existingSeries = getSeriesByName(highchart, algorithm);
+                                var existingSeries = getSeriesByName(highchart, responseAlgorithm);
                                 if(existingSeries !== undefined) {
                                     existingSeries.setData(series_data, true, true);
                                 } else {
