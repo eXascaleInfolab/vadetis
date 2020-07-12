@@ -2,37 +2,37 @@
 
 var DatasetSuggestionForm = function () {
 
-    var submitSingle = function () {
+    var submitSingleSuggestion = function (url, action, method, enctype, algorithm, callbackData, callback) {
         var csrftoken = Cookies.get('csrftoken');
+        var formData = new FormData();
+        formData.append('algorithm', algorithm);
         $.ajax({
             beforeSend: function (xhr, settings) {
                 if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
                     xhr.setRequestHeader("X-CSRFToken", csrftoken);
                 }
             },
-            url: form_selector.attr('action'),
+            url: action,
             data: formData,
-            type: form_selector.attr('method'),
-            enctype: form_selector.attr('enctype'),
+            type: method,
+            enctype: enctype,
             processData: false,
             contentType: false,
             success: function (data, status, xhr) {
                 handleRedirect(data, xhr);
                 handleMessages(data);
-                highchart.hideLoading();
-
-                $(":submit").attr("disabled", false);
+                callbackData(data);
+                callback();
             },
             error: function (data, status, xhr) {
                 printMessages([{'message': "Request failed: Could not request suggestions."}], "error-request");
                 handleMessages(data);
-                highchart.hideLoading();
-                $(":submit").attr("disabled", false);
+                callback_fail();
             }
         });
     }
 
-    var initSuggestion = function(form_id) {
+    var initSuggestion = function (form_id) {
         var html_id = '#' + form_id;
         $(html_id).on('submit', function (event) {
             event.preventDefault();
@@ -43,46 +43,54 @@ var DatasetSuggestionForm = function () {
             var form_selector = $(html_id), csrftoken = Cookies.get('csrftoken');
             var formData = new FormData(this);
             highchart.showLoading();
-            // TODO construct there multiple requests from form data
+            var url = form_selector.attr('action'), action = form_selector.attr('action'), method = form_selector.attr('method'),
+                enctype = form_selector.attr('enctype');
 
-            $.ajax({
-                beforeSend: function (xhr, settings) {
-                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                    }
-                },
-                url: form_selector.attr('action'),
-                data: formData,
-                type: form_selector.attr('method'),
-                enctype: form_selector.attr('enctype'),
-                processData: false,
-                contentType: false,
-                success: function (data, status, xhr) {
-                    handleRedirect(data, xhr);
-                    handleMessages(data);
-                    highchart.hideLoading();
+            var settings = settingsFromCookie();
+            var round_digits = settings.round_digits;
 
-                    $(":submit").attr("disabled", false);
-                },
-                error: function (data, status, xhr) {
-                    printMessages([{'message': "Request failed: Could not request suggestions."}], "error-request");
-                    handleMessages(data);
-                    highchart.hideLoading();
-                    $(":submit").attr("disabled", false);
+            // Iterate through values and send each as own request
+            var entries = formData.entries();
+            var numRequests = Array.from(formData.entries()).filter(array => array[0] === 'algorithm').length;
+            var numResponses = 0;
+            for (var pair of entries) {
+                var key = pair[0];
+                var algorithm = pair[1];
+                if (key === 'algorithm') {
+                    submitSingleSuggestion(url, action, method, enctype, algorithm, function (data) {
+                            var suggestions = data.suggestions
+                            suggestions.forEach(s => {
+                                var info = s.info;
+                                var series_data = [
+                                    parseFloat((info.accuracy * 100).toFixed(round_digits)),
+                                    parseFloat((info.f1_score * 100).toFixed(round_digits)),
+                                    parseFloat((info.precision * 100).toFixed(round_digits)),
+                                    parseFloat((info.recall * 100).toFixed(round_digits)),
+                                ];
+                                addColumnSeries(highchart, s.algorithm, series_data);
+                            });
+                        },
+                        function () {
+                            numResponses += 1;
+                            if (numResponses === numRequests) {
+                                highchart.hideLoading();
+                                $(":submit").attr("disabled", false);
+                            }
+                        });
                 }
-            });
+            }
         });
     }
 
     // private
-    var init = function (suggestion_url, suggestion_form_id) {
-
+    var init = function (suggestion_form_id) {
+        initSuggestion(suggestion_form_id);
     }
 
     return {
         // public
-        init: function(suggestion_url, suggestion_form_id) {
-            init(suggestion_url, suggestion_form_id);
+        init: function (suggestion_form_id) {
+            init(suggestion_form_id);
         }
     };
 }();

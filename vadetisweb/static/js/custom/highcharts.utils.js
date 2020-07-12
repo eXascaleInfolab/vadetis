@@ -407,10 +407,6 @@ function addColumnSeries(highchart, algorithm, data) {
     // reindex order
     highchart.series.forEach(function (series) {
         var index = getIndexForAlgorithm(series.name);
-
-        console.log("name " + series.name);
-        console.log("index " + index);
-
         series.update({index: index}, false);
     });
     highchart.redraw();
