@@ -1,7 +1,7 @@
 import collections, logging
 import pandas as pd, numpy as np
 from celery.task import Task
-from django.db import transaction, IntegrityError
+from django.db import transaction
 from django.utils import timezone
 from django.conf import settings
 
@@ -9,6 +9,7 @@ from vadetisweb.models import User, Location, TimeSeries, DataSet
 from vadetisweb.parameters import *
 from vadetisweb.utils import iso_format_time, silent_remove
 from vadetisweb.anomaly_algorithms import df_anomaly_instances
+
 
 class TaskImportData(Task):
     """
@@ -50,7 +51,7 @@ class TaskImportData(Task):
                                   index_col='time')
 
             # check number of values (row counts)
-            num_values = sum(df_read.count(axis='rows'))
+            num_values = df_read['value'].shape[0]
             if num_values > settings.DATASET_MAX_VALUES:
                 raise ValueError("Dataset exceeds value limit {} ({} values provided)".format(settings.DATASET_MAX_VALUES, num_values))
 
@@ -206,7 +207,7 @@ class TaskImportTrainingData(Task):
                                   index_col='time')
 
             # check number of values (row counts)
-            num_values = sum(df_read.count(axis='rows'))
+            num_values = df_read['value'].shape[0]
             if num_values > settings.TRAINING_DATA_MAX_SIZE:
                 raise ValueError("Dataset exceeds value limit {} ({} values provided)".format(settings.TRAINING_DATA_MAX_SIZE, num_values))
 

@@ -12,6 +12,7 @@ from django.shortcuts import render, redirect
 
 from vadetisweb.models import UserTasks
 from vadetisweb.utils import settings_from_request_or_default_dict, update_setting_cookie, write_to_tempfile
+from vadetisweb.utils.data_import_utils import *
 from vadetisweb.serializers.account_serializers import *
 from vadetisweb.serializers.dataset.account_dataset_serializer import *
 from vadetisweb.tasks import TaskImportData, TaskImportTrainingData
@@ -160,32 +161,25 @@ class AccountUploadDataset(APIView):
             title = serializer.validated_data['title']
             type = serializer.validated_data['type']  # real world or synthetic
 
-            # start import task
-            user_tasks, _ = UserTasks.objects.get_or_create(user=user)
-            task_uuid = uuid()
-            if spatial_file is not None:
-                user_tasks.apply_async(TaskImportData, args=[user.username, dataset_file.name, title, type],
-                                       kwargs={'spatial_file_name': spatial_file.name},
-                                       task_id=task_uuid)
-            else:
-                user_tasks.apply_async(TaskImportData, args=[user.username, dataset_file.name, title, type],
-                                       task_id=task_uuid)
+            try:
+                if spatial_file is not None:
+                    import_dataset(user.username, dataset_file.name, title, type, kwargs={'spatial_file_name': spatial_file.name})
+                    silent_remove(dataset_file.name)
+                    silent_remove(spatial_file.name)
 
-            message = "Importing Dataset Task (%s) created" % task_uuid
+                else:
+                    import_dataset(user.username, dataset_file.name, title, type)
+                    silent_remove(dataset_file.name)
 
-            if request.accepted_renderer.format == 'json':  # requested format is json
-                json_messages = []
-                json_message_utils.success(json_messages, message)
-                return Response({
-                    'status': 'success',
-                    'messages': MessageSerializer(json_messages, many=True).data,
-                }, status=status.HTTP_201_CREATED)
+                messages.success(request, dataset_imported_msg(title))
+                response = Response({}, status=status.HTTP_201_CREATED)
+                response['Location'] = reverse('vadetisweb:account_datasets')
+                return response
 
-            else:  # or render html template
-                messages.success(request, message)
-                return Response({
-                    'serializer': serializer,
-                }, status=status.HTTP_201_CREATED)
+            except Exception as e:
+                logging.debug(e)
+                return exception_message_response(e)
+
         else:
             message = "Form was invalid"
             if request.accepted_renderer.format == 'json':  # requested format is json
@@ -224,33 +218,24 @@ class AccountUploadTrainingDataset(APIView):
             main_dataset = serializer.validated_data['main_dataset']
             training_dataset_file_raw = serializer.validated_data['csv_file']
 
-            # check if user is ok
-            if owner == request.user and main_dataset.owner == request.user:
-                logging.info("Training dataset file received: %s", training_dataset_file_raw.name)
-                training_dataset_file = write_to_tempfile(training_dataset_file_raw)
+            try:
+                # check if user is ok
+                if owner == request.user and main_dataset.owner == request.user:
+                    logging.info("Training dataset file received: %s", training_dataset_file_raw.name)
+                    training_dataset_file = write_to_tempfile(training_dataset_file_raw)
 
-                user_tasks, _ = UserTasks.objects.get_or_create(user=user)
+                    import_training_dataset(user.username, main_dataset.id, training_dataset_file.name, title)
+                    silent_remove(training_dataset_file.name)
 
-                # start import task
-                task_uuid = uuid()
-                user_tasks.apply_async(TaskImportTrainingData,
-                                       args=[user.username, main_dataset.id, training_dataset_file.name,
-                                             title], task_id=task_uuid)
+                    messages.success(request, training_dataset_imported_msg(title))
+                    response = Response({}, status=status.HTTP_201_CREATED)
+                    response['Location'] = reverse('vadetisweb:account_training_datasets')
+                    return response
 
-                message = 'Importing Training Dataset: Task (%s) created' % task_uuid
-                if request.accepted_renderer.format == 'json':  # requested format is json
-                    json_messages = []
-                    json_message_utils.success(json_messages, message)
-                    return Response({
-                        'status': 'success',
-                        'messages': MessageSerializer(json_messages, many=True).data,
-                    }, status=status.HTTP_201_CREATED)
+            except Exception as e:
+                logging.debug(e)
+                return exception_message_response(e)
 
-                else:  # or render html template
-                    messages.error(request, message)
-                    return Response({
-                        'serializer': serializer,
-                    }, status=status.HTTP_201_CREATED)
         else:
             message = "Form was invalid"
             if request.accepted_renderer.format == 'json':  # requested format is json

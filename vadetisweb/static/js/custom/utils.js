@@ -78,6 +78,41 @@ function initAjaxFormSubmit(form_id, format) {
     });
 }
 
+function initAjaxFormSubmitWithDisable(form_id, format) {
+    $('#' + form_id).on('submit', function (event) {
+        event.preventDefault();
+        $(":submit").attr("disabled", true);
+        clearFormErrors(form_id);
+        clearMessages();
+        var csrftoken = Cookies.get('csrftoken'), url = $(this).attr('action');
+        if(format) {
+            url += '?format=' + format
+        }
+        $.ajax({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            },
+            url: url,
+            data: new FormData(this),
+            type: $(this).attr('method'),
+            enctype: $(this).attr('enctype'),
+            processData: false,
+            contentType: false,
+            success: function(data, status, xhr) {
+                handleRedirect(data, xhr);
+                handleMessages(data);
+                $(":submit").attr("disabled", false);
+            },
+            error: function(data, status, xhr) {
+                handleMessages(data);
+                $(":submit").attr("disabled", false);
+            }
+        });
+    });
+}
+
 /**
  * Handles messages contained in an ajax response if available
  * @param data - The data returned from the server

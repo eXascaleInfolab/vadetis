@@ -21,3 +21,11 @@ def dataset_removed_msg(dataset_title):
 
 def msg_injection_all_anomalies():
     return "Cannot compute an anomaly in a range that contains only anomalies"
+
+
+def dataset_imported_msg(title):
+    return "Dataset '%s' has been imported" % title
+
+
+def training_dataset_imported_msg(title):
+    return "Training Dataset '%s' has been imported" % title

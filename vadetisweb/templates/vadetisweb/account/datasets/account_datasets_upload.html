@@ -5,11 +5,11 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    {% breadcrumb "Upload Dataset" "vadetisweb:account_datasets_upload" %}
+    {% breadcrumb "Add Dataset" "vadetisweb:account_datasets_upload" %}
 {% endblock %}
 
 {% block page_title %}
-    <h3 class="kt-subheader__title">Upload Dataset</h3>
+    <h3 class="kt-subheader__title">Add Dataset</h3>
 {% endblock %}
 
 {% block content %}
@@ -18,7 +18,7 @@
             <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title">Import Dataset</h3>
+                        <h3 class="kt-portlet__head-title">Upload</h3>
                     </div>
                 </div>
                 {% url 'vadetisweb:account_datasets_upload' as fromurl %}
