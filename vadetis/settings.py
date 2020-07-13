@@ -279,13 +279,13 @@ REGISTRATION_SALT = 'encoded_username:timestamp:signature'
 STATIC_URL = '/static/'
 
 # CELERY CONFIG
-CELERY_BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'django-db'
-CELERY_TASK_RESULT_EXPIRES = timedelta(days=30)
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TIMEZONE = 'Europe/Zurich'
+# CELERY_BROKER_URL = 'redis://localhost:6379'
+# CELERY_RESULT_BACKEND = 'django-db'
+# CELERY_TASK_RESULT_EXPIRES = timedelta(days=30)
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_ACCEPT_CONTENT = ['json']
+# CELERY_TIMEZONE = 'Europe/Zurich'
 
 # BREADCRUMBS
 BREADCRUMBS_TEMPLATE = 'vadetisweb/parts/breadcrumbs.html'

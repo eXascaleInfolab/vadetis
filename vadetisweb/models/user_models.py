@@ -2,27 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxLengthValidator, MaxValueValidator, MinValueValidator, RegexValidator
 
-from vadetisweb.models import TaskMixin
 from vadetisweb.parameters import *
-
-
-class UserTasks(TaskMixin, models.Model):
-    # link UserTasks to a User model instance.
-    user = models.OneToOneField(User, null=False, on_delete=models.CASCADE)
-
-    class Meta:
-        verbose_name_plural = 'User Tasks'
-
-    def __str__(self):
-        return '%s' % (self.user.username)
 
 
 class UserSetting(models.Model):
     """
-    The User Profile contains User settings for the application.
+    The user settings for the application.
     """
 
-    # link UserProfile to a User model instance.
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
 
     color_outliers = models.CharField('Color outliers', max_length=7, null=False, default=DEFAULT_COLOR_OUTLIERS,
@@ -45,6 +32,8 @@ class UserSetting(models.Model):
                                                help_text='Used to set the decimal places for the presentation. Must be a number between 1 and 6',
                                                validators=[MinValueValidator(1), MaxValueValidator(6)])
 
-    # Override the __unicode__() method to return out something meaningful!
     def __str__(self):
-        return self.user.username
+        if self.user is not None:
+            return self.user.username
+        else:
+            return 'Settings'

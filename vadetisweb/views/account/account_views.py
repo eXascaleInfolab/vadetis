@@ -10,12 +10,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
-from vadetisweb.models import UserTasks
 from vadetisweb.utils import settings_from_request_or_default_dict, update_setting_cookie, write_to_tempfile
 from vadetisweb.utils.data_import_utils import *
 from vadetisweb.serializers.account_serializers import *
 from vadetisweb.serializers.dataset.account_dataset_serializer import *
-from vadetisweb.tasks import TaskImportData, TaskImportTrainingData
 from vadetisweb.factory import *
 
 

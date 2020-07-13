@@ -20,7 +20,6 @@ cython==0.29.20
 confusable-homoglyphs==3.2.0
 scikit-learn==0.23.1
 matplotlib==3.2.2
-redis==3.5.3
 django-allauth==0.42.0
 djangorestframework==3.11.0
 djangorestframework-datatables==0.5.2
