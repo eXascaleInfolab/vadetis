@@ -1,5 +1,5 @@
 {% load account %}
-<!-- begin:: Confirm E-Mail Form -->
+<!-- begin: Confirm E-Mail Form -->
 <form id="email_confirm_form" class="kt-form" method="post" action="{% url 'account_confirm_email' confirmation.key %}">
     {% csrf_token %}
     <div class="kt-portlet__body">
@@ -18,4 +18,4 @@
         </div>
     </div>
 </form>
-<!-- end:: Confirm E-Mail Form -->
+<!-- end: Confirm E-Mail Form -->

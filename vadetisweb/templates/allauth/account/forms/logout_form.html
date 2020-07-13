@@ -1,5 +1,5 @@
 {% load account %}
-<!-- begin:: Logout Form -->
+<!-- begin: Logout Form -->
 <form id="logout_form" class="kt-form" method="post" action="{% url 'account_logout' %}">
     {% csrf_token %}
     <div class="kt-portlet__body">
@@ -16,4 +16,4 @@
         </div>
     </div>
 </form>
-<!-- end:: Logout Form -->
+<!-- end: Logout Form -->

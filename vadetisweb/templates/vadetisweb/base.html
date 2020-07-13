@@ -6,9 +6,9 @@
     {% include 'vadetisweb/parts/includes/head.html' %}
     {% block form_media_css %}
         {% if form %}
-            <!-- begin:: Form Media CSS -->
+            <!-- begin: Form Media CSS -->
             {{ form.media.css }}
-            <!-- end:: Form Media CSS -->
+            <!-- end: Form Media CSS -->
         {% endif %}
     {% endblock %}
     {% block css %}
@@ -19,12 +19,12 @@
 	{% endblock %}
 </head>
 
-<!-- begin::Body -->
+<!-- begin:Body -->
 <body class="kt-page--loading-enabled kt-page--loading kt-page--fixed kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header--minimize-menu kt-header-mobile--fixed kt-subheader--enabled kt-subheader--transparent kt-aside--enabled kt-aside--left kt-aside--fixed kt-page--loading">
 
-    <!-- begin:: Page -->
+    <!-- begin: Page -->
 
-    <!-- begin:: Header Mobile -->
+    <!-- begin: Header Mobile -->
     <div id="kt_header_mobile" class="kt-header-mobile  kt-header-mobile--fixed ">
         <div class="kt-header-mobile__logo">
             <a href="{% url 'vadetisweb:index' %}">
@@ -37,12 +37,12 @@
         </div>
     </div>
 
-    <!-- end:: Header Mobile -->
+    <!-- end: Header Mobile -->
     <div class="kt-grid kt-grid--hor kt-grid--root">
         <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver kt-page">
             <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">
 
-                <!-- begin:: Header -->
+                <!-- begin: Header -->
                 <div id="kt_header" class="kt-header  kt-header--fixed " data-ktheader-minimize="on">
                     <div class="kt-container kt-container--fluid">
 
@@ -81,18 +81,17 @@
                                 </ul>
                             </div>
                         </div>
-
                         <!-- end: Header Menu -->
 
-                        <!-- begin:: Logo -->
+                        <!-- begin: Logo -->
                         <div class="kt-header__brand  kt-grid__item" id="kt_header_brand">
                             <a class="kt-header__brand-logo" href="{% url 'vadetisweb:index' %}">
                                 <img alt="Logo" src="{% static 'img/global/logo.png' %}" />
                             </a>
                         </div>
-                        <!-- end:: Logo -->
+                        <!-- end: Logo -->
 
-                        <!-- begin:: Header Topbar -->
+                        <!-- begin: Header Topbar -->
                         <div class="kt-header__topbar kt-grid__item">
 
                             <!--begin: Search -->
@@ -120,16 +119,16 @@
                             <!--end: Login -->
                         </div>
 
-                        <!-- end:: Header Topbar -->
+                        <!-- end: Header Topbar -->
                     </div>
                 </div>
 
-                <!-- end:: Header -->
+                <!-- end: Header -->
                 <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver kt-grid--stretch">
                     <div class="kt-container kt-body  kt-grid kt-grid--ver" id="kt_body">
                         <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
 
-                            <!-- begin:: Subheader -->
+                            <!-- begin: Subheader -->
                             <div class="kt-subheader   kt-grid__item" id="kt_subheader">
                                 <div class="kt-subheader__main">
                                     {% block page_title %}{% endblock %}
@@ -138,9 +137,9 @@
                                     {% block breadcrumbs_content %}{% render_breadcrumbs %}{% endblock %}
                                 </div>
                             </div>
-                            <!-- end:: Subheader -->
+                            <!-- end: Subheader -->
 
-                            <!-- begin:: Content -->
+                            <!-- begin: Content -->
                             <div class="kt-content kt-grid__item kt-grid__item--fluid" id="kt_content">
                                 <div id="message-container">
                                     {% include 'vadetisweb/parts/messages.html' %}
@@ -149,26 +148,26 @@
                                 {% block content %}{% endblock %}
                                 <!--End::Main Content -->
                             </div>
-                            <!-- end:: Content -->
+                            <!-- end: Content -->
                         </div>
                     </div>
                 </div>
 
-                <!-- begin:: Footer -->
+                <!-- begin: Footer -->
                 {% block footer %}
                     {% include 'vadetisweb/parts/footer/footer.html' %}
                 {% endblock %}
-                <!-- end:: Footer -->
+                <!-- end: Footer -->
             </div>
         </div>
     </div>
-    <!-- end:: Page -->
+    <!-- end: Page -->
 
-    <!-- begin::Scrolltop -->
+    <!-- begin:Scrolltop -->
     <div id="kt_scrolltop" class="kt-scrolltop">
         <i class="mdi mdi-arrow-up-bold mdi-24px"></i>
     </div>
-    <!-- end::Scrolltop -->
+    <!-- end:Scrolltop -->
     {% block bottom_js %}
         {% include 'vadetisweb/parts/includes/bottom_js.html' %}
         <script type="text/javascript">
@@ -187,9 +186,9 @@
     {% endblock %}
     {% block form_media_js %}
         {% if form %}
-            <!-- begin:: Form Media Scripts -->
+            <!-- begin: Form Media Scripts -->
             {{ form.media.js }}
-            <!-- end:: Form Media Scripts -->
+            <!-- end: Form Media Scripts -->
         {% endif %}
     {% endblock %}
 </body>
