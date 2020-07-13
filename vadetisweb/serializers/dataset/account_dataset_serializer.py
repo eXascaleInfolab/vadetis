@@ -243,7 +243,7 @@ class TrainingDatasetImportSerializer(serializers.Serializer):
                                       help_text='Determines if this dataset is available to other users',
                                       style={'template': 'vadetisweb/parts/input/checkbox_input.html'})
 
-    csv_file = serializers.FileField(required=True, label='CSV File', help_text='The csv file of the dataset. As anomaly detection is computationally expensive, the dataset must not exceed 100\'000 values.',
+    csv_file = serializers.FileField(required=True, label='CSV File', help_text='The csv file of the dataset. As anomaly detection is computationally expensive, the dataset must not exceed 10\'000 values.',
                                      validators=[FileExtensionValidator(allowed_extensions=['csv'])],
                                      style={'template': 'vadetisweb/parts/input/file_input.html'})
 
