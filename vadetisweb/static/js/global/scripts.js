@@ -4,7 +4,7 @@ var KTApp = function() {
 
     var initTooltip = function(el) {
         var skin = el.data('skin') ? 'tooltip-' + el.data('skin') : '';
-        var width = el.data('width') == 'auto' ? 'tooltop-auto-width' : '';
+        var width = el.data('width') === 'auto' ? 'tooltop-auto-width' : '';
         var triggerValue = el.data('trigger') ? el.data('trigger') : 'hover';
 
         el.tooltip({
@@ -77,7 +77,7 @@ var KTApp = function() {
             KTUtil.scrollInit(this, {
                 mobileNativeScroll: true,
                 handleWindowResize: true,
-                rememberPosition: (el.data('remember-position') == 'true' ? true : false),
+                rememberPosition: (el.data('remember-position') === 'true' ? true : false),
                 height: function() {
                     if (KTUtil.isInResponsiveRange('tablet-and-mobile') && el.data('mobile-height')) {
                         return el.data('mobile-height');
@@ -1259,7 +1259,6 @@ window.onload = function() {
 var KTHeader = function(elementId, options) {
     // Main object
     var the = this;
-    var init = false;
 
     // Get element object
     var element = KTUtil.get(elementId);
@@ -1268,19 +1267,6 @@ var KTHeader = function(elementId, options) {
     if (element === undefined) {
         return;
     }
-
-    // Default options
-    var defaultOptions = {
-        classic: false,
-        offset: {
-            mobile: 150,
-            desktop: 200
-        },
-        minimize: {
-            mobile: false,
-            desktop: false
-        }
-    };
 
     ////////////////////////////
     // ** Private Methods  ** //
@@ -1313,9 +1299,7 @@ var KTHeader = function(elementId, options) {
          */
         init: function(options) {
             the.events = [];
-
-            // merge default and user defined options
-            the.options = KTUtil.deepExtend({}, defaultOptions, options);
+            the.options = options;
         },
 
         /**
@@ -1325,8 +1309,6 @@ var KTHeader = function(elementId, options) {
         build: function() {
             var lastScrollTop = 0;
             var eventTriggerState = true;
-            var viewportHeight = KTUtil.getViewPort().height;
-
             if (the.options.minimize.mobile === false && the.options.minimize.desktop === false) {
                 return;
             }
@@ -1363,7 +1345,7 @@ var KTHeader = function(elementId, options) {
                         KTUtil.addClass(body, off);
                         KTUtil.removeClass(body, on);
 
-                        if (eventTriggerState == false) {
+                        if (eventTriggerState === false) {
                             Plugin.eventTrigger('minimizeOff', the);
                             eventTriggerState = true; 
                         }
@@ -1381,12 +1363,11 @@ var KTHeader = function(elementId, options) {
                         KTUtil.addClass(body, off);
                         KTUtil.removeClass(body, on);
 
-                        if (eventTriggerState == false) {
+                        if (eventTriggerState === false) {
                             Plugin.eventTrigger('minimizeOff', the);
                             eventTriggerState = true;
                         }
                     }
-
                     lastScrollTop = st;
                 }
             });
@@ -1398,9 +1379,9 @@ var KTHeader = function(elementId, options) {
         eventTrigger: function(name, args) {
             for (var i = 0; i < the.events.length; i++) {
                 var event = the.events[i];
-                if (event.name == name) {
-                    if (event.one == true) {
-                        if (event.fired == false) {
+                if (event.name === name) {
+                    if (event.one === true) {
+                        if (event.fired === false) {
                             the.events[i].fired = true;
                             event.handler.call(this, the, args);
                         }
@@ -1421,34 +1402,12 @@ var KTHeader = function(elementId, options) {
         }
     };
 
-    //////////////////////////
-    // ** Public Methods ** //
-    //////////////////////////
-
-    /**
-     * Set default options 
-     */
-
-    the.setDefaults = function(options) {
-        defaultOptions = options;
-    };
-
-    /**
-     * Register event
-     */
-    the.on = function(name, handler) {
-        return Plugin.addEvent(name, handler);
-    };
-
     ///////////////////////////////
     // ** Plugin Construction ** //
     ///////////////////////////////
 
     // Run plugin
     Plugin.construct.apply(the, [options]);
-
-    // Init done
-    init = true;
 
     // Return plugin instance
     return the;
@@ -1466,27 +1425,6 @@ var KTMenu = function(elementId, options) {
     if (!element) {
         return;
     }
-
-    // Default options
-    var defaultOptions = {       
-        // scrollable area with Perfect Scroll
-        scroll: {
-            rememberPosition: false
-        },
-        
-        // accordion submenu mode
-        accordion: {
-            slideSpeed: 200, // accordion toggle slide speed in milliseconds
-            autoScroll: false, // enable auto scrolling(focus) to the clicked menu item
-            autoScrollSpeed: 1200,
-            expandAll: true // allow having multiple expanded accordions in the menu
-        },
-
-        // dropdown submenu mode
-        dropdown: {
-            timeout: 500 // timeout in milliseconds to show and hide the hoverable submenu dropdown
-        }
-    };
 
     ////////////////////////////
     // ** Private Methods  ** //
@@ -1522,43 +1460,30 @@ var KTMenu = function(elementId, options) {
          */
         init: function(options) {
             the.events = [];
-
             the.eventHandlers = {};
-
-            // merge default and user defined options
-            the.options = KTUtil.deepExtend({}, defaultOptions, options);
-
+            the.options = options;
             // pause menu
             the.pauseDropdownHoverTime = 0;
-
             the.uid = KTUtil.getUniqueID();
         },
 
         update: function(options) {
-            // merge default and user defined options
-            the.options = KTUtil.deepExtend({}, defaultOptions, options);
-
+            the.options = options;
             // pause menu
             the.pauseDropdownHoverTime = 0;
-
              // reset menu
             Plugin.reset();
-
             the.eventHandlers = {};
-
             // build menu
             Plugin.build();
-
             KTUtil.data(element).set('menu', the);
         },
 
         reload: function() {
              // reset menu
             Plugin.reset();
-
             // build menu
             Plugin.build();
-
             // reset submenu props
             Plugin.resetSubmenuProps();
         },
@@ -1646,7 +1571,7 @@ var KTMenu = function(elementId, options) {
          */
         getSubmenuMode: function(el) {
             if ( KTUtil.isInResponsiveRange('desktop') ) {
-                if (el && KTUtil.hasAttr(el, 'data-ktmenu-submenu-toggle') && KTUtil.attr(el, 'data-ktmenu-submenu-toggle') == 'hover') {
+                if (el && KTUtil.hasAttr(el, 'data-ktmenu-submenu-toggle') && KTUtil.attr(el, 'data-ktmenu-submenu-toggle') === 'hover') {
                     return 'dropdown';
                 }
 
@@ -1673,11 +1598,7 @@ var KTMenu = function(elementId, options) {
          * @returns {KTMenu}
          */
         isConditionalSubmenuDropdown: function() {
-            if ( KTUtil.isInResponsiveRange('desktop') && KTUtil.isset(the.options.submenu, 'desktop.state.body') ) {
-                return true;
-            } else {
-                return false;
-            }
+            return KTUtil.isInResponsiveRange('desktop') && KTUtil.isset(the.options.submenu, 'desktop.state.body');
         },
 
         /**
@@ -1709,7 +1630,7 @@ var KTMenu = function(elementId, options) {
 
             var item = this;
 
-            if ( item.getAttribute('data-hover') == '1' ) {
+            if ( item.getAttribute('data-hover') === '1' ) {
                 item.removeAttribute('data-hover');
                 clearTimeout( item.getAttribute('data-timeout') );
                 item.removeAttribute('data-timeout');
@@ -1736,7 +1657,7 @@ var KTMenu = function(elementId, options) {
             var time = the.options.dropdown.timeout;
 
             var timeout = setTimeout(function() {
-                if ( item.getAttribute('data-hover') == '1' ) {
+                if ( item.getAttribute('data-hover') === '1' ) {
                     Plugin.hideSubmenuDropdown(item, true);
                 } 
             }, time);
@@ -1756,7 +1677,7 @@ var KTMenu = function(elementId, options) {
  
             var item = this.closest('.kt-menu__item');
 
-            if ( item.getAttribute('data-ktmenu-submenu-mode') == 'accordion' ) {
+            if ( item.getAttribute('data-ktmenu-submenu-mode') === 'accordion' ) {
                 return;
             }
 
@@ -1782,11 +1703,11 @@ var KTMenu = function(elementId, options) {
 
             var item = this.closest('.kt-menu__item');
 
-            if (item.getAttribute('data-ktmenu-submenu-mode') == 'accordion') {
+            if (item.getAttribute('data-ktmenu-submenu-mode') === 'accordion') {
                 return;
             }
 
-            if (KTUtil.hasClass(item, 'kt-menu__item--hover') == false) {
+            if (KTUtil.hasClass(item, 'kt-menu__item--hover') === false) {
                 KTUtil.addClass(item, 'kt-menu__item--open-dropdown');
                 Plugin.showSubmenuDropdown(item);
             }
@@ -1814,7 +1735,7 @@ var KTMenu = function(elementId, options) {
             var item = el ? el : this;
 
             if ( Plugin.getSubmenuMode(el) === 'dropdown' && (query = item.closest('.kt-menu__item') ) ) {
-                if (query.getAttribute('data-ktmenu-submenu-mode') != 'accordion' ) {
+                if (query.getAttribute('data-ktmenu-submenu-mode') !== 'accordion' ) {
                     e.preventDefault();
                     return;
                 }
@@ -2019,9 +1940,9 @@ var KTMenu = function(elementId, options) {
         eventTrigger: function(name, args) {
             for (var i = 0; i < the.events.length; i++ ) {
                 var event = the.events[i];
-                if ( event.name == name ) {
-                    if ( event.one == true ) {
-                        if ( event.fired == false ) {
+                if ( event.name === name ) {
+                    if ( event.one === true ) {
+                        if ( event.fired === false ) {
                             the.events[i].fired = true;
                             event.handler.call(this, the, args);
                         }
@@ -2051,15 +1972,6 @@ var KTMenu = function(elementId, options) {
     //////////////////////////
     // ** Public Methods ** //
     //////////////////////////
-
-    /**
-     * Set default options 
-     */
-
-    the.setDefaults = function(options) {
-        defaultOptions = options;
-    };
-
     /**
      * Update scroll
      */
@@ -2238,8 +2150,7 @@ var KTOffcanvas = function(elementId, options) {
         init: function(options) {
             the.events = [];
 
-            // merge default and user defined options
-            the.options = KTUtil.deepExtend({}, defaultOptions, options);
+            the.options = options;
             the.overlay;
 
             the.classBase = the.options.baseClass;
@@ -3967,7 +3878,7 @@ var KTLayout = function() {
 
         options.minimize.mobile = false;
 
-        if (KTUtil.attr(headerEl, 'data-ktheader-minimize') == 'on') {
+        if (KTUtil.attr(headerEl, 'data-ktheader-minimize') === 'on') {
             options.minimize.desktop = {};
             options.minimize.desktop.on = 'kt-header--minimize';
             options.offset.desktop = parseInt(KTUtil.css(headerEl, 'height')) - 10;
