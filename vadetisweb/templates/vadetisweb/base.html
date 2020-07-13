@@ -28,13 +28,12 @@
     <div id="kt_header_mobile" class="kt-header-mobile  kt-header-mobile--fixed ">
         <div class="kt-header-mobile__logo">
             <a href="{% url 'vadetisweb:index' %}">
-                <img alt="Logo" src="{% static 'img/global/icon.png' %}" style="max-height: 50px;"/>
+                <img alt="Logo" src="{% static 'img/global/logo.png' %}" style="max-height: 30px;"/>
             </a>
         </div>
         <div class="kt-header-mobile__toolbar">
-            <button class="kt-header-mobile__toolbar-toggler kt-header-mobile__toolbar-toggler--left" id="kt_aside_mobile_toggler"><span></span></button>
+            <button class="kt-header-mobile__toolbar-topbar-toggler" id="kt_header_mobile_topbar_toggler"><i class="mdi mdi-dots-vertical mdi-24px"></i></button>
             <button class="kt-header-mobile__toolbar-toggler" id="kt_header_mobile_toggler"><span></span></button>
-            <button class="kt-header-mobile__toolbar-topbar-toggler" id="kt_header_mobile_topbar_toggler"><i class="flaticon-more-1"></i></button>
         </div>
     </div>
 
@@ -128,26 +127,6 @@
                 <!-- end:: Header -->
                 <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver kt-grid--stretch">
                     <div class="kt-container kt-body  kt-grid kt-grid--ver" id="kt_body">
-
-                        <!-- begin:: Aside -->
-                        <button class="kt-aside-close " id="kt_aside_close_btn"><i class="mdi mdi-close mdi-18px"></i></button>
-                        <div class="kt-aside  kt-aside--fixed  kt-grid__item kt-grid kt-grid--desktop kt-grid--hor-desktop" id="kt_aside">
-
-                            <!-- begin:: Aside Menu -->
-                            <div class="kt-aside-menu-wrapper kt-grid__item kt-grid__item--fluid" id="kt_aside_menu_wrapper">
-                                <div id="kt_aside_menu" class="kt-aside-menu " data-ktmenu-vertical="1" data-ktmenu-scroll="1">
-                                    <ul class="kt-menu__nav ">
-                                        <li class="kt-menu__section "><h4 class="kt-menu__section-text">Account</h4></li>
-                                        <li class="kt-menu__item " aria-haspopup="true"><a href="{% url 'vadetisweb:account' %}" class="kt-menu__link "><span class="kt-menu__link-text">Profile</span></a></li>
-                                        <li class="kt-menu__item " aria-haspopup="true"><a href="{% url 'vadetisweb:account_datasets' %}" class="kt-menu__link "><span class="kt-menu__link-text">Datasets</span></a></li>
-                                        <li class="kt-menu__item " aria-haspopup="true"><a href="{% url 'vadetisweb:account_training_datasets' %}" class="kt-menu__link "><span class="kt-menu__link-text">Training Datasets</span></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <!-- end:: Aside Menu -->
-                        </div>
-
-                        <!-- end:: Aside -->
                         <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
 
                             <!-- begin:: Subheader -->
