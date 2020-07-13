@@ -19,12 +19,11 @@
 	{% endblock %}
 </head>
 
-<!-- begin:Body -->
+<!-- begin: Body -->
 <body class="kt-page--loading-enabled kt-page--loading kt-page--fixed kt-quick-panel--right kt-demo-panel--right kt-offcanvas-panel--right kt-header--fixed kt-header--minimize-menu kt-header-mobile--fixed kt-subheader--enabled kt-subheader--transparent kt-aside--enabled kt-aside--left kt-aside--fixed kt-page--loading">
 
     <!-- begin: Page -->
-
-    <!-- begin: Header Mobile -->
+    <!-- begin: Mobile Header -->
     <div id="kt_header_mobile" class="kt-header-mobile  kt-header-mobile--fixed ">
         <div class="kt-header-mobile__logo">
             <a href="{% url 'vadetisweb:index' %}">
@@ -36,8 +35,8 @@
             <button class="kt-header-mobile__toolbar-toggler" id="kt_header_mobile_toggler"><span></span></button>
         </div>
     </div>
+    <!-- end: Mobile Header -->
 
-    <!-- end: Header Mobile -->
     <div class="kt-grid kt-grid--hor kt-grid--root">
         <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver kt-page">
             <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">
@@ -46,7 +45,7 @@
                 <div id="kt_header" class="kt-header  kt-header--fixed " data-ktheader-minimize="on">
                     <div class="kt-container kt-container--fluid">
 
-                        <!-- begin: Header Menu -->
+                        <!-- begin: Menu -->
                         <button class="kt-header-menu-wrapper-close" id="kt_header_menu_mobile_close_btn"><i class="mdi mdi-close mdi-18px"></i></button>
                         <div class="kt-header-menu-wrapper kt-grid__item kt-grid__item--fluid" id="kt_header_menu_wrapper">
                             <button style="display: none;" class="kt-aside-toggler kt-aside-toggler--left" id="kt_aside_toggler"><span></span></button>
@@ -81,7 +80,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <!-- end: Header Menu -->
+                        <!-- end: Menu -->
 
                         <!-- begin: Logo -->
                         <div class="kt-header__brand  kt-grid__item" id="kt_header_brand">
@@ -91,7 +90,7 @@
                         </div>
                         <!-- end: Logo -->
 
-                        <!-- begin: Header Topbar -->
+                        <!-- begin: Topbar -->
                         <div class="kt-header__topbar kt-grid__item">
 
                             <!--begin: Search -->
@@ -100,11 +99,11 @@
                             {% endblock %}
                             <!--end: Search -->
 
-                            <!--begin: Quick actions -->
+                            <!--begin: Actions -->
                             {% block actions %}
                                 {% include 'vadetisweb/parts/header/actions.html' %}
                             {% endblock %}
-                            <!--end: Quick actions -->
+                            <!--end: Actions -->
 
                             <!--begin: User -->
                             {% block user %}
@@ -119,17 +118,17 @@
                             <!--end: Login -->
                         </div>
 
-                        <!-- end: Header Topbar -->
+                        <!-- end: Topbar -->
                     </div>
                 </div>
-
                 <!-- end: Header -->
+
                 <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver kt-grid--stretch">
                     <div class="kt-container kt-body  kt-grid kt-grid--ver" id="kt_body">
                         <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
 
-                            <!-- begin: Subheader -->
-                            <div class="kt-subheader   kt-grid__item" id="kt_subheader">
+                            <!-- begin: SubHeader -->
+                            <div class="kt-subheader kt-grid__item" id="kt_subheader">
                                 <div class="kt-subheader__main">
                                     {% block page_title %}{% endblock %}
                                     <span class="kt-subheader__separator kt-hidden"></span>
@@ -137,22 +136,21 @@
                                     {% block breadcrumbs_content %}{% render_breadcrumbs %}{% endblock %}
                                 </div>
                             </div>
-                            <!-- end: Subheader -->
+                            <!-- end: SubHeader -->
 
                             <!-- begin: Content -->
                             <div class="kt-content kt-grid__item kt-grid__item--fluid" id="kt_content">
                                 <div id="message-container">
                                     {% include 'vadetisweb/parts/messages.html' %}
                                 </div>
-                                <!--Begin::Main Content -->
+                                <!-- begin: Main Content -->
                                 {% block content %}{% endblock %}
-                                <!--End::Main Content -->
+                                <!-- end: Main Content -->
                             </div>
                             <!-- end: Content -->
                         </div>
                     </div>
                 </div>
-
                 <!-- begin: Footer -->
                 {% block footer %}
                     {% include 'vadetisweb/parts/footer/footer.html' %}
@@ -163,11 +161,11 @@
     </div>
     <!-- end: Page -->
 
-    <!-- begin:Scrolltop -->
+    <!-- begin: Scrolltop -->
     <div id="kt_scrolltop" class="kt-scrolltop">
         <i class="mdi mdi-arrow-up-bold mdi-24px"></i>
     </div>
-    <!-- end:Scrolltop -->
+    <!-- end: Scrolltop -->
     {% block bottom_js %}
         {% include 'vadetisweb/parts/includes/bottom_js.html' %}
         <script type="text/javascript">
