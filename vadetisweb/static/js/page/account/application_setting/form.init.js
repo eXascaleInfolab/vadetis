@@ -8,9 +8,9 @@ var ApplicationSettingsForm = function () {
             event.preventDefault();
             var url = $(this).attr('action');
             if(format !== undefined) {
-                url += url + '?format=' + format;
+                url = url + '?format=' + format;
             }
-            clearFormErrors("{{ formid }}");
+            clearFormErrors(form_id);
             clearMessages();
             var csrftoken = Cookies.get('csrftoken');
             $.ajax({

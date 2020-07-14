@@ -282,7 +282,7 @@ function makeHtmlId(str) {
  */
 function settingsFromCookie() {
     var settings = {};
-    _setSettingOrDefault(settings, 'color_outliers', '#FF0000');
+    _setSettingOrDefault(settings, 'color_outliers', '#C30000');
     _setSettingOrDefault(settings, 'color_true_positive', '#008800');
     _setSettingOrDefault(settings, 'color_false_positive', '#FF0000');
     _setSettingOrDefault(settings, 'color_false_negative', '#0000FF');

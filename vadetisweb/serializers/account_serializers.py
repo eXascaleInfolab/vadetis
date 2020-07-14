@@ -27,8 +27,8 @@ class UserSettingSerializer(serializers.ModelSerializer):
     round_digits = RoundDigitsField(default=3, min_value=1, max_value=6,
                                     validators=[MinValueValidator(1), MaxValueValidator(6)], )
 
-    color_outliers = serializers.CharField(max_length=7, default="#FF0000",
-                                           help_text='Default: #FF0000, the RGB color used to mark outliers',
+    color_outliers = serializers.CharField(max_length=7, default="#C30000",
+                                           help_text='Default: #C30000, the RGB color used to mark outliers',
                                            validators=[RegexValidator(regex='^#(?:[0-9a-fA-F]{3}){1,2}$')],
                                            style={'template': 'vadetisweb/parts/input/text_input.html',
                                                   'input_type': 'color'})
