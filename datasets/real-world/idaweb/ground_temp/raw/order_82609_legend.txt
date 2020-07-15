@@ -1,0 +1,46 @@
+Bundesamt für Meteorologie und Klimatologie, MeteoSchweiz
+Operation Center 1
+Postfach 257
+8058 Zürich-Flughafen
+
+stn yyyyMMddHHmm
+
+stn Stationskürzel
+y   Jahr
+M   Monat
+d   Tag
+H   Stunde
+m   Minute
+
+Zeitangaben in UTC: 00:40 UTC = 02:40 Sommerzeit
+                              = 01:40 Winterzeit
+
+Zeitbezug bei Stundenwerten, sofern in der Parameterbeschreibung nicht anders vermerkt: HH  = (HH-1):01 - HH:00
+Beispiel: 13 = beinhaltet Messperiode von 12:01 bis 13:00 
+
+Fehlende Messwerte sind gekenntzeichnet mit '-'
+
+Qualitätsinformationen: Die Legende zu den Qualitätsinformationen ist zu finden unter: https://gate.meteoswiss.ch/idaweb/text/datenqualitaet_legende_de.pdf
+
+ 
+
+
+
+
+Stationen
+---------
+stn       Name                                 Parameter        Datenquelle                                        Länge/Breite             Koordinaten [km] Höhe ü. M. [m]
+SLFAL1    Allières / Chenau                    tre200h0         Eidg. Institut für Schnee- und Lawinenforschung    6°60'/46°29'             565800/148685    1716
+GRA       Fribourg / Posieux                   tre200h0         MeteoSchweiz                                       7°07'/46°46'             575183/180076    650
+MLS       Le Moléson                           tre200h0         MeteoSchweiz                                       7°01'/46°33'             567718/155076    1974
+MAS       Marsens                              tre200h0         MeteoSchweiz                                       7°04'/46°39'             571758/167316    714
+PLF       Plaffeien                            tre200h0         MeteoSchweiz                                       7°16'/46°45'             586828/177406    1042
+MMROM     Romont                               tre200h0         MeteoGroup Schweiz AG                              6°55'/46°42'             560223/171568    778
+
+Parameter
+---------
+          Einheit                              Beschreibung
+tre200h0  °C                                   Lufttemperatur 2 m über Boden; Stundenmittel
+qtre200h0 Code                                 de/legend.parameter.dq
+mtre200h0 Code                                 Mutationsinformation für tre200h0
+

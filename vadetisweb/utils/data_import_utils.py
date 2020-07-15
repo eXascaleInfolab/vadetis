@@ -147,8 +147,7 @@ def import_dataset(owner_username, dataset_file_name, title, type, **kwargs):
 
                 # check if needed columns are present and check if values complete
                 required_cols = pd.Series(['l_name', 'latitude', 'longitude'])
-                if not required_cols.isin(df.columns).all() or df_loc.loc[
-                    ts_names, required_cols].isnull().values.any():
+                if not required_cols.isin(df_loc.columns).all() or df_loc.loc[ts_names, required_cols].isnull().values.any():
                     err_msg = "Some required values are missing"
                     raise ValueError(err_msg)
 

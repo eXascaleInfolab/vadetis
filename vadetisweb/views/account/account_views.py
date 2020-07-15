@@ -161,7 +161,7 @@ class AccountUploadDataset(APIView):
 
             try:
                 if spatial_file is not None:
-                    import_dataset(user.username, dataset_file.name, title, type, kwargs={'spatial_file_name': spatial_file.name})
+                    import_dataset(user.username, dataset_file.name, title, type, spatial_file_name=spatial_file.name)
                     silent_remove(dataset_file.name)
                     silent_remove(spatial_file.name)
 
