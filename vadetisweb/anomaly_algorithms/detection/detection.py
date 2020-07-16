@@ -87,8 +87,7 @@ def rpca_detection(df, df_class, validated_data, settings):
                                                                          delta=validated_data['delta'],
                                                                          n_components=validated_data['n_components'],
                                                                          maximize_score=validated_data['maximize_score'],
-                                                                         train_size=validated_data['train_size'],
-                                                                         random_seed=validated_data['random_seed'])
+                                                                         train_size=validated_data['train_size'])
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
     data_series = get_common_detection_results_json(dataset, df, df_class, df_common_class, scores, y_hat_results, settings, type)
     return data_series, info
@@ -105,8 +104,7 @@ def histogram_detection(df, df_class, validated_data, settings):
 
     scores, y_hat_results, df_common_class, info = histogram(df, df_class, df_train, df_train_class,
                                                              maximize_score=validated_data['maximize_score'],
-                                                             train_size=validated_data['train_size'],
-                                                             random_seed=validated_data['random_seed'])
+                                                             train_size=validated_data['train_size'])
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
     data_series = get_common_detection_results_json(dataset, df, df_class, df_common_class, scores, y_hat_results, settings, type)
     return data_series, info
@@ -126,8 +124,7 @@ def cluster_detection(df, df_class, validated_data, settings):
                                                                             maximize_score=validated_data['maximize_score'],
                                                                             n_components=validated_data['n_components'],
                                                                             n_init=validated_data['n_init'],
-                                                                            train_size=validated_data['train_size'],
-                                                                            random_seed=validated_data['random_seed'])
+                                                                            train_size=validated_data['train_size'])
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
     data_series = get_common_detection_results_json(dataset, df, df_class, df_common_class, scores, y_hat_results, settings, type)
     return data_series, info
@@ -148,8 +145,7 @@ def svm_detection(df, df_class, validated_data, settings):
                                                        gamma=validated_data['gamma'],
                                                        nu=validated_data['nu'],
                                                        kernel=validated_data['kernel'],
-                                                       train_size=validated_data['train_size'],
-                                                       random_seed=validated_data['random_seed'])
+                                                       train_size=validated_data['train_size'])
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
     data_series = get_common_detection_results_json(dataset, df, df_class, df_common_class, scores, y_hat_results, settings, type)
     return data_series, info
@@ -171,8 +167,7 @@ def isolation_forest_detection(df, df_class, validated_data, settings):
                                                                     n_jobs=-1,
                                                                     bootstrap=validated_data['bootstrap'],
                                                                     n_estimators=validated_data['n_estimators'],
-                                                                    train_size=validated_data['train_size'],
-                                                                    random_seed=validated_data['random_seed'])
+                                                                    train_size=validated_data['train_size'])
 
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
     data_series = get_common_detection_results_json(dataset, df, df_class, df_common_class, scores, y_hat_results, settings, type)

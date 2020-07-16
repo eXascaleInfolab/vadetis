@@ -44,8 +44,7 @@ def rpca_suggestion(df, df_class, validated_data, ):
                                                                          delta=validated_data['delta'],
                                                                          n_components=validated_data['n_components'],
                                                                          maximize_score=validated_data['maximize_score'],
-                                                                         train_size=validated_data['train_size'],
-                                                                         random_seed=validated_data['random_seed'])
+                                                                         train_size=validated_data['train_size'])
 
     return info
 
@@ -60,8 +59,7 @@ def histogram_suggestion(df, df_class, validated_data):
 
     scores, y_hat_results, df_common_class, info = histogram(df, df_class, df_train, df_train_class,
                                                              maximize_score=validated_data['maximize_score'],
-                                                             train_size=validated_data['train_size'],
-                                                             random_seed=validated_data['random_seed'])
+                                                             train_size=validated_data['train_size'])
 
     return info
 
@@ -78,8 +76,7 @@ def cluster_suggestion(df, df_class, validated_data):
                                                                             maximize_score=validated_data['maximize_score'],
                                                                             n_components=validated_data['n_components'],
                                                                             n_init=validated_data['n_init'],
-                                                                            train_size=validated_data['train_size'],
-                                                                            random_seed=validated_data['random_seed'])
+                                                                            train_size=validated_data['train_size'])
 
     return info
 
@@ -97,8 +94,7 @@ def svm_suggestion(df, df_class, validated_data):
                                                        gamma=validated_data['gamma'],
                                                        nu=validated_data['nu'],
                                                        kernel=validated_data['kernel'],
-                                                       train_size=validated_data['train_size'],
-                                                       random_seed=validated_data['random_seed'])
+                                                       train_size=validated_data['train_size'])
     return info
 
 
@@ -116,7 +112,6 @@ def isolation_forest_suggestion(df, df_class, validated_data):
                                                                     n_jobs=-1,
                                                                     bootstrap=validated_data['bootstrap'],
                                                                     n_estimators=validated_data['n_estimators'],
-                                                                    train_size=validated_data['train_size'],
-                                                                    random_seed=validated_data['random_seed'])
+                                                                    train_size=validated_data['train_size'])
 
     return info

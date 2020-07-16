@@ -43,10 +43,6 @@ class ConfJsonField(serializers.JSONField):
                     title='train_size',
                     type=openapi.TYPE_NUMBER,
                 ),
-                'random_seed': openapi.Schema(
-                    title='random_seed',
-                    type=openapi.TYPE_INTEGER,
-                ),
                 'n_init': openapi.Schema(
                     title='n_init',
                     type=openapi.TYPE_INTEGER,

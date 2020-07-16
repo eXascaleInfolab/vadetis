@@ -69,7 +69,7 @@ class TimeSeriesField(serializers.PrimaryKeyRelatedField):
 class TrainSizeFloatField(serializers.FloatField):
     def __init__(self, **kwargs):
         super(TrainSizeFloatField, self).__init__(**kwargs)
-        self.label = 'Train Size'
+        self.label = 'Training Size'
         self.help_text = 'Represent the proportion of the training dataset to use for model training. The rest of the data will be used to validate the model. At least 20% of the data will be required to either train or validate the model.'
         self.style = {'template': 'vadetisweb/parts/input/ion_slider_input.html',
                       'id': 'train_size',
@@ -95,16 +95,6 @@ class WindowSizeIntegerField(serializers.IntegerField):
                       'data_max': self.max_value,
                       'data_from': self.initial,
                       'data_step': "1",
-                      'help_text_in_popover': True}
-
-
-class RandomSeedIntegerField(serializers.IntegerField):
-    def __init__(self, **kwargs):
-        super(RandomSeedIntegerField, self).__init__(**kwargs)
-        self.label = 'Random Seed'
-        self.help_text = 'The seed used by the random number generator when randomly selecting training and validation data. If you provide the same seed again in a later computation, you get the same selection of data.'
-        self.style = {'template': 'vadetisweb/parts/input/text_input.html',
-                      'placeholder': 'e.g. 42',
                       'help_text_in_popover': True}
 
 

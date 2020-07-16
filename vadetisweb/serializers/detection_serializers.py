@@ -54,7 +54,6 @@ class RPCAMEstimatorLossSerializer(ConditionalRequiredFieldMixin, serializers.Se
 
     train_size = TrainSizeFloatField(initial=0.5, min_value=0.2, max_value=0.8, required=True)
 
-    random_seed = RandomSeedIntegerField(initial=10, required=False)
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
     range_start = RangeStartHiddenIntegerField()
@@ -80,7 +79,6 @@ class HistogramSerializer(ConditionalRequiredFieldMixin, serializers.Serializer)
                                             required=True,
                                             queryset=DataSet.objects.none())
     train_size = TrainSizeFloatField(initial=0.5, min_value=0.2, max_value=0.8, required=True)
-    random_seed = RandomSeedIntegerField(initial=10, required=False)
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
     range_start = RangeStartHiddenIntegerField()
@@ -117,7 +115,6 @@ class ClusterSerializer(ConditionalRequiredFieldMixin, serializers.Serializer):
                                              'help_text_in_popover': True})
 
     train_size = TrainSizeFloatField(initial=0.5, min_value=0.2, max_value=0.8, required=True)
-    random_seed = RandomSeedIntegerField(initial=10, required=False)
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
     range_start = RangeStartHiddenIntegerField()
@@ -162,7 +159,6 @@ class SVMSerializer(ConditionalRequiredFieldMixin, serializers.Serializer):
                                        'help_text_in_popover': True})
     train_size = TrainSizeFloatField(initial=0.5, min_value=0.2, max_value=0.8, required=True)
 
-    random_seed = RandomSeedIntegerField(initial=10, required=False)
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
     range_start = RangeStartHiddenIntegerField()
@@ -199,7 +195,6 @@ class IsolationForestSerializer(ConditionalRequiredFieldMixin, serializers.Seria
                                                    'help_text_in_popover': True})
     train_size = TrainSizeFloatField(initial=0.5, min_value=0.2, max_value=0.8, required=True)
 
-    random_seed = RandomSeedIntegerField(initial=10, required=False)
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
     range_start = RangeStartHiddenIntegerField()
