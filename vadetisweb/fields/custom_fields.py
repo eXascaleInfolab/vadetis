@@ -25,19 +25,3 @@ class IonIntegerRangeJsonField(serializers.JSONField):
 
     def __init__(self, **kwargs):
         super(IonIntegerRangeJsonField, self).__init__(**kwargs)
-
-
-class RoundDigitsField(serializers.IntegerField):
-    def __init__(self, **kwargs):
-        super(RoundDigitsField, self).__init__(**kwargs)
-        self.label = 'Round digits'
-        self.help_text = 'Used to set the decimal places for the presentation. Note: Computation is always performed on the original data.'
-        self.style = {'template': 'vadetisweb/parts/input/ion_slider_input.html',
-                      'id': 'round_digits',
-                      'data_type': "single",
-                      'data_grid': "false",
-                      'data_min': self.min_value,
-                      'data_max': self.max_value,
-                      'data_from': self.initial,
-                      'data_step': "1",
-                      'help_text_in_popover': False}

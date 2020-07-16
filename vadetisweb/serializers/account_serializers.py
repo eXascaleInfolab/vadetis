@@ -10,7 +10,6 @@ from django.core.validators import MaxLengthValidator, MaxValueValidator, MinVal
 
 from vadetisweb.models import UserSetting, User
 from vadetisweb.validators import username_validators, email_validators, alphabetic_validator
-from vadetisweb.fields import RoundDigitsField
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -23,9 +22,6 @@ class UserSettingSerializer(serializers.ModelSerializer):
     """
     The form for the settings of the user
     """
-
-    round_digits = RoundDigitsField(default=3, min_value=1, max_value=6,
-                                    validators=[MinValueValidator(1), MaxValueValidator(6)], )
 
     color_outliers = serializers.CharField(max_length=7, default="#C30000",
                                            help_text='Default: #C30000, the RGB color used to mark outliers',
@@ -54,8 +50,7 @@ class UserSettingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserSetting
-        fields = ('round_digits', 'color_outliers',
-                  'color_true_positive', 'color_false_positive', 'color_false_negative')
+        fields = ('color_outliers', 'color_true_positive', 'color_false_positive', 'color_false_negative')
 
 
 class AccountUserSerializer(serializers.ModelSerializer):

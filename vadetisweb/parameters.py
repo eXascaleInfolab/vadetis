@@ -263,18 +263,15 @@ DTW_DISTANCE_FUNCTION = (
 #########################################################
 
 DEFAULT_COLOR_OUTLIERS = '#C30000'
-DEFAULT_COLOR_CLUSTERS = '#0000FF'
 DEFAULT_COLOR_TRUE_POSITIVES = '#008800'
 DEFAULT_COLOR_FALSE_POSITIVES = '#FF0000'
 DEFAULT_COLOR_FALSE_NEGATIVES = '#0000FF'
-DEFAULT_ROUND_DIGITS = 3
 
 DEFAULT_SETTINGS = (
     ('color_outliers', DEFAULT_COLOR_OUTLIERS),
     ('color_true_positive', DEFAULT_COLOR_TRUE_POSITIVES),
     ('color_false_positive', DEFAULT_COLOR_FALSE_POSITIVES),
     ('color_false_negative', DEFAULT_COLOR_FALSE_NEGATIVES),
-    ('round_digits', DEFAULT_ROUND_DIGITS),
 )
 
 #########################################################

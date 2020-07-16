@@ -286,7 +286,6 @@ function settingsFromCookie() {
     _setSettingOrDefault(settings, 'color_true_positive', '#008800');
     _setSettingOrDefault(settings, 'color_false_positive', '#FF0000');
     _setSettingOrDefault(settings, 'color_false_negative', '#0000FF');
-    _setSettingOrDefault(settings, 'round_digits', 3);
     return settings;
 }
 

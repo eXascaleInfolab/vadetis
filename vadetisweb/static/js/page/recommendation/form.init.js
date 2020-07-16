@@ -115,7 +115,6 @@ var DatasetRecommendationForm = function () {
                 enctype = form_selector.attr('enctype');
 
             var settings = settingsFromCookie();
-            var round_digits = settings.round_digits;
 
             // Iterate through values and send each as own request
             var numRequests = Array.from(formData.entries()).filter(array => array[0] === 'algorithm').length;
@@ -147,10 +146,10 @@ var DatasetRecommendationForm = function () {
                                 var conf = s.conf;
                                 var maximizedScore = conf.maximize_score;
                                 var series_data = [
-                                    parseFloat((info.accuracy * 100).toFixed(round_digits)),
-                                    parseFloat((info.f1_score * 100).toFixed(round_digits)),
-                                    parseFloat((info.precision * 100).toFixed(round_digits)),
-                                    parseFloat((info.recall * 100).toFixed(round_digits)),
+                                    parseFloat((info.accuracy * 100).toFixed(3)),
+                                    parseFloat((info.f1_score * 100).toFixed(3)),
+                                    parseFloat((info.precision * 100).toFixed(3)),
+                                    parseFloat((info.recall * 100).toFixed(3)),
                                 ];
                                 var existingSeries = getSeriesByName(highchart, responseAlgorithm);
                                 if (existingSeries !== undefined) {

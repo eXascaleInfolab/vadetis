@@ -138,8 +138,7 @@ class RecommendationPortlet(APIView):
             validated_data = portlet_serializer.validated_data
 
             settings = get_settings(request)
-            round_digits = settings['round_digits']
-            threshold = round(validated_data['threshold'], round_digits)
+            threshold = round(validated_data['threshold'], 3)
 
             transformed_conf = get_transformed_conf(validated_data['conf'])
 

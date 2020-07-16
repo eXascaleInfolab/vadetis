@@ -41,8 +41,6 @@ def settings_from_request_or_default_dict(request):
     _get_str_setting_from_cookie(settings, missing_keys, request, 'color_false_positive', DEFAULT_COLOR_FALSE_POSITIVES)
     _get_str_setting_from_cookie(settings, missing_keys, request, 'color_false_negative', DEFAULT_COLOR_FALSE_NEGATIVES)
 
-    _get_int_setting_from_cookie(settings, missing_keys, request, 'round_digits', DEFAULT_ROUND_DIGITS)
-
     return settings, missing_keys
 
 

@@ -3,7 +3,6 @@
 var VadetisHighcharts = function () {
 
     var initHighcharts = function (html_id, url, selectedButton) {
-        var settings = settingsFromCookie();
 
         Highcharts.setOptions({
             global: {
@@ -49,7 +48,7 @@ var VadetisHighcharts = function () {
                         }
                         tooltip += '<tr>';
                         tooltip += '<td><span style="color:' + this.series.color + '">\u25CF</span> ' + this.series.name + ': </td>'
-                            + '<td style="text-align: right;"><strong style="color: ' + value_color + ';">' + this.y.toFixed(settings.round_digits) + '</strong></td>';
+                            + '<td style="text-align: right;"><strong style="color: ' + value_color + ';">' + this.y.toFixed(3) + '</strong></td>';
 
                         if (point.point.score !== undefined) {
                             hasScore = true;
@@ -63,7 +62,7 @@ var VadetisHighcharts = function () {
                         for (var i = 0; i < this.points.length; i++) {
                             var point = this.points[i];
                             if (point.hasOwnProperty('point') && point.point.score !== undefined) {
-                                tooltip += '<tr><td><strong>Score:</strong></td><td>' + point.point.score.toFixed(settings.round_digits) + '</td></tr>';
+                                tooltip += '<tr><td><strong>Score:</strong></td><td>' + point.point.score.toFixed(3) + '</td></tr>';
                                 break;
                             }
                         }

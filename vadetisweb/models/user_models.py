@@ -28,10 +28,6 @@ class UserSetting(models.Model):
                                             help_text='Default: #0000FF, the RGB color used to mark false negatives',
                                             validators=[RegexValidator(regex='^#(?:[0-9a-fA-F]{3}){1,2}$')])
 
-    round_digits = models.PositiveIntegerField('Round digits', null=False, default=DEFAULT_ROUND_DIGITS,
-                                               help_text='Used to set the decimal places for the presentation. Must be a number between 1 and 6',
-                                               validators=[MinValueValidator(1), MaxValueValidator(6)])
-
     def __str__(self):
         if self.user is not None:
             return self.user.username

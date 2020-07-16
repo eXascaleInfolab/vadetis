@@ -356,13 +356,11 @@ function updateSeriesForType(highchart, url, type, show_anomaly, callback) {
 }
 
 function updateScores(info) {
-    var settings = settingsFromCookie();
-    var round_digits = settings.round_digits;
-    RoundSliders.init(round_digits);
-    RoundSliders.updateValue("#roundslider_accuracy", info.accuracy.toFixed(round_digits));
-    RoundSliders.updateValue("#roundslider_f1", info.f1_score.toFixed(round_digits));
-    RoundSliders.updateValue("#roundslider_precision", info.precision.toFixed(round_digits));
-    RoundSliders.updateValue("#roundslider_recall", info.recall.toFixed(round_digits));
+    RoundSliders.init(3);
+    RoundSliders.updateValue("#roundslider_accuracy", info.accuracy.toFixed(3));
+    RoundSliders.updateValue("#roundslider_f1", info.f1_score.toFixed(3));
+    RoundSliders.updateValue("#roundslider_precision", info.precision.toFixed(3));
+    RoundSliders.updateValue("#roundslider_recall", info.recall.toFixed(3));
 }
 
 function updateThreshold(thresholds, value) {
