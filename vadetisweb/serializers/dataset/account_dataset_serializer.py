@@ -14,7 +14,7 @@ class AccountDatasetDataTablesSerializer(serializers.ModelSerializer):
     title = serializers.CharField(read_only=True)
     timeseries = serializers.SerializerMethodField()
     values = serializers.SerializerMethodField()
-    frequency = serializers.CharField(read_only=True)
+    granularity = serializers.CharField(read_only=True)
     spatial = serializers.SerializerMethodField()
     public = serializers.BooleanField(read_only=True)
     training_datasets = serializers.SerializerMethodField()
@@ -50,7 +50,7 @@ class AccountDatasetDataTablesSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataSet
         fields = (
-            'title', 'timeseries', 'values', 'frequency', 'spatial', 'public', 'training_datasets', 'actions'
+            'title', 'timeseries', 'values', 'granularity', 'spatial', 'public', 'training_datasets', 'actions'
         )
 
 
@@ -80,7 +80,7 @@ class AccountDatasetSearchSerializer(serializers.Serializer):
                                              'col_index': '2',
                                              'step': 'any'})
 
-    frequency = serializers.CharField(write_only=True,
+    granularity = serializers.CharField(write_only=True,
                                       style={'template': 'vadetisweb/parts/input/text_input.html',
                                              'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
                                              'input_class': 'search-input',
@@ -115,7 +115,7 @@ class AccountTrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
     main_dataset = serializers.StringRelatedField(read_only=True, label="Main dataset")
     timeseries = serializers.SerializerMethodField()
     values = serializers.SerializerMethodField()
-    frequency = serializers.CharField(read_only=True)
+    granularity = serializers.CharField(read_only=True)
     public = serializers.BooleanField(read_only=True)
     spatial = serializers.SerializerMethodField()
     actions = serializers.SerializerMethodField(read_only=True)
@@ -130,13 +130,18 @@ class AccountTrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
         return obj.is_spatial()
 
     def get_actions(self, obj):
+        if obj.type == REAL_WORLD:
+            view_link = reverse('vadetisweb:display_real_world_training_dataset', args=[obj.main_dataset.id, obj.id])
+        else:
+            view_link = reverse('vadetisweb:display_synthetic_training_dataset', args=[obj.main_dataset.id, obj.id])
+
         edit_link = reverse('vadetisweb:account_training_dataset_edit', args=[obj.id])
-        return '<a href="%s">Edit</a>' % (edit_link)
+        return '<a href="%s">Display</a> <a href="%s">Edit</a>' % (view_link, edit_link)
 
     class Meta:
         model = DataSet
         fields = (
-            'title', 'main_dataset', 'timeseries', 'values', 'frequency', 'spatial', 'public', 'actions'
+            'title', 'main_dataset', 'timeseries', 'values', 'granularity', 'spatial', 'public', 'actions'
         )
 
 
@@ -172,7 +177,7 @@ class AccountTrainingDatasetSearchSerializer(serializers.Serializer):
                                              'col_index': '3',
                                              'step': 'any'})
 
-    frequency = serializers.CharField(write_only=True,
+    granularity = serializers.CharField(write_only=True,
                                       style={'template': 'vadetisweb/parts/input/text_input.html',
                                              'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
                                              'input_class': 'search-input',

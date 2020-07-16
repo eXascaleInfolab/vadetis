@@ -69,8 +69,8 @@ class DataSet(models.Model):
     dataframe_class = PickledObjectField(null=True, compress=True)
 
     # frequency of the data
-    frequency = models.CharField(null=True, max_length=16,
-                                 help_text='The frequency of the series in this dataset.')
+    granularity = models.CharField(null=True, max_length=16,
+                                 help_text='The granularity of the series in this dataset.')
 
     public = models.BooleanField(default=True, help_text='Determines if this dataset is public available.')
 

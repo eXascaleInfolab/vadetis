@@ -21,7 +21,7 @@ class LevelShiftInjector(OutlierInjector):
         :return: the value to add to the current value at index 'inject_at_index'
         """
 
-        frequency = self.df.index.inferred_freq
+        frequency = self.df.index.inferred_freq # the granularity
         before_dt = next_earlier_dt(inject_at_index, frequency, 10)
         after_dt = next_later_dt(inject_at_index, frequency, 10)
 

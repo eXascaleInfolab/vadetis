@@ -10,7 +10,7 @@ class DetectionDatasetDataTablesSerializer(serializers.ModelSerializer):
     owner = serializers.CharField(read_only=True)
     timeseries = serializers.SerializerMethodField()
     values = serializers.SerializerMethodField()
-    frequency = serializers.CharField(read_only=True)
+    granularity = serializers.CharField(read_only=True)
     spatial = serializers.SerializerMethodField()
     training_datasets = serializers.SerializerMethodField()
     actions = serializers.SerializerMethodField()
@@ -37,7 +37,7 @@ class DetectionDatasetDataTablesSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataSet
         fields = (
-            'title', 'owner', 'timeseries', 'values', 'frequency', 'spatial', 'training_datasets', 'actions'
+            'title', 'owner', 'timeseries', 'values', 'granularity', 'spatial', 'training_datasets', 'actions'
         )
 
 
@@ -73,7 +73,7 @@ class DetectionDatasetSearchSerializer(serializers.Serializer):
                                              'col_index': '3',
                                              'step': 'any'})
 
-    frequency = serializers.CharField(write_only=True,
+    granularity = serializers.CharField(write_only=True,
                                       style={'template': 'vadetisweb/parts/input/text_input.html',
                                              'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
                                              'input_class' : 'search-input',

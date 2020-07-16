@@ -70,10 +70,10 @@ def import_dataset(owner_username, dataset_file_name, title, type, **kwargs):
         # unflatten dataframe
         df = df_read.pivot(columns='ts_name', values='value')
 
-        # check if same frequency => pandas can infer a frequency
+        # check if same frequency (granularity) => pandas can infer a frequency
         freq = df.index.inferred_freq
         if freq is None:
-            err_msg = "Series do not have same frequency"
+            err_msg = "Series do not have same granularity"
             raise ValueError(err_msg)
 
         # get anomaly df
@@ -98,7 +98,7 @@ def import_dataset(owner_username, dataset_file_name, title, type, **kwargs):
         dataset = DataSet.objects.create(title=title,
                                          owner=user,
                                          type=type,
-                                         frequency=freq)
+                                         granularity=freq)
         logging.info("New dataset {0} added".format(dataset))
 
         # for each series create a time series object
@@ -227,10 +227,10 @@ def import_training_dataset(owner_username, main_dataset_id, training_dataset_fi
         # unflatten dataframe
         df = df_read.pivot(columns='ts_name', values='value')
 
-        # check if same frequency => pandas can infer a frequency
+        # check if same frequency (granularity) => pandas can infer a frequency
         freq = df.index.inferred_freq
         if freq is None:
-            err_msg = "Series do not have same frequency"
+            err_msg = "Series do not have same granularity"
             raise ValueError(err_msg)
 
         # get anomaly df
@@ -267,7 +267,7 @@ def import_training_dataset(owner_username, main_dataset_id, training_dataset_fi
         training_dataset = DataSet.objects.create(title=title,
                                                   owner=user,
                                                   type=main_dataset.type,
-                                                  frequency=freq,
+                                                  granularity=freq,
                                                   training_data=True,
                                                   main_dataset=main_dataset)
 

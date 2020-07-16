@@ -55,7 +55,7 @@ class DetectionSyntheticDataset(APIView):
             messages.error(request, dataset_not_found_msg(dataset_id))
             return redirect('vadetisweb:detection_synthetic_datasets')
 
-        selected_button = get_highcharts_range_button_preselector(dataset.frequency)
+        selected_button = get_highcharts_range_button_preselector(dataset.granularity)
 
         detection_serializer = AlgorithmSerializer(context={'dataset': dataset})
         injection_serializer = InjectionSerializer(context={'dataset_selected': dataset_id, 'request' : request})
@@ -84,7 +84,7 @@ class DetectionRealWorldDataset(APIView):
             messages.error(request, dataset_not_found_msg(dataset_id))
             return redirect('vadetisweb:detection_real_world_datasets')
 
-        selected_button = get_highcharts_range_button_preselector(dataset.frequency)
+        selected_button = get_highcharts_range_button_preselector(dataset.granularity)
 
         detection_serializer = AlgorithmSerializer(context={'dataset': dataset})
         injection_serializer = InjectionSerializer(context={'dataset_selected': dataset_id, 'request' : request})

@@ -54,7 +54,7 @@ class DisplaySyntheticDataset(APIView):
             messages.error(request, dataset_not_found_msg(dataset_id))
             return redirect('vadetisweb:display_synthetic_datasets')
 
-        selected_button = get_highcharts_range_button_preselector(dataset.frequency)
+        selected_button = get_highcharts_range_button_preselector(dataset.granularity)
 
         return Response({
             'dataset': dataset,
@@ -77,7 +77,7 @@ class DisplayRealWorldDataset(APIView):
             messages.error(request, dataset_not_found_msg(dataset_id))
             return redirect('vadetisweb:display_real_world_datasets')
 
-        selected_button = get_highcharts_range_button_preselector(dataset.frequency)
+        selected_button = get_highcharts_range_button_preselector(dataset.granularity)
 
         return Response({
             'dataset': dataset,
@@ -100,7 +100,7 @@ class DisplaySyntheticTrainingDataset(APIView):
             messages.error(request, dataset_not_found_msg(training_dataset_id))
             return redirect('vadetisweb:display_synthetic_datasets')
 
-        selected_button = get_highcharts_range_button_preselector(training_dataset.frequency)
+        selected_button = get_highcharts_range_button_preselector(training_dataset.granularity)
 
         return Response({
             'dataset': training_dataset.main_dataset,
@@ -123,7 +123,7 @@ class DisplayRealWorldTrainingDataset(APIView):
             messages.error(request, dataset_not_found_msg(training_dataset_id))
             return redirect('vadetisweb:display_real_world_datasets')
 
-        selected_button = get_highcharts_range_button_preselector(training_dataset.frequency)
+        selected_button = get_highcharts_range_button_preselector(training_dataset.granularity)
 
         return Response({
             'dataset': training_dataset.main_dataset,
