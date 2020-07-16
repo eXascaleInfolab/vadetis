@@ -41,16 +41,16 @@ class OutlierInjector:
     def get_factor(self):
         anomaly_scale = self.validated_data['anomaly_scale']
         if anomaly_scale == ANOMALY_INJECTION_SCALE_SMALL:
-            return 8
+            return 5
 
         elif anomaly_scale == ANOMALY_INJECTION_SCALE_MEDIUM:
-            return 16
+            return 10
 
         elif anomaly_scale == ANOMALY_INJECTION_SCALE_HIGH:
-            return 24
+            return 15
 
         elif anomaly_scale == ANOMALY_INJECTION_SCALE_RANDOM:
-            return np.random.choice([8, 16, 24])
+            return np.random.choice([5, 10, 15])
 
         else:
             raise ValueError

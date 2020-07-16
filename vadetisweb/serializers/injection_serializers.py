@@ -30,7 +30,7 @@ class InjectionSerializer(serializers.Serializer):
                                                 required=False,
                                                 choices=ANOMALY_INJECTION_SCALE,
                                                 default=ANOMALY_INJECTION_SCALE_MEDIUM,
-                                                help_text='The scale of deviation for anomalies from the normal data.',
+                                                help_text='The scale of difference for anomalies from the normal data.',
                                                 style={'template': 'vadetisweb/parts/input/select_input.html',
                                                        'help_text_in_popover': True})
 
