@@ -309,15 +309,14 @@ class LisaGeoDistanceSerializer(ConditionalRequiredFieldMixin, serializers.Seria
                                   style={'template': 'vadetisweb/parts/input/select_input.html',
                                          'help_text_in_popover': True})
 
-    time_range = serializers.ChoiceField(label='Time Range', choices=TIME_RANGE, required=True,
-                                         help_text='The time range to apply anomaly detection',
-                                         style={'template': 'vadetisweb/parts/input/select_input.html',
-                                                'help_text_in_popover': True})
+    time_range = TimeRangeChoiceField(required=True)
+
     maximize_score = serializers.ChoiceField(label='Maximize Score', choices=ANOMALY_DETECTION_SCORE_TYPES,
                                              required=True,
                                              help_text='Define which score you want to maximize for the results. In order to achive the best score out of this selection, the most appropiate threshold value will be selected. You can further change the threshold after computation.',
                                              style={'template': 'vadetisweb/parts/input/select_input.html',
                                                     'help_text_in_popover': True})
+
     range_start = RangeStartHiddenIntegerField()
     range_end = RangeEndHiddenIntegerField()
 
