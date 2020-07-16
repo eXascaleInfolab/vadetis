@@ -236,11 +236,6 @@ class LisaPearsonSerializer(ConditionalRequiredFieldMixin, serializers.Serialize
 
     window_size = WindowSizeIntegerField(initial=10, required=True, min_value=2, max_value=20)
 
-    normalize = serializers.BooleanField(initial=True, label='Apply Normalisation', required=False,
-                                         help_text='Each sample of the correlation values is rescaled independently of other samples so that its L1 norm equals one.',
-                                         style={'help_text_in_popover': False,
-                                                'template': 'vadetisweb/parts/input/checkbox_input.html'})
-
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)
     range_start = RangeStartHiddenIntegerField()
@@ -280,10 +275,6 @@ class LisaDtwPearsonSerializer(ConditionalRequiredFieldMixin, serializers.Serial
                                                     help_text='The distance function used to calculate the cost between values.',
                                                     style={'template': 'vadetisweb/parts/input/select_input.html',
                                                            'help_text_in_popover': True})
-    normalize = serializers.BooleanField(initial=True, label='Apply Normalisation', required=False,
-                                         help_text='Each sample of the correlation values is rescaled independently of other samples so that its L1 norm equals one.',
-                                         style={'help_text_in_popover': False,
-                                                'template': 'vadetisweb/parts/input/checkbox_input.html'})
 
     time_range = TimeRangeChoiceField(required=True)
     maximize_score = MaximizeScoreChoiceField(required=True)

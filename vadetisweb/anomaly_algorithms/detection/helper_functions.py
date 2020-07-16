@@ -27,18 +27,6 @@ def df_range(df, df_class, range_start_millis, range_end_millis, start_offset=No
     return df_range, df_class_range
 
 
-def df_normalize(df, norm='l1'):
-    """
-    Each sample (row) with at least one non zero component is rescaled independently of other samples so that its norm (l1, l2 or inf) equals one.
-
-    :param df: the dataframe to apply normalization
-    :param norm: ‘l1’, ‘l2’, or ‘max’
-    :return: a normalized dataframe
-    """
-    df.iloc[:, :] = Normalizer(norm=norm).fit_transform(df.fillna(0))
-    return df
-
-
 def df_copy_with_mean(df, axis=1, skipna=True):
     """
     Returns a copy of the dataframe, including a column with mean values

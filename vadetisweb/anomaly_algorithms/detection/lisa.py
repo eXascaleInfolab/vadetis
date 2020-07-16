@@ -153,7 +153,6 @@ def lisa_pearson(df, df_class, validated_data):
 
     window_size = validated_data['window_size']
     time_series = validated_data['time_series']
-    normalize = validated_data['normalize']
 
     # mean values of each row of dataframe
     df_mean = df_copy_with_mean(df)
@@ -162,10 +161,6 @@ def lisa_pearson(df, df_class, validated_data):
     df_class_copy = df_class_copy.rename(columns={time_series.id: 'class'})
 
     df_correlation = pearson(df, time_series.id, window_size=window_size)
-
-    # apply row standardization if needed
-    if normalize:
-        df_correlation = df_normalize(df_correlation)
 
     # LISA Time Series
     df_results = df_lisa_time_series(time_series.id, df_mean, df_correlation)
@@ -198,7 +193,6 @@ def lisa_dtw(df, df_class, validated_data):
 
     window_size = validated_data['window_size']
     time_series = validated_data['time_series']
-    normalize = validated_data['normalize']
     distance_function = validated_data['dtw_distance_function']
 
     # mean values of each row of dataframe
@@ -208,10 +202,6 @@ def lisa_dtw(df, df_class, validated_data):
     df_class_copy = df_class_copy.rename(columns={time_series.id: 'class'})
 
     df_correlation = dtw_pearson(df, time_series.id, distance_function, window_size=window_size)
-
-    # apply row standardization if needed
-    if normalize:
-        df_correlation = df_normalize(df_correlation)
 
     # LISA Time Series
     df_results = df_lisa_time_series(time_series.id, df_mean, df_correlation)
