@@ -1,7 +1,8 @@
 from rest_framework import serializers
 
 from vadetisweb.fields import *
-from vadetisweb.utils import get_detection_choices
+from vadetisweb.utils import get_detection_choices, get_preselected_detection_choices
+from vadetisweb.parameters import LISA_PEARSON
 
 
 class RecommendationSerializer(serializers.Serializer):
@@ -21,4 +22,6 @@ class RecommendationSerializer(serializers.Serializer):
     def __init__(self, *args, **kwargs):
         super(RecommendationSerializer, self).__init__(*args, **kwargs)
         dataset = self.context.get('dataset', None)
-        self.fields['algorithm'].choices = get_detection_choices(dataset, with_empty=False)
+        detection_choices = get_detection_choices(dataset, with_empty=False)
+        self.fields['algorithm'].choices = detection_choices
+        self.fields['algorithm'].initial = get_preselected_detection_choices(detection_choices)

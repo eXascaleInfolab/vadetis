@@ -40,6 +40,19 @@ def get_detection_choices(dataset, with_empty=True):
             raise ValueError('Could not determine supported outlier algorithms.')
 
 
+def get_preselected_detection_choices(detection_choices):
+    preselected = [LISA_PEARSON]
+
+    if (RPCA_HUBER_LOSS, RPCA_HUBER_LOSS) in detection_choices and (SVM, SVM) in detection_choices:
+        preselected.append(RPCA_HUBER_LOSS)
+        preselected.append(SVM)
+
+    else:
+        preselected.append(LISA_DTW_PEARSON)
+
+    return preselected
+
+
 def _add(x, y):
     """
     Adds to values
