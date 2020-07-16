@@ -44,9 +44,7 @@
                                 <a href="#" class="btn btn-outline-brand btn-icon btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="mdi mdi-18px mdi-dots-horizontal"></i>
                                 </a>
-                                {% url 'vadetisweb:display_real_world_dataset' dataset_id=dataset.id as display_link %}
-                                {% url 'vadetisweb:suggestion_real_world_dataset' dataset_id=dataset.id as suggestion_link %}
-                                {% include 'vadetisweb/parts/misc/highcharts_line_dropdown.html' with display_link=display_link suggestion_link=suggestion_link%}
+                                {% include 'vadetisweb/parts/misc/highcharts_line_dropdown.html' %}
                             </div>
                         </div>
                     </div>

@@ -1,32 +1,6 @@
 {% load static %}
 <div class="dropdown-menu dropdown-menu-right">
     <ul class="kt-nav">
-        {% if display_link or detection_link or suggestion_link %}
-        <li class="kt-nav__section kt-nav__section--first">
-            <span class="kt-nav__section-text">Navigation</span>
-        </li>
-        {% if display_link %}
-        <li class="kt-nav__item">
-            <a href="{{ display_link }}" class="kt-nav__link">
-                <span class="kt-nav__link-text">Display</span>
-            </a>
-        </li>
-        {% endif %}
-        {% if detection_link %}
-        <li class="kt-nav__item">
-            <a href="{{ detection_link }}" class="kt-nav__link">
-                <span class="kt-nav__link-text">Detection</span>
-            </a>
-        </li>
-        {% endif %}
-        {% if suggestion_link %}
-        <li class="kt-nav__item">
-            <a href="{{ suggestion_link }}" class="kt-nav__link">
-                <span class="kt-nav__link-text">Suggestion</span>
-            </a>
-        </li>
-        {% endif %}
-        {% endif %}
         <li class="kt-nav__section kt-nav__section--first">
             <span class="kt-nav__section-text">Load Data</span>
         </li>
@@ -37,7 +11,7 @@
         </li>
         <li class="kt-nav__item">
             <a id="zscore_btn" href="#" class="kt-nav__link">
-                <span class="kt-nav__link-text">Z-Score</span>
+                <span class="kt-nav__link-text">Normalized</span>
             </a>
         </li>
         <li class="kt-nav__section kt-nav__section--first">
