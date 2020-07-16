@@ -27,6 +27,11 @@ def anomaly_injection(validated_data):
         injector.inject_outliers()
         return injector.get_injection_datasets()
 
+    elif anomaly_type == ANOMALY_TYPE_MISSING_VALUES:
+        injector = MissingValuesInjector(validated_data)
+        injector.inject_outliers()
+        return injector.get_injection_datasets()
+
     else:
         logging.error("Unknown anomaly type, will return original datasets")
         df_from_json, df_class_from_json = get_datasets_from_json(validated_data['dataset_series_json'])

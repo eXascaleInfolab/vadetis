@@ -48,7 +48,7 @@ class AmplitudeShiftInjector(OutlierInjector):
 
     def get_split_ranges(self):
         """
-        For level shift we consider only every second range in order to have some space between subsequent level shifts
+        For amplitude shift we consider only every second range in order to have some space between subsequent level shifts
         :return: the ranges to insert the anomaly into
         """
         split_ranges = super().get_split_ranges()

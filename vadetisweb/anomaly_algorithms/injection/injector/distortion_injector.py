@@ -14,7 +14,7 @@ class DistortionInjector(OutlierInjector):
 
     def get_split_ranges(self):
         """
-        For trend we consider only every second range in order to have some space between subsequent trends
+        For distortion we consider only every second range in order to have some space between subsequent distortions
         :return: the ranges to insert the anomaly into
         """
         split_ranges = super().get_split_ranges()
@@ -34,6 +34,6 @@ class DistortionInjector(OutlierInjector):
 
             difference = np.diff(self.df.loc[variance_diff_indexes, ts_id])
 
-            # variance
+            # distortion
             self.df_inject.loc[variance_indexes, ts_id] += (self.get_factor() - 1) * difference
             self.df_inject_class.loc[variance_indexes, ts_id] = 1
