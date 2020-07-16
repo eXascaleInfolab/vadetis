@@ -72,7 +72,7 @@ class DataSet(models.Model):
     granularity = models.CharField(null=True, max_length=16,
                                  help_text='The granularity of the series in this dataset.')
 
-    public = models.BooleanField(default=True, help_text='Determines if this dataset is public available.')
+    shared = models.BooleanField(default=True, help_text='If shared, this dataset is visible to other users.')
 
     # test data
     training_data = models.BooleanField(default=False)
@@ -135,8 +135,8 @@ class DataSet(models.Model):
     def number_of_training_datasets(self):
         return self.training_dataset.count()
 
-    def number_of_public_training_datasets(self):
-        return self.training_dataset.filter(public=True).count()
+    def number_of_shared_training_datasets(self):
+        return self.training_dataset.filter(shared=True).count()
 
     def is_spatial(self):
         return all(ts.location is not None for ts in self.timeseries_set.all())

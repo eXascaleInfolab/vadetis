@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.db.models import Q
 from django.contrib import messages
 
-from vadetisweb.utils import q_public_or_user_is_owner, get_settings, get_transformed_conf, get_recommendation
+from vadetisweb.utils import q_shared_or_user_is_owner, get_settings, get_transformed_conf, get_recommendation
 from vadetisweb.serializers.portlet_serializers import *
 from vadetisweb.serializers import ThresholdSerializer, InjectionSerializer
 from vadetisweb.models import DataSet
@@ -27,7 +27,7 @@ class InjectionFormPortlet(APIView):
         portlet_serializer = BasePortletSerializer(data=request.data)
 
         dataset = DataSet.objects.filter(Q(id=dataset_id),
-                                         q_public_or_user_is_owner(request)).first()
+                                         q_shared_or_user_is_owner(request)).first()
         if dataset is None:
             messages.error(request, dataset_not_found_msg(dataset_id))
             response = Response({}, status=status.HTTP_404_NOT_FOUND)

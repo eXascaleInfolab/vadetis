@@ -18,7 +18,7 @@ from vadetisweb.models import DataSet
 from vadetisweb.utils import get_settings, dataset_to_json, get_datasets_from_json, df_zscore, export_to_csv, export_to_json, get_locations_json
 from vadetisweb.serializers import DatasetExportSerializer, DatasetSearchSerializer
 from vadetisweb.factory import dataset_not_found_msg
-from vadetisweb.utils.request_utils import q_public_or_user_is_owner
+from vadetisweb.utils.request_utils import q_shared_or_user_is_owner
 
 
 class DatasetJson(APIView):
@@ -31,7 +31,7 @@ class DatasetJson(APIView):
         try:
 
             dataset = DataSet.objects.filter(Q(id=dataset_id),
-                                             q_public_or_user_is_owner(request)).first()
+                                             q_shared_or_user_is_owner(request)).first()
             if dataset is None:
                 return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -106,7 +106,7 @@ class DatasetSearchView(generics.ListAPIView):
 
     def get_queryset(self):
         return DataSet.objects.filter(Q(training_data=False),
-                                      q_public_or_user_is_owner(self.request))
+                                      q_shared_or_user_is_owner(self.request))
 
 
 class DatasetLocationsJson(APIView):
@@ -119,7 +119,7 @@ class DatasetLocationsJson(APIView):
         try:
 
             dataset = DataSet.objects.filter(Q(id=dataset_id),
-                                             q_public_or_user_is_owner(request)).first()
+                                             q_shared_or_user_is_owner(request)).first()
 
             if dataset is None or not dataset.is_spatial():
                 return Response({}, status=status.HTTP_400_BAD_REQUEST)

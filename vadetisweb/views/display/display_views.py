@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.db.models import Q
 
 from vadetisweb.models import DataSet
-from vadetisweb.utils import get_highcharts_range_button_preselector, q_public_or_user_is_owner
+from vadetisweb.utils import get_highcharts_range_button_preselector, q_shared_or_user_is_owner
 from vadetisweb.factory import dataset_not_found_msg
 from vadetisweb.parameters import SYNTHETIC, REAL_WORLD
 from vadetisweb.serializers.dataset.display_dataset_serializer import DisplayDatasetSearchSerializer
@@ -49,7 +49,7 @@ class DisplaySyntheticDataset(APIView):
 
     def get(self, request, dataset_id):
         dataset = DataSet.objects.filter(Q(id=dataset_id, type=SYNTHETIC),
-                                         q_public_or_user_is_owner(request)).first()
+                                         q_shared_or_user_is_owner(request)).first()
         if dataset is None:
             messages.error(request, dataset_not_found_msg(dataset_id))
             return redirect('vadetisweb:display_synthetic_datasets')
@@ -72,7 +72,7 @@ class DisplayRealWorldDataset(APIView):
 
     def get(self, request, dataset_id):
         dataset = DataSet.objects.filter(Q(id=dataset_id, type=REAL_WORLD),
-                                         q_public_or_user_is_owner(request)).first()
+                                         q_shared_or_user_is_owner(request)).first()
         if dataset is None:
             messages.error(request, dataset_not_found_msg(dataset_id))
             return redirect('vadetisweb:display_real_world_datasets')
@@ -95,7 +95,7 @@ class DisplaySyntheticTrainingDataset(APIView):
 
     def get(self, request, dataset_id, training_dataset_id):
         training_dataset = DataSet.objects.filter(Q(id=training_dataset_id, main_dataset_id=dataset_id, type=SYNTHETIC),
-                                                  q_public_or_user_is_owner(request)).first()
+                                                  q_shared_or_user_is_owner(request)).first()
         if training_dataset is None:
             messages.error(request, dataset_not_found_msg(training_dataset_id))
             return redirect('vadetisweb:display_synthetic_datasets')
@@ -118,7 +118,7 @@ class DisplayRealWorldTrainingDataset(APIView):
 
     def get(self, request, dataset_id, training_dataset_id):
         training_dataset = DataSet.objects.filter(Q(id=training_dataset_id, main_dataset_id=dataset_id, type=REAL_WORLD),
-                                                  q_public_or_user_is_owner(request)).first()
+                                                  q_shared_or_user_is_owner(request)).first()
         if training_dataset is None:
             messages.error(request, dataset_not_found_msg(training_dataset_id))
             return redirect('vadetisweb:display_real_world_datasets')

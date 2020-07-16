@@ -24,7 +24,7 @@ class DetectionAlgorithmSelectionView(APIView):
 
     def post(self, request, dataset_id):
         dataset = DataSet.objects.filter(Q(id=dataset_id),
-                                         q_public_or_user_is_owner(request)).first()
+                                         q_shared_or_user_is_owner(request)).first()
         if dataset is None:
             messages.error(request, dataset_not_found_msg(dataset_id))
             return redirect('vadetisweb:index')

@@ -57,8 +57,8 @@ def number_of_training_datasets(dataset):
 
 
 @register.filter
-def number_of_public_training_datasets(dataset):
-    return dataset.number_of_training_datasets()
+def number_of_shared_training_datasets(dataset):
+    return dataset.number_of_shared_training_datasets()
 
 @register.filter
 def is_spatial(dataset):

@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from vadetisweb.parameters import TIME_RANGE, ANOMALY_DETECTION_SCORE_TYPES, ANOMALY_DETECTION_ALGORITHMS, ANOMALY_DETECTION_ALGORITHMS_NON_SPATIAL
 from vadetisweb.models import DataSet, TimeSeries
-from vadetisweb.utils.request_utils import q_public_or_user_is_owner, q_related_public_or_user_is_owner
+from vadetisweb.utils.request_utils import q_shared_or_user_is_owner, q_related_shared_or_user_is_owner
 
 
 class DatasetField(serializers.HiddenField):
@@ -19,7 +19,7 @@ class DatasetField(serializers.HiddenField):
         request = self.context.get('request', None)
         if dataset_selected is not None and request is not None:
             dataset = DataSet.objects.filter(Q(id=dataset_selected, training_data=False),
-                                             q_public_or_user_is_owner(request)).first()
+                                             q_shared_or_user_is_owner(request)).first()
             if dataset is None:
                 raise ObjectDoesNotExist
             return dataset
@@ -39,7 +39,7 @@ class TrainingDatasetField(serializers.PrimaryKeyRelatedField):
         request = self.context.get('request', None)
         if dataset_selected is not None and request is not None:
             return DataSet.objects.filter(Q(main_dataset__id=dataset_selected, training_data=True),
-                                          q_public_or_user_is_owner(request))
+                                          q_shared_or_user_is_owner(request))
 
         return DataSet.objects.none()
 
@@ -59,7 +59,7 @@ class TimeSeriesField(serializers.PrimaryKeyRelatedField):
         # timeseries_selected = self.context.get('timeseries_selected', None)
         if dataset_selected is not None and request is not None:
             return TimeSeries.objects.filter(Q(datasets__in=[dataset_selected]),
-                                             q_related_public_or_user_is_owner(request))
+                                             q_related_shared_or_user_is_owner(request))
         return TimeSeries.objects.none()
 
     def display_value(self, instance):

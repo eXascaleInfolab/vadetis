@@ -7,23 +7,23 @@ from vadetisweb.models import UserSetting
 from vadetisweb.parameters import *
 
 
-def q_public_or_user_is_owner(request):
+def q_shared_or_user_is_owner(request):
     query = Q()
     if request.user.is_authenticated:
-        query |= Q(public=True)
+        query |= Q(shared=True)
         query |= Q(owner=request.user)
     else:
-        query = Q(public=True)
+        query = Q(shared=True)
     return query
 
 
-def q_related_public_or_user_is_owner(request):
+def q_related_shared_or_user_is_owner(request):
     query = Q()
     if request.user.is_authenticated:
-        query |= Q(datasets__public=True)
+        query |= Q(datasets__shared=True)
         query |= Q(datasets__owner=request.user)
     else:
-        query = Q(datasets__public=True)
+        query = Q(datasets__shared=True)
     return query
 
 

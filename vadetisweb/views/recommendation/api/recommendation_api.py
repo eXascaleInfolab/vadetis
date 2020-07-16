@@ -14,7 +14,7 @@ from vadetisweb.models import DataSet
 from vadetisweb.serializers import RecommendationSerializer
 from vadetisweb.serializers.detection_serializers import *
 from vadetisweb.anomaly_algorithms import anomaly_injection
-from vadetisweb.utils import get_default_configuration, q_public_or_user_is_owner
+from vadetisweb.utils import get_default_configuration, q_shared_or_user_is_owner
 from vadetisweb.factory import *
 from vadetisweb.parameters import *
 from vadetisweb.anomaly_algorithms.recommendation import *
@@ -30,7 +30,7 @@ class RecommendationView(APIView):
     def post(self, request, dataset_id):
 
         dataset = DataSet.objects.filter(Q(id=dataset_id, training_data=False),
-                                         q_public_or_user_is_owner(request)).first()
+                                         q_shared_or_user_is_owner(request)).first()
         if dataset is None:
             messages.error(request, dataset_not_found_msg(dataset_id))
             response = Response({}, status=status.HTTP_404_NOT_FOUND)

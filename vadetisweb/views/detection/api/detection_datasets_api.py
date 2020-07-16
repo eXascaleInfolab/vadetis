@@ -6,7 +6,7 @@ from django.db.models import Q
 from vadetisweb.models import DataSet
 from vadetisweb.parameters import REAL_WORLD, SYNTHETIC
 from vadetisweb.serializers import DetectionDatasetDataTablesSerializer
-from vadetisweb.utils import q_public_or_user_is_owner
+from vadetisweb.utils import q_shared_or_user_is_owner
 
 class DetectionSyntheticDatasetDataTableViewSet(viewsets.ModelViewSet):
     """
@@ -19,7 +19,7 @@ class DetectionSyntheticDatasetDataTableViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = self.queryset
         query_set = queryset.filter(Q(type=SYNTHETIC, training_data=False),
-                                    q_public_or_user_is_owner(self.request))
+                                    q_shared_or_user_is_owner(self.request))
         return query_set
 
     def get_permissions(self):
@@ -44,7 +44,7 @@ class DetectionRealWorldDatasetDataTableViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = self.queryset
         query_set = queryset.filter(Q(type=REAL_WORLD, training_data=False),
-                                    q_public_or_user_is_owner(self.request))
+                                    q_shared_or_user_is_owner(self.request))
         return query_set
 
     def get_permissions(self):

@@ -16,7 +16,7 @@ class AccountDatasetDataTablesSerializer(serializers.ModelSerializer):
     values = serializers.SerializerMethodField()
     granularity = serializers.CharField(read_only=True)
     spatial = serializers.SerializerMethodField()
-    public = serializers.BooleanField(read_only=True)
+    shared = serializers.BooleanField(read_only=True)
     training_datasets = serializers.SerializerMethodField()
     actions = serializers.SerializerMethodField()
 
@@ -50,7 +50,7 @@ class AccountDatasetDataTablesSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataSet
         fields = (
-            'title', 'timeseries', 'values', 'granularity', 'spatial', 'public', 'training_datasets', 'actions'
+            'title', 'timeseries', 'values', 'granularity', 'spatial', 'shared', 'training_datasets', 'actions'
         )
 
 
@@ -92,7 +92,7 @@ class AccountDatasetSearchSerializer(serializers.Serializer):
                                              'input_class': 'search-input',
                                              'col_index': '4'})
 
-    public = serializers.ChoiceField(write_only=True, choices=BOOLEAN_SELECTION,
+    shared = serializers.ChoiceField(write_only=True, choices=BOOLEAN_SELECTION,
                                      style={'template': 'vadetisweb/parts/input/select_input.html',
                                             'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
                                             'input_class': 'search-input',
@@ -116,7 +116,7 @@ class AccountTrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
     timeseries = serializers.SerializerMethodField()
     values = serializers.SerializerMethodField()
     granularity = serializers.CharField(read_only=True)
-    public = serializers.BooleanField(read_only=True)
+    shared = serializers.BooleanField(read_only=True)
     spatial = serializers.SerializerMethodField()
     actions = serializers.SerializerMethodField(read_only=True)
 
@@ -141,7 +141,7 @@ class AccountTrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataSet
         fields = (
-            'title', 'main_dataset', 'timeseries', 'values', 'granularity', 'spatial', 'public', 'actions'
+            'title', 'main_dataset', 'timeseries', 'values', 'granularity', 'spatial', 'shared', 'actions'
         )
 
 
@@ -189,7 +189,7 @@ class AccountTrainingDatasetSearchSerializer(serializers.Serializer):
                                              'input_class': 'search-input',
                                              'col_index': '5'})
 
-    public = serializers.ChoiceField(write_only=True, choices=BOOLEAN_SELECTION,
+    shared = serializers.ChoiceField(write_only=True, choices=BOOLEAN_SELECTION,
                                      style={'template': 'vadetisweb/parts/input/select_input.html',
                                             'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
                                             'input_class': 'search-input',
@@ -213,8 +213,8 @@ class DatasetImportSerializer(serializers.Serializer):
                                    help_text='Determines whether this dataset is real world or synthetic data.',
                                    style={'template': 'vadetisweb/parts/input/select_input.html'})
 
-    public = serializers.BooleanField(default=True, initial=True,
-                                      help_text='Determines if this dataset is available to other users',
+    shared = serializers.BooleanField(default=True, initial=True,
+                                      help_text='If shared, this dataset is visible to other users.',
                                       style={'template': 'vadetisweb/parts/input/checkbox_input.html'})
 
     csv_spatial_file = serializers.FileField(label='Spatial CSV File',
@@ -244,8 +244,8 @@ class TrainingDatasetImportSerializer(serializers.Serializer):
     main_dataset = MainDatasetField(label="Main dataset", required=True,
                                     style={'template': 'vadetisweb/parts/input/select_input.html'})
 
-    public = serializers.BooleanField(default=True, initial=True,
-                                      help_text='Determines if this dataset is available to other users',
+    shared = serializers.BooleanField(default=True, initial=True,
+                                      help_text='If shared, this training dataset is visible to other users.',
                                       style={'template': 'vadetisweb/parts/input/checkbox_input.html'})
 
     csv_file = serializers.FileField(required=True, label='CSV File', help_text='The csv file of the dataset. As anomaly detection is computationally expensive, the dataset must not exceed 10\'000 values.',
@@ -271,12 +271,12 @@ class AccountDatasetUpdateSerializer(serializers.ModelSerializer):
                                    style={'template': 'vadetisweb/parts/input/select_input.html',
                                           'help_text_in_popover': False})
 
-    public = serializers.BooleanField(required=True, help_text='Determines if this dataset is available to other users',
+    shared = serializers.BooleanField(required=True, help_text='If shared, this dataset is visible to other users.',
                                       style={'template': 'vadetisweb/parts/input/checkbox_input.html'})
 
     class Meta:
         model = DataSet
-        fields = ('title', 'type', 'public')
+        fields = ('title', 'type', 'shared')
 
 
 class AccountDatasetDeleteSerializer(serializers.Serializer):

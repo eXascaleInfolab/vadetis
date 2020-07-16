@@ -4,7 +4,7 @@ from rest_framework import viewsets
 from django.db.models import Q
 
 from vadetisweb.serializers.dataset.recommendation_dataset_serializer import *
-from vadetisweb.utils import q_public_or_user_is_owner
+from vadetisweb.utils import q_shared_or_user_is_owner
 
 
 class RecommendationSyntheticDatasetDataTableViewSet(viewsets.ModelViewSet):
@@ -18,7 +18,7 @@ class RecommendationSyntheticDatasetDataTableViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = self.queryset
         query_set = queryset.filter(Q(type=SYNTHETIC, training_data=False),
-                                    q_public_or_user_is_owner(self.request))
+                                    q_shared_or_user_is_owner(self.request))
         return query_set
 
     def get_permissions(self):
@@ -43,7 +43,7 @@ class RecommendationRealWorldDatasetDataTableViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = self.queryset
         query_set = queryset.filter(Q(type=REAL_WORLD, training_data=False),
-                                    q_public_or_user_is_owner(self.request))
+                                    q_shared_or_user_is_owner(self.request))
         return query_set
 
     def get_permissions(self):

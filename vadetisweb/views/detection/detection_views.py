@@ -10,7 +10,7 @@ from django.db.models import Q
 
 from vadetisweb.models import DataSet
 from vadetisweb.serializers import AlgorithmSerializer, ThresholdSerializer, InjectionSerializer
-from vadetisweb.utils import get_highcharts_range_button_preselector, q_public_or_user_is_owner
+from vadetisweb.utils import get_highcharts_range_button_preselector, q_shared_or_user_is_owner
 from vadetisweb.factory import dataset_not_found_msg
 from vadetisweb.parameters import SYNTHETIC, REAL_WORLD
 from vadetisweb.serializers.dataset.detection_dataset_serializer import DetectionDatasetSearchSerializer
@@ -50,7 +50,7 @@ class DetectionSyntheticDataset(APIView):
 
     def get(self, request, dataset_id):
         dataset = DataSet.objects.filter(Q(id=dataset_id, type=SYNTHETIC),
-                                         q_public_or_user_is_owner(request)).first()
+                                         q_shared_or_user_is_owner(request)).first()
         if dataset is None:
             messages.error(request, dataset_not_found_msg(dataset_id))
             return redirect('vadetisweb:detection_synthetic_datasets')
@@ -79,7 +79,7 @@ class DetectionRealWorldDataset(APIView):
 
     def get(self, request, dataset_id):
         dataset = DataSet.objects.filter(Q(id=dataset_id, type=REAL_WORLD),
-                                         q_public_or_user_is_owner(request)).first()
+                                         q_shared_or_user_is_owner(request)).first()
         if dataset is None:
             messages.error(request, dataset_not_found_msg(dataset_id))
             return redirect('vadetisweb:detection_real_world_datasets')

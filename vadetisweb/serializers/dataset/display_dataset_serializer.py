@@ -26,7 +26,7 @@ class DisplayDatasetDataTablesSerializer(serializers.ModelSerializer):
         return obj.is_spatial()
 
     def get_training_datasets(self, obj):
-        return obj.number_of_public_training_datasets()
+        return obj.number_of_shared_training_datasets()
 
     def get_actions(self, obj):
         if obj.type == REAL_WORLD:
