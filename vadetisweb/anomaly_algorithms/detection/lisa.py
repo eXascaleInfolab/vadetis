@@ -171,16 +171,13 @@ def lisa_pearson(df, df_class, time_series_id, maximize_score=F1_SCORE, window_s
     # LISA Time Series
     df_results = df_lisa_time_series(time_series_id, df_mean, df_correlation)
 
-    # get highest and lowest lisa values
-    lower = df_results.min()[time_series_id]
-    higher = df_results.max()[time_series_id]
-    thresholds = np.linspace(lower, higher, 200)
+    thresholds = np.linspace(0, 1, 200)
+    scores = min_max_normalization(df_results[time_series_id].values)
 
-    threshold_scores = get_threshold_scores(thresholds, df_results[time_series_id].values, df_class_copy['class'])
+    threshold_scores = get_threshold_scores(thresholds, scores, df_class_copy['class'])
     selected_index = get_max_score_index_for_score_type(threshold_scores, maximize_score)
     selected_threshold = thresholds[selected_index]
 
-    scores = df_results[time_series_id].values
     y_hat_results = (scores < selected_threshold).astype(int)
     y_truth = df_class_copy['class'].values.astype(int)
     info = get_detection_meta(selected_threshold, y_hat_results, y_truth)
@@ -215,15 +212,14 @@ def lisa_dtw(df, df_class, time_series_id, maximize_score=F1_SCORE, window_size=
     df_results = df_lisa_time_series(time_series_id, df_mean, df_correlation)
 
     # get highest and lowest lisa values
-    lower = df_results.min()[time_series_id]
-    higher = df_results.max()[time_series_id]
-    thresholds = np.linspace(lower, higher, 200)
+    thresholds = np.linspace(0, 1, 200)
 
-    threshold_scores = get_threshold_scores(thresholds, df_results[time_series_id].values, df_class_copy['class'])
+    scores = min_max_normalization(df_results[time_series_id].values)
+
+    threshold_scores = get_threshold_scores(thresholds, scores, df_class_copy['class'])
     selected_index = get_max_score_index_for_score_type(threshold_scores, maximize_score)
     selected_threshold = thresholds[selected_index]
 
-    scores = df_results[time_series_id].values
     y_hat_results = (scores < selected_threshold).astype(int)
     y_truth = df_class_copy['class'].values.astype(int)
     info = get_detection_meta(selected_threshold, y_hat_results, y_truth)
@@ -251,16 +247,14 @@ def lisa_geo(df, df_class, time_series_id, maximize_score=F1_SCORE):
     # LISA Time Series
     df_results = df_lisa_time_series(time_series_id, df_val_mean, df_corr_dist, global_correlation=True)
 
-    # get highest and lowest lisa values
-    higher = df_results.max()[time_series_id]
-    lower = df_results.min()[time_series_id]
-    thresholds = np.linspace(lower, higher, 200)
+    thresholds = np.linspace(0, 1, 200)
 
-    threshold_scores = get_threshold_scores(thresholds, df_results[time_series_id].values, df_class_copy['class'])
+    scores = min_max_normalization(df_results[time_series_id].values)
+
+    threshold_scores = get_threshold_scores(thresholds, scores, df_class_copy['class'])
     selected_index = get_max_score_index_for_score_type(threshold_scores, maximize_score)
     selected_threshold = thresholds[selected_index]
 
-    scores = df_results[time_series_id].values
     y_hat_results = (scores < selected_threshold).astype(int)
     y_truth = df_class_copy['class'].values.astype(int)
     info = get_detection_meta(selected_threshold, y_hat_results, y_truth)
