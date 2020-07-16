@@ -9,7 +9,7 @@ from vadetisweb.utils import next_earlier_dt, next_later_dt
 from vadetisweb.factory import msg_injection_all_anomalies
 
 
-class LevelShiftInjector(OutlierInjector):
+class AmplitudeShiftInjector(OutlierInjector):
 
     def __init__(self, validated_data):
         super().__init__(validated_data)

@@ -22,7 +22,7 @@ class InjectionSerializer(serializers.Serializer):
     anomaly_type = serializers.ChoiceField(label='Anomaly Type',
                                            required=True,
                                            choices=ANOMALY_INJECTION_TYPES,
-                                           help_text='The type of anomalies for injection. Choose between extreme value outliers, a level or trend shift or increased variance in the data.',
+                                           help_text='The type of anomalies for injection. Choose between point outliers, an amplitude shift, growth change or distortion of the data.',
                                            style={'template': 'vadetisweb/parts/input/select_input.html',
                                                   'help_text_in_popover': True})
 

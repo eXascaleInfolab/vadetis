@@ -14,7 +14,7 @@ var VadetisColumnHighcharts = function () {
         var highchart = new Highcharts.chart(html_id, {
             chart: {
                 type: 'column',
-                height: 650,
+                height: 450,
             },
 
             title: {

@@ -8,7 +8,7 @@ from vadetisweb.utils import next_earlier_dt, next_later_dt
 from vadetisweb.factory import msg_injection_all_anomalies
 
 
-class TrendInjector(OutlierInjector):
+class GrowthInjector(OutlierInjector):
 
     def __init__(self, validated_data):
         super().__init__(validated_data)

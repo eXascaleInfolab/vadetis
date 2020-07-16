@@ -1,29 +1,29 @@
 
 from vadetisweb.anomaly_algorithms.injection import *
 from vadetisweb.utils import get_datasets_from_json
-from vadetisweb.parameters import ANOMALY_TYPE_EXTREME, ANOMALY_TYPE_LEVEL_SHIFT, ANOMALY_TYPE_VARIANCE, ANOMALY_TYPE_TREND
+from vadetisweb.parameters import ANOMALY_TYPE_POINT, ANOMALY_TYPE_AMPLITUDE_SHIFT, ANOMALY_TYPE_DISTORTION, ANOMALY_TYPE_GROWTH_CHANGE
 
 def anomaly_injection(validated_data):
 
     anomaly_type = validated_data['anomaly_type']
 
-    if anomaly_type == ANOMALY_TYPE_EXTREME:
+    if anomaly_type == ANOMALY_TYPE_POINT:
         injector = ExtremeValueInjector(validated_data)
         injector.inject_outliers()
         return injector.get_injection_datasets()
 
-    elif anomaly_type == ANOMALY_TYPE_LEVEL_SHIFT:
-        injector = LevelShiftInjector(validated_data)
+    elif anomaly_type == ANOMALY_TYPE_AMPLITUDE_SHIFT:
+        injector = AmplitudeShiftInjector(validated_data)
         injector.inject_outliers()
         return injector.get_injection_datasets()
 
-    elif anomaly_type == ANOMALY_TYPE_TREND:
-        injector = TrendInjector(validated_data)
+    elif anomaly_type == ANOMALY_TYPE_GROWTH_CHANGE:
+        injector = GrowthInjector(validated_data)
         injector.inject_outliers()
         return injector.get_injection_datasets()
 
-    elif anomaly_type == ANOMALY_TYPE_VARIANCE:
-        injector = VarianceInjector(validated_data)
+    elif anomaly_type == ANOMALY_TYPE_DISTORTION:
+        injector = DistortionInjector(validated_data)
         injector.inject_outliers()
         return injector.get_injection_datasets()
 
