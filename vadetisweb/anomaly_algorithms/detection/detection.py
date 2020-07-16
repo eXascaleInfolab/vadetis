@@ -18,7 +18,7 @@ def lisa_pearson_detection(df, df_class, validated_data, settings):
     if validated_data['time_range'] == TIME_RANGE_SELECTION:
         df, df_class = df_range(df, df_class, validated_data['range_start'], validated_data['range_end'], start_offset=window_size)
 
-    scores, y_hat_results, info = lisa_pearson(df, df_class, validated_data)
+    scores, y_hat_results, info = lisa_pearson(df, df_class, time_series_id, maximize_score=validated_data['maximize_score'], window_size=window_size)
 
     # leave out the first x values (window size-1) from the beginning of the datasets as we cannot compute LISA for these values
     offset = window_size - 1
@@ -41,7 +41,7 @@ def lisa_dtw_detection(df, df_class, validated_data, settings):
     if validated_data['time_range'] == TIME_RANGE_SELECTION:
         df, df_class = df_range(df, df_class, validated_data['range_start'], validated_data['range_end'], start_offset=window_size)
 
-    scores, y_hat_results, info = lisa_dtw(df, df_class, validated_data)
+    scores, y_hat_results, info = lisa_dtw(df, df_class, time_series_id, maximize_score=validated_data['maximize_score'], window_size=window_size, distance_function=validated_data['dtw_distance_function'])
 
     # leave out the first x values (window size-1) from the beginning of the datasets as we cannot compute LISA for these values
     offset = window_size - 1
@@ -64,7 +64,7 @@ def lisa_geo_detection(df, df_class, validated_data, settings):
     if validated_data['time_range'] == TIME_RANGE_SELECTION:
         df, df_class = df_range(df, df_class, validated_data['range_start'], validated_data['range_end'])
 
-    scores, y_hat_results, info = lisa_geo(df, df_class, validated_data)
+    scores, y_hat_results, info = lisa_geo(df, df_class, time_series_id, maximize_score=validated_data['maximize_score'])
 
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])
 

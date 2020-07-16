@@ -14,7 +14,8 @@ def df_range(df, df_class, range_start_millis, range_end_millis, start_offset=No
     if start_offset is not None:
         range_start = next_earlier_dt(range_start, df.index.inferred_freq, start_offset - 1)
         if range_start < df.index[0]:
-            raise ValueError("You selected a window size of {}, but first timestamp {} is out of bounds.".format(start_offset, range_start))
+            logging.warning("You selected a window size of {}, but first timestamp {} is out of bounds. Fallback to minimum index.".format(start_offset, range_start))
+            range_start = df.index[0]
 
     range_end = unix_time_millis_to_dt(range_end_millis)
 
