@@ -13,14 +13,22 @@
     <div class="kt-portlet__body kt-portlet__body--fit">
         <div class="kt-padding-25">
             {% with recommendation|get_item:'f1_scores' as f1_scores %}
-                <p>The best overall <strong>F1-Score</strong> is achieved with
+                <table class="table table-xs table-head-bg-brand">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th>Highest F1-Score</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                     {% for f1_score in f1_scores %}
-                        {% if f1_scores|length > 1 %}
-                            {% if forloop.last %}and {% else %}{% if forloop.first %}{% else %}, {% endif %}{% endif %}
-                        {% endif %}
-                    <strong>{{ f1_score|get_item:'algorithm' }}</strong> at a score of
-                    <strong>{{ f1_score|get_item:'f1_score' }}</strong>{% endfor %}.
-                </p>
+                        <tr>
+                            <td>{{ f1_score|get_item:'algorithm' }}</td>
+                            <td>{{ f1_score|get_item:'f1_score' }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             {% endwith %}
 
             {% with recommendation|get_item:'accuracies' as accuracies %}
