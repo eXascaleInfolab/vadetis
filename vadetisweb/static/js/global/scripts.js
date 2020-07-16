@@ -9375,7 +9375,7 @@ var KTQuickSearch = function() {
             + "<div>"
             + "<a href=\"" + result.detection + "\" class=\"text-dark text-hover-primary\">Detection</a>"
             + " | "
-            + "<a href=\"" + result.suggestion + "\" class=\"text-dark text-hover-primary\">Suggestion</a>"
+            + "<a href=\"" + result.recommendation + "\" class=\"text-dark text-hover-primary\">Recommendation</a>"
             + "</div>"
             + "</div>"
             + "</div>";

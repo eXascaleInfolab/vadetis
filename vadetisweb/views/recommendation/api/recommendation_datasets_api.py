@@ -3,16 +3,16 @@ from rest_framework import viewsets
 
 from django.db.models import Q
 
-from vadetisweb.serializers.dataset.suggestion_dataset_serializer import *
+from vadetisweb.serializers.dataset.recommendation_dataset_serializer import *
 from vadetisweb.utils import q_public_or_user_is_owner
 
 
-class SuggestionSyntheticDatasetDataTableViewSet(viewsets.ModelViewSet):
+class RecommendationSyntheticDatasetDataTableViewSet(viewsets.ModelViewSet):
     """
     Request synthetic datasets
     """
     queryset = DataSet.objects.all()
-    serializer_class = SuggestionDatasetDataTablesSerializer
+    serializer_class = RecommendationDatasetDataTablesSerializer
     http_method_names = ['get', 'head'] # disable http put, delete etc. from ViewSet
 
     def get_queryset(self):
@@ -32,12 +32,12 @@ class SuggestionSyntheticDatasetDataTableViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
-class SuggestionRealWorldDatasetDataTableViewSet(viewsets.ModelViewSet):
+class RecommendationRealWorldDatasetDataTableViewSet(viewsets.ModelViewSet):
     """
     Request real-world datasets
     """
     queryset = DataSet.objects.all()
-    serializer_class = SuggestionDatasetDataTablesSerializer
+    serializer_class = RecommendationDatasetDataTablesSerializer
     http_method_names = ['get', 'head'] # disable http put, delete etc. from ViewSet
 
     def get_queryset(self):

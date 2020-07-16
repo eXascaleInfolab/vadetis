@@ -60,11 +60,11 @@ def get_default_configuration(algorithm, maximize_score, dataset):
         return _isolation_forest_default(maximize_score, dataset)
 
 
-def get_time_series_lisa_suggestion(dataset):
+def get_time_series_lisa_recommendation(dataset):
     """
-    For suggestion we choose the time series with the most anomalies
+    For recommendation we choose the time series with the most anomalies
 
-    :param dataset: the dataset for suggestion
+    :param dataset: the dataset for recommendation
     :return: the time series we use for anomaly detection
     """
     time_series = None
@@ -80,7 +80,7 @@ def get_time_series_lisa_suggestion(dataset):
 
 def get_time_range(dataset, offset=0, max_range=500):
     """
-    For suggestion we do not compute over the whole dataset, as we have several algorithms and each dataset could contain up to 100'000 points
+    For recommendation we do not compute over the whole dataset, as we have several algorithms and each dataset could contain up to 100'000 points
     the computation would take too long. Therefore we compute for a max index range of 500 values
 
     :param dataset: the dataset to determine the range for
@@ -102,7 +102,7 @@ def get_training_dataset(dataset):
     """
     By default we use the training dataset that has the highest contamination level (number of outliers relative to number of values)
     :param dataset: the dataset we search a training dataset for
-    :return: the training dataset to use for suggestion
+    :return: the training dataset to use for recommendation
 
     """
     max_contamination_level = 0
@@ -117,7 +117,7 @@ def get_training_dataset(dataset):
 
 
 def _lisa_pearson_default(maximize_score, dataset):
-    time_series = get_time_series_lisa_suggestion(dataset)
+    time_series = get_time_series_lisa_recommendation(dataset)
     range_start, range_end = get_time_range(dataset, offset=10)
 
     return {
@@ -133,7 +133,7 @@ def _lisa_pearson_default(maximize_score, dataset):
 
 
 def _lisa_dtw_default(maximize_score, dataset):
-    time_series = get_time_series_lisa_suggestion(dataset)
+    time_series = get_time_series_lisa_recommendation(dataset)
     range_start, range_end = get_time_range(dataset, offset=10)
 
     return {
@@ -150,7 +150,7 @@ def _lisa_dtw_default(maximize_score, dataset):
 
 
 def _lisa_geo_default(maximize_score, dataset):
-    time_series = get_time_series_lisa_suggestion(dataset)
+    time_series = get_time_series_lisa_recommendation(dataset)
     range_start, range_end = get_time_range(dataset, offset=10)
 
     return {

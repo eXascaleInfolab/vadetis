@@ -1,13 +1,13 @@
 "use strict";
 
-var DatasetSuggestionForm = function () {
+var DatasetRecommendationForm = function () {
 
     var loadImages = function (portlet_id, info) {
         requestCnfMatrix(portlet_id, portlet_id + "_cnf", info);
         requestPlot(portlet_id, portlet_id + "_plot", info.thresholds, info.detection_threshold_scores);
     }
 
-    var requestRecommendationPortlet = function (portlet_url, portlet_id, callback) {
+    var requestRecommendationSummaryPortlet = function (portlet_url, portlet_id, callback) {
         var highchart = $('#highcharts_container').highcharts(), scores = getScoresFromColumnChart(highchart), csrftoken = Cookies.get('csrftoken');
         var data = {
             id: portlet_id,
@@ -35,7 +35,7 @@ var DatasetSuggestionForm = function () {
         });
     }
 
-    var requestSuggestionPortlet = function (portlet_url, portlet_id, title, conf, threshold, callback) {
+    var requestRecommendationPortlet = function (portlet_url, portlet_id, title, conf, threshold, callback) {
         var data = {
             id: portlet_id,
             title: title,
@@ -59,7 +59,7 @@ var DatasetSuggestionForm = function () {
             enctype: "multipart/form-data",
             success: function (data, status, xhr) {
                 var column = '<div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">' + data + '</div>';
-                $('#suggestion_portlets').prepend(column);
+                $('#recommendation_portlets').prepend(column);
                 callback();
             },
             error: function (data, status, xhr) {
@@ -69,7 +69,7 @@ var DatasetSuggestionForm = function () {
         });
     }
 
-    var submitSingleSuggestion = function (url, action, method, enctype, algorithm, maximizeScore, callbackData, callback) {
+    var submitSingleRecommendation = function (url, action, method, enctype, algorithm, maximizeScore, callbackData, callback) {
         var csrftoken = Cookies.get('csrftoken');
         var formData = new FormData();
         formData.append('algorithm', algorithm);
@@ -93,14 +93,14 @@ var DatasetSuggestionForm = function () {
                 callback();
             },
             error: function (data, status, xhr) {
-                printMessages([{'message': "Request failed: Could not request suggestions."}], "error-request");
+                printMessages([{'message': "Request failed: Could not request recommendations."}], "error-request");
                 handleMessages(data);
                 callback();
             }
         });
     }
 
-    var initSuggestion = function (form_id, suggestion_portlet_url, recommendation_portlet_url) {
+    var initRecommendation = function (form_id, recommendation_portlet_url, recommendation_summary_portlet_url) {
         var html_id = '#' + form_id;
         $(html_id).on('submit', function (event) {
             event.preventDefault();
@@ -139,9 +139,9 @@ var DatasetSuggestionForm = function () {
                 var key = pair[0];
                 var algorithm = pair[1];
                 if (key === 'algorithm') {
-                    submitSingleSuggestion(url, action, method, enctype, algorithm, maximizeScore, function (data) {
-                            var suggestions = data.suggestions
-                            suggestions.forEach(s => {
+                    submitSingleRecommendation(url, action, method, enctype, algorithm, maximizeScore, function (data) {
+                            var recommendations = data.recommendations
+                            recommendations.forEach(s => {
                                 var info = s.info;
                                 var responseAlgorithm = s.algorithm;
                                 var conf = s.conf;
@@ -168,7 +168,7 @@ var DatasetSuggestionForm = function () {
                                 if ($('#' + portlet_id).length > 0) {
                                     $('#' + portlet_id).remove();
                                 }
-                                requestSuggestionPortlet(suggestion_portlet_url, portlet_id, responseAlgorithm, conf, info.threshold,
+                                requestRecommendationPortlet(recommendation_portlet_url, portlet_id, responseAlgorithm, conf, info.threshold,
                                     function () {
                                         KTApp.initPortlets();
                                         KTApp.initTooltips();
@@ -181,7 +181,7 @@ var DatasetSuggestionForm = function () {
                             if (numResponses === numRequests) {
                                 highchart.hideLoading();
                                 $(":submit").attr("disabled", false);
-                                requestRecommendationPortlet(recommendation_portlet_url, "recommendation_portlet", function (data) {
+                                requestRecommendationSummaryPortlet(recommendation_summary_portlet_url, "recommendation_summary_portlet", function (data) {
                                     $('#recommendation_portlet').remove();
                                     $('#form_portlets').append(data);
                                     KTApp.initPortlet();
@@ -195,14 +195,14 @@ var DatasetSuggestionForm = function () {
     }
 
     // private
-    var init = function (suggestion_form_id, suggestion_portlet_url, recommendation_portlet_url) {
-        initSuggestion(suggestion_form_id, suggestion_portlet_url, recommendation_portlet_url);
+    var init = function (recommendation_form_id, recommendation_portlet_url, recommendation_summary_portlet_url) {
+        initRecommendation(recommendation_form_id, recommendation_portlet_url, recommendation_summary_portlet_url);
     }
 
     return {
         // public
-        init: function (suggestion_form_id, suggestion_portlet_url, recommendation_portlet_url) {
-            init(suggestion_form_id, suggestion_portlet_url, recommendation_portlet_url);
+        init: function (recommendation_form_id, recommendation_portlet_url, recommendation_summary_portlet_url) {
+            init(recommendation_form_id, recommendation_portlet_url, recommendation_summary_portlet_url);
         }
     };
 }();

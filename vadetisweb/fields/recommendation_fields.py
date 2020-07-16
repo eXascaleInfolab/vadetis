@@ -4,7 +4,7 @@ from drf_yasg import openapi
 
 class ConfJsonField(serializers.JSONField):
     """
-        JSON Field to format the used configuration for suggestion.
+        JSON Field to format the used configuration for recommendation.
     """
 
     class Meta:
@@ -91,9 +91,9 @@ class ConfJsonField(serializers.JSONField):
         super(ConfJsonField, self).__init__(**kwargs)
 
 
-class SuggestionScoresJsonField(serializers.JSONField):
+class RecommendationScoresJsonField(serializers.JSONField):
     """
-        JSON Field to format the resulting scores for suggestion.
+        JSON Field to format the resulting scores for recommendation.
     """
     class Meta:
         swagger_schema_fields = {
@@ -134,4 +134,4 @@ class SuggestionScoresJsonField(serializers.JSONField):
         }
 
     def __init__(self, **kwargs):
-        super(SuggestionScoresJsonField, self).__init__(**kwargs)
+        super(RecommendationScoresJsonField, self).__init__(**kwargs)

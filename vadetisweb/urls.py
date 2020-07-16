@@ -21,8 +21,8 @@ router.register(r'display/datasets/real-world', views.DisplayRealWorldDatasetDat
 router.register(r'display/training-datasets', views.DisplayTrainingDatasetDataTableViewSet, basename='display_training_datasets_datatable')
 router.register(r'detection/datasets/synthetic', views.DetectionSyntheticDatasetDataTableViewSet, basename='detection_synthetic_datasets_datatable')
 router.register(r'detection/datasets/real-world', views.DetectionRealWorldDatasetDataTableViewSet, basename='detection_real_world_datasets_datatable')
-router.register(r'suggestion/datasets/synthetic', views.SuggestionSyntheticDatasetDataTableViewSet, basename='suggestion_synthetic_datasets_datatable')
-router.register(r'suggestion/datasets/real-world', views.SuggestionRealWorldDatasetDataTableViewSet, basename='suggestion_real_world_datasets_datatable')
+router.register(r'recommendation/datasets/synthetic', views.RecommendationSyntheticDatasetDataTableViewSet, basename='recommendation_synthetic_datasets_datatable')
+router.register(r'recommendation/datasets/real-world', views.RecommendationRealWorldDatasetDataTableViewSet, basename='recommendation_real_world_datasets_datatable')
 
 apipatterns = [
     path('api/', include((router.urls))),
@@ -38,7 +38,7 @@ apipatterns = [
 
     path('api/injection/<int:dataset_id>/', views.InjectionView.as_view(), name='injection_anomaly'),
 
-    path('api/suggestion/<int:dataset_id>/', views.SuggestionView.as_view(), name='suggestion_scores'),
+    path('api/recommendation/<int:dataset_id>/', views.RecommendationView.as_view(), name='recommendation_scores'),
 
     path('api/dataset/<int:dataset_id>/', views.DatasetJson.as_view(), name='dataset_json'),
     path('api/dataset/<int:dataset_id>/update/', views.AccountDatasetUpdate.as_view(), name='account_dataset_update'),
@@ -51,8 +51,8 @@ apipatterns = [
 
     path('api/portlet/image/', views.ImagePortlet.as_view(), name='image_portlet'),
     path('api/portlet/score/', views.ScorePortlet.as_view(), name='score_portlet'),
-    path('api/portlet/suggestion/', views.SuggestionPortlet.as_view(), name='suggestion_portlet'),
-    path('api/portlet/recommendation/', views.SuggestionRecommendationPortlet.as_view(), name='suggestion_recommendation_portlet'),
+    path('api/portlet/recommendation/', views.RecommendationPortlet.as_view(), name='recommendation_portlet'),
+    path('api/portlet/recommendation-summary/', views.RecommendationSummaryPortlet.as_view(), name='recommendation_summary_portlet'),
     path('api/portlet/threshold/', views.ThresholdFormPortlet.as_view(), name='threshold_portlet'),
     path('api/portlet/injection/<int:dataset_id>/', views.InjectionFormPortlet.as_view(), name='injection_form_portlet'),
 
@@ -80,10 +80,10 @@ urlpatterns = apipatterns + [
     path('detection/synthetic/', views.DetectionSyntheticDatasets.as_view(), name='detection_synthetic_datasets'),
     path('detection/synthetic/<int:dataset_id>/', views.DetectionSyntheticDataset.as_view(), name='detection_synthetic_dataset'),
 
-    path('suggestion/real-world/', views.SuggestionRealWorldDatasets.as_view(), name='suggestion_real_world_datasets'),
-    path('suggestion/real-world/<int:dataset_id>/', views.SuggestionRealWorldDataset.as_view(), name='suggestion_real_world_dataset'),
-    path('suggestion/synthetic/', views.SuggestionSyntheticDatasets.as_view(), name='suggestion_synthetic_datasets'),
-    path('suggestion/synthetic/<int:dataset_id>/', views.SuggestionSyntheticDataset.as_view(), name='suggestion_synthetic_dataset'),
+    path('recommendation/real-world/', views.RecommendationRealWorldDatasets.as_view(), name='recommendation_real_world_datasets'),
+    path('recommendation/real-world/<int:dataset_id>/', views.RecommendationRealWorldDataset.as_view(), name='recommendation_real_world_dataset'),
+    path('recommendation/synthetic/', views.RecommendationSyntheticDatasets.as_view(), name='recommendation_synthetic_datasets'),
+    path('recommendation/synthetic/<int:dataset_id>/', views.RecommendationSyntheticDataset.as_view(), name='recommendation_synthetic_dataset'),
 
     path('account/application-setting/', views.ApplicationSetting.as_view(), name='application_setting'),
     path('account/datasets/', views.account_datasets, name='account_datasets'),

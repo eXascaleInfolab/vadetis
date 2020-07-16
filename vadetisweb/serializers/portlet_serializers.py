@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from vadetisweb.fields import ConfJsonField, SuggestionScoresJsonField
+from vadetisweb.fields import ConfJsonField, RecommendationScoresJsonField
 
 
 class BasePortletSerializer(serializers.Serializer):
@@ -13,7 +13,7 @@ class ImagePortletSerializer(BasePortletSerializer):
     content_class = serializers.CharField(required=False)
 
 
-class SuggestionPortletSerializer(BasePortletSerializer):
+class RecommendationPortletSerializer(BasePortletSerializer):
     conf = ConfJsonField(required=True, initial=None, binary=False, encoder=None)
 
     threshold = serializers.FloatField(required=True)
@@ -22,5 +22,5 @@ class SuggestionPortletSerializer(BasePortletSerializer):
     content_class = serializers.CharField(required=False)
 
 
-class RecommendationPortletSerializer(BasePortletSerializer):
-    scores = SuggestionScoresJsonField(required=True, initial=None, binary=False, encoder=None)
+class RecommendationSummaryPortletSerializer(BasePortletSerializer):
+    scores = RecommendationScoresJsonField(required=True, initial=None, binary=False, encoder=None)

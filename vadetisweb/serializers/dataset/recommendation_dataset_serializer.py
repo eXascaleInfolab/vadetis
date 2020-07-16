@@ -5,7 +5,7 @@ from vadetisweb.models import DataSet
 from vadetisweb.parameters import *
 
 
-class SuggestionDatasetDataTablesSerializer(serializers.ModelSerializer):
+class RecommendationDatasetDataTablesSerializer(serializers.ModelSerializer):
     title = serializers.CharField(read_only=True)
     owner = serializers.CharField(read_only=True)
     timeseries = serializers.SerializerMethodField()
@@ -29,10 +29,10 @@ class SuggestionDatasetDataTablesSerializer(serializers.ModelSerializer):
 
     def get_actions(self, obj):
         if obj.type == REAL_WORLD:
-            link = reverse('vadetisweb:suggestion_real_world_dataset', args=[obj.id])
+            link = reverse('vadetisweb:recommendation_real_world_dataset', args=[obj.id])
         else:
-            link = reverse('vadetisweb:suggestion_synthetic_dataset', args=[obj.id])
-        return '<a href="%s">Suggestion</a>' % (link)
+            link = reverse('vadetisweb:recommendation_synthetic_dataset', args=[obj.id])
+        return '<a href="%s">Recommendation</a>' % (link)
 
     class Meta:
         model = DataSet
@@ -41,7 +41,7 @@ class SuggestionDatasetDataTablesSerializer(serializers.ModelSerializer):
         )
 
 
-class SuggestionDatasetSearchSerializer(serializers.Serializer):
+class RecommendationDatasetSearchSerializer(serializers.Serializer):
     """
         Order is important and must refer to the order in the datatables serializer
     """
@@ -94,4 +94,4 @@ class SuggestionDatasetSearchSerializer(serializers.Serializer):
                                                         'col_index' : '6'})
 
     def __init__(self, *args, **kwargs):
-        super(SuggestionDatasetSearchSerializer, self).__init__(*args, **kwargs)
+        super(RecommendationDatasetSearchSerializer, self).__init__(*args, **kwargs)

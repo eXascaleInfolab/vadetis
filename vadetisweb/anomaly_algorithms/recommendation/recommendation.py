@@ -4,7 +4,7 @@ from ..detection import *
 from vadetisweb.parameters import TIME_RANGE_SELECTION
 
 
-def lisa_pearson_suggestion(df, df_class, validated_data):
+def lisa_pearson_recommendation(df, df_class, validated_data):
     window_size = validated_data['window_size']
 
     if validated_data['time_range'] == TIME_RANGE_SELECTION:
@@ -15,7 +15,7 @@ def lisa_pearson_suggestion(df, df_class, validated_data):
     return info
 
 
-def lisa_dtw_suggestion(df, df_class, validated_data):
+def lisa_dtw_recommendation(df, df_class, validated_data):
     window_size = validated_data['window_size']
     if validated_data['time_range'] == TIME_RANGE_SELECTION:
         df, df_class = df_range(df, df_class, validated_data['range_start'], validated_data['range_end'], start_offset=window_size)
@@ -25,13 +25,13 @@ def lisa_dtw_suggestion(df, df_class, validated_data):
     return info
 
 
-def lisa_geo_suggestion(df, df_class, validated_data):
+def lisa_geo_recommendation(df, df_class, validated_data):
     scores, y_hat_results, info = lisa_geo(df, df_class, validated_data)
 
     return info
 
 
-def rpca_suggestion(df, df_class, validated_data, ):
+def rpca_recommendation(df, df_class, validated_data, ):
 
     training_dataset = validated_data['training_dataset']
     df_train = training_dataset.dataframe
@@ -49,7 +49,7 @@ def rpca_suggestion(df, df_class, validated_data, ):
     return info
 
 
-def histogram_suggestion(df, df_class, validated_data):
+def histogram_recommendation(df, df_class, validated_data):
     training_dataset = validated_data['training_dataset']
     df_train = training_dataset.dataframe
     df_train_class = training_dataset.dataframe_class
@@ -64,7 +64,7 @@ def histogram_suggestion(df, df_class, validated_data):
     return info
 
 
-def cluster_suggestion(df, df_class, validated_data):
+def cluster_recommendation(df, df_class, validated_data):
     training_dataset = validated_data['training_dataset']
     df_train = training_dataset.dataframe
     df_train_class = training_dataset.dataframe_class
@@ -81,7 +81,7 @@ def cluster_suggestion(df, df_class, validated_data):
     return info
 
 
-def svm_suggestion(df, df_class, validated_data):
+def svm_recommendation(df, df_class, validated_data):
     training_dataset = validated_data['training_dataset']
     df_train = training_dataset.dataframe
     df_train_class = training_dataset.dataframe_class
@@ -98,7 +98,7 @@ def svm_suggestion(df, df_class, validated_data):
     return info
 
 
-def isolation_forest_suggestion(df, df_class, validated_data):
+def isolation_forest_recommendation(df, df_class, validated_data):
     training_dataset = validated_data['training_dataset']
     df_train = training_dataset.dataframe
     df_train_class = training_dataset.dataframe_class

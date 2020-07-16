@@ -11,73 +11,73 @@ from vadetisweb.models import DataSet
 from vadetisweb.utils import get_highcharts_range_button_preselector, q_public_or_user_is_owner
 from vadetisweb.factory import dataset_not_found_msg
 from vadetisweb.parameters import SYNTHETIC, REAL_WORLD
-from vadetisweb.serializers.dataset.suggestion_dataset_serializer import SuggestionDatasetSearchSerializer
-from vadetisweb.serializers.suggestion_serializers import SuggestionSerializer
+from vadetisweb.serializers.dataset.recommendation_dataset_serializer import RecommendationDatasetSearchSerializer
+from vadetisweb.serializers.recommendation_serializers import RecommendationSerializer
 
-class SuggestionSyntheticDatasets(APIView):
+class RecommendationSyntheticDatasets(APIView):
     """
     View for synthetic datasets
     """
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'vadetisweb/suggestion/synthetic/datasets.html'
+    template_name = 'vadetisweb/recommendation/synthetic/datasets.html'
 
     def get(self, request):
-        search_serializer = SuggestionDatasetSearchSerializer()
+        search_serializer = RecommendationDatasetSearchSerializer()
         return Response({ 'search_serializer' : search_serializer }, status=status.HTTP_200_OK)
 
 
-class SuggestionRealWorldDatasets(APIView):
+class RecommendationRealWorldDatasets(APIView):
     """
     View for real world datasets
     """
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'vadetisweb/suggestion/real-world/datasets.html'
+    template_name = 'vadetisweb/recommendation/real-world/datasets.html'
 
     def get(self, request):
-        search_serializer = SuggestionDatasetSearchSerializer()
+        search_serializer = RecommendationDatasetSearchSerializer()
 
         return Response({ 'search_serializer' : search_serializer }, status=status.HTTP_200_OK)
 
 
-class SuggestionSyntheticDataset(APIView):
+class RecommendationSyntheticDataset(APIView):
     """
     View for a single synthetic dataset
     """
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'vadetisweb/suggestion/synthetic/dataset.html'
+    template_name = 'vadetisweb/recommendation/synthetic/dataset.html'
 
     def get(self, request, dataset_id):
         dataset = DataSet.objects.filter(Q(id=dataset_id, type=SYNTHETIC),
                                          q_public_or_user_is_owner(request)).first()
         if dataset is None:
             messages.error(request, dataset_not_found_msg(dataset_id))
-            return redirect('vadetisweb:suggestion_synthetic_datasets')
+            return redirect('vadetisweb:recommendation_synthetic_datasets')
 
-        suggestion_serializer = SuggestionSerializer(context={'dataset': dataset})
+        recommendation_serializer = RecommendationSerializer(context={'dataset': dataset})
 
         return Response({
             'dataset': dataset,
-            'suggestion_serializer' : suggestion_serializer,
+            'recommendation_serializer' : recommendation_serializer,
         }, status=status.HTTP_200_OK)
 
 
-class SuggestionRealWorldDataset(APIView):
+class RecommendationRealWorldDataset(APIView):
     """
     View for a single real world dataset
     """
     renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'vadetisweb/suggestion/real-world/dataset.html'
+    template_name = 'vadetisweb/recommendation/real-world/dataset.html'
 
     def get(self, request, dataset_id):
         dataset = DataSet.objects.filter(Q(id=dataset_id, type=REAL_WORLD),
                                          q_public_or_user_is_owner(request)).first()
         if dataset is None:
             messages.error(request, dataset_not_found_msg(dataset_id))
-            return redirect('vadetisweb:suggestion_real_world_datasets')
+            return redirect('vadetisweb:recommendation_real_world_datasets')
 
-        suggestion_serializer = SuggestionSerializer(context={'dataset': dataset})
+        recommendation_serializer = RecommendationSerializer(context={'dataset': dataset})
 
         return Response({
             'dataset': dataset,
-            'suggestion_serializer' : suggestion_serializer,
+            'recommendation_serializer' : recommendation_serializer,
         }, status=status.HTTP_200_OK)

@@ -123,16 +123,16 @@ class ScorePortlet(APIView):
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class SuggestionPortlet(APIView):
+class RecommendationPortlet(APIView):
     """
-    API for a suggestion portlet
+    API for a recommendation portlet
     """
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
-    template_name = 'vadetisweb/parts/portlet/suggestion_portlet.html'
+    template_name = 'vadetisweb/parts/portlet/recommendation_portlet.html'
 
-    @swagger_auto_schema(request_body=SuggestionPortletSerializer)
+    @swagger_auto_schema(request_body=RecommendationPortletSerializer)
     def post(self, request, format=None):
-        portlet_serializer = SuggestionPortletSerializer(data=request.data)
+        portlet_serializer = RecommendationPortletSerializer(data=request.data)
 
         if portlet_serializer.is_valid() and request.accepted_renderer.format == 'html':  # rendered template:
             validated_data = portlet_serializer.validated_data
@@ -157,16 +157,16 @@ class SuggestionPortlet(APIView):
             return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class SuggestionRecommendationPortlet(APIView):
+class RecommendationSummaryPortlet(APIView):
     """
-    API for a suggestion portlet
+    API for a recommendation summary portlet
     """
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
-    template_name = 'vadetisweb/parts/portlet/suggestion_recommendation_portlet.html'
+    template_name = 'vadetisweb/parts/portlet/recommendation_summary_portlet.html'
 
-    @swagger_auto_schema(request_body=RecommendationPortletSerializer)
+    @swagger_auto_schema(request_body=RecommendationSummaryPortletSerializer)
     def post(self, request, format=None):
-        portlet_serializer = RecommendationPortletSerializer(data=request.data)
+        portlet_serializer = RecommendationSummaryPortletSerializer(data=request.data)
 
         if portlet_serializer.is_valid() and request.accepted_renderer.format == 'html':  # rendered template:
             validated_data = portlet_serializer.validated_data
