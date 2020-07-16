@@ -154,13 +154,19 @@ def df_lisa_time_series(time_series_id_p, df_mean, df_corr, global_correlation=F
 
 def lisa_pearson(df, df_class, time_series_id, maximize_score=F1_SCORE, window_size=10):
 
+    df_correlation = pearson(df, time_series_id, window_size=window_size)
+
+    # after correlation have been computed we remove the size of the window from the head of the data frame, as those correlations cannot be computed
+    offset = window_size - 1
+    df_correlation = df_correlation.iloc[offset:]
+    df = df.iloc[offset:]
+    df_class = df_class.iloc[offset:]
+
     # mean values of each row of dataframe
     df_mean = df_copy_with_mean(df)
 
     df_class_copy = df_class.copy()
     df_class_copy = df_class_copy.rename(columns={time_series_id: 'class'})
-
-    df_correlation = pearson(df, time_series_id, window_size=window_size)
 
     # LISA Time Series
     df_results = df_lisa_time_series(time_series_id, df_mean, df_correlation)
@@ -182,7 +188,7 @@ def lisa_pearson(df, df_class, time_series_id, maximize_score=F1_SCORE, window_s
     info['thresholds'] = thresholds.tolist()
     info['detection_threshold_scores'] = threshold_scores.tolist()
 
-    return scores, y_hat_results, info
+    return scores, y_hat_results, info, df, df_class
 
 
 #########################################################
@@ -191,13 +197,19 @@ def lisa_pearson(df, df_class, time_series_id, maximize_score=F1_SCORE, window_s
 
 def lisa_dtw(df, df_class, time_series_id, maximize_score=F1_SCORE, window_size=10, distance_function=EUCLIDEAN):
 
+    df_correlation = dtw_pearson(df, time_series_id, distance_function, window_size=window_size)
+
+    # after correlation have been computed we remove the size of the window from the head of the data frame, as those correlations cannot be computed
+    offset = window_size - 1
+    df_correlation = df_correlation.iloc[offset:]
+    df = df.iloc[offset:]
+    df_class = df_class.iloc[offset:]
+
     # mean values of each row of dataframe
     df_mean = df_copy_with_mean(df)
 
     df_class_copy = df_class.copy()
     df_class_copy = df_class_copy.rename(columns={time_series_id: 'class'})
-
-    df_correlation = dtw_pearson(df, time_series_id, distance_function, window_size=window_size)
 
     # LISA Time Series
     df_results = df_lisa_time_series(time_series_id, df_mean, df_correlation)
@@ -219,7 +231,7 @@ def lisa_dtw(df, df_class, time_series_id, maximize_score=F1_SCORE, window_size=
     info['thresholds'] = thresholds.tolist()
     info['detection_threshold_scores'] = threshold_scores.tolist()
 
-    return scores, y_hat_results, info
+    return scores, y_hat_results, info, df, df_class
 
 
 #########################################################

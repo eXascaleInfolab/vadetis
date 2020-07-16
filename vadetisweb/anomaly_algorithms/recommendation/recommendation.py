@@ -11,7 +11,7 @@ def lisa_pearson_recommendation(df, df_class, validated_data):
     if validated_data['time_range'] == TIME_RANGE_SELECTION:
         df, df_class = df_range(df, df_class, validated_data['range_start'], validated_data['range_end'], start_offset=window_size)
 
-    scores, y_hat_results, info = lisa_pearson(df, df_class, time_series_id, maximize_score=validated_data['maximize_score'], window_size=window_size)
+    scores, y_hat_results, info, _, _ = lisa_pearson(df, df_class, time_series_id, maximize_score=validated_data['maximize_score'], window_size=window_size)
 
     return info
 
@@ -23,7 +23,7 @@ def lisa_dtw_recommendation(df, df_class, validated_data):
     if validated_data['time_range'] == TIME_RANGE_SELECTION:
         df, df_class = df_range(df, df_class, validated_data['range_start'], validated_data['range_end'], start_offset=window_size)
 
-    scores, y_hat_results, info = lisa_dtw(df, df_class, time_series_id, maximize_score=validated_data['maximize_score'], window_size=window_size, distance_function=validated_data['dtw_distance_function'])
+    scores, y_hat_results, info, _, _ = lisa_dtw(df, df_class, time_series_id, maximize_score=validated_data['maximize_score'], window_size=window_size, distance_function=validated_data['dtw_distance_function'])
 
     return info
 
