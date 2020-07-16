@@ -8,7 +8,7 @@ var DatasetRecommendationForm = function () {
     }
 
     var requestRecommendationSummaryPortlet = function (portlet_url, portlet_id, callback) {
-        var highchart = $('#highcharts_container').highcharts(), scores = getScoresFromColumnChart(highchart), csrftoken = Cookies.get('csrftoken');
+        var highchart = $('#highcharts_plot_container').highcharts(), scores = getScoresFromColumnChart(highchart), csrftoken = Cookies.get('csrftoken');
         var data = {
             id: portlet_id,
             title: "Recommendation",
@@ -107,7 +107,7 @@ var DatasetRecommendationForm = function () {
             $(":submit").attr("disabled", true);
             clearFormErrors(form_id);
             clearMessages();
-            var highchart = $('#highcharts_container').highcharts();
+            var highchart = $('#highcharts_plot_container').highcharts();
             var form_selector = $(html_id), csrftoken = Cookies.get('csrftoken');
             var formData = new FormData(this);
             highchart.showLoading();

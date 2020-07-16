@@ -54,9 +54,11 @@ class RecommendationSyntheticDataset(APIView):
             return redirect('vadetisweb:recommendation_synthetic_datasets')
 
         recommendation_serializer = RecommendationSerializer(context={'dataset': dataset})
+        selected_button = get_highcharts_range_button_preselector(dataset.granularity)
 
         return Response({
             'dataset': dataset,
+            'selected_button': selected_button,
             'recommendation_serializer' : recommendation_serializer,
         }, status=status.HTTP_200_OK)
 
@@ -76,8 +78,10 @@ class RecommendationRealWorldDataset(APIView):
             return redirect('vadetisweb:recommendation_real_world_datasets')
 
         recommendation_serializer = RecommendationSerializer(context={'dataset': dataset})
+        selected_button = get_highcharts_range_button_preselector(dataset.granularity)
 
         return Response({
             'dataset': dataset,
+            'selected_button' : selected_button,
             'recommendation_serializer' : recommendation_serializer,
         }, status=status.HTTP_200_OK)
