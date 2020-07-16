@@ -39,17 +39,17 @@ class OutlierInjector:
         return self.df.loc[self.get_range_start_dt():self.get_range_end_dt()].index.tolist()
 
     def get_factor(self):
-        anomaly_deviation = self.validated_data['anomaly_deviation']
-        if anomaly_deviation == ANOMALY_INJECTION_DEVIATION_SMALL:
+        anomaly_scale = self.validated_data['anomaly_scale']
+        if anomaly_scale == ANOMALY_INJECTION_SCALE_SMALL:
             return 8
 
-        elif anomaly_deviation == ANOMALY_INJECTION_DEVIATION_MEDIUM:
+        elif anomaly_scale == ANOMALY_INJECTION_SCALE_MEDIUM:
             return 16
 
-        elif anomaly_deviation == ANOMALY_INJECTION_DEVIATION_HIGH:
+        elif anomaly_scale == ANOMALY_INJECTION_SCALE_HIGH:
             return 24
 
-        elif anomaly_deviation == ANOMALY_INJECTION_DEVIATION_RANDOM:
+        elif anomaly_scale == ANOMALY_INJECTION_SCALE_RANDOM:
             return np.random.choice([8, 16, 24])
 
         else:
@@ -70,7 +70,7 @@ class OutlierInjector:
         return None
 
     def _number_of_splits(self):
-        anomaly_deviation = self.validated_data['anomaly_repetition']
+        anomaly_scale = self.validated_data['anomaly_repetition']
 
         range_length = len(self.df.loc[self.get_range_start_dt():self.get_range_end_dt()].index)
         # 30 values is the minimum range in which we inject anomalies
@@ -79,16 +79,16 @@ class OutlierInjector:
 
         max_splits = int(range_length / 30)
 
-        if anomaly_deviation == ANOMALY_INJECTION_REPEAT_INTERVAL_LOW:
+        if anomaly_scale == ANOMALY_INJECTION_REPEAT_INTERVAL_LOW:
             return min(4, max_splits)
 
-        elif anomaly_deviation == ANOMALY_INJECTION_REPEAT_INTERVAL_MEDIUM:
+        elif anomaly_scale == ANOMALY_INJECTION_REPEAT_INTERVAL_MEDIUM:
             return min(8, max_splits)
 
-        elif anomaly_deviation == ANOMALY_INJECTION_REPEAT_INTERVAL_HIGH:
+        elif anomaly_scale == ANOMALY_INJECTION_REPEAT_INTERVAL_HIGH:
             return min(16, max_splits)
 
-        elif anomaly_deviation == ANOMALY_INJECTION_REPEAT_SINGLE:
+        elif anomaly_scale == ANOMALY_INJECTION_REPEAT_SINGLE:
             return 1
         else:
             return ValueError

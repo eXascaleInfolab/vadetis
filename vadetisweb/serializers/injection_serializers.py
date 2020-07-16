@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from vadetisweb.fields import *
-from vadetisweb.parameters import ANOMALY_INJECTION_TYPES, ANOMALY_INJECTION_DEVIATIONS, ANOMALY_INJECTION_DEVIATION_MEDIUM, ANOMALY_INJECTION_REPETITIONS, ANOMALY_INJECTION_REPEAT_SINGLE
+from vadetisweb.parameters import ANOMALY_INJECTION_TYPES, ANOMALY_INJECTION_SCALE, ANOMALY_INJECTION_SCALE_MEDIUM, ANOMALY_INJECTION_REPETITIONS, ANOMALY_INJECTION_REPEAT_SINGLE
 
 
 class InjectionSerializer(serializers.Serializer):
@@ -26,6 +26,14 @@ class InjectionSerializer(serializers.Serializer):
                                            style={'template': 'vadetisweb/parts/input/select_input.html',
                                                   'help_text_in_popover': True})
 
+    anomaly_scale = serializers.ChoiceField(label='Anomaly Scale',
+                                                required=False,
+                                                choices=ANOMALY_INJECTION_SCALE,
+                                                default=ANOMALY_INJECTION_SCALE_MEDIUM,
+                                                help_text='The scale of deviation for anomalies from the normal data.',
+                                                style={'template': 'vadetisweb/parts/input/select_input.html',
+                                                       'help_text_in_popover': True})
+
     anomaly_repetition = serializers.ChoiceField(label='Insertion',
                                                 required=False,
                                                 choices=ANOMALY_INJECTION_REPETITIONS,
@@ -34,13 +42,6 @@ class InjectionSerializer(serializers.Serializer):
                                                 style={'template': 'vadetisweb/parts/input/select_input.html',
                                                        'help_text_in_popover': True})
 
-    anomaly_deviation = serializers.ChoiceField(label='Deviation',
-                                                required=False,
-                                                choices=ANOMALY_INJECTION_DEVIATIONS,
-                                                default=ANOMALY_INJECTION_DEVIATION_MEDIUM,
-                                                help_text='The grade of deviation for anomalies from the normal data.',
-                                                style={'template': 'vadetisweb/parts/input/select_input.html',
-                                                       'help_text_in_popover': True})
 
     range_start = RangeStartHiddenIntegerField(html_id='rangeStartInjection')
     range_end = RangeEndHiddenIntegerField(html_id='rangeEndInjection')
