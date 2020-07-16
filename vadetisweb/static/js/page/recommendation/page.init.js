@@ -7,7 +7,7 @@ var DatasetRecommendationPage = function () {
         VadetisColumnHighcharts.init("highcharts_container");
         VadetisHighchartsClear.init("highcharts_container", clear_button_id, function () {
             $('#recommendation_portlets').empty();
-            $('#recommendation_portlet').remove();
+            $('#recommendation_summary_portlet').remove();
         });
     }
     return {
