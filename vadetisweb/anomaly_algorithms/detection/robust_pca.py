@@ -29,12 +29,7 @@ def robust_pca_huber_loss(df, df_class, df_train, df_train_class, delta=1, n_com
     y_test_scores_class = y_test_scores.to_frame().join(y_test)
 
     # computed scores are always in between 0-1 due to min max normalization
-    # we only have to estimate the higher bound
-    lower = 0
-    higher = np.minimum(y_test_scores_class[y_test_scores_class['class'] == True].drop('class', axis=1).values.mean(), 1)
-
-    lower_bound, higher_bound = estimate_score_bound(lower, higher)
-    thresholds = np.linspace(lower_bound, higher_bound, 100)
+    thresholds = np.linspace(0, 1, 200)
 
     training_threshold_scores = get_threshold_scores(thresholds, y_test_scores, y_test, upper_boundary=True)
     selected_index = get_max_score_index_for_score_type(training_threshold_scores, maximize_score)

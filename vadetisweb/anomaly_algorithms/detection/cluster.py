@@ -2,7 +2,7 @@ from sklearn.mixture import GaussianMixture
 
 from .helper_functions import *
 
-from vadetisweb.utils import get_detection_meta
+from vadetisweb.utils import get_detection_meta,min_max_normalization
 
 #########################################################
 # CLUSTER
@@ -20,18 +20,15 @@ def cluster_gaussian_mixture(df, df_class, df_train, df_train_class, maximize_sc
     gmm = GaussianMixture(n_components=n_components, n_init=n_init, random_state=random_seed)
     gmm.fit(train.drop('class', axis=1).values)
 
-    higher = gmm.score(valid[valid['class'] == False].drop('class', axis=1).values)
-    lower = gmm.score(valid[valid['class'] == True].drop('class', axis=1).values)
-    lower_bound, higher_bound = estimate_score_bound(lower, higher) if lower <= higher else estimate_score_bound(higher, lower)
-    thresholds = np.linspace(lower_bound, higher_bound, 100)
+    thresholds = np.linspace(0, 1, 200)
 
-    y_scores = gmm.score_samples(valid.drop('class', axis=1).values)
+    y_scores = min_max_normalization(gmm.score_samples(valid.drop('class', axis=1).values))
     training_threshold_scores = get_threshold_scores(thresholds, y_scores, valid['class'])
     selected_index = get_max_score_index_for_score_type(training_threshold_scores, maximize_score)
     selected_threshold = thresholds[selected_index]
 
     # detection on dataset
-    scores = gmm.score_samples(df.values)
+    scores = min_max_normalization(gmm.score_samples(df.values))
     y_hat_results = (scores < selected_threshold).astype(int)
     y_truth = df_common_class['class'].values.astype(int)
     detection_threshold_scores = get_threshold_scores(thresholds, scores, df_common_class['class'])

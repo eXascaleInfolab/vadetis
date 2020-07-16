@@ -2,7 +2,7 @@ from sklearn.svm import OneClassSVM
 
 from .helper_functions import *
 
-from vadetisweb.utils import get_detection_meta
+from vadetisweb.utils import get_detection_meta, min_max_normalization
 
 #########################################################
 # SVM
@@ -20,18 +20,15 @@ def svm(df, df_class, df_train, df_train_class, maximize_score=F1_SCORE, gamma=0
     model = OneClassSVM(gamma=gamma, nu=nu, kernel=kernel)
     model.fit(train.drop('class', axis=1).values)
 
-    higher = model.decision_function(valid[valid['class'] == False].drop('class', axis=1).values).mean()
-    lower = model.decision_function(valid[valid['class'] == True].drop('class', axis=1).values).mean()
-    lower_bound, higher_bound = estimate_score_bound(lower, higher) if lower <= higher else estimate_score_bound(higher, lower)
-    thresholds = np.linspace(lower_bound, higher_bound, 100)
+    thresholds = np.linspace(0, 1, 200)
 
-    y_scores = model.decision_function(valid.drop('class', axis=1).values)
+    y_scores = min_max_normalization(model.decision_function(valid.drop('class', axis=1).values))
     training_threshold_scores = get_threshold_scores(thresholds, y_scores, valid['class'])
     selected_index = get_max_score_index_for_score_type(training_threshold_scores, maximize_score)
     selected_threshold = thresholds[selected_index]
 
     # detection on dataset
-    scores = model.decision_function(df.values)
+    scores = min_max_normalization(model.decision_function(df.values))
     y_hat_results = (scores < selected_threshold).astype(int)
     y_truth = df_common_class['class'].values.astype(int)
     detection_threshold_scores = get_threshold_scores(thresholds, scores, df_common_class['class'])
