@@ -207,6 +207,10 @@ function generateSeriesFromJson(dataset_series_json, algorithm, time_series) {
 function setSeriesData(highchart, series_data_json) {
     series_data_json.forEach(function (series) {
         var highchart_series = highchart.get(series.id);
+
+        // bugfix: sometimes markers do not get updated by highcharts, therefore we clear before setting the data
+        highchart_series.setData([], false, false);
+
         highchart_series.setData(series.data, false, true);
         highchart_series.update({
             custom: {
@@ -278,6 +282,7 @@ function loadSeriesForType(highchart, url, type, callback) {
     $.getJSON(url + '?type=' + type, function (data) {
         var series_data_json = data['series'];
         setSeriesData(highchart, series_data_json);
+
         highchart.hideLoading();
         callback();
     });
