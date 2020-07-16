@@ -1,5 +1,4 @@
 {% extends 'account/base.html' %}
-{% load account socialaccount %}
 {% load django_bootstrap_breadcrumbs %}
 {% load static %}
 
@@ -32,16 +31,6 @@
                 </div>
             </div>
             <div class="kt-portlet__body">
-                {% get_providers as socialaccount_providers %}
-                {% if socialaccount_providers %}
-                    <p>Please sign in with your {{ site.name }} account, or use one of your existing third party accounts.</p>
-                    <div class="socialaccount_ballot">
-                      <ul class="socialaccount_providers">
-                        {% include "socialaccount/snippets/provider_list.html" with process="login" %}
-                      </ul>
-                    </div>
-                    {% include "socialaccount/snippets/login_extra.html" %}
-                {% endif %}
                 <p>If you have not created a account yet, then please <a href="{{ signup_url }}">create an account</a> first.</p>
                 <p>Forgot your password?<br/> Click here to <a href="{% url 'account_reset_password' %}">reset your password</a>.</p>
             </div>

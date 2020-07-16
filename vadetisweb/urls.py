@@ -92,7 +92,6 @@ urlpatterns = apipatterns + [
     path('account/training-datasets/', views.account_training_datasets, name='account_training_datasets'),
     path('account/user/update', views.AccountUserUpdate.as_view(), name='account_user_update'),
     path('account/pwd/update', views.AccountPasswordUpdate.as_view(), name='account_pwd_update'),
-    path('account/social/update', views.AccountSocialDisconnectUpdate.as_view(), name='account_social_disconnect_update'),
     path('account/delete', views.AccountDelete.as_view(), name='account_delete'),
     path('account/', views.account, name='account'),
 

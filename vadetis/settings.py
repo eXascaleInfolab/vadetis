@@ -55,8 +55,6 @@ INSTALLED_APPS = [
     'django_bootstrap_breadcrumbs',
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
     'rest_framework',
     'rest_framework_datatables',
     'drf_yasg',
@@ -202,31 +200,6 @@ ACCOUNT_FORMS = {
     'reset_password': 'vadetisweb.forms.AccountResetPasswordForm',
     'reset_password_from_key': 'vadetisweb.forms.AccountResetPasswordKeyForm',
     'disconnect': 'vadetisweb.forms.AccountSocialDisconnectForm',
-}
-
-SOCIALACCOUNT_FORMS = {
-    'login': 'allauth.socialaccount.forms.DisconnectForm',
-    'signup': 'vadetisweb.forms.SocialAccountSignupForm',
-}
-
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': [
-            'profile',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        },
-        # For each OAuth based provider, either add a ``SocialApp``
-        # (``socialaccount`` app) containing the required client credentials, or list them here:
-        # ATTENTION: there might be a bug in allauth, add this info in admin backend under socialapplications
-        'APP': {
-            'client_id': '844915385364-2aeu7mjtg4s9v1beb1gp8lmqjpr2lpi5.apps.googleusercontent.com',
-            'secret': 'SQ7jfMEvIBGNHiDfVpyI6OMr',
-            'key': 'AIzaSyCWVgicKlJ9mnTyjSnY9Mb-yGO96RnMDeA'
-        }
-    }
 }
 
 SITE_ID = 1

@@ -67,31 +67,6 @@ class AccountPasswordUpdate(APIView):
             return response_invalid_form(password_update_serializer, json_messages)
 
 
-class AccountSocialDisconnectUpdate(APIView):
-    """
-    View for account social disconnect processing
-    """
-    renderer_classes = [JSONRenderer]
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication]
-
-    def post(self, request):
-        social_disconnect_serializer = AccountSocialDisconnectSerializer(data=request.data)
-
-        if social_disconnect_serializer.is_valid():
-            social_disconnect_serializer.save()
-
-            messages.success(request, "Saved")
-            response = Response({}, status=status.HTTP_200_OK)
-            response['Location'] = reverse('vadetisweb:account')
-            return response
-
-        else:
-            json_messages = []
-            json_message_utils.error(json_messages, 'Form was not valid')
-            return response_invalid_form(social_disconnect_serializer, json_messages)
-
-
 class AccountDelete(APIView):
     """
     View for account delete processing

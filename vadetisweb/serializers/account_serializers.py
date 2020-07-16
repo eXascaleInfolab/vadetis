@@ -137,15 +137,6 @@ class AccountPasswordSerializer(serializers.Serializer):
         super(AccountPasswordSerializer, self).__init__(*args, **kwargs)
 
 
-class AccountSocialDisconnectSerializer(serializers.Serializer):
-    account = serializers.PrimaryKeyRelatedField(queryset=SocialAccount.objects.none(),
-                                                 required=True,
-                                                 style={'template': 'vadetisweb/parts/input/select_input.html'})
-
-    def __init__(self, *args, **kwargs):
-        super(AccountSocialDisconnectSerializer, self).__init__(*args, **kwargs)
-
-
 class AccountDeleteSerializer(serializers.ModelSerializer):
     is_active = serializers.BooleanField(initial=True, label='Account is active',
                                          help_text='Uncheck this box and save if you are sure you want to delete your account.',

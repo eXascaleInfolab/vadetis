@@ -28,12 +28,10 @@ def account(request):
     """
     user_serializer = AccountUserSerializer(instance=request.user)
     password_update_serializer = AccountPasswordSerializer()
-    social_disconnect_serializer = AccountSocialDisconnectSerializer()
     delete_account_serializer = AccountDeleteSerializer(instance=request.user)
 
     return render(request, 'vadetisweb/account/account.html', {'user_serializer': user_serializer,
                                                                'password_update_serializer': password_update_serializer,
-                                                               'social_disconnect_serializer': social_disconnect_serializer,
                                                                'delete_account_serializer': delete_account_serializer})
 
 

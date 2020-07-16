@@ -28,30 +28,6 @@
             {% url 'vadetisweb:account_user_update' as user_account_url %}
             {% include 'vadetisweb/parts/forms/serializer_form.html' with formid="user_form" url=user_account_url serializer=user_serializer submit_label="Save" %}
         </div>
-        <div class="kt-portlet">
-            <div class="kt-portlet__head">
-                <div class="kt-portlet__head-label">
-                    <h3 class="kt-portlet__head-title">Social Account</h3>
-                </div>
-            </div>
-            {% if form_social_disconnect.accounts %}
-                <div class="kt-portlet__body">
-                    <p>You can sign in to your account using any of the following third party accounts:</p>
-                </div>
-            {% else %}
-                <div class="kt-portlet__body">
-                    <p>You currently have no social network accounts connected to your Vadetis account.</p>
-                    <ul class="socialaccount_providers">
-                        {% include "socialaccount/snippets/provider_list_logged_in.html" with process="connect" next=url_social_connect_success_redirect %}
-                    </ul>
-                    {% include "socialaccount/snippets/login_extra.html" %}
-                </div>
-            {% endif %}
-            {% if form_social_disconnect.accounts %}
-                {% url 'vadetisweb:account_social_disconnect_update' as social_disconnect_url %}
-                {% include 'vadetisweb/parts/forms/serializer_form.html' with formid="social_disconnect_form" url=social_disconnect_url serializer=social_disconnect_serializer submit_label="Save" %}
-            {% endif %}
-        </div>
     </div>
     <div class="col-md-6">
         <div class="kt-portlet">
@@ -82,7 +58,7 @@
     <!-- page init -->
     <script type="text/javascript">
         jQuery(document).ready(function () {
-            AccountPage.init("user_form", "password_form", "social_disconnect_form", "account_delete_form");
+            AccountPage.init("user_form", "password_form", "account_delete_form");
         });
     </script>
 {% endblock %}
