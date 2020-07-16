@@ -61,6 +61,9 @@ def lisa_geo_detection(df, df_class, validated_data, settings):
     dataset = validated_data['dataset']
     time_series_id = validated_data['time_series'].id
 
+    if validated_data['time_range'] == TIME_RANGE_SELECTION:
+        df, df_class = df_range(df, df_class, validated_data['range_start'], validated_data['range_end'])
+
     scores, y_hat_results, info = lisa_geo(df, df_class, validated_data)
 
     type = get_type_from_dataset_json(validated_data['dataset_series_json'])

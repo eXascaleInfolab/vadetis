@@ -250,6 +250,7 @@ class LisaPearsonSerializer(ConditionalRequiredFieldMixin, serializers.Serialize
     def __init__(self, *args, **kwargs):
         super(LisaPearsonSerializer, self).__init__(*args, **kwargs)
 
+
 class LisaDtwPearsonSerializer(ConditionalRequiredFieldMixin, serializers.Serializer):
     """
     The serializer for the parameters for DTW with Pearson correlation algorithm
