@@ -1,9 +1,14 @@
-import pandas as pd, logging
+import pandas as pd, numpy as np
 from pandas.tseries.frequencies import to_offset
 from sklearn.metrics import fbeta_score, precision_score, recall_score, accuracy_score, confusion_matrix
 from vadetisweb.parameters import *
 
 from .helper_function_utils import *
+
+
+
+def min_max_normalization(scores):
+    return (scores - np.min(scores)) / (np.max(scores) - np.min(scores))
 
 
 def get_detection_choices(dataset, with_empty=True):
