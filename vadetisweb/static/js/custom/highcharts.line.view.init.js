@@ -51,18 +51,18 @@ var VadetisHighcharts = function () {
                         tooltip += '<td><span style="color:' + this.series.color + '">\u25CF</span> ' + this.series.name + ': </td>'
                             + '<td style="text-align: right;"><strong style="color: ' + value_color + ';">' + this.y.toFixed(settings.round_digits) + '</strong></td>';
 
-                        if(point.point.score !== undefined) {
+                        if (point.point.score !== undefined) {
                             hasScore = true;
                         }
                         tooltip += '</tr>';
                     });
                     tooltip += '</table>';
 
-                    if(hasScore) {
+                    if (hasScore) {
                         tooltip += '<table style="margin-top: 4px;">';
                         for (var i = 0; i < this.points.length; i++) {
                             var point = this.points[i];
-                            if(point.hasOwnProperty('point') && point.point.score !== undefined) {
+                            if (point.hasOwnProperty('point') && point.point.score !== undefined) {
                                 tooltip += '<tr><td><strong>Score:</strong></td><td>' + point.point.score.toFixed(settings.round_digits) + '</td></tr>';
                                 break;
                             }
@@ -76,7 +76,12 @@ var VadetisHighcharts = function () {
 
             legend: {
                 enabled: true,
+                floating: true,
                 layout: 'horizontal',
+                align: 'right',
+                x: 0,
+                y: 30,
+                verticalAlign: 'top'
             },
 
             rangeSelector: {
