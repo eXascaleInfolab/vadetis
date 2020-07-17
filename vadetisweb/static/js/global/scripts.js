@@ -328,7 +328,7 @@ var KTApp = function() {
 
 // Initialize KTApp class on document ready
 $(document).ready(function() {
-    KTApp.init(KTAppOptions);
+    KTApp.init();
 });
 "use strict";
 /**
