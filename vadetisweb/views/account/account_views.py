@@ -167,9 +167,10 @@ class AccountUploadDataset(APIView):
                     import_dataset(user.username, dataset_file.name, title, type)
                     silent_remove(dataset_file.name)
 
+
                 messages.success(request, dataset_imported_msg(title))
                 response = Response({}, status=status.HTTP_201_CREATED)
-                response['Location'] = reverse('vadetisweb:account_datasets')
+                response['Location'] = reverse('vadetisweb:account_training_datasets_upload')
                 return response
 
             except Exception as e:

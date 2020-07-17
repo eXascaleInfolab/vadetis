@@ -18,7 +18,7 @@
             <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title">Upload</h3>
+                        <h3 class="kt-portlet__head-title">Upload Dataset</h3>
                     </div>
                 </div>
                 {% url 'vadetisweb:account_datasets_upload' as fromurl %}
@@ -27,17 +27,9 @@
         </div>
         <div class="col-md-6">
             <div class="kt-portlet">
-                <div class="kt-portlet__head">
-                    <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title">Info</h3>
-                    </div>
-                </div>
                 <div class="kt-portlet__body">
-                    <p>Note that datasets are immutable after they are inserted into the database. You may want to
-                        insert training data afterwards.
-                        See the <a class="kt-link kt-font-bold"
-                                   href="{% comment %}{% url 'vadetisweb:faq' %}{% endcomment %}">FAQ</a> section for
-                        requirements of the CSV files.</p>
+                    <p>Note that the values of a datasets are immutable after they are inserted into the database. You will be redirected to insert training data afterwards.
+                        See the <a class="kt-link kt-font-bold" href="{% url 'vadetisweb:faq' %}">FAQ</a> section for requirements of the CSV files.</p>
                 </div>
             </div>
         </div>

@@ -31,7 +31,7 @@ class AccountLoginForm(LoginForm):
 
     password = AddonPasswordField(label="Password")
     remember = BooleanField(widget=FormCheckboxInput(default=True, label='Stay signed in'), required=False, label='Stay signed in')
-    captcha = ReCaptchaField()
+    captcha = ReCaptchaField(label="")
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
@@ -79,7 +79,7 @@ class AccountSignUpForm(AllauthAccountSignupForm):
     email = EmailField(widget=UserTextInput('email', attrs={'type' : 'email',
                                                             'placeholder':  'E-mail address',
                                                             'autofocus': 'autofocus'}))
-    captcha = ReCaptchaField()
+    captcha = ReCaptchaField(label="")
 
     def __init__(self, *args, **kwargs):
         super(AccountSignUpForm, self).__init__(*args, **kwargs)
@@ -99,7 +99,7 @@ class AccountResetPasswordForm(ResetPasswordForm):
     email = EmailField(label='E-mail', required=True, widget=UserTextInput('email', attrs={'type' : 'email',
                                                                                            'size' : '30',
                                                                                            'placeholder': 'E-mail address',}))
-    captcha = ReCaptchaField()
+    captcha = ReCaptchaField(label="")
 
     def __init__(self, *args, **kwargs):
         super(AccountResetPasswordForm, self).__init__(*args, **kwargs)

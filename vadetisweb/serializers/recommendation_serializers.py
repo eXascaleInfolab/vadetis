@@ -22,6 +22,7 @@ class RecommendationSerializer(serializers.Serializer):
     def __init__(self, *args, **kwargs):
         super(RecommendationSerializer, self).__init__(*args, **kwargs)
         dataset = self.context.get('dataset', None)
-        detection_choices = get_detection_choices(dataset, with_empty=False)
-        self.fields['algorithm'].choices = detection_choices
-        self.fields['algorithm'].initial = get_preselected_detection_choices(detection_choices)
+        if dataset is not None:
+            detection_choices = get_detection_choices(dataset, with_empty=False)
+            self.fields['algorithm'].choices = detection_choices
+            self.fields['algorithm'].initial = get_preselected_detection_choices(detection_choices)

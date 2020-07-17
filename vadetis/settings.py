@@ -207,13 +207,16 @@ SITE_ID = 1
 # Cookies
 CSRF_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_SAMESITE = 'Lax'
+LANGUAGE_COOKIE_SAMESITE = 'Lax'
 
 # CHANGE ON PRODUCTION (!!)
 """
 Whether to use a secure cookie for the session cookie. If this is set to True, the cookie will be marked as “secure”, which means browsers may ensure that the cookie is only sent under an HTTPS connection.
 Leaving this setting off isn’t a good idea because an attacker could capture an unencrypted session cookie with a packet sniffer and use the cookie to hijack the user’s session.
 """
-SESSION_COOKIE_SECURE = False
+"""SESSION_COOKIE_SECURE = True
+LANGUAGE_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True"""
 
 # RECAPTCHA
 RECAPTCHA_PUBLIC_KEY = '6Lc452UUAAAAAFYADmbUZgYf7qBx3A8i-nnLUde2'
@@ -250,15 +253,6 @@ REGISTRATION_SALT = 'encoded_username:timestamp:signature'
 # Static files (CSS, JavaScript, Images)
 
 STATIC_URL = '/static/'
-
-# CELERY CONFIG
-# CELERY_BROKER_URL = 'redis://localhost:6379'
-# CELERY_RESULT_BACKEND = 'django-db'
-# CELERY_TASK_RESULT_EXPIRES = timedelta(days=30)
-# CELERY_TASK_SERIALIZER = 'json'
-# CELERY_RESULT_SERIALIZER = 'json'
-# CELERY_ACCEPT_CONTENT = ['json']
-# CELERY_TIMEZONE = 'Europe/Zurich'
 
 # BREADCRUMBS
 BREADCRUMBS_TEMPLATE = 'vadetisweb/parts/breadcrumbs.html'

@@ -24,7 +24,7 @@ def msg_injection_all_anomalies():
 
 
 def dataset_imported_msg(title):
-    return "Dataset '%s' has been imported" % title
+    return "Dataset '%s' has been imported. Now, you can add training data." % title
 
 
 def training_dataset_imported_msg(title):
