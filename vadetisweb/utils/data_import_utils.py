@@ -57,7 +57,13 @@ def import_dataset(owner_username, dataset_file_name, title, type, **kwargs):
 
         for idx, row in df_ts_unit.items():  # check length of units at each series must be 1
             if not len(row) == 1:
-                err_msg = "Series {0} has multiple units".format(idx)
+                err_msg = "Series '{0}' has multiple units".format(idx)
+                raise ValueError(err_msg)
+
+        df_ts_name = group_by_ts_name.apply(lambda x: x['ts_name'].unique())
+        for idx, row in df_ts_name.items():  # check length series names must not be 1
+            if len(row) == 1:
+                err_msg = "Only one series '{0}' provided. You must include at least 2 time series.".format(idx)
                 raise ValueError(err_msg)
 
         # check each series distinct name => each series has only one value for a given index

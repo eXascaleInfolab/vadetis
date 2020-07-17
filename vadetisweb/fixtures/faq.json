@@ -20,42 +20,7 @@
     }
 },
 
-{
-    "model": "vadetisweb.frequentlyaskedquestion",
-    "pk": 10,
-    "fields": {
-        "category": 3,
-        "question": "How many training datasets can I add to my dataset?",
-        "answer": "You can add as many as you want."
-    }
-},
-{
-    "model": "vadetisweb.frequentlyaskedquestion",
-    "pk": 11,
-    "fields": {
-        "category": 3,
-        "question": "Can I add training data to datasets I do not own?",
-        "answer": "No, only the owner of the dataset can add training data."
-    }
-},
-{
-    "model": "vadetisweb.frequentlyaskedquestion",
-    "pk": 12,
-    "fields": {
-        "category": 3,
-        "question": "I have missing values in my datasets. Is this a problem?",
-        "answer": "Yes, if a value is missing at a certain timestamp some algorithms cannot compute a detection result at this timestamp and therefor it is required to have no gaps in the data. There exist several techniques to recover missing values such as <a href=\\\"http://revival.exascale.info/\\\" target=\\\"_blank\\\">centroid decomposition</a>."
-    }
-},
-{
-    "model": "vadetisweb.frequentlyaskedquestion",
-    "pk": 13,
-    "fields": {
-        "category": 3,
-        "question": "What is the impact if the time series in a dataset recorded attributes in different domains?",
-        "answer": "If time series recorded different related domains, e.g. temperature and radiation, the values are transformed into z-scores and the anomaly detection algorithm will perform on these z-score values and not the raw data."
-    }
-},
+
 {
     "model": "vadetisweb.frequentlyaskedquestion",
     "pk": 14,
