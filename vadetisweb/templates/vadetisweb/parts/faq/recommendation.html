@@ -1,3 +1,173 @@
 <div id="faq_recommendation_content" class="accordion accordion-solid accordion-toggle-plus"{% if hide %} style="display: none;"{% endif %}>
-
+    <div class="card">
+        <div class="card-header" id="heading_recommendation1">
+            <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse_recommendation1" aria-expanded="false"
+                 aria-controls="collapse_recommendation1">
+                What settings are used for the recommendation?
+            </div>
+        </div>
+        <div id="collapse_recommendation1" class="collapse" aria-labelledby="heading_recommendation1" data-parent="#faq_account_content">
+            <div class="card-body">
+                <p>
+                    For each performed method it will use the default configuration.
+                </p>
+                <table class="table table-xs table-head-bg-brand">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th style="width: 50%;">LISA (Pearson)</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Window Size</td>
+                            <td>10</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-xs table-head-bg-brand">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th style="width: 50%;">LISA (DTW with Pearson)</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Window Size</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>Dtw Distance Function</td>
+                            <td>euclidean</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-xs table-head-bg-brand">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th style="width: 50%;">Histogram</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Train Size</td>
+                            <td>0.5</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-xs table-head-bg-brand">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th style="width: 50%;">Cluster (Gaussian Mixture)</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Bootstrap</td>
+                            <td>False</td>
+                        </tr>
+                        <tr>
+                            <td>N Estimators</td>
+                            <td>40</td>
+                        </tr>
+                        <tr>
+                            <td>Train Size</td>
+                            <td>0.5</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-xs table-head-bg-brand">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th style="width: 50%;">SVM</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Kernel</td>
+                            <td>rbf</td>
+                        </tr>
+                        <tr>
+                            <td>Gamma</td>
+                            <td>0.0005</td>
+                        </tr>
+                        <tr>
+                            <td>Nu</td>
+                            <td>0.95</td>
+                        </tr>
+                        <tr>
+                            <td>Train Size</td>
+                            <td>0.5</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-xs table-head-bg-brand">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th style="width: 50%;">Isolation Forest</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Bootstrap</td>
+                            <td>False</td>
+                        </tr>
+                        <tr>
+                            <td>N Estimators</td>
+                            <td>40</td>
+                        </tr>
+                        <tr>
+                            <td>Train Size</td>
+                            <td>0.5</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-xs table-head-bg-brand">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th style="width: 50%;">RPCA</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Delta</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>N Components</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>Train Size</td>
+                            <td>0.5</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="heading_recommendation2">
+            <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse_recommendation2" aria-expanded="false"
+                 aria-controls="collapse_recommendation2">
+                Which datasets and time series are used to compute the recommendation?
+            </div>
+        </div>
+        <div id="collapse_recommendation2" class="collapse" aria-labelledby="heading_recommendation2" data-parent="#faq_account_content">
+            <div class="card-body">
+                <p>
+                    The training dataset that has the highest contamination level will be used for model training. Further, LISA computation is applied to the
+                    time series that contains the most outliers. In order to improve performance when executing several detection methods at the same time, only
+                    the last 500 timestamps of a time series are
+                    taken into account.
+                </p>
+            </div>
+        </div>
+    </div>
 </div>
