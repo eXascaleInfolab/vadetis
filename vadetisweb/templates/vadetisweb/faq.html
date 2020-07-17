@@ -370,84 +370,56 @@
                             <div id="collapse13" class="collapse" aria-labelledby="heading13" data-parent="#faq_content">
                                 <div class="card-body">
                                     <p>
-                                        In order to compute outlier detection the time series must share the same granularities, that can be inferred by the
-                                        used Python <i>pandas</i> library. The supported granularities are:
+                                        In order to compute outlier detection the time series must share the same granularities. The supported granularities are:
                                     </p>
                                     <table class="table table-xs table-head-bg-brand">
                                         <thead class="thead-inverse">
                                         <tr>
                                             <th>Type</th>
+                                            <th>Label</th>
                                             <th>Description</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr>
-                                            <td>BDay or BusinessDay</td>
-                                            <td>business day (weekday)</td>
+                                            <td>YearBegin</td>
+                                            <td>'AS' or 'BYS'</td>
+                                            <td>calendar year begin</td>
                                         </tr>
                                         <tr>
-                                            <td>CDay or CustomBusinessDay</td>
-                                            <td>custom business day</td>
+                                            <td>MonthBegin</td>
+                                            <td>'MS'</td>
+                                            <td>calendar month begin</td>
                                         </tr>
                                         <tr>
-                                            <td></td>
-                                            <td></td>
+                                            <td>Week</td>
+                                            <td>'W'</td>
+                                            <td>one week, optionally anchored on a day of the week</td>
                                         </tr>
                                         <tr>
-                                            <td></td>
-                                            <td></td>
+                                            <td>Day</td>
+                                            <td>'D'</td>
+                                            <td>one absolute day</td>
                                         </tr>
                                         <tr>
-                                            <td></td>
-                                            <td></td>
+                                            <td>Hour</td>
+                                            <td>'H'</td>
+                                            <td>one hour</td>
                                         </tr>
                                         <tr>
-                                            <td></td>
-                                            <td></td>
+                                            <td>Minute</td>
+                                            <td>'T' or 'min'</td>
+                                            <td>one minute</td>
                                         </tr>
                                         <tr>
-                                            <td></td>
-                                            <td></td>
+                                            <td>Second</td>
+                                            <td>'S'</td>
+                                            <td>one second</td>
                                         </tr>
                                         <tr>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
+                                            <td>Milli</td>
+                                            <td>'L' or 'ms'</td>
+                                            <td>one millisecond</td>
                                         </tr>
                                         </tbody>
                                     </table>

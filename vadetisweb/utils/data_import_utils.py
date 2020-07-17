@@ -12,6 +12,10 @@ from vadetisweb.models import User, Location, TimeSeries, DataSet
 from vadetisweb.anomaly_algorithms import df_anomaly_instances
 
 
+def _get_supported_granularities():
+    return ['AS', 'BYS', 'MS', 'W', 'D', 'H', 'T', 'min', 'S', 'L', 'ms']
+
+
 def import_dataset(owner_username, dataset_file_name, title, type, **kwargs):
     """
     The execution method of this task. We read the csv with the pandas lib, it's fast!
@@ -60,11 +64,10 @@ def import_dataset(owner_username, dataset_file_name, title, type, **kwargs):
                 err_msg = "Series '{0}' has multiple units".format(idx)
                 raise ValueError(err_msg)
 
-        df_ts_name = group_by_ts_name.apply(lambda x: x['ts_name'].unique())
-        for idx, row in df_ts_name.items():  # check length series names must not be 1
-            if len(row) == 1:
-                err_msg = "Only one series '{0}' provided. You must include at least 2 time series.".format(idx)
-                raise ValueError(err_msg)
+        df_ts_name = df_read['ts_name'].unique()
+        if len(df_ts_name) == 1:  # check length series names must not be 1
+            err_msg = "Only one series '{0}' provided. You must include at least 2 time series.".format(idx)
+            raise ValueError(err_msg)
 
         # check each series distinct name => each series has only one value for a given index
         group_by_index = df_read.groupby(level=0)
@@ -78,7 +81,7 @@ def import_dataset(owner_username, dataset_file_name, title, type, **kwargs):
 
         # check if same frequency (granularity) => pandas can infer a frequency
         freq = df.index.inferred_freq
-        if freq is None:
+        if freq is None or freq not in _get_supported_granularities():
             err_msg = "Series do not have same granularity"
             raise ValueError(err_msg)
 
@@ -192,6 +195,10 @@ def import_training_dataset(owner_username, main_dataset_id, training_dataset_fi
     # import time series
     with open(filename, 'r') as file_csv, transaction.atomic():
 
+        main_dataset = DataSet.objects.filter(id=main_dataset_id, owner=user).first()
+        if main_dataset is None:
+            raise ValueError("Main dataset not found")
+
         # get flatten df
         df_read = pd.read_csv(file_csv,
                               sep=';',
@@ -235,7 +242,7 @@ def import_training_dataset(owner_username, main_dataset_id, training_dataset_fi
 
         # check if same frequency (granularity) => pandas can infer a frequency
         freq = df.index.inferred_freq
-        if freq is None:
+        if freq is None or freq not in _get_supported_granularities() or freq != main_dataset.dataframe.index.inferred_freq:
             err_msg = "Series do not have same granularity"
             raise ValueError(err_msg)
 
@@ -266,8 +273,6 @@ def import_training_dataset(owner_username, main_dataset_id, training_dataset_fi
 
         if len(units) > 1:
             raise ValueError('Different types of values provided')
-
-        main_dataset = DataSet.objects.get(id=main_dataset_id)
 
         # create (and saves) training dataset
         training_dataset = DataSet.objects.create(title=title,
