@@ -15,7 +15,7 @@ class GrowthInjector(OutlierInjector):
 
     def get_factor(self):
         factor = super().get_factor()
-        return factor / 10 # adjustment for growth
+        return factor / 9 # adjustment for growth
 
     def get_split_ranges(self):
         """

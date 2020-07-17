@@ -1,3 +1,82 @@
 <div id="faq_injection_content" class="accordion accordion-solid accordion-toggle-plus"{% if hide %} style="display: none;"{% endif %}>
-
+    <div class="card">
+        <div class="card-header" id="heading_injection1">
+            <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse_injection1" aria-expanded="false"
+                 aria-controls="collapse_injection1">
+                What are point outliers and how are they computed?
+            </div>
+        </div>
+        <div id="collapse_injection1" class="collapse" aria-labelledby="heading_injection1" data-parent="#faq_account_content">
+            <div class="card-body">
+                <p>
+                    Point outliers are single extreme values. The outlier value is computed from the standard deviation of normal values
+                    around the location where they are injected and multiplied by an additional factor.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="heading_injection2">
+            <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse_injection2" aria-expanded="false"
+                 aria-controls="collapse_injection2">
+                What are amplitude shift outliers and how are they computed?
+            </div>
+        </div>
+        <div id="collapse_injection2" class="collapse" aria-labelledby="heading_injection2" data-parent="#faq_account_content">
+            <div class="card-body">
+                <p>
+                    An amplitude shift affects several subsequent values which are all increased or decreased by the same offset value that is computed from the
+                    standard deviation of normal values around the location of insertion and multiplied by an additional factor.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="heading_injection3">
+            <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse_injection3" aria-expanded="false"
+                 aria-controls="collapse_injection3">
+                What are growth change outliers and how are they computed?
+            </div>
+        </div>
+        <div id="collapse_injection3" class="collapse" aria-labelledby="heading_injection3" data-parent="#faq_account_content">
+            <div class="card-body">
+                <p>
+                    Growth change either increases or decreased several subsequent values by a changing offset. The offset is linear increased or decreased at
+                    each subsequent step depending if negative or positive growth is applied. After the last affected point, all subsequent points will be
+                    shifted by the last offset value, leading to permanent modification of the rest of the data.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="heading_injection4">
+            <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse_injection4" aria-expanded="false"
+                 aria-controls="collapse_injection4">
+                What are distortion outliers and how are they computed?
+            </div>
+        </div>
+        <div id="collapse_injection4" class="collapse" aria-labelledby="heading_injection4" data-parent="#faq_account_content">
+            <div class="card-body">
+                <p>
+                    Distortion is computed from the difference of the original values between two subsequent points. This difference from the first point to the second is multiplied by a factor and added to the second point.
+                    This procedure is repeated and applied to the next group of two points, making the second point from last iteration the first point in the next step.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="heading_injection5">
+            <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse_injection5" aria-expanded="false"
+                 aria-controls="collapse_injection5">
+                What are missing value outliers and how are they computed?
+            </div>
+        </div>
+        <div id="collapse_injection5" class="collapse" aria-labelledby="heading_injection5" data-parent="#faq_account_content">
+            <div class="card-body">
+                <p>
+                    For a certain range, the values of a time series are set to 0.
+                </p>
+            </div>
+        </div>
+    </div>
 </div>
