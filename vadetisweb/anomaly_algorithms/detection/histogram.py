@@ -44,7 +44,7 @@ def histogram(df, df_class, df_train, df_train_class, maximize_score=F1_SCORE, t
 
     df_common_class = df_anomaly_instances(df_class)
 
-    train, valid, test = get_train_valid_test_sets(df_train_with_common_class, train_size=train_size, random_seed=random_seed)
+    train, valid = get_train_valid_sets(df_train_with_common_class, train_size=train_size, random_seed=random_seed)
 
     # square root of number of instances as number of bins
     num_bins = (np.sqrt(train.shape[0])).astype(int)

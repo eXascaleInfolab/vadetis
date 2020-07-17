@@ -144,9 +144,9 @@ def estimate_score_bound(lower, higher):
     return lower_bound, higher_bound
 
 
-def get_train_valid_test_sets(df_train, train_size=0.5, random_seed=10):
+def get_train_valid_sets(df_train, train_size=0.5, random_seed=10):
     """
-    Splits the training dataset into a train, validation and test set. Use this method for semi supervised techniques
+    Splits the training dataset into a train and validation set. Use this method for semi supervised techniques
     as those models should be trained with only normal data.
 
     :param df_train: training data set with normal and anomalous data, should contain a class column to indicate anomalies
@@ -162,23 +162,19 @@ def get_train_valid_test_sets(df_train, train_size=0.5, random_seed=10):
                                                 train_size=train_size,
                                                 random_state=random_seed)
 
-    normal_valid, normal_test, _, _ = train_test_split(normal_test, normal_test,
+    normal_valid, _, _, _ = train_test_split(normal_test, normal_test,
                                                        train_size=train_size,
                                                        random_state=random_seed)
 
-    anormal_valid, anormal_test, _, _ = train_test_split(anomaly, anomaly,
+    anormal_valid, _, _, _ = train_test_split(anomaly, anomaly,
                                                          train_size=train_size,
                                                          random_state=random_seed)
 
-    #train = train  # .reset_index(drop=True)
     valid = normal_valid.append(anormal_valid).sample(frac=1, random_state=random_seed)
-    test = normal_test.append(anormal_test).sample(frac=1, random_state=random_seed)
+
 
     logging.debug('Train shape: %s' % repr(train.shape))
-    logging.debug('Proportion of anomaly in training set: %.2f\n' % train['class'].mean())
     logging.debug('Valid shape: %s' % repr(valid.shape))
     logging.debug('Proportion of anomaly in validation set: %.2f\n' % valid['class'].mean())
-    logging.debug('Test shape:, %s' % repr(test.shape))
-    logging.debug('Proportion of anomaly in test set: %.2f\n' % test['class'].mean())
 
-    return train, valid, test
+    return train, valid

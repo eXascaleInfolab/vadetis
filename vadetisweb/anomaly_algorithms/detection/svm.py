@@ -15,7 +15,7 @@ def svm(df, df_class, df_train, df_train_class, maximize_score=F1_SCORE, gamma=0
 
     df_common_class = df_anomaly_instances(df_class)
 
-    train, valid, test = get_train_valid_test_sets(df_train_with_common_class, train_size=train_size, random_seed=random_seed)
+    train, valid = get_train_valid_sets(df_train_with_common_class, train_size=train_size, random_seed=random_seed)
 
     model = OneClassSVM(gamma=gamma, nu=nu, kernel=kernel)
     model.fit(train.drop('class', axis=1).values)

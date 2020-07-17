@@ -6,7 +6,6 @@ from vadetisweb.parameters import *
 from .helper_function_utils import *
 
 
-
 def min_max_normalization(scores):
     return (scores - np.min(scores)) / (np.max(scores) - np.min(scores))
 
@@ -90,13 +89,6 @@ def next_dt(dt, f, inferred_freq, size=1):
     :param size: the size of the window (that is applied with the frequency)
     :return: the next later or earlier datetime
     """
-
-    """if type == 'later':
-        f = lambda x, y: _add(x,y)
-    elif type == 'earlier':
-        f = lambda x, y: _subtract(x,y)
-    else:
-        raise ValueError('Wrong type provided')"""
 
     # some freqs require relative offset, others can be computed with timedelta
     if inferred_freq.endswith(('MS', 'AS', 'B', 'W', 'M', 'SM', 'BM', 'CBM', 'SMS', 'BMS', 'CBMS', 'Q', 'BQ', 'QS', 'BQS', 'A', 'Y', 'BA', 'BY', 'YS', 'BAS', 'BYS', 'BH')):

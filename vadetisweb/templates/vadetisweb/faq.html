@@ -40,12 +40,12 @@
                         </li>
                         <li class="kt-nav__item">
                             <a href="#" class="kt-nav__link">
-                                <span class="kt-nav__link-text">Detection Methods</span>
+                                <span class="kt-nav__link-text">Detection</span>
                             </a>
                         </li>
                         <li class="kt-nav__item">
                             <a href="#" class="kt-nav__link">
-                                <span class="kt-nav__link-text">Outlier Injection</span>
+                                <span class="kt-nav__link-text">Injection</span>
                             </a>
                         </li>
                     </ul>
@@ -72,17 +72,24 @@
                             <div class="card-header" id="headingTwo">
                                 <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseTwo1" aria-expanded="false"
                                      aria-controls="collapseTwo1">
-                                    Impact on buyers who bought before the new item support policy.
+                                    How is model training performed?
                                 </div>
                             </div>
                             <div id="collapseTwo1" class="collapse" aria-labelledby="headingTwo1" data-parent="#faq_content">
                                 <div class="card-body">
                                     <p>
-                                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of
-                                        type and scrambled it to make a type specimen book. Lorem Ipsum has been the industry's standard dummy text ever since
-                                        the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived
-                                        not only five centuries, but also the leap into Lorem Ipsum has been the industry's standard dummy text ever since the
-                                        1500s, when an unknown printer took a galley of
+                                        <strong>Histogram, Cluster, SVM, Isolation Forest:</strong><br/>
+                                        These methods use the selected proportion of normal data instances in the training dataset for semi-supervised learning.
+                                        The rest of the normal data as well as outlier instances will be split by the given proportion to a validation set. For
+                                        example: with a dataset of 1000 data instances containing 60 outlier instances and a proportion of 0.5, then the
+                                        training set will contain 470 normal data instances, whereas the validation set contains 235 normal and 30 outlier
+                                        instances. The validation set is used to determine the decision boundary (threshold). Data instances with a score below
+                                        the threshold will be marked as anomalies.
+                                    </p>
+                                    <p>
+                                        <strong>RPCA:</strong><br/>
+                                        Training on RPCA directly splits the training data by the given proportion into a test and validation set
+                                        so that both sets share the same level of contamination.
                                     </p>
                                 </div>
                             </div>
