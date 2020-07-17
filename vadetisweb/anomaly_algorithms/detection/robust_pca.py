@@ -27,7 +27,6 @@ def robust_pca_huber_loss(df, df_class, df_train, df_train_class, delta=1, n_com
 
     y_test_scores = normalized_anomaly_scores(X_test, X_test_reconstructed)
     y_test_scores = np.round(y_test_scores, 7)  # round scores
-    y_test_scores_class = y_test_scores.to_frame().join(y_test)
 
     # computed scores are always in between 0-1 due to min max normalization
     thresholds = np.linspace(0, 1, 200)

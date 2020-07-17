@@ -141,7 +141,7 @@ def import_dataset(owner_username, dataset_file_name, title, type, **kwargs):
                 ts_dataset = TimeSeries.objects.filter(datasets__id=dataset.id)
                 ts_names = ts_dataset.values_list('name', flat=True)
                 if not np.all(df_loc.index.isin(ts_names) == True):
-                    err_msg = "Some time series are missing: %s " % ', '.join(
+                    err_msg = "Some time series are missing in location file: %s " % ', '.join(
                         str(x) for x in df_loc[~df_loc.index.isin(ts_names)].index.values)
                     raise ValueError(err_msg)
 

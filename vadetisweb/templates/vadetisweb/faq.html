@@ -48,17 +48,22 @@
                                 <span class="kt-nav__link-text">Injection</span>
                             </a>
                         </li>
+                        <li class="kt-nav__item">
+                            <a href="#" class="kt-nav__link">
+                                <span class="kt-nav__link-text">Recommendation</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
                 <div class="col-xl-9">
                     <div id="faq_content" class="accordion accordion-solid accordion-toggle-plus">
                         <div class="card">
-                            <div class="card-header" id="headingOne">
-                                <div class="card-title" data-toggle="collapse" data-target="#collapseOne1" aria-expanded="false" aria-controls="collapseOne1">
+                            <div class="card-header" id="heading1">
+                                <div class="card-title" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
                                     What is Vadetis?
                                 </div>
                             </div>
-                            <div id="collapseOne1" class="collapse show" aria-labelledby="headingOne" data-parent="#faq_content" style="">
+                            <div id="collapse1" class="collapse show" aria-labelledby="heading1" data-parent="#faq_content" style="">
                                 <div class="card-body">
                                     <p>
                                         Vadetis is a tool to perform anomaly detection in time series datasets using different detection algorithms with various
@@ -69,13 +74,13 @@
                             </div>
                         </div>
                         <div class="card">
-                            <div class="card-header" id="headingTwo">
-                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseTwo1" aria-expanded="false"
-                                     aria-controls="collapseTwo1">
+                            <div class="card-header" id="heading2">
+                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse2" aria-expanded="false"
+                                     aria-controls="collapse2">
                                     How is model training performed?
                                 </div>
                             </div>
-                            <div id="collapseTwo1" class="collapse" aria-labelledby="headingTwo1" data-parent="#faq_content">
+                            <div id="collapse2" class="collapse" aria-labelledby="heading2" data-parent="#faq_content">
                                 <div class="card-body">
                                     <p>
                                         <strong>Histogram, Cluster, SVM, Isolation Forest:</strong><br/>
@@ -88,27 +93,220 @@
                                     </p>
                                     <p>
                                         <strong>RPCA:</strong><br/>
-                                        Training on RPCA directly splits the training data by the given proportion into a test and validation set
-                                        so that both sets share the same level of contamination.
+                                        Training on RPCA directly splits the training data by the given proportion into a training and validation set
+                                        so that both sets share the same level of contamination. Then, the model is fitted with the given training set computing
+                                        the principal components and applied to the validation set reducing the dimensions. Afterwards the data is translated
+                                        back to the original dimension space. The outliers scores are computed from the reconstruction error and the most
+                                        appropriate decision boundary is set. Data instances with a score above the threshold will be marked as outliers.
+                                    </p>
+                                    <p>
+                                        <strong>LISA:</strong><br/>
+                                        LISA is a statistical method that does not require training and is directly applied to the data.
                                     </p>
                                 </div>
                             </div>
                         </div>
                         <div class="card">
-                            <div class="card-header" id="headingThree1">
-                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapseThree1" aria-expanded="false"
-                                     aria-controls="collapseThree1">
-                                    Extending and Renewing Item Support.
+                            <div class="card-header" id="heading3">
+                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse3" aria-expanded="false"
+                                     aria-controls="collapse3">
+                                    Why is supervised-data required?
                                 </div>
                             </div>
-                            <div id="collapseThree1" class="collapse" aria-labelledby="headingThree1" data-parent="#faq_content">
+                            <div id="collapse3" class="collapse" aria-labelledby="heading3" data-parent="#faq_content">
                                 <div class="card-body">
                                     <p>
-                                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of
-                                        type and scrambled it to make a type specimen book. Lorem Ipsum has been the industry's standard dummy text ever since
-                                        the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived
-                                        not only five centuries, but also the leap into Lorem Ipsum has been the industry's standard dummy text ever since the
-                                        1500s, when an unknown printer took a galley of
+                                        Although some methods do not require supervised data in general, in this application we validate the performance of the
+                                        detection and automatically set decision boundaries that maximize a given metric. In order to accomplish these tasks
+                                        supervised data is
+                                        required.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="heading4">
+                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse4" aria-expanded="false"
+                                     aria-controls="collapse4">
+                                    What are the requirements for datasets and training datasets?
+                                </div>
+                            </div>
+                            <div id="collapse4" class="collapse" aria-labelledby="heading4" data-parent="#faq_content">
+                                <div class="card-body">
+                                    <p>
+                                        Detection of outliers is a computational intensive operation as a score has to be computed for each point or data
+                                        instance. Therefore the limit is 100'000 values for a dataset. Training data must be larger than 100 values and shall
+                                        not exceed 10'000 values.
+                                        It must contain at least 5 outlier and 20 normal data instances as a minimum requirement for splitting
+                                        the data into training and validation parts.
+                                    </p>
+                                    <p>
+                                        All time series must have the same length and same granularity.
+                                    </p>
+                                    <p>
+                                        Further, the datasets must not contain missing values.
+                                    </p>
+                                    <p>
+                                        Only univariate time series are supported, therefore values must be of the same domain.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="heading5">
+                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse5" aria-expanded="false"
+                                     aria-controls="collapse5">
+                                    How does the CSV format looks like?
+                                </div>
+                            </div>
+                            <div id="collapse5" class="collapse" aria-labelledby="heading5" data-parent="#faq_content">
+                                <div class="card-body">
+                                    <p>
+                                        <strong>Dataset / Training Dataset:</strong><br/>
+                                    </p>
+                                    <p>
+                                        The CSV file must contain a header line of the form:<br/>
+                                        ts_name;time;unit;value;class<br/>
+                                    </p>
+                                    <table class="table table-xs table-head-bg-brand">
+                                        <thead class="thead-inverse">
+                                        <tr>
+                                            <th>Column</th>
+                                            <th>Description</th>
+                                            <th>Example</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>ts_name</td>
+                                            <td>The name of the time series.</td>
+                                            <td>SLFAL1</td>
+                                        </tr>
+                                        <tr>
+                                            <td>time</td>
+                                            <td>An ISO8601 formatted date.</td>
+                                            <td>202004010000</td>
+                                        </tr>
+                                        <tr>
+                                            <td>unit</td>
+                                            <td>The unit of the series. Note: all time series must have same unit.</td>
+                                            <td>Celsius</td>
+                                        </tr>
+                                        <tr>
+                                            <td>value</td>
+                                            <td>The value at the given time.</td>
+                                            <td>10.12</td>
+                                        </tr>
+                                        <tr>
+                                            <td>class</td>
+                                            <td>The label that marks the value as outlier or not. 0 for normal data, 1 for anomaly.</td>
+                                            <td>0</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <p>
+                                        <strong>Spatial:</strong><br/>
+                                    </p>
+                                    <p>
+                                        This optional CSV file provides spatial information about the time series, which enables classical LISA computation
+                                        based on the
+                                        distance between the locations as weights. The CSV file must contain a header line of the form:<br/>
+                                        ts_name;l_name;latitude;longitude<br/>
+                                    </p>
+                                    <table class="table table-xs table-head-bg-brand">
+                                        <thead class="thead-inverse">
+                                        <tr>
+                                            <th>Column</th>
+                                            <th>Description</th>
+                                            <th>Example</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>ts_name</td>
+                                            <td>The name of the time series, which is associated to this location.</td>
+                                            <td>SLFAL1</td>
+                                        </tr>
+                                        <tr>
+                                            <td>l_name</td>
+                                            <td>A label for the location.</td>
+                                            <td>Allières / Chenau</td>
+                                        </tr>
+                                        <tr>
+                                            <td>latitude</td>
+                                            <td>The latitude of the location in decimal format.</td>
+                                            <td>46.48861</td>
+                                        </tr>
+                                        <tr>
+                                            <td>longitude</td>
+                                            <td>The longitude of the location in decimal format.</td>
+                                            <td>6.99321</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="heading6">
+                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse6" aria-expanded="false"
+                                     aria-controls="collapse6">
+                                    I removed my account. Is it possible to re-enable it?
+                                </div>
+                            </div>
+                            <div id="collapse6" class="collapse" aria-labelledby="heading6" data-parent="#faq_content">
+                                <div class="card-body">
+                                    <p>
+                                        No, once you deleted your account, all linked information including datasets and training datasets have been removed
+                                        from the database.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="heading7">
+                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse7" aria-expanded="false"
+                                     aria-controls="collapse6">
+                                    Is it possible to change datasets?
+                                </div>
+                            </div>
+                            <div id="collapse7" class="collapse" aria-labelledby="heading7" data-parent="#faq_content">
+                                <div class="card-body">
+                                    <p>
+                                        You can change the name, type and the sharing of your datasets. Altering of values is not supported. If something is
+                                        wrong with your data remove your dataset and add your corrected data as new dataset.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="heading8">
+                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse8" aria-expanded="false"
+                                     aria-controls="collapse8">
+                                    I have unsupervised data, can I import it?
+                                </div>
+                            </div>
+                            <div id="collapse8" class="collapse" aria-labelledby="heading8" data-parent="#faq_content">
+                                <div class="card-body">
+                                    <p>
+                                        Although models are trained in a semi-supervised fashion, Vadetis is a validator for anomaly detection in time series.
+                                        In order to set the decision boundary that maximizes a given performance metric, it requires to add only supervised datasets.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="heading8">
+                                <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse8" aria-expanded="false"
+                                     aria-controls="collapse8">
+                                    I have unsupervised data, can I import it?
+                                </div>
+                            </div>
+                            <div id="collapse8" class="collapse" aria-labelledby="heading8" data-parent="#faq_content">
+                                <div class="card-body">
+                                    <p>
+                                        Although models are trained in a semi-supervised fashion, Vadetis is a validator for anomaly detection in time series.
+                                        In order to set the decision boundary that maximizes a given performance metric, it requires to add only supervised datasets.
                                     </p>
                                 </div>
                             </div>

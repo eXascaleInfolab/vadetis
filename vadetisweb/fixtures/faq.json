@@ -1,97 +1,6 @@
-[
-{
-    "model": "vadetisweb.category",
-    "pk": 1,
-    "fields": {
-        "name": "General",
-        "order": 1
-    }
-},
-{
-    "model": "vadetisweb.category",
-    "pk": 2,
-    "fields": {
-        "name": "User Account",
-        "order": 2
-    }
-},
-{
-    "model": "vadetisweb.category",
-    "pk": 3,
-    "fields": {
-        "name": "Dataset",
-        "order": 3
-    }
-},
-{
-    "model": "vadetisweb.category",
-    "pk": 4,
-    "fields": {
-        "name": "Files",
-        "order": 4
-    }
-},
-{
-    "model": "vadetisweb.category",
-    "pk": 5,
-    "fields": {
-        "name": "Anomaly Detection",
-        "order": 5
-    }
-},
-{
-    "model": "vadetisweb.category",
-    "pk": 6,
-    "fields": {
-        "name": "Algorithm",
-        "order": 6
-    }
-},
-{
-    "model": "vadetisweb.frequentlyaskedquestion",
-    "pk": 1,
-    "fields": {
-        "category": 1,
-        "question": "What is Vadetis?",
-        "answer": "Vadetis is a tool to perform anomaly detection in time series datasets using different detection algorithms with various settings."
-    }
-},
-{
-    "model": "vadetisweb.frequentlyaskedquestion",
-    "pk": 2,
-    "fields": {
-        "category": 1,
-        "question": "I performed anomaly detection but no results show up. Why?",
-        "answer": "Depending on the algorithm, detection of anomalies is a computational intensive operation. If the dataset contains a large amount of values it is possible that your browser encounters an HTTP Request Timeout before the computation finishes. In this case you can create a task to process your configuration on the server. Your results are available permanently after the task completes."
-    }
-},
-{
-    "model": "vadetisweb.frequentlyaskedquestion",
-    "pk": 3,
-    "fields": {
-        "category": 1,
-        "question": "How is anomaly detection performed in general?",
-        "answer": "TBA"
-    }
-},
-{
-    "model": "vadetisweb.frequentlyaskedquestion",
-    "pk": 4,
-    "fields": {
-        "category": 2,
-        "question": "Can I connect or disconnect a social account, such as a Google account to my already exisiting Vadetis account?",
-        "answer": "You can connect or disconnect your social account anytime in the account settings section of your profile."
-    }
-},
-{
-    "model": "vadetisweb.frequentlyaskedquestion",
-    "pk": 5,
-    "fields": {
-        "category": 2,
-        "question": "I removed my account. Is it possible to reenable it?",
-        "answer": "No, once you deleted your account, all linked information including datasets and preprocessed results have been removed from the database."
-    }
-},
+
+
+
 {
     "model": "vadetisweb.frequentlyaskedquestion",
     "pk": 6,
@@ -110,24 +19,7 @@
         "answer": "Spatial datasets require additional geographic information about the recording location of each time series. If spatial data is available you can perform LISA algorithm using spatial distances as weights between the time series."
     }
 },
-{
-    "model": "vadetisweb.frequentlyaskedquestion",
-    "pk": 8,
-    "fields": {
-        "category": 3,
-        "question": "Is it possible to modify my dataset?",
-        "answer": "No, altering datasets would invalidate all preprocessed and saved anomaly detection results. If something is wrong with your data remove your dataset and add your corrected data as new dataset."
-    }
-},
-{
-    "model": "vadetisweb.frequentlyaskedquestion",
-    "pk": 9,
-    "fields": {
-        "category": 3,
-        "question": "I have unsupervised data, can I import them?",
-        "answer": "Although models are trained in a semi-supervised fashion, Vadetis is a validator for anomaly detection in time series. In order to calculate F1, precision and recall scores it requires you to add only supervised datasets."
-    }
-},
+
 {
     "model": "vadetisweb.frequentlyaskedquestion",
     "pk": 10,
