@@ -45,7 +45,7 @@ class AccountDatasetDataTablesSerializer(serializers.ModelSerializer):
         edit_link = reverse('vadetisweb:account_dataset_edit', args=[obj.id])
 
         return '<a href="%s">Display</a> <a href="%s">Detection</a> <a href="%s">Recommendation</a> <a href="%s">Edit</a>' % (
-        view_link, detection_link, recommendation_link, edit_link)
+            view_link, detection_link, recommendation_link, edit_link)
 
     class Meta:
         model = DataSet
@@ -81,10 +81,10 @@ class AccountDatasetSearchSerializer(serializers.Serializer):
                                              'step': 'any'})
 
     granularity = serializers.CharField(write_only=True,
-                                      style={'template': 'vadetisweb/parts/input/text_input.html',
-                                             'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
-                                             'input_class': 'search-input',
-                                             'col_index': '3'})
+                                        style={'template': 'vadetisweb/parts/input/text_input.html',
+                                               'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
+                                               'input_class': 'search-input',
+                                               'col_index': '3'})
 
     spatial = serializers.ChoiceField(write_only=True, choices=BOOLEAN_SELECTION,
                                       style={'template': 'vadetisweb/parts/input/select_input.html',
@@ -110,7 +110,6 @@ class AccountDatasetSearchSerializer(serializers.Serializer):
 
 
 class AccountTrainingDatasetDataTablesSerializer(serializers.ModelSerializer):
-
     title = serializers.CharField(read_only=True)
     main_dataset = serializers.StringRelatedField(read_only=True, label="Main dataset")
     timeseries = serializers.SerializerMethodField()
@@ -178,10 +177,10 @@ class AccountTrainingDatasetSearchSerializer(serializers.Serializer):
                                              'step': 'any'})
 
     granularity = serializers.CharField(write_only=True,
-                                      style={'template': 'vadetisweb/parts/input/text_input.html',
-                                             'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
-                                             'input_class': 'search-input',
-                                             'col_index': '4'})
+                                        style={'template': 'vadetisweb/parts/input/text_input.html',
+                                               'class': 'col-lg-3 kt-margin-b-10-tablet-and-mobile',
+                                               'input_class': 'search-input',
+                                               'col_index': '4'})
 
     spatial = serializers.ChoiceField(write_only=True, choices=BOOLEAN_SELECTION,
                                       style={'template': 'vadetisweb/parts/input/select_input.html',
@@ -200,18 +199,23 @@ class AccountTrainingDatasetSearchSerializer(serializers.Serializer):
 
 
 class DatasetImportSerializer(serializers.Serializer):
-    title = serializers.CharField(required=True, max_length=64, help_text='Human readable title of the dataset',
-                                  style={'template': 'vadetisweb/parts/input/text_input.html'})
+    title = serializers.CharField(required=True, max_length=64,
+                                  help_text='Human readable title of the dataset',
+                                  style={'template': 'vadetisweb/parts/input/text_input.html',
+                                         'help_text_in_popover': True})
 
-    csv_file = serializers.FileField(required=True, label='CSV File', help_text='The csv file of the dataset. As anomaly detection is computationally expensive, the dataset must not exceed 100\'000 values.',
+    csv_file = serializers.FileField(required=True, label='CSV File',
+                                     help_text='The CSV file of the dataset. The dataset must not exceed 100\'000 values.\nFormat: ts_name;time;unit;value;class',
                                      validators=[FileExtensionValidator(allowed_extensions=['csv'])],
-                                     style={'template': 'vadetisweb/parts/input/file_input.html'})
+                                     style={'template': 'vadetisweb/parts/input/file_input.html',
+                                            'help_text_in_popover': True})
 
     owner = UserSerializer(read_only=True, default=serializers.CurrentUserDefault())
 
     type = serializers.ChoiceField(choices=DATASET_TYPE, default=SYNTHETIC,
-                                   help_text='Determines whether this dataset is real world or synthetic data.',
-                                   style={'template': 'vadetisweb/parts/input/select_input.html'})
+                                   help_text='Define whether this dataset is real world or synthetic data.',
+                                   style={'template': 'vadetisweb/parts/input/select_input.html',
+                                          'help_text_in_popover': True})
 
     shared = serializers.BooleanField(default=True, initial=True,
                                       help_text='If shared, this dataset is visible to other users.',
@@ -220,9 +224,10 @@ class DatasetImportSerializer(serializers.Serializer):
     csv_spatial_file = serializers.FileField(label='Spatial CSV File',
                                              required=False,
                                              allow_empty_file=True,
-                                             help_text='The csv file of spatial information. If geographic information about the time series of this dataset is available, you can provide this information here.',
+                                             help_text='The CSV file of spatial information. If geographic information about the time series of this dataset is available, you can provide this information here.\nFormat: ts_name;l_name;latitude;longitude',
                                              validators=[FileExtensionValidator(allowed_extensions=['csv'])],
-                                             style={'template': 'vadetisweb/parts/input/file_input.html'})
+                                             style={'template': 'vadetisweb/parts/input/file_input.html',
+                                                    'help_text_in_popover': True})
 
     class Meta:
         validators = [
@@ -237,20 +242,25 @@ class DatasetImportSerializer(serializers.Serializer):
 class TrainingDatasetImportSerializer(serializers.Serializer):
     title = serializers.CharField(required=True, max_length=128,
                                   help_text='Human readable title of the training dataset',
-                                  style={'template': 'vadetisweb/parts/input/text_input.html'})
+                                  style={'template': 'vadetisweb/parts/input/text_input.html',
+                                         'help_text_in_popover': True})
 
     owner = UserSerializer(read_only=True, default=serializers.CurrentUserDefault())
 
     main_dataset = MainDatasetField(label="Main dataset", required=True,
-                                    style={'template': 'vadetisweb/parts/input/select_input.html'})
+                                    help_text='The primary dataset to which this training dataset is related. Both datasets must have same time series names.',
+                                    style={'template': 'vadetisweb/parts/input/select_input.html',
+                                           'help_text_in_popover': True})
 
     shared = serializers.BooleanField(default=True, initial=True,
                                       help_text='If shared, this training dataset is visible to other users.',
                                       style={'template': 'vadetisweb/parts/input/checkbox_input.html'})
 
-    csv_file = serializers.FileField(required=True, label='CSV File', help_text='The csv file of the dataset. As anomaly detection is computationally expensive, the dataset must not exceed 10\'000 values.',
+    csv_file = serializers.FileField(required=True, label='CSV File',
+                                     help_text='The csv file of the dataset. The dataset must not exceed 10\'000 values and must contain at least 5 outliers and 20 normal values.\nFormat: ts_name;time;unit;value;class',
                                      validators=[FileExtensionValidator(allowed_extensions=['csv'])],
-                                     style={'template': 'vadetisweb/parts/input/file_input.html'})
+                                     style={'template': 'vadetisweb/parts/input/file_input.html',
+                                            'help_text_in_popover': True})
 
     class Meta:
         validators = [
