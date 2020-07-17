@@ -11,7 +11,7 @@
     "model": "vadetisweb.category",
     "pk": 2,
     "fields": {
-        "name": "User",
+        "name": "User Account",
         "order": 2
     }
 },

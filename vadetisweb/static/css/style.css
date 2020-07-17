@@ -8305,7 +8305,7 @@ a.text-dark:hover, a.text-dark:focus {
       color: #a7abc3;
       content: ""; }
 
-.accordion.accordion-toggle-plus .card .card-header .card-title {
+/*.accordion.accordion-toggle-plus .card .card-header .card-title {
   color: #283593;
   position: relative; }
   .accordion.accordion-toggle-plus .card .card-header .card-title::after {
@@ -8324,7 +8324,7 @@ a.text-dark:hover, a.text-dark:focus {
     color: #a7abc3; }
     .accordion.accordion-toggle-plus .card .card-header .card-title.collapsed::after {
       color: #a7abc3;
-      content: ""; }
+      content: ""; }*/
 
 .alert {
   display: -webkit-box;
