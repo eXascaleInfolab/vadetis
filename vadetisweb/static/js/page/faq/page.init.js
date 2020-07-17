@@ -15,9 +15,6 @@ var FaqPage = function () {
         $('#general_link').on('click', function (e) {
             switchFaqContent(e, 'faq_general_content', hideIds);
         });
-        $('#account_link').on('click', function (e) {
-            switchFaqContent(e, 'faq_account_content', hideIds);
-        });
         $('#dataset_link').on('click', function (e) {
             switchFaqContent(e, 'faq_dataset_content', hideIds);
         });

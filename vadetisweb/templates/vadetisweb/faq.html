@@ -29,11 +29,6 @@
                             </a>
                         </li>
                         <li class="kt-nav__item">
-                            <a id="account_link" href="#" class="kt-nav__link">
-                                <span class="kt-nav__link-text">User Account</span>
-                            </a>
-                        </li>
-                        <li class="kt-nav__item">
                             <a id="dataset_link" href="#" class="kt-nav__link">
                                 <span class="kt-nav__link-text">Dataset</span>
                             </a>
@@ -57,7 +52,6 @@
                 </div>
                 <div id="faq_content" class="col-xl-9">
                     {% include 'vadetisweb/parts/faq/general.html' with hide=False %}
-                    {% include 'vadetisweb/parts/faq/account.html' with hide=True %}
                     {% include 'vadetisweb/parts/faq/dataset.html' with hide=True %}
                     {% include 'vadetisweb/parts/faq/detection.html' with hide=True %}
                     {% include 'vadetisweb/parts/faq/injection.html' with hide=True %}

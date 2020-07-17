@@ -1,11 +1,11 @@
 <div id="faq_general_content" class="accordion accordion-solid accordion-toggle-plus"{% if hide %} style="display: none;"{% endif %}>
     <div class="card">
         <div class="card-header" id="heading_general1">
-            <div class="card-title" data-toggle="collapse" data-target="#collapse_dataset1" aria-expanded="true" aria-controls="collapse_dataset1">
+            <div class="card-title" data-toggle="collapse" data-target="#collapse_general1" aria-expanded="true" aria-controls="collapse_general1">
                 What is Vadetis?
             </div>
         </div>
-        <div id="collapse_dataset1" class="collapse show" aria-labelledby="heading_general1" data-parent="#faq_general_content" style="">
+        <div id="collapse_general1" class="collapse show" aria-labelledby="heading_general1" data-parent="#faq_general_content" style="">
             <div class="card-body">
                 <p>
                     Vadetis is a tool to perform anomaly detection in time series datasets using different detection algorithms with various
@@ -15,5 +15,35 @@
             </div>
         </div>
     </div>
-
+    <div class="card">
+        <div class="card-header" id="heading_general3">
+            <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse_general3" aria-expanded="false"
+                 aria-controls="collapse_general3">
+                How can I search datasets?
+            </div>
+        </div>
+        <div id="collapse_general3" class="collapse" aria-labelledby="heading_general3" data-parent="#faq_general_content">
+            <div class="card-body">
+                <p>
+                    The search form in the header navigation allows to search datasets by title, title of associated training datasets and username.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="heading_general2">
+            <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse_general2" aria-expanded="false"
+                 aria-controls="collapse_general2">
+                I removed my account. Is it possible to re-enable it?
+            </div>
+        </div>
+        <div id="collapse_general2" class="collapse" aria-labelledby="heading_general2" data-parent="#faq_general_content">
+            <div class="card-body">
+                <p>
+                    No, once you deleted your account, all linked information including datasets and training datasets have been removed
+                    from the database.
+                </p>
+            </div>
+        </div>
+    </div>
 </div>
