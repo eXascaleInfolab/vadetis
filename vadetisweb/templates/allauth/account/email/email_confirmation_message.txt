@@ -1,6 +1,6 @@
 {% load account %}{% user_display user as user_display %}{% load i18n %}{% autoescape off %}{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}Hello {{ user_display }},
 
-Please confirm your e-mail address for your {{ site_name}} account by clicking the link below:
+Please confirm your e-mail address for your {{ site_name }} account by clicking the link below:
 
 {{ activate_url }}
 
