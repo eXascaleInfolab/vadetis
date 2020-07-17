@@ -62,7 +62,8 @@ def unix_time_millis_to_dt(unix_millis):
     """
 
     value_sec = float(unix_millis) / 1000
-    dt = datetime.datetime.fromtimestamp(value_sec)
+    #dt = datetime.datetime.fromtimestamp(value_sec)
+    dt = datetime.datetime.utcfromtimestamp(value_sec)
     return dt
 
 
