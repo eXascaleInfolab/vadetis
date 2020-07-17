@@ -172,7 +172,10 @@ def lisa_pearson(df, df_class, time_series_id, maximize_score=F1_SCORE, window_s
     df_results = df_lisa_time_series(time_series_id, df_mean, df_correlation)
 
     thresholds = np.linspace(0, 1, 200)
+    thresholds = np.round(thresholds, 7)  # round thresholds
+
     scores = min_max_normalization(df_results[time_series_id].values)
+    scores = np.round(scores, 7)  # round scores
 
     threshold_scores = get_threshold_scores(thresholds, scores, df_class_copy['class'])
     selected_index = get_max_score_index_for_score_type(threshold_scores, maximize_score)
@@ -211,10 +214,11 @@ def lisa_dtw(df, df_class, time_series_id, maximize_score=F1_SCORE, window_size=
     # LISA Time Series
     df_results = df_lisa_time_series(time_series_id, df_mean, df_correlation)
 
-    # get highest and lowest lisa values
     thresholds = np.linspace(0, 1, 200)
+    thresholds = np.round(thresholds, 7)  # round thresholds
 
     scores = min_max_normalization(df_results[time_series_id].values)
+    scores = np.round(scores, 7)  # round scores
 
     threshold_scores = get_threshold_scores(thresholds, scores, df_class_copy['class'])
     selected_index = get_max_score_index_for_score_type(threshold_scores, maximize_score)
@@ -248,8 +252,10 @@ def lisa_geo(df, df_class, time_series_id, maximize_score=F1_SCORE):
     df_results = df_lisa_time_series(time_series_id, df_val_mean, df_corr_dist, global_correlation=True)
 
     thresholds = np.linspace(0, 1, 200)
+    thresholds = np.round(thresholds, 7)  # round thresholds
 
     scores = min_max_normalization(df_results[time_series_id].values)
+    scores = np.round(scores, 7)  # round scores
 
     threshold_scores = get_threshold_scores(thresholds, scores, df_class_copy['class'])
     selected_index = get_max_score_index_for_score_type(threshold_scores, maximize_score)

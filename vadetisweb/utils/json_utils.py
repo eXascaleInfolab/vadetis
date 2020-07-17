@@ -245,12 +245,12 @@ def _set_single_marker_lower_boundary(point, threshold, settings):
         point['marker'] = {'enabled': False}
 
 
-def _get_scores_and_truth_from_series_data(series_data):
+def _get_scores_and_truth_from_series_data(series_data, class_name='class'):
     scores = []
     truth = []
     for point in series_data:
         scores.append(point['score'])
-        truth.append(point['class'])
+        truth.append(point[class_name])
 
     return np.array(scores), np.array(truth)
 
@@ -318,14 +318,17 @@ def get_updated_dataset_series_for_threshold_json(dataset_series, threshold, upp
         time_series = series[0]
         time_series_data = time_series['data']
 
+        scores, truth = _get_scores_and_truth_from_series_data(time_series_data, class_name='class_common')
+
     else:
         time_series = _get_detection_series(series)
         time_series_data = time_series['data']
         for point in time_series_data:
             _set_single_marker_for_threshold(point, threshold, settings, upper_boundary=upper_boundary)
 
-    scores, truth = _get_scores_and_truth_from_series_data(time_series_data)
-    y_hat_results = (scores < threshold).astype(int) if upper_boundary else (scores > threshold).astype(int)
+        scores, truth = _get_scores_and_truth_from_series_data(time_series_data)
+
+    y_hat_results = (scores < threshold).astype(int) if not upper_boundary else (scores > threshold).astype(int)
     info = get_detection_meta(threshold, y_hat_results, truth)
 
     return dataset_series, info

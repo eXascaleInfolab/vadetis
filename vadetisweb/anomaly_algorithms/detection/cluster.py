@@ -21,14 +21,19 @@ def cluster_gaussian_mixture(df, df_class, df_train, df_train_class, maximize_sc
     gmm.fit(train.drop('class', axis=1).values)
 
     thresholds = np.linspace(0, 1, 200)
+    thresholds = np.round(thresholds, 7)  # round thresholds
 
     y_scores = min_max_normalization(gmm.score_samples(valid.drop('class', axis=1).values))
+    y_scores = np.round(y_scores, 7)  # round scores
+
     training_threshold_scores = get_threshold_scores(thresholds, y_scores, valid['class'])
     selected_index = get_max_score_index_for_score_type(training_threshold_scores, maximize_score)
     selected_threshold = thresholds[selected_index]
 
     # detection on dataset
     scores = min_max_normalization(gmm.score_samples(df.values))
+    scores = np.round(scores, 7)  # round scores
+
     y_hat_results = (scores < selected_threshold).astype(int)
     y_truth = df_common_class['class'].values.astype(int)
     detection_threshold_scores = get_threshold_scores(thresholds, scores, df_common_class['class'])

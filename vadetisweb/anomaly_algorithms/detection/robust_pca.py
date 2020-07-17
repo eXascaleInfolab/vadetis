@@ -26,10 +26,12 @@ def robust_pca_huber_loss(df, df_class, df_train, df_train_class, delta=1, n_com
     X_test_reconstructed = pd.DataFrame(data=X_test_reconstructed, index=X_test.index)
 
     y_test_scores = normalized_anomaly_scores(X_test, X_test_reconstructed)
+    y_test_scores = np.round(y_test_scores, 7)  # round scores
     y_test_scores_class = y_test_scores.to_frame().join(y_test)
 
     # computed scores are always in between 0-1 due to min max normalization
     thresholds = np.linspace(0, 1, 200)
+    thresholds = np.round(thresholds, 7)  # round thresholds
 
     training_threshold_scores = get_threshold_scores(thresholds, y_test_scores, y_test, upper_boundary=True)
     selected_index = get_max_score_index_for_score_type(training_threshold_scores, maximize_score)
@@ -43,6 +45,8 @@ def robust_pca_huber_loss(df, df_class, df_train, df_train_class, delta=1, n_com
 
     # detection on dataset
     scores = normalized_anomaly_scores(df, X_df_reconstructed)
+    scores = np.round(scores, 7)  # round scores
+
     y_hat_results = (scores > selected_threshold).astype(int)
     y_truth = df_common_class.values.astype(int)
     detection_threshold_scores = get_threshold_scores(thresholds, scores, df_common_class['class'])
