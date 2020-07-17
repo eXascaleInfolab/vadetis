@@ -18,7 +18,7 @@ class AlgorithmSerializer(serializers.Serializer):
     empty_choice = ('', '----')
     # choices are loaded from context
     algorithm = serializers.ChoiceField(choices=empty_choice, required=True,
-                                        help_text='Select the algorithm you want to use for detection. The possibilities depend on whether training data and spatial data are avaiable or not.',
+                                        help_text='Select the algorithm you want to use for detection. The possibilities depend on whether training data and spatial data are available or not.',
                                         style={'template': 'vadetisweb/parts/input/select_input.html',
                                                'id': 'detectionOnChange',
                                                'help_text_in_popover': True})

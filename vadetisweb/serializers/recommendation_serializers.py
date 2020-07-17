@@ -15,7 +15,7 @@ class RecommendationSerializer(serializers.Serializer):
 
     # choices are loaded from context
     algorithm = serializers.MultipleChoiceField(choices=empty_choice, required=True,
-                                                help_text='Select the algorithms to use for the recommendation. The possibilities depend on whether training data and spatial data are avaiable or not.',
+                                                help_text='Select the algorithms to use for the recommendation. The possibilities depend on whether training data and spatial data are available or not.',
                                                 style={'template': 'vadetisweb/parts/input/checkbox_multiple_input.html',
                                                        'help_text_in_popover': True})
 

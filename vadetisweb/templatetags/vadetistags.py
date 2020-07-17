@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
 import re, datetime, time
-import kombu.five
 
 from django.urls import reverse, NoReverseMatch, resolve
 from django.utils.safestring import mark_safe
@@ -139,13 +138,8 @@ def addcss(field, css):
 def isoformat(dt):
     return dt.isoformat()
 
-@register.filter()
-def float_as_timestamp(timestamp):
-    try:
-        #assume, that timestamp is given in seconds with decimal point
-        ts = float(timestamp)
-    except ValueError:
-        return None
-    return datetime.datetime.fromtimestamp(time.time() - (kombu.five.monotonic() - ts))
-    #return time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(ts))
+@register.filter
+def get_type(value):
+    return type(value)
+
 

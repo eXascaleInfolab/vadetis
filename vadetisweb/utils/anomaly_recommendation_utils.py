@@ -33,10 +33,10 @@ def get_transformed_conf(conf):
         conf['training_dataset'] = DataSet.objects.get(id=conf['training_dataset']).title
 
     if 'range_start' in conf:
-        conf['range_start'] = unix_time_millis_to_dt(conf['range_start']).astimezone(pytz.utc).isoformat()
+        conf['range_start'] = unix_time_millis_to_dt(conf['range_start'])
 
     if 'range_end' in conf:
-        conf['range_end'] = unix_time_millis_to_dt(conf['range_end']).astimezone(pytz.utc).isoformat()
+        conf['range_end'] = unix_time_millis_to_dt(conf['range_end'])
 
     return conf
 
