@@ -232,7 +232,7 @@ class LisaPearsonSerializer(ConditionalRequiredFieldMixin, serializers.Serialize
     window_size = WindowSizeIntegerField(initial=10, required=True, min_value=2, max_value=20)
 
     time_range = TimeRangeChoiceField(required=True)
-    maximize_score = MaximizeScoreChoiceField(required=True)
+    maximize_score = MaximizeScoreChoiceFieldNoTraining(required=True)
     range_start = RangeStartHiddenIntegerField()
     range_end = RangeEndHiddenIntegerField()
 
@@ -273,7 +273,7 @@ class LisaDtwPearsonSerializer(ConditionalRequiredFieldMixin, serializers.Serial
                                                            'help_text_in_popover': True})
 
     time_range = TimeRangeChoiceField(required=True)
-    maximize_score = MaximizeScoreChoiceField(required=True)
+    maximize_score = MaximizeScoreChoiceFieldNoTraining(required=True)
     range_start = RangeStartHiddenIntegerField()
     range_end = RangeEndHiddenIntegerField()
 
@@ -307,11 +307,7 @@ class LisaGeoDistanceSerializer(ConditionalRequiredFieldMixin, serializers.Seria
 
     time_range = TimeRangeChoiceField(required=True)
 
-    maximize_score = serializers.ChoiceField(label='Maximize Score', choices=ANOMALY_DETECTION_SCORE_TYPES,
-                                             required=True,
-                                             help_text='Define which score you want to maximize for the results. In order to achive the best score out of this selection, the most appropiate threshold value will be selected. You can further change the threshold after computation.',
-                                             style={'template': 'vadetisweb/parts/input/select_input.html',
-                                                    'help_text_in_popover': True})
+    maximize_score = MaximizeScoreChoiceFieldNoTraining(required=True)
 
     range_start = RangeStartHiddenIntegerField()
     range_end = RangeEndHiddenIntegerField()

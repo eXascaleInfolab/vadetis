@@ -112,7 +112,16 @@ class MaximizeScoreChoiceField(serializers.ChoiceField):
     def __init__(self, **kwargs):
         super(MaximizeScoreChoiceField, self).__init__(choices=ANOMALY_DETECTION_SCORE_TYPES, **kwargs)
         self.label = 'Maximize Score'
-        self.help_text = 'Define which score you want to maximize for the results. In order to achive the best score out of this selection, the most appropiate threshold value will be selected. You can further change the threshold after computation.'
+        self.help_text = 'Define which score you want to maximize in the training data. In order to achive the best score out of this selection, the most appropiate threshold value will be selected to define the decision boundary. You can further change the threshold after computation.'
+        self.style = {'template': 'vadetisweb/parts/input/select_input.html',
+                      'help_text_in_popover': True}
+
+
+class MaximizeScoreChoiceFieldNoTraining(serializers.ChoiceField):
+    def __init__(self, **kwargs):
+        super(MaximizeScoreChoiceFieldNoTraining, self).__init__(choices=ANOMALY_DETECTION_SCORE_TYPES, **kwargs)
+        self.label = 'Maximize Score'
+        self.help_text = 'Define which score you want to maximize. In order to achive the best score out of this selection, the most appropiate threshold value will be selected to define the decision boundary. You can further change the threshold after computation.'
         self.style = {'template': 'vadetisweb/parts/input/select_input.html',
                       'help_text_in_popover': True}
 
