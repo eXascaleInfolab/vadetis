@@ -5,10 +5,10 @@ def get_highcharts_range_button_preselector(inferred_freq):
 
     if inferred_freq is None:
         logging.warning("Warning: no granularity provided, will return default")
-        return 2
+        return 3
 
     if inferred_freq.endswith(('B', 'C', 'D')): # freq of days
-        return 3 # week
+        return 4 # month
     elif inferred_freq.endswith(('M', 'BM', 'CBM', 'MS', 'BMS', 'CBMS')): # freq of months
         return 6 # all
     elif inferred_freq.endswith(('W', 'SM', 'SMS')): # freq of weeks or two week
@@ -24,4 +24,4 @@ def get_highcharts_range_button_preselector(inferred_freq):
     elif inferred_freq.endswith(('S')):  # freq of seconds
         return 0 # minute
 
-    return 2
+    return 3
