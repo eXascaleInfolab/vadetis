@@ -1,0 +1,291 @@
+<div id="faq_dataset_content" class="accordion accordion-solid accordion-toggle-plus"{% if hide %} style="display: none;"{% endif %}>
+    <div class="card">
+        <div class="card-header" id="heading3">
+            <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse3" aria-expanded="false"
+                 aria-controls="collapse3">
+                Why is supervised-data required?
+            </div>
+        </div>
+        <div id="collapse3" class="collapse" aria-labelledby="heading3" data-parent="#faq_dataset_content">
+            <div class="card-body">
+                <p>
+                    Although some methods do not require supervised data in general, in this application we validate the performance of the
+                    detection and automatically set decision boundaries that maximize a given metric. In order to accomplish these tasks
+                    supervised data is
+                    required.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="heading4">
+            <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse4" aria-expanded="false"
+                 aria-controls="collapse4">
+                What are the requirements for datasets and training datasets?
+            </div>
+        </div>
+        <div id="collapse4" class="collapse" aria-labelledby="heading4" data-parent="#faq_dataset_content">
+            <div class="card-body">
+                <p>
+                    Detection of outliers is a computational intensive operation as a score has to be computed for each point or data
+                    instance. Therefore the limit is 100'000 values for a dataset. Training data must be larger than 100 values and shall
+                    not exceed 10'000 values.
+                    It must contain at least 5 outlier and 20 normal data instances as a minimum requirement for splitting
+                    the data into training and validation parts.
+                </p>
+                <p>
+                    All time series must have the same length and same granularity.
+                </p>
+                <p>
+                    Further, the datasets must not contain missing values.
+                </p>
+                <p>
+                    Only univariate time series are supported, therefore values must be of the same domain.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="heading5">
+            <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse5" aria-expanded="false"
+                 aria-controls="collapse5">
+                How does the CSV format looks like?
+            </div>
+        </div>
+        <div id="collapse5" class="collapse" aria-labelledby="heading5" data-parent="#faq_dataset_content">
+            <div class="card-body">
+                <p>
+                    <strong>Dataset / Training Dataset:</strong><br/>
+                </p>
+                <p>
+                    The file must use semicolons as delimiter and all time series of your dataset must be contained in this single file. The
+                    time series names must be distinct within the same dataset. The CSV file must contain a header line of the form:<br/>
+                    ts_name;time;unit;value;class<br/>
+                </p>
+                <table class="table table-xs table-head-bg-brand">
+                    <thead class="thead-inverse">
+                    <tr>
+                        <th>Column</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>ts_name</td>
+                        <td>The name of the time series.</td>
+                        <td>SLFAL1</td>
+                    </tr>
+                    <tr>
+                        <td>time</td>
+                        <td>An ISO8601 formatted date.</td>
+                        <td>202004210000 or 2020-04-21T00:00</td>
+                    </tr>
+                    <tr>
+                        <td>unit</td>
+                        <td>The unit of the series. Note: all time series must have same unit.</td>
+                        <td>Celsius</td>
+                    </tr>
+                    <tr>
+                        <td>value</td>
+                        <td>The value at the given time.</td>
+                        <td>10.12</td>
+                    </tr>
+                    <tr>
+                        <td>class</td>
+                        <td>The label that marks the value as outlier or not. 0 for normal data, 1 for anomaly.</td>
+                        <td>0</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <strong>Spatial:</strong><br/>
+                </p>
+                <p>
+                    This optional CSV file provides spatial information about the time series, which enables classical LISA computation
+                    based on the
+                    distance between the locations as weights. The CSV file must contain a header line of the form:<br/>
+                    ts_name;l_name;latitude;longitude<br/>
+                </p>
+                <table class="table table-xs table-head-bg-brand">
+                    <thead class="thead-inverse">
+                    <tr>
+                        <th>Column</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>ts_name</td>
+                        <td>The name of the time series, which is associated to this location.</td>
+                        <td>SLFAL1</td>
+                    </tr>
+                    <tr>
+                        <td>l_name</td>
+                        <td>A label for the location.</td>
+                        <td>Allières / Chenau</td>
+                    </tr>
+                    <tr>
+                        <td>latitude</td>
+                        <td>The latitude of the location in decimal format.</td>
+                        <td>46.48861</td>
+                    </tr>
+                    <tr>
+                        <td>longitude</td>
+                        <td>The longitude of the location in decimal format.</td>
+                        <td>6.99321</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="heading7">
+            <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse7" aria-expanded="false"
+                 aria-controls="heading7">
+                Is it possible to change datasets?
+            </div>
+        </div>
+        <div id="collapse7" class="collapse" aria-labelledby="heading7" data-parent="#faq_dataset_content">
+            <div class="card-body">
+                <p>
+                    You can change the name, type and the sharing of your datasets. Altering of values is not supported. If something is
+                    wrong with your data remove your dataset and add your corrected data as new dataset.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="heading8">
+            <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse8" aria-expanded="false"
+                 aria-controls="collapse8">
+                I have unsupervised data, can I import it?
+            </div>
+        </div>
+        <div id="collapse8" class="collapse" aria-labelledby="heading8" data-parent="#faq_dataset_content">
+            <div class="card-body">
+                <p>
+                    Although models are trained in a semi-supervised fashion, Vadetis is a validator for anomaly detection in time series.
+                    In order to set the decision boundary that maximizes a given performance metric, it requires to add only supervised
+                    datasets.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="heading10">
+            <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse10" aria-expanded="false"
+                 aria-controls="collapse10">
+                How many dataset and training datasets can I add?
+            </div>
+        </div>
+        <div id="collapse10" class="collapse" aria-labelledby="heading10" data-parent="#faq_dataset_content">
+            <div class="card-body">
+                <p>
+                    You can add as many datasets as you want.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="heading11">
+            <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse11" aria-expanded="false"
+                 aria-controls="collapse11">
+                Can I add training data to datasets I do not own?
+            </div>
+        </div>
+        <div id="collapse11" class="collapse" aria-labelledby="heading11" data-parent="#faq_dataset_content">
+            <div class="card-body">
+                <p>
+                    No, only the owner of the dataset can add training data.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="heading12">
+            <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse12" aria-expanded="false"
+                 aria-controls="collapse12">
+                I have missing values in my datasets. Is this a problem?
+            </div>
+        </div>
+        <div id="collapse12" class="collapse" aria-labelledby="heading12" data-parent="#faq_dataset_content">
+            <div class="card-body">
+                <p>
+                    Yes, if a value is missing at a certain timestamp some algorithms cannot compute a detection result at this timestamp
+                    and therefor it is required to have no gaps in the data. There exist several techniques to recover missing values such
+                    as <a href=\\\"http://revival.exascale.info/\\\" target=\\\"_blank\\\">centroid decomposition</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="heading13">
+            <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse13" aria-expanded="false"
+                 aria-controls="collapse13">
+                Which granularities are supported?
+            </div>
+        </div>
+        <div id="collapse13" class="collapse" aria-labelledby="heading13" data-parent="#faq_dataset_content">
+            <div class="card-body">
+                <p>
+                    In order to compute outlier detection the time series must share the same granularities. The supported granularities
+                    are:
+                </p>
+                <table class="table table-xs table-head-bg-brand">
+                    <thead class="thead-inverse">
+                    <tr>
+                        <th>Type</th>
+                        <th>Label</th>
+                        <th>Description</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>YearBegin</td>
+                        <td>'AS' or 'BYS'</td>
+                        <td>calendar year begin</td>
+                    </tr>
+                    <tr>
+                        <td>MonthBegin</td>
+                        <td>'MS'</td>
+                        <td>calendar month begin</td>
+                    </tr>
+                    <tr>
+                        <td>Week</td>
+                        <td>'W'</td>
+                        <td>one week, optionally anchored on a day of the week</td>
+                    </tr>
+                    <tr>
+                        <td>Day</td>
+                        <td>'D'</td>
+                        <td>one absolute day</td>
+                    </tr>
+                    <tr>
+                        <td>Hour</td>
+                        <td>'H'</td>
+                        <td>one hour</td>
+                    </tr>
+                    <tr>
+                        <td>Minute</td>
+                        <td>'T' or 'min'</td>
+                        <td>one minute</td>
+                    </tr>
+                    <tr>
+                        <td>Second</td>
+                        <td>'S'</td>
+                        <td>one second</td>
+                    </tr>
+                    <tr>
+                        <td>Milli</td>
+                        <td>'L' or 'ms'</td>
+                        <td>one millisecond</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

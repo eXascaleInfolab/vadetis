@@ -1,0 +1,35 @@
+<div id="faq_detection_content" class="accordion accordion-solid accordion-toggle-plus"{% if hide %} style="display: none;"{% endif %}>
+    <div class="card">
+        <div class="card-header" id="heading2">
+            <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse2" aria-expanded="false"
+                 aria-controls="collapse2">
+                How is model training performed?
+            </div>
+        </div>
+        <div id="collapse2" class="collapse" aria-labelledby="heading2" data-parent="#faq_detection_content">
+            <div class="card-body">
+                <p>
+                    <strong>Histogram, Cluster, SVM, Isolation Forest:</strong><br/>
+                    These methods use the selected proportion of normal data instances in the training dataset for semi-supervised learning.
+                    The rest of the normal data as well as outlier instances will be split by the given proportion to a validation set. For
+                    example: with a dataset of 1000 data instances containing 60 outlier instances and a proportion of 0.5, then the
+                    training set will contain 470 normal data instances, whereas the validation set contains 235 normal and 30 outlier
+                    instances. The validation set is used to determine the decision boundary (threshold). Data instances with a score below
+                    the threshold will be marked as anomalies.
+                </p>
+                <p>
+                    <strong>RPCA:</strong><br/>
+                    Training on RPCA directly splits the training data by the given proportion into a training and validation set
+                    so that both sets share the same level of contamination. Then, the model is fitted with the given training set computing
+                    the principal components and applied to the validation set reducing the dimensions. Afterwards the data is translated
+                    back to the original dimension space. The outliers scores are computed from the reconstruction error and the most
+                    appropriate decision boundary is set. Data instances with a score above the threshold will be marked as outliers.
+                </p>
+                <p>
+                    <strong>LISA:</strong><br/>
+                    LISA is a statistical method that does not require training and is directly applied to the data.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

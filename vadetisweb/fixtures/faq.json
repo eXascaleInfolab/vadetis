@@ -23,69 +23,6 @@
 
 {
     "model": "vadetisweb.frequentlyaskedquestion",
-    "pk": 14,
-    "fields": {
-        "category": 3,
-        "question": "Which frequencies are supported?",
-        "answer": "TBA"
-    }
-},
-{
-    "model": "vadetisweb.frequentlyaskedquestion",
-    "pk": 15,
-    "fields": {
-        "category": 3,
-        "question": "How does a CSV of a dataset must be formatted?",
-        "answer": "The CSV file of supervised data must include a <strong>ts_name;time;unit;value;class</strong> header where 'ts_name' is the name of the time series, 'time' the timestamp in UTC, 'unit' the unit of the values and value' the value of the measurement. The 'class' field is a boolean that indicates if the current value at a given timestamp is considered an anomaly (1) or not (0). The file must use semicolons as delimiter and all time series of your dataset must be contained in this single file. Of course, the time series names must be distinct within the same dataset. Further, the timestamps between series must be aligned."
-    }
-},
-{
-    "model": "vadetisweb.frequentlyaskedquestion",
-    "pk": 16,
-    "fields": {
-        "category": 4,
-        "question": "Is there an example of a dataset CSV?",
-        "answer": "ts_name;time;unit;value;class<br/>\r\nSeries1;201606010000;Celsius;35;0<br/>\r\nSeries1;201606010010;Celsius;36;1<br/>\r\n.....<br/>\r\nSeries2;201606010000;Celsius;26;0<br/>\r\nSeries2;201606010010;Celsius;25;0<br/>"
-    }
-},
-{
-    "model": "vadetisweb.frequentlyaskedquestion",
-    "pk": 17,
-    "fields": {
-        "category": 4,
-        "question": "How does a CSV of spatial information for a dataset must be formatted?",
-        "answer": "The locations file must include a <strong>ts_name;l_name;lon;lat;ch1903_e;ch1903_n;height</strong> header. The 'ts_name' is the name of the time series, 'l_name' is the recording location name, lat' the latitude and 'lon' the longitude in decimal degrees of the location. The ch1903 values are based on Swiss coordinate system and expect values in meters. 'Height' indicates meters over sea level at the recording location."
-    }
-},
-{
-    "model": "vadetisweb.frequentlyaskedquestion",
-    "pk": 18,
-    "fields": {
-        "category": 4,
-        "question": "Are CH1903 coordinates required for spatial information?",
-        "answer": "You can leave them empty if your locations are outside Switzerland or not available."
-    }
-},
-{
-    "model": "vadetisweb.frequentlyaskedquestion",
-    "pk": 19,
-    "fields": {
-        "category": 4,
-        "question": "Is there an example of a CSV with spatial information?",
-        "answer": "ts_name;l_name;lon;lat;ch1903_e;ch1903_n;height<br/>\r\nSeries1;Adelboden;7.56042;46.49226;609350;149001;1326<br/>\r\nSeries2;Thun;7.58521;46.74985;611200;177640;570<br/>\r\n..."
-    }
-},
-{
-    "model": "vadetisweb.frequentlyaskedquestion",
-    "pk": 20,
-    "fields": {
-        "category": 5,
-        "question": "I performed the same configuration for anomaly detection multiple times, but I get different results. Why?",
-        "answer": "It depends on the selected training data when Vadetis is evaluating the model for outlier detection. If you don't define a random seed, training data is selected in a full random fashion out of the training dataset. \r\nThis may lead to different results. Vadetis will select the same training data for a given random seed."
-    }
-},
-{
-    "model": "vadetisweb.frequentlyaskedquestion",
     "pk": 21,
     "fields": {
         "category": 6,
