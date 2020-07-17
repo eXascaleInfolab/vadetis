@@ -1,21 +1,13 @@
-from rest_framework import status, viewsets
-from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.settings import api_settings
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from rest_framework.authentication import SessionAuthentication
-
-from drf_yasg.utils import swagger_auto_schema
-
 from django.contrib import messages
-from django.shortcuts import redirect
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import viewsets
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.renderers import JSONRenderer
+from rest_framework.views import APIView
 
-from vadetisweb.models import DataSet
-from vadetisweb.utils import json_message_utils
-from vadetisweb.serializers import MessageSerializer
-from vadetisweb.serializers.dataset.account_dataset_serializer import *
 from vadetisweb.factory import *
+from vadetisweb.serializers.dataset.account_dataset_serializer import *
 
 
 class AccountDatasetDataTableViewSet(viewsets.ModelViewSet):

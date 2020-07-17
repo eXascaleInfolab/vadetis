@@ -1,11 +1,8 @@
-import numpy as np, pandas as pd
+import numpy as np
+import pandas as pd
 
-from vadetisweb.models import TimeSeries
-from vadetisweb.parameters import LISA_PEARSON
-
-from .anomaly_detection_utils import df_zscore
-from .date_utils import unix_time_millis_from_dt
 from .anomaly_detection_utils import get_detection_meta
+from .date_utils import unix_time_millis_from_dt
 
 
 def get_type_from_dataset_json(dataset_json):

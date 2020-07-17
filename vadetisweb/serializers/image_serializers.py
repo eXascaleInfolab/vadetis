@@ -1,4 +1,3 @@
-from rest_framework import serializers
 from vadetisweb.fields.image_fields import *
 
 

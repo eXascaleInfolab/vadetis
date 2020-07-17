@@ -1,8 +1,7 @@
+from django.urls import reverse
 from rest_framework import serializers
 
-from django.urls import reverse
-
-from vadetisweb.fields import DatasetField, DatasetJsonField
+from vadetisweb.fields import DatasetJsonField
 from vadetisweb.models import DataSet
 from vadetisweb.parameters import REAL_WORLD
 

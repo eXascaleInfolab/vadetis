@@ -1,12 +1,10 @@
-from rest_framework import serializers
 from allauth.account import app_settings
 from allauth.account.forms import get_adapter as get_account_adapter, filter_users_by_email
-from allauth.socialaccount.models import SocialAccount
 from allauth.utils import get_username_max_length
-
-from django.core.exceptions import ValidationError
 from django.contrib.auth import password_validation
-from django.core.validators import MaxLengthValidator, MaxValueValidator, MinValueValidator, RegexValidator
+from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
+from rest_framework import serializers
 
 from vadetisweb.models import UserSetting, User
 from vadetisweb.validators import username_validators, email_validators, alphabetic_validator

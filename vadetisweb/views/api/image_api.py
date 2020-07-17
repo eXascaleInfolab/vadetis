@@ -1,15 +1,16 @@
-import logging, json, os
-from rest_framework import status
-from rest_framework.views import APIView
-from rest_framework.response import Response
-
-from drf_yasg.utils import swagger_auto_schema
+import logging
+import os
 from wsgiref.util import FileWrapper
-from django.http import HttpResponse
-from django.core.files.temp import NamedTemporaryFile
 
-from vadetisweb.utils.image_utils import *
+from django.core.files.temp import NamedTemporaryFile
+from django.http import HttpResponse
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from vadetisweb.serializers.image_serializers import *
+from vadetisweb.utils.image_utils import *
 
 
 class CnfImage(APIView):

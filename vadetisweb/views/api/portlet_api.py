@@ -1,18 +1,17 @@
+from django.contrib import messages
+from django.db.models import Q
+from django.urls import reverse
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
-from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
-from drf_yasg.utils import swagger_auto_schema
+from rest_framework.views import APIView
 
-from django.urls import reverse
-from django.db.models import Q
-from django.contrib import messages
-
-from vadetisweb.utils import q_shared_or_user_is_owner, get_settings, get_transformed_conf, get_recommendation
-from vadetisweb.serializers.portlet_serializers import *
-from vadetisweb.serializers import ThresholdSerializer, InjectionSerializer
-from vadetisweb.models import DataSet
 from vadetisweb.factory import dataset_not_found_msg
+from vadetisweb.models import DataSet
+from vadetisweb.serializers import ThresholdSerializer, InjectionSerializer
+from vadetisweb.serializers.portlet_serializers import *
+from vadetisweb.utils import q_shared_or_user_is_owner, get_settings, get_transformed_conf, get_recommendation
 
 
 class InjectionFormPortlet(APIView):
@@ -137,7 +136,6 @@ class RecommendationPortlet(APIView):
         if portlet_serializer.is_valid() and request.accepted_renderer.format == 'html':  # rendered template:
             validated_data = portlet_serializer.validated_data
 
-            settings = get_settings(request)
             threshold = round(validated_data['threshold'], 3)
 
             transformed_conf = get_transformed_conf(validated_data['conf'])

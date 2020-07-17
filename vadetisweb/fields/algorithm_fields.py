@@ -1,10 +1,9 @@
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 from rest_framework import serializers
 
-from django.db.models import Q
-from django.core.exceptions import ObjectDoesNotExist
-
-from vadetisweb.parameters import TIME_RANGE, ANOMALY_DETECTION_SCORE_TYPES, ANOMALY_DETECTION_ALGORITHMS, ANOMALY_DETECTION_ALGORITHMS_NON_SPATIAL
 from vadetisweb.models import DataSet, TimeSeries
+from vadetisweb.parameters import TIME_RANGE, ANOMALY_DETECTION_SCORE_TYPES
 from vadetisweb.utils.request_utils import q_shared_or_user_is_owner, q_related_shared_or_user_is_owner
 
 

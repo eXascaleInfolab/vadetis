@@ -1,13 +1,12 @@
-import numpy as np, pandas as pd
-from django.db import models
+import numpy as np
+import pandas as pd
 from django.contrib.auth.models import User
-from django.db.models.signals import post_delete, pre_delete
-from django.dispatch import receiver
 from django.core.validators import MaxValueValidator, MinValueValidator
-
-from model_utils.managers import InheritanceManager
-from picklefield.fields import PickledObjectField
+from django.db import models
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 from pandas import DataFrame
+from picklefield.fields import PickledObjectField
 
 from vadetisweb.parameters import *
 
@@ -198,10 +197,3 @@ def pre_delete_story(sender, instance, **kwargs):
         if ts.datasets.count() == 1:
             # ts is the only time series of this dataset that is going to be deleted, so delete it too
             ts.delete()
-
-# @receiver(post_delete, sender=TimeSeries)
-# def auto_delete_location_with_ts(sender, instance, **kwargs):
-#     """
-#     In order to delete Location once a Time Series is deleted
-#     """
-#     instance.location.delete()

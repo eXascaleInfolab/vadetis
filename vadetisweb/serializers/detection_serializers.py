@@ -1,6 +1,7 @@
-from vadetisweb.models import *
 from vadetisweb.fields import *
+from vadetisweb.models import *
 from vadetisweb.utils.anomaly_detection_utils import get_detection_choices
+
 
 class ConditionalRequiredFieldMixin:
     """

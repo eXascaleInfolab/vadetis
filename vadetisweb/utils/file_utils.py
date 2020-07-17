@@ -1,4 +1,7 @@
-import tempfile, os, errno, logging
+import errno
+import logging
+import os
+import tempfile
 
 
 def write_to_tempfile(raw_file, delete=False):

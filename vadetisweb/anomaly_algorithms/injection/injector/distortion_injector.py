@@ -1,10 +1,8 @@
-import numpy as np, pandas as pd
-import logging
-
-from .base import OutlierInjector
+import numpy as np
+import pandas as pd
 
 from vadetisweb.utils import next_earlier_dt, next_later_dt
-from vadetisweb.parameters import *
+from .base import OutlierInjector
 
 
 class DistortionInjector(OutlierInjector):

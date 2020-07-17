@@ -1,23 +1,18 @@
 import logging
-from rest_framework.views import APIView
-from rest_framework.renderers import JSONRenderer
-from rest_framework_csv.renderers import CSVStreamingRenderer
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework import generics
-from rest_framework import filters
 from wsgiref.util import FileWrapper
 
-from drf_yasg.utils import swagger_auto_schema
-from django.contrib import messages
-from django.shortcuts import redirect
-from django.http import HttpResponse
 from django.db.models import Q
+from django.http import HttpResponse
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status, generics, filters
+from rest_framework.renderers import JSONRenderer
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_csv.renderers import CSVStreamingRenderer
 
 from vadetisweb.models import DataSet
-from vadetisweb.utils import get_settings, dataset_to_json, get_datasets_from_json, df_zscore, export_to_csv, export_to_json, get_locations_json
 from vadetisweb.serializers import DatasetExportSerializer, DatasetSearchSerializer
-from vadetisweb.factory import dataset_not_found_msg
+from vadetisweb.utils import get_settings, dataset_to_json, df_zscore, export_to_csv, export_to_json, get_locations_json
 from vadetisweb.utils.request_utils import q_shared_or_user_is_owner
 
 

@@ -1,8 +1,8 @@
-import pandas as pd, numpy as np, logging
-
-from sklearn.preprocessing import Normalizer
+import logging
+import numpy as np
+import pandas as pd
+from sklearn.metrics import fbeta_score, precision_score, recall_score, accuracy_score
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import fbeta_score, precision_score, recall_score, accuracy_score, confusion_matrix
 
 from vadetisweb.parameters import F1_SCORE, PRECISION, RECALL, ACCURACY
 from vadetisweb.utils import unix_time_millis_to_dt, next_earlier_dt

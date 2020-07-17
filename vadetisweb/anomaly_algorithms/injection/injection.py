@@ -1,7 +1,8 @@
 
 from vadetisweb.anomaly_algorithms.injection import *
+from vadetisweb.parameters import ANOMALY_TYPE_POINT, ANOMALY_TYPE_AMPLITUDE_SHIFT, ANOMALY_TYPE_DISTORTION, ANOMALY_TYPE_GROWTH_CHANGE, ANOMALY_TYPE_MISSING_VALUES
 from vadetisweb.utils import get_datasets_from_json
-from vadetisweb.parameters import ANOMALY_TYPE_POINT, ANOMALY_TYPE_AMPLITUDE_SHIFT, ANOMALY_TYPE_DISTORTION, ANOMALY_TYPE_GROWTH_CHANGE
+
 
 def anomaly_injection(validated_data):
 

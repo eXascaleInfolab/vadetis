@@ -1,9 +1,9 @@
 from rest_framework import status
-from rest_framework.settings import api_settings
 from rest_framework.response import Response
+from rest_framework.settings import api_settings
 
-from vadetisweb.utils import json_message_utils
 from vadetisweb.serializers.message_serializers import MessageSerializer
+from vadetisweb.utils import json_message_utils
 
 
 def response_invalid_form(serializer, json_messages):

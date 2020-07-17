@@ -1,10 +1,10 @@
-import numpy as np, pandas as pd
-import logging
+import numpy as np
+import pandas as pd
 
+from vadetisweb.parameters import ANOMALY_INJECTION_SCALE_SMALL, ANOMALY_INJECTION_SCALE_MEDIUM, ANOMALY_INJECTION_SCALE_HIGH, ANOMALY_INJECTION_SCALE_RANDOM
+from vadetisweb.utils import next_later_dt
 from .base import OutlierInjector
 
-from vadetisweb.utils import next_earlier_dt, next_later_dt
-from vadetisweb.parameters import ANOMALY_INJECTION_SCALE_SMALL, ANOMALY_INJECTION_SCALE_MEDIUM, ANOMALY_INJECTION_SCALE_HIGH, ANOMALY_INJECTION_SCALE_RANDOM
 
 class MissingValuesInjector(OutlierInjector):
 

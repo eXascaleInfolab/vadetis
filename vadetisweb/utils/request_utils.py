@@ -1,10 +1,8 @@
-import logging
-from .helper_function_utils import *
-
 from django.db.models import Q
 
 from vadetisweb.models import UserSetting
 from vadetisweb.parameters import *
+from .helper_function_utils import *
 
 
 def q_shared_or_user_is_owner(request):

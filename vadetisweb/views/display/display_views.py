@@ -1,17 +1,16 @@
-from rest_framework import status
-from rest_framework.views import APIView
-from rest_framework.renderers import TemplateHTMLRenderer
-from rest_framework.response import Response
-
-from django.shortcuts import redirect
 from django.contrib import messages
 from django.db.models import Q
+from django.shortcuts import redirect
+from rest_framework import status
+from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from vadetisweb.models import DataSet
-from vadetisweb.utils import get_highcharts_range_button_preselector, q_shared_or_user_is_owner
 from vadetisweb.factory import dataset_not_found_msg
+from vadetisweb.models import DataSet
 from vadetisweb.parameters import SYNTHETIC, REAL_WORLD
 from vadetisweb.serializers.dataset.display_dataset_serializer import DisplayDatasetSearchSerializer
+from vadetisweb.utils import get_highcharts_range_button_preselector, q_shared_or_user_is_owner
 
 
 class DisplaySyntheticDatasets(APIView):

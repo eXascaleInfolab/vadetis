@@ -1,12 +1,11 @@
+from django.core.validators import FileExtensionValidator
+from django.urls import reverse
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
-from django.urls import reverse
-from django.core.validators import FileExtensionValidator
-
+from vadetisweb.fields import MainDatasetField
 from vadetisweb.models import DataSet
 from vadetisweb.parameters import REAL_WORLD, SYNTHETIC, DATASET_TYPE, BOOLEAN_SELECTION
-from vadetisweb.fields import MainDatasetField
 from vadetisweb.serializers.account_serializers import UserSerializer
 
 

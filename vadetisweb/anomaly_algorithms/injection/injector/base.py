@@ -1,9 +1,11 @@
-import numpy as np
 import logging
 
+import numpy as np
+
+from vadetisweb.factory import msg_injection_all_anomalies
 from vadetisweb.parameters import *
 from vadetisweb.utils import get_datasets_from_json, unix_time_millis_to_dt
-from vadetisweb.factory import msg_injection_all_anomalies
+
 
 class OutlierInjector:
 

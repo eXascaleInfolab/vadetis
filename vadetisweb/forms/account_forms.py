@@ -1,11 +1,10 @@
-from django.forms import ModelForm, ValidationError
 from allauth.account import app_settings
+from allauth.account.forms import get_adapter as get_account_adapter, SetPasswordForm, filter_users_by_email
 from allauth.account.models import EmailAddress
-from allauth.account.forms import get_adapter as get_account_adapter, ChangePasswordForm, SetPasswordForm, filter_users_by_email
-from allauth.socialaccount.forms import DisconnectForm
+from django.forms import ModelForm, ValidationError
 
 from vadetisweb.models import User
-from vadetisweb.widgets import FormCheckboxInput
+
 
 #########################################################
 # Account Forms
@@ -65,6 +64,3 @@ class AccountSetPasswordForm(SetPasswordForm):
         # Ensure you call the parent classes save
         # .save() does not return anything
         super(AccountSetPasswordForm, self).save()
-
-
-

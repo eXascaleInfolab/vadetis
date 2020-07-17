@@ -1,6 +1,6 @@
+from vadetisweb.utils import get_detection_meta, min_max_normalization
 from .helper_functions import *
 
-from vadetisweb.utils import get_detection_meta, min_max_normalization
 
 #########################################################
 # HISTOGRAM

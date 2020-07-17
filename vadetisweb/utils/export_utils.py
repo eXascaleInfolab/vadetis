@@ -1,4 +1,6 @@
-import csv, json
+import csv
+import json
+
 from django.core.files.temp import NamedTemporaryFile
 
 from .date_utils import *

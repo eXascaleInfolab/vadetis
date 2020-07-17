@@ -1,15 +1,15 @@
-import pandas as pd, numpy as np
-import collections, logging
+import collections
+import logging
 
-from django.utils import timezone
+import numpy as np
+import pandas as pd
 from django.conf import settings
 from django.db import transaction
+from django.utils import timezone
 
-from .date_utils import iso_format_time
-from .file_utils import silent_remove
-
-from vadetisweb.models import User, Location, TimeSeries, DataSet
 from vadetisweb.anomaly_algorithms import df_anomaly_instances
+from vadetisweb.models import User, Location, TimeSeries, DataSet
+from .date_utils import iso_format_time
 
 
 def _get_supported_granularities():

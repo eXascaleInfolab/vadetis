@@ -1,20 +1,17 @@
-import logging
-from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
-from rest_framework.parsers import MultiPartParser
-from rest_framework.views import APIView
-from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated
-from celery.utils import uuid
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.parsers import MultiPartParser
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
+from rest_framework.views import APIView
 
-from vadetisweb.utils import settings_from_request_or_default_dict, update_setting_cookie, write_to_tempfile
-from vadetisweb.utils.data_import_utils import *
+from vadetisweb.factory import *
 from vadetisweb.serializers.account_serializers import *
 from vadetisweb.serializers.dataset.account_dataset_serializer import *
-from vadetisweb.factory import *
+from vadetisweb.utils import settings_from_request_or_default_dict, update_setting_cookie, write_to_tempfile, silent_remove
+from vadetisweb.utils.data_import_utils import *
 
 
 #########################################################

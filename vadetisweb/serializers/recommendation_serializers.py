@@ -1,8 +1,5 @@
-from rest_framework import serializers
-
 from vadetisweb.fields import *
 from vadetisweb.utils import get_detection_choices, get_preselected_detection_choices
-from vadetisweb.parameters import LISA_PEARSON
 
 
 class RecommendationSerializer(serializers.Serializer):

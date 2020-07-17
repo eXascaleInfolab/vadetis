@@ -1,9 +1,12 @@
-import numpy as np, pandas as pd
-import datetime, logging
+import datetime
+import logging
 
-from .dtw import dtw
+import numpy as np
+import pandas as pd
 
 from vadetisweb.utils import next_earlier_dt
+from .dtw import dtw
+
 
 #########################################################
 # PEARSON HELPER FUNCTIONS
@@ -204,7 +207,6 @@ def dtw_pearson(df, time_series_id, distance, window_size=2, absolute_values=Tru
                 if absolute_values:
                     weight = np.absolute(weight)
 
-                #df_corr.loc[win_end_index_dt, station] = weight #faster
                 df_corr.at[win_end_index_dt, ts_id] = weight
 
     time_elapsed = (datetime.datetime.now() - start_time).__str__()

@@ -1,6 +1,9 @@
-import datetime, logging
-import pandas as pd, numpy as np
+import datetime
+import logging
 from math import hypot, sin, cos, sqrt, atan2, radians
+
+import numpy as np
+import pandas as pd
 
 from vadetisweb.models import TimeSeries
 

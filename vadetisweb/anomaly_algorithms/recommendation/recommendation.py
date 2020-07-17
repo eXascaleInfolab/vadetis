@@ -1,7 +1,4 @@
-
 from ..detection import *
-
-from vadetisweb.parameters import TIME_RANGE_SELECTION
 
 
 def lisa_pearson_recommendation(df, df_class, validated_data):

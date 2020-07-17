@@ -1,7 +1,6 @@
-from rest_framework.permissions import AllowAny, IsAdminUser
-from rest_framework import viewsets
-
 from django.db.models import Q
+from rest_framework import viewsets
+from rest_framework.permissions import AllowAny, IsAdminUser
 
 from vadetisweb.serializers.dataset.recommendation_dataset_serializer import *
 from vadetisweb.utils import q_shared_or_user_is_owner

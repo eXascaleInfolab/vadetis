@@ -1,18 +1,16 @@
+from django.contrib import messages
+from django.shortcuts import redirect
+from django.urls import reverse
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
-from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
-from drf_yasg.utils import swagger_auto_schema
+from rest_framework.views import APIView
 
-from django.urls import reverse
-from django.shortcuts import redirect
-from django.contrib import messages
-
-from vadetisweb.serializers.detection_serializers import *
-from vadetisweb.models import DataSet
-from vadetisweb.utils import *
 from vadetisweb.anomaly_algorithms.detection import *
 from vadetisweb.factory import dataset_not_found_msg, exception_message_response
+from vadetisweb.serializers.detection_serializers import *
+from vadetisweb.utils import *
 
 
 class DetectionAlgorithmSelectionView(APIView):

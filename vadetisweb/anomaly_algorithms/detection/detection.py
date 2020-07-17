@@ -1,13 +1,12 @@
-from .lisa import lisa_pearson, lisa_dtw, lisa_geo
-from .histogram import histogram
-from .cluster import cluster_gaussian_mixture
-from .svm import svm
-from .isolation_forest import isolation_forest
-from .robust_pca import robust_pca_huber_loss
-from .helper_functions import df_range
-
-from vadetisweb.utils import get_detection_single_ts_results_json, get_common_detection_results_json, get_type_from_dataset_json
 from vadetisweb.parameters import TIME_RANGE_SELECTION
+from vadetisweb.utils import get_detection_single_ts_results_json, get_common_detection_results_json, get_type_from_dataset_json
+from .cluster import cluster_gaussian_mixture
+from .helper_functions import df_range
+from .histogram import histogram
+from .isolation_forest import isolation_forest
+from .lisa import lisa_pearson, lisa_dtw, lisa_geo
+from .robust_pca import robust_pca_huber_loss
+from .svm import svm
 
 
 def lisa_pearson_detection(df, df_class, validated_data, settings):

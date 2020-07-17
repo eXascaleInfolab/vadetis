@@ -1,10 +1,9 @@
 from __future__ import unicode_literals
 
-import re, datetime, time
+import re
 
-from django.urls import reverse, NoReverseMatch, resolve
-from django.utils.safestring import mark_safe
 from django.template import Library
+from django.urls import reverse, NoReverseMatch, resolve
 
 register = Library()
 

@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from vadetisweb.models import *
 
 # Register your models here.

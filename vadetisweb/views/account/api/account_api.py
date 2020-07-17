@@ -1,18 +1,17 @@
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.shortcuts import reverse
 from rest_framework import status
-from rest_framework.views import APIView
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from django.contrib import messages
-from django.shortcuts import reverse
-from django.contrib.auth import update_session_auth_hash
-
+from vadetisweb.factory import response_invalid_form
 from vadetisweb.serializers import MessageSerializer
 from vadetisweb.serializers.account_serializers import *
 from vadetisweb.utils import json_message_utils
-from vadetisweb.factory import response_invalid_form
 
 
 class AccountUserUpdate(APIView):

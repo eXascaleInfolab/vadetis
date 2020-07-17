@@ -1,5 +1,3 @@
-from rest_framework import serializers
-
 from vadetisweb.fields import *
 from vadetisweb.parameters import ANOMALY_INJECTION_TYPES, ANOMALY_INJECTION_SCALE, ANOMALY_INJECTION_SCALE_MEDIUM, ANOMALY_INJECTION_REPETITIONS, ANOMALY_INJECTION_REPEAT_SINGLE
 

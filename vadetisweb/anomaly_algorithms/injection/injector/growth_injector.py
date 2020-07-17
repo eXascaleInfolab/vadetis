@@ -1,11 +1,8 @@
-import numpy as np, pandas as pd
-import logging
+import numpy as np
+import pandas as pd
 
+from vadetisweb.utils import next_later_dt
 from .base import OutlierInjector
-
-from vadetisweb.parameters import *
-from vadetisweb.utils import next_earlier_dt, next_later_dt
-from vadetisweb.factory import msg_injection_all_anomalies
 
 
 class GrowthInjector(OutlierInjector):

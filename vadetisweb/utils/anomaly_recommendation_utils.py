@@ -1,7 +1,5 @@
-import pytz
-from vadetisweb.parameters import *
-from vadetisweb.utils.date_utils import dt_to_unix_time_millis, unix_time_millis_to_dt
 from vadetisweb.models import *
+from vadetisweb.utils.date_utils import dt_to_unix_time_millis, unix_time_millis_to_dt
 
 
 def get_recommendation(scores):

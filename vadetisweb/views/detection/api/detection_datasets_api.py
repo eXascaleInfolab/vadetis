@@ -1,12 +1,12 @@
-from rest_framework.permissions import AllowAny, IsAdminUser
-from rest_framework import viewsets
-
 from django.db.models import Q
+from rest_framework import viewsets
+from rest_framework.permissions import AllowAny, IsAdminUser
 
 from vadetisweb.models import DataSet
 from vadetisweb.parameters import REAL_WORLD, SYNTHETIC
 from vadetisweb.serializers import DetectionDatasetDataTablesSerializer
 from vadetisweb.utils import q_shared_or_user_is_owner
+
 
 class DetectionSyntheticDatasetDataTableViewSet(viewsets.ModelViewSet):
     """

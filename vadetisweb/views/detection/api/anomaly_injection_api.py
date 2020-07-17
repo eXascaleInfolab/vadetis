@@ -1,20 +1,14 @@
-from rest_framework import status
-from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
-from rest_framework.parsers import MultiPartParser
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.settings import api_settings
-from drf_yasg.utils import swagger_auto_schema
-
 from django.contrib import messages
-from django.shortcuts import reverse
 from django.db.models import Q
+from django.shortcuts import reverse
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework.renderers import JSONRenderer
+from rest_framework.views import APIView
 
-from vadetisweb.models import DataSet
-from vadetisweb.serializers import InjectionSerializer, MessageSerializer
 from vadetisweb.anomaly_algorithms import anomaly_injection
-from vadetisweb.utils import dataset_to_json, get_settings, q_shared_or_user_is_owner, get_type_from_dataset_json
 from vadetisweb.factory import *
+from vadetisweb.serializers import InjectionSerializer
+from vadetisweb.utils import dataset_to_json, get_settings, q_shared_or_user_is_owner, get_type_from_dataset_json
 
 
 class InjectionView(APIView):

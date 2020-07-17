@@ -1,15 +1,11 @@
-from django.forms import CharField, PasswordInput, BooleanField, EmailField
-from vadetisweb.widgets import FormCheckboxInput, UserTextInput
 from allauth.account import app_settings
-from allauth.account.forms import LoginForm, ResetPasswordForm, ChangePasswordForm, SetPasswordForm, ResetPasswordKeyForm, get_username_max_length, set_form_field_order, filter_users_by_email
-
-from allauth.account.forms import SignupForm as AllauthAccountSignupForm, get_adapter as get_account_adapter
-from allauth.socialaccount.forms import SignupForm as AllauthSocialSignupForm, get_adapter as get_socialaccount_adapter
-
-from allauth.socialaccount.forms import DisconnectForm
-from allauth.account.utils import logout_on_password_change
-from allauth.account.models import EmailAddress
+from allauth.account.forms import LoginForm, ResetPasswordForm, ChangePasswordForm, SetPasswordForm, ResetPasswordKeyForm, get_username_max_length, \
+    set_form_field_order, SignupForm as AllauthAccountSignupForm
 from captcha.fields import ReCaptchaField
+from django.forms import CharField, PasswordInput, BooleanField, EmailField
+
+from vadetisweb.widgets import FormCheckboxInput, UserTextInput
+
 
 #########################################################
 # CUSTOM FIELDS

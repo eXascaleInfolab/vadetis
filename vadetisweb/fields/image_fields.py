@@ -1,5 +1,5 @@
-from rest_framework import serializers
 from drf_yasg import openapi
+from rest_framework import serializers
 
 
 class CnfMatrixJsonField(serializers.JSONField):

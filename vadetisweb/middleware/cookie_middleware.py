@@ -1,8 +1,7 @@
-import logging
-
 from vadetisweb.models import UserSetting
-from vadetisweb.utils import settings_from_request_or_default_dict, update_setting_cookie
 from vadetisweb.serializers import UserSettingSerializer
+from vadetisweb.utils import settings_from_request_or_default_dict, update_setting_cookie
+
 
 class UserCookieMiddleWare:
     """
