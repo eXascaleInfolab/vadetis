@@ -6,10 +6,16 @@ from .rpca import *
 def robust_pca_huber_loss(df, df_class, df_train, df_train_class, delta=1, n_components=2, maximize_score=F1_SCORE, train_size=0.5, random_seed=10):
 
     df_train_common_class = df_anomaly_instances(df_train_class)
+    df_train_with_common_class = df_train.join(df_train_common_class)
     df_common_class = df_anomaly_instances(df_class)
 
-    # stratify parameter makes a split so that the proportion of values in the sample produced will be the same as the proportion of values provided to parameter stratify
-    X_train, X_test, y_train, y_test = train_test_split(df_train, df_train_common_class, train_size=train_size, random_state=random_seed, stratify=df_train_common_class)
+    # for supervised detection(!) - stratify parameter makes a split so that the proportion of values in the sample produced will be the same as the proportion of values provided to parameter stratify
+    #X_train, X_test, y_train, y_test = train_test_split(df_train, df_train_common_class, train_size=train_size, random_state=random_seed, stratify=df_train_common_class)
+
+    train, valid = get_train_valid_sets(df_train_with_common_class, train_size=train_size, random_seed=random_seed)
+
+    X_train = train.drop('class', axis=1)
+    X_test = valid.drop('class', axis=1)
 
     # Dimensionality reduction with Robust PCA and Huber Loss Function
     huber_loss = loss.HuberLoss(delta=delta)
@@ -31,7 +37,7 @@ def robust_pca_huber_loss(df, df_class, df_train, df_train_class, delta=1, n_com
     thresholds = np.linspace(0, 1, 200)
     thresholds = np.round(thresholds, 7)  # round thresholds
 
-    training_threshold_scores = get_threshold_scores(thresholds, y_test_scores, y_test, upper_boundary=True)
+    training_threshold_scores = get_threshold_scores(thresholds, y_test_scores, valid['class'], upper_boundary=True) # or replace valid['class'] with y_test for supervised detection
     selected_index = get_max_score_index_for_score_type(training_threshold_scores, maximize_score)
     selected_threshold = thresholds[selected_index]
 
