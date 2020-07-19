@@ -24,7 +24,12 @@ class DistortionInjector(OutlierInjector):
         if inject_at_index is not None:
 
             lower_boundary_before = max(next_earlier_dt(inject_at_index, self.df.index.inferred_freq, 10), self.df.index.min())
-            lower_boundary = max(next_earlier_dt(inject_at_index, self.df.index.inferred_freq, 9), self.df.index.min())
+
+            if lower_boundary_before == self.df.index.min():
+                lower_boundary = next_later_dt(lower_boundary_before, self.df.index.inferred_freq, 1)
+            else:
+                lower_boundary = max(next_earlier_dt(inject_at_index, self.df.index.inferred_freq, 9), self.df.index.min())
+
             upper_boundary = min(next_later_dt(inject_at_index, self.df.index.inferred_freq, 10), self.df.index.max())
 
             variance_diff_indexes = pd.date_range(lower_boundary_before, upper_boundary, freq=self.df.index.inferred_freq)
