@@ -7,7 +7,7 @@ from django.conf import settings
 from django.db import transaction
 from django.utils import timezone
 
-from vadetisweb.anomaly_algorithms import df_anomaly_instances
+from vadetisweb.anomaly_algorithms.detection.helper_functions import df_anomaly_instances
 from vadetisweb.models import User, Location, TimeSeries, DataSet
 from .date_utils import iso_format_time
 

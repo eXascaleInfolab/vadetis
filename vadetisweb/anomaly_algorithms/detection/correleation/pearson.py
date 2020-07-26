@@ -51,7 +51,7 @@ def pearson_matrix(df, min_periods=None):
     return df_pm
 
 
-def pearson(df, time_series_id, window_size=2, min_periods=None, absolute_values=True):
+def pearson(df, time_series_id, window_size=2, min_periods=None, absolute_values=False):
     """
     Calculates the Pearson correlation between a series and a dataframe column-wise using a rolling window
 
