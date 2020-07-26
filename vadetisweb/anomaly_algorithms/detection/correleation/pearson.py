@@ -146,7 +146,7 @@ def pearson_corr_coeff(X, Y):
     return weight
 
 
-def dtw_pearson(df, time_series_id, distance, window_size=2, absolute_values=True):
+def dtw_pearson(df, time_series_id, distance, window_size=2, absolute_values=False):
     """
     Computes the Pearson correlation using DTW for a given station id to all other time series of the same dataset.
     The DTW path defines the mapping of the values.

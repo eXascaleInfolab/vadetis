@@ -44,6 +44,7 @@ def dtw(x, y, distance):
     D0[1:,1:] = cdist(x, y, distance)
 
     #CM = D1.copy() #the cost matrix
+    #print(CM)
 
     """
     for i in range(len_x):
@@ -52,6 +53,8 @@ def dtw(x, y, distance):
     """
 
     cutil.min_cumsum(D0) # cythonized version of cost accumulation
+
+    #print(D0)
 
     if len_x == 1:
         path = np.zeros(len_y, dtype=np.int8), np.array(range(len_y))
