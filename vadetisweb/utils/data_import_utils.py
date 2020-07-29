@@ -81,7 +81,7 @@ def import_dataset(owner_username, dataset_file_name, title, type, **kwargs):
 
         # check if same frequency (granularity) => pandas can infer a frequency
         freq = df.index.inferred_freq
-        if freq is None or freq not in _get_supported_granularities():
+        if freq is None or (freq not in _get_supported_granularities() and not freq.endswith(tuple(_get_supported_granularities()))):
             err_msg = "Series do not have same granularity"
             raise ValueError(err_msg)
 
@@ -242,7 +242,7 @@ def import_training_dataset(owner_username, main_dataset_id, training_dataset_fi
 
         # check if same frequency (granularity) => pandas can infer a frequency
         freq = df.index.inferred_freq
-        if freq is None or freq not in _get_supported_granularities() or freq != main_dataset.dataframe.index.inferred_freq:
+        if freq is None or (freq not in _get_supported_granularities() and not freq.endswith(tuple(_get_supported_granularities()))) or freq != main_dataset.dataframe.index.inferred_freq:
             err_msg = "Series do not have same granularity"
             raise ValueError(err_msg)
 
