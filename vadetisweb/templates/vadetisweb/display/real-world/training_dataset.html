@@ -51,7 +51,7 @@
         </div>
     </div>
     <div class="row">
-        {% include 'vadetisweb/parts/portlet/training_dataset_info_portlet.html' with training_dataset=dataset %}
+        {% include 'vadetisweb/parts/portlet/training_dataset_info_portlet.html' with training_dataset=training_dataset %}
         {% if dataset|is_spatial %}{% include 'vadetisweb/parts/portlet/location_portlet.html' %}{% endif %}
     </div>
 {% endblock %}
