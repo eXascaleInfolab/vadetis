@@ -1,0 +1,43 @@
+TS11	 anomalies 9	 values 1421	 min -1288.4912053444198	 max 4492.0546085613205
+test	 anomalies 6	 values 700
+train	 anomalies 3	 values 700
+
+
+TS12	 anomalies 1	 values 1421	 min -1716.1728402295098	 max 1756.67495057559
+test	 anomalies 0	 values 700
+train	 anomalies 1	 values 700
+
+
+TS13	 anomalies 4	 values 1421	 min -1435.8133483540398	 max 4298.9986399934005
+test	 anomalies 2	 values 700
+train	 anomalies 2	 values 700
+
+
+TS14	 anomalies 9	 values 1421	 min -165.031044984485	 max 10640.2416388357
+test	 anomalies 6	 values 700
+train	 anomalies 3	 values 700
+
+
+TS15	 anomalies 1	 values 1421	 min -1732.7463531757	 max 1954.1237572643104
+test	 anomalies 0	 values 700
+train	 anomalies 1	 values 700
+
+
+TS16	 anomalies 4	 values 1421	 min -969.1594552207409	 max 7619.48340953066
+test	 anomalies 2	 values 700
+train	 anomalies 2	 values 700
+
+
+TS17	 anomalies 9	 values 1421	 min -1619.89508548574	 max 2212.82357199317
+test	 anomalies 6	 values 700
+train	 anomalies 3	 values 700
+
+
+TS18	 anomalies 1	 values 1421	 min -1248.3852663909402	 max 6657.26093078765
+test	 anomalies 0	 values 700
+train	 anomalies 1	 values 700
+
+
+TS19	 anomalies 4	 values 1421	 min -1577.05476966853	 max 2383.1029633962
+test	 anomalies 2	 values 700
+train	 anomalies 2	 values 700
