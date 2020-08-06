@@ -1,0 +1,23 @@
+TS3	 anomalies 15	 values 1461	 min 1.8619444444443998	 max 4.2797222222222
+test	 anomalies 1	 values 1000
+train	 anomalies 0	 values 400
+
+
+TS16	 anomalies 3	 values 1461	 min 0.82472222222222	 max 2.5113888888889
+test	 anomalies 0	 values 1000
+train	 anomalies 3	 values 400
+
+
+TS23	 anomalies 19	 values 1420	 min 0.0	 max 0.97236626590723
+test	 anomalies 15	 values 1000
+train	 anomalies 0	 values 400
+
+
+TS30	 anomalies 9	 values 1461	 min 1.0383333333333	 max 2.9558333333333
+test	 anomalies 1	 values 1000
+train	 anomalies 0	 values 400
+
+
+TS60	 anomalies 16	 values 1461	 min 0.6105555555555601	 max 2.3672222222222
+test	 anomalies 6	 values 1000
+train	 anomalies 5	 values 400

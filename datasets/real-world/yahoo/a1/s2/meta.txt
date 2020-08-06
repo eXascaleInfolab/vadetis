@@ -1,0 +1,23 @@
+TS12	 anomalies 3	 values 1439	 min 1	 max 115
+test	 anomalies 1	 values 1000
+train	 anomalies 0	 values 400
+
+
+TS19	 anomalies 227	 values 1424	 min 0	 max 118
+test	 anomalies 113	 values 1000
+train	 anomalies 91	 values 400
+
+
+TS33	 anomalies 2	 values 1439	 min 1	 max 179
+test	 anomalies 0	 values 1000
+train	 anomalies 0	 values 400
+
+
+TS45	 anomalies 1	 values 1440	 min 0	 max 182
+test	 anomalies 0	 values 1000
+train	 anomalies 1	 values 400
+
+
+TS58	 anomalies 43	 values 1435	 min 0	 max 35
+test	 anomalies 0	 values 1000
+train	 anomalies 9	 values 400
