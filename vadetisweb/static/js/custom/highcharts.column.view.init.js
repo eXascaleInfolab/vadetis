@@ -27,10 +27,12 @@ var VadetisColumnHighcharts = function () {
             },
             xAxis: {
                 categories: [
-                    'Accuracy',
+                    'NMI',
+                    'RMSE',
                     'F1-Score',
+                    'Accuracy',
                     'Precision',
-                    'Recall',
+                    'Recall'
                 ],
                 crosshair: true
             },

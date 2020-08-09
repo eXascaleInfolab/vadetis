@@ -5,17 +5,23 @@ from vadetisweb.utils.date_utils import dt_to_unix_time_millis, unix_time_millis
 def get_recommendation(scores):
 
     entries = scores['scores']
+    max_nmi = max([x['nmi'] for x in entries])
+    min_rmse = min([x['rmse'] for x in entries])
     max_f1_score = max([x['f1_score'] for x in entries])
     max_accuracy = max([x['accuracy'] for x in entries])
     max_precision = max([x['precision'] for x in entries])
     max_recall = max([x['recall'] for x in entries])
 
+    best_nmi_scores = [item for item in entries if item['nmi'] == max_nmi]
+    best_rmse_scores = [item for item in entries if item['rmse'] == min_rmse]
     best_f1_scores = [item for item in entries if item['f1_score'] == max_f1_score]
     best_accuracies = [item for item in entries if item['accuracy'] == max_accuracy]
     best_precisions = [item for item in entries if item['precision'] == max_precision]
     best_recalls = [item for item in entries if item['recall'] == max_recall]
 
     return {
+        'nmi_scores': best_nmi_scores,
+        'rmse_scores': best_rmse_scores,
         'f1_scores': best_f1_scores,
         'accuracies': best_accuracies,
         'precisions': best_precisions,

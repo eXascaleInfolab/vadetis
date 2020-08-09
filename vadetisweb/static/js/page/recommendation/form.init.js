@@ -145,9 +145,12 @@ var DatasetRecommendationForm = function () {
                                 var responseAlgorithm = s.algorithm;
                                 var conf = s.conf;
                                 var maximizedScore = conf.maximize_score;
+                                // order must refer to the bar chart columns
                                 var series_data = [
-                                    parseFloat((info.accuracy * 100).toFixed(3)),
+                                    parseFloat((info.nmi * 100).toFixed(3)),
+                                    parseFloat((info.rmse * 100).toFixed(3)),
                                     parseFloat((info.f1_score * 100).toFixed(3)),
+                                    parseFloat((info.accuracy * 100).toFixed(3)),
                                     parseFloat((info.precision * 100).toFixed(3)),
                                     parseFloat((info.recall * 100).toFixed(3)),
                                 ];

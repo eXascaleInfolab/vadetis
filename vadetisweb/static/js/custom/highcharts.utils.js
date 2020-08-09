@@ -284,10 +284,12 @@ function getScoresFromColumnChart(highchart) {
         if (highchart.navigator === undefined || !containsObject(series, highchart.navigator.series)) {
             var score_json = {};
             score_json.algorithm = series.options.name;
-            score_json.accuracy = series.options.data[0];
-            score_json.f1_score = series.options.data[1];
-            score_json.precision = series.options.data[2];
-            score_json.recall = series.options.data[3];
+            score_json.nmi = series.options.data[0];
+            score_json.rmse = series.options.data[1];
+            score_json.f1_score = series.options.data[2];
+            score_json.accuracy = series.options.data[3];
+            score_json.precision = series.options.data[4];
+            score_json.recall = series.options.data[5];
             scores.scores.push(score_json);
         }
     });

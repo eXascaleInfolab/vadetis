@@ -109,24 +109,32 @@ class RecommendationScoresJsonField(serializers.JSONField):
                                 title='algorithm',
                                 type=openapi.TYPE_STRING,
                             ),
-                            'accuracy': openapi.Schema(
-                                title='accuracy',
-                                type=openapi.TYPE_STRING,
+                            'nmi': openapi.Schema(
+                                title='nmi',
+                                type=openapi.TYPE_NUMBER,
+                            ),
+                            'rmse': openapi.Schema(
+                                title='rmse',
+                                type=openapi.TYPE_NUMBER,
                             ),
                             'f1_score': openapi.Schema(
                                 title='f1_score',
-                                type=openapi.TYPE_STRING,
+                                type=openapi.TYPE_NUMBER,
+                            ),
+                            'accuracy': openapi.Schema(
+                                title='accuracy',
+                                type=openapi.TYPE_NUMBER,
                             ),
                             'precision': openapi.Schema(
                                 title='precision',
-                                type=openapi.TYPE_STRING,
+                                type=openapi.TYPE_NUMBER,
                             ),
                             'recall': openapi.Schema(
                                 title='recall',
-                                type=openapi.TYPE_STRING,
+                                type=openapi.TYPE_NUMBER,
                             ),
                         },
-                        required=['algorithm', 'accuracy', 'f1_score', 'precision', 'recall'],
+                        required=['algorithm', 'nmi', 'rmse', 'f1_score', 'accuracy', 'precision', 'recall'],
                     )
                 ),
             },

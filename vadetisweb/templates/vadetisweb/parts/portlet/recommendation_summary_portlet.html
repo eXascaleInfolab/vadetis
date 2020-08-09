@@ -12,11 +12,49 @@
     </div>
     <div class="kt-portlet__body kt-portlet__body--fit">
         <div class="kt-padding-25">
+            {% with recommendation|get_item:'nmi_scores' as nmi_scores %}
+                <table class="table table-xs table-head-bg-brand">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th>Best NMI-Score</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for nmi_score in nmi_scores %}
+                        <tr>
+                            <td>{{ nmi_score|get_item:'algorithm' }}</td>
+                            <td>{{ nmi_score|get_item:'nmi' }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endwith %}
+
+            {% with recommendation|get_item:'rmse_scores' as rmse_scores %}
+                <table class="table table-xs table-head-bg-brand">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th>Best RMSE-Score</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for rmse_score in rmse_scores %}
+                        <tr>
+                            <td>{{ rmse_score|get_item:'algorithm' }}</td>
+                            <td>{{ rmse_score|get_item:'rmse' }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endwith %}
+
             {% with recommendation|get_item:'f1_scores' as f1_scores %}
                 <table class="table table-xs table-head-bg-brand">
                     <thead class="thead-inverse">
                         <tr>
-                            <th>Highest F1-Score</th>
+                            <th>Best F1-Score</th>
                             <th>Score</th>
                         </tr>
                     </thead>
@@ -35,7 +73,7 @@
                 <table class="table table-xs table-head-bg-brand">
                     <thead class="thead-inverse">
                         <tr>
-                            <th>Highest Accuracy</th>
+                            <th>Best Accuracy</th>
                             <th>Score</th>
                         </tr>
                     </thead>
@@ -54,7 +92,7 @@
                 <table class="table table-xs table-head-bg-brand">
                     <thead class="thead-inverse">
                         <tr>
-                            <th>Highest Precision</th>
+                            <th>Best Precision</th>
                             <th>Score</th>
                         </tr>
                     </thead>
@@ -72,7 +110,7 @@
                 <table class="table table-xs table-head-bg-brand">
                     <thead class="thead-inverse">
                         <tr>
-                            <th>Highest Recall</th>
+                            <th>Best Recall</th>
                             <th>Score</th>
                         </tr>
                     </thead>

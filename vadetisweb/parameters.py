@@ -57,11 +57,11 @@ RMSE = 'Root Mean Square Error'
 
 ANOMALY_DETECTION_SCORE_TYPES = (
     (F1_SCORE, F1_SCORE),
+    (NMI, NMI),
+    (RMSE, RMSE),
     (PRECISION, PRECISION),
     (RECALL, RECALL),
     (ACCURACY, ACCURACY),
-    (NMI, NMI),
-    (RMSE, RMSE),
 )
 
 #########################################################
