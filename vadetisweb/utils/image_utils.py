@@ -54,6 +54,10 @@ def plot_thresholds_scores(full_path, thresholds, scores, dpi=300):
     ax.plot(thresholds, scores[:, 1], label='$Precision$')
     ax.plot(thresholds, scores[:, 2], label='$F_1-Score$')
     ax.plot(thresholds, scores[:, 3], label='$Accuracy$')
+
+    ax.plot(thresholds, scores[:, 4], label='$NMI$')
+    ax.plot(thresholds, scores[:, 5], label='$RMSE$')
+
     ax.set_ylabel('Score')
     ax.set_xlabel('Threshold')
     ax.legend(loc='best')

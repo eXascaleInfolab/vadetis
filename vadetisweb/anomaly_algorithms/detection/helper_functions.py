@@ -4,7 +4,7 @@ import pandas as pd
 from sklearn.metrics import fbeta_score, precision_score, recall_score, accuracy_score
 from sklearn.model_selection import train_test_split
 
-from vadetisweb.parameters import F1_SCORE, PRECISION, RECALL, ACCURACY
+from vadetisweb.parameters import F1_SCORE, PRECISION, RECALL, ACCURACY, NMI, RMSE
 from vadetisweb.utils import unix_time_millis_to_dt, next_earlier_dt
 
 
@@ -64,34 +64,6 @@ def _df_remove_column(df, column_name):
         del df[column_name]
 
 
-def get_threshold_scores(thresholds, y_scores, valid, upper_boundary=False):
-    """
-    Computes for each possible threshold the score for the performance metrics
-
-    :param thresholds: a list of possible thresholds
-    :param y_scores: the list of computed scores by the detection algorithm
-    :param valid: the true class values to run the performance metric against
-    :param upper_boundary: determines if score higher than thresholds are anomalies or not
-
-    :return: array of scores for each threshold for each performance metric
-    """
-    scores = []
-
-    # any comparison (other than !=) of a NaN to a non-NaN value will always return False,
-    # and therefore will not be detected as anomaly
-    with np.errstate(invalid='ignore'):
-
-        for threshold in thresholds:
-            y_hat = np.array(y_scores < threshold).astype(int) if upper_boundary == False else np.array(y_scores > threshold).astype(int)
-
-            scores.append([recall_score(y_true=valid.values, y_pred=y_hat, zero_division=0),
-                           precision_score(y_true=valid.values, y_pred=y_hat, zero_division=0),
-                           fbeta_score(y_true=valid.values, y_pred=y_hat, beta=1, zero_division=0),
-                           accuracy_score(y_true=valid.values, y_pred=y_hat)])
-
-    return np.array(scores)
-
-
 def arrElemContainsTrue(x):
     """
     Helper method to check if a 1-dim arr contains 1
@@ -102,14 +74,19 @@ def arrElemContainsTrue(x):
 
 
 def get_max_score_index_for_score_type(threshold_scores, score_type):
-    if score_type == F1_SCORE:
-        return threshold_scores[:, 2].argmax()
-    elif score_type == RECALL:
+    if score_type == RECALL:
         return threshold_scores[:, 0].argmax()
     elif score_type == PRECISION:
         return threshold_scores[:, 1].argmax()
+    elif score_type == F1_SCORE:
+        return threshold_scores[:, 2].argmax()
     elif score_type == ACCURACY:
         return threshold_scores[:, 3].argmax()
+    elif score_type == NMI:
+        return threshold_scores[:, 4].argmax()
+    elif score_type == RMSE:
+        return threshold_scores[:, 5].argmin() # best RMSE is lowest value
+
     raise ValueError
 
 

@@ -51,7 +51,7 @@ def pearson_matrix(df, min_periods=None):
     return df_pm
 
 
-def pearson(df, time_series_id, window_size=2, min_periods=None, absolute_values=False):
+def pearson(df, time_series_id, window_size=2, min_periods=None, absolute_values=True):
     """
     Calculates the Pearson correlation between a series and a dataframe column-wise using a rolling window
 
@@ -84,17 +84,17 @@ def pearson(df, time_series_id, window_size=2, min_periods=None, absolute_values
     return df_corr
 
 
-def most_correlated(df, station_id, num=3):
+def most_correlated(df, time_series_id, num=3):
     """
     For a given station ID, it finds the most n correlated time series using Pearson correlation.
 
     :param df: a dataframe
-    :param station_id: the station ID one wants the find the most n correlated time series, must be a colums in the dataframe
+    :param time_series_id: the station ID one wants the find the most n correlated time series, must be a colums in the dataframe
     :param num: the number of most correlated time series in the result
     :return: dict of the most correlated time series (id and value)
     """
     df_pearson = pearson_matrix(df)
-    sorted_pearson = df_pearson.drop(station_id)[station_id].sort_values(ascending=False)
+    sorted_pearson = df_pearson.drop(time_series_id)[time_series_id].sort_values(ascending=False)
     most_n_correlated = sorted_pearson.iloc[1:num + 1].index.values #exclude first value at index 0
 
     return most_n_correlated
@@ -146,7 +146,7 @@ def pearson_corr_coeff(X, Y):
     return weight
 
 
-def dtw_pearson(df, time_series_id, distance, window_size=2, absolute_values=False):
+def dtw_pearson(df, time_series_id, distance, window_size=2, absolute_values=True):
     """
     Computes the Pearson correlation using DTW for a given station id to all other time series of the same dataset.
     The DTW path defines the mapping of the values.
@@ -159,7 +159,7 @@ def dtw_pearson(df, time_series_id, distance, window_size=2, absolute_values=Fal
     """
     assert (window_size >= 2)
 
-    past_size = window_size - 1 #a window of 2 means only one past value, later needed in _next_dt
+    past_size = window_size - 1 # e.g. a window of 2 means only one past value, later needed in _next_dt
 
     start_time = datetime.datetime.now()
 

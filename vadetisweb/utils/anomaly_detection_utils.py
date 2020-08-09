@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from pandas.tseries.frequencies import to_offset
-from sklearn.metrics import fbeta_score, precision_score, recall_score, accuracy_score, confusion_matrix
+from sklearn.metrics import fbeta_score, precision_score, recall_score, accuracy_score, confusion_matrix, normalized_mutual_info_score, mean_squared_error
 
 from vadetisweb.parameters import *
 from .helper_function_utils import *
@@ -135,6 +135,36 @@ def df_zscore(df, skipna=True):
     return df_zscore
 
 
+def get_threshold_scores(thresholds, y_scores, valid, upper_boundary=False):
+    """
+    Computes for each possible threshold the score for the performance metrics
+
+    :param thresholds: a list of possible thresholds
+    :param y_scores: the list of computed scores by the detection algorithm
+    :param valid: the true class values to run the performance metric against
+    :param upper_boundary: determines if score higher than thresholds are anomalies or not
+
+    :return: array of scores for each threshold for each performance metric
+    """
+    scores = []
+
+    # any comparison (other than !=) of a NaN to a non-NaN value will always return False,
+    # and therefore will not be detected as anomaly
+    with np.errstate(invalid='ignore'):
+
+        for threshold in thresholds:
+            y_hat = np.array(y_scores < threshold).astype(int) if upper_boundary == False else np.array(y_scores > threshold).astype(int)
+
+            scores.append([recall_score(y_true=valid.values, y_pred=y_hat, zero_division=0),
+                           precision_score(y_true=valid.values, y_pred=y_hat, zero_division=0),
+                           fbeta_score(y_true=valid.values, y_pred=y_hat, beta=1, zero_division=0),
+                           accuracy_score(y_true=valid.values, y_pred=y_hat),
+                           normalized_mutual_info_score(valid.values, y_hat, average_method='arithmetic'),
+                           mean_squared_error(valid.values, y_hat, sample_weight=None, multioutput='uniform_average', squared=True)])
+
+    return np.array(scores)
+
+
 def get_detection_meta(threshold, y_hat_results, y_truth, upper_boundary=False):
     info = {}
 
@@ -142,6 +172,9 @@ def get_detection_meta(threshold, y_hat_results, y_truth, upper_boundary=False):
     recall = recall_score(y_pred=y_hat_results, y_true=y_truth, zero_division=0)
     precision = precision_score(y_pred=y_hat_results, y_true=y_truth, zero_division=0)
     f1_score = fbeta_score(y_pred=y_hat_results, y_true=y_truth, beta=1, zero_division=0)
+
+    nmi = normalized_mutual_info_score(y_truth.flatten(), y_hat_results, average_method='arithmetic')
+    rmse = mean_squared_error(y_truth, y_hat_results, sample_weight=None, multioutput='uniform_average', squared=True)
 
     # we set labels 0,1 manually because the dataset could contain only one class
     cnf_matrix = confusion_matrix(y_truth, y_hat_results, labels=[0,1])
@@ -153,6 +186,9 @@ def get_detection_meta(threshold, y_hat_results, y_truth, upper_boundary=False):
     info['precision'] = precision
     info['f1_score'] = f1_score
 
+    info['nmi'] = nmi
+    info['rmse'] = rmse
+
     info['upper_boundary'] = upper_boundary
 
     logging.debug('Threshold: %.3f' % threshold)
@@ -160,5 +196,8 @@ def get_detection_meta(threshold, y_hat_results, y_truth, upper_boundary=False):
     logging.debug('Recall Score: %.3f' % recall)
     logging.debug('Precision Score: %.3f' % precision)
     logging.debug('F1 Score: %.3f' % f1_score)
+
+    logging.debug('NMI Score: %.3f' % nmi)
+    logging.debug('RMSE Score: %.3f' % rmse)
 
     return info

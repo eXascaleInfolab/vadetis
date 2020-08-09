@@ -1,4 +1,4 @@
-from vadetisweb.utils import get_detection_meta, min_max_normalization
+from vadetisweb.utils import get_detection_meta, get_threshold_scores, min_max_normalization
 from .helper_functions import *
 
 

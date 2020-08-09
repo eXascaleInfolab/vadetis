@@ -1,7 +1,7 @@
 import datetime
 
 from vadetisweb.parameters import EUCLIDEAN
-from vadetisweb.utils import get_detection_meta, min_max_normalization
+from vadetisweb.utils import get_detection_meta, get_threshold_scores, min_max_normalization
 from .correleation.distance import get_df_corr_geo_distance
 from .correleation.pearson import pearson, dtw_pearson
 from .helper_functions import *
