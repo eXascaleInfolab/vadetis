@@ -209,8 +209,10 @@ function downloadDataset(highchart, url, type, callback) {
 
 function updateScores(info) {
     RoundSliders.init(3);
-    RoundSliders.updateValue("#roundslider_accuracy", info.accuracy.toFixed(3));
+    RoundSliders.updateValue("#roundslider_nmi", info.nmi.toFixed(3));
+    RoundSliders.updateValue("#roundslider_rmse", info.rmse.toFixed(3));
     RoundSliders.updateValue("#roundslider_f1", info.f1_score.toFixed(3));
+    RoundSliders.updateValue("#roundslider_accuracy", info.accuracy.toFixed(3));
     RoundSliders.updateValue("#roundslider_precision", info.precision.toFixed(3));
     RoundSliders.updateValue("#roundslider_recall", info.recall.toFixed(3));
 }
