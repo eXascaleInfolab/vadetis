@@ -51,7 +51,7 @@ def pearson_matrix(df, min_periods=None):
     return df_pm
 
 
-def pearson(df, time_series_id, window_size=2, min_periods=None, absolute_values=True):
+def pearson(df, time_series_id, window_size=2, min_periods=None, absolute_values=True, fill_na=True):
     """
     Calculates the Pearson correlation between a series and a dataframe column-wise using a rolling window
 
@@ -59,6 +59,8 @@ def pearson(df, time_series_id, window_size=2, min_periods=None, absolute_values
     :param time_series_id: the id of the station to calculate the correlations for
     :param window_size: The size of the moving window
     :param min_periods: the minimum number of values needed calculate a single correlation, otherwise result is NaN
+    :param absolute_values: transform correlation to absolute values
+    :param fill_na: replace nan values with 0
     :return: the correlation dataframe
     """
     assert (window_size >= 2)
@@ -79,7 +81,10 @@ def pearson(df, time_series_id, window_size=2, min_periods=None, absolute_values
     logging.debug("Execution time for pearson values for series:", time_elapsed)
 
     if absolute_values:
-        return df_corr.abs()
+        df_corr = df_corr.abs()
+
+    if fill_na:
+        df_corr = df_corr.fillna(0)
 
     return df_corr
 
@@ -129,7 +134,7 @@ def pearson_corr_coeff(X, Y):
     #print("XM:", XM)
     #print("YM:", YM)
 
-    r_numerator = sum(np.asarray(XM) * np.asarray(YM)) #add.reduce() is equivalent to sum()
+    r_numerator = sum(np.asarray(XM) * np.asarray(YM)) # add.reduce() is equivalent to sum()
     r_denominator = np.sqrt(_sum_of_squares(XM)) * np.sqrt(_sum_of_squares(YM))
 
     #print("r_numerator:", r_numerator)
@@ -146,7 +151,7 @@ def pearson_corr_coeff(X, Y):
     return weight
 
 
-def dtw_pearson(df, time_series_id, distance, window_size=2, absolute_values=True):
+def dtw_pearson(df, time_series_id, distance, window_size=2, absolute_values=True, fill_na=True):
     """
     Computes the Pearson correlation using DTW for a given station id to all other time series of the same dataset.
     The DTW path defines the mapping of the values.
@@ -155,6 +160,8 @@ def dtw_pearson(df, time_series_id, distance, window_size=2, absolute_values=Tru
     :param time_series_id: the ID of the time series to calculate the Pearson correlation for
     :param string or func distance: distance parameter for cdist, see method dtw()
     :param window_size: the size of the moving window
+    :param absolute_values: transform correlation to absolute values
+    :param fill_na: replace nan values with 0
     :return: a dataframe containing the DTW with Pearson correlation values
     """
     assert (window_size >= 2)
@@ -204,12 +211,15 @@ def dtw_pearson(df, time_series_id, distance, window_size=2, absolute_values=Tru
 
                 weight = pearson_corr_coeff(x_dtw, y_dtw)
 
-                if absolute_values:
-                    weight = np.absolute(weight)
-
                 df_corr.at[win_end_index_dt, ts_id] = weight
 
-    time_elapsed = (datetime.datetime.now() - start_time).__str__()
+    if absolute_values:
+        df_corr = df_corr.abs()
 
+    if fill_na:
+        df_corr = df_corr.fillna(0)
+
+    time_elapsed = (datetime.datetime.now() - start_time).__str__()
     logging.debug("Execution time for pearson values using dtw:", time_elapsed)
+
     return df_corr

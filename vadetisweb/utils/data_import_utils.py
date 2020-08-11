@@ -48,7 +48,8 @@ def import_dataset(owner_username, dataset_file_name, title, type, **kwargs):
                               sep=';',
                               parse_dates=['time'],
                               infer_datetime_format=True,
-                              index_col='time')
+                              index_col='time',
+                              float_precision='high')
 
         # check number of values (row counts)
         num_values = df_read['value'].shape[0]
@@ -204,7 +205,8 @@ def import_training_dataset(owner_username, main_dataset_id, training_dataset_fi
                               sep=';',
                               parse_dates=['time'],
                               infer_datetime_format=True,
-                              index_col='time')
+                              index_col='time',
+                              float_precision='high')
 
         # check number of values (row counts)
         num_values = df_read['value'].shape[0]
