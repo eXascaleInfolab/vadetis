@@ -144,13 +144,6 @@ class SVMSerializer(ConditionalRequiredFieldMixin, serializers.Serializer):
                                      help_text='The kernel for the SVM.',
                                      style={'template': 'vadetisweb/parts/input/select_input.html',
                                             'help_text_in_popover': True})
-    gamma = serializers.FloatField(initial=0.0005, label='Gamma', min_value=0.00000001, max_value=1, required=False,
-                                   help_text='Kernel coefficient for \'rbf\', \'poly\' and \'sigmoid\'; ignored for \'linear\' kernel. The optimal value depends entirely on the data. If gamma is \'None\' then (1 / Number of features) will be used instead.',
-                                   style={'template': 'vadetisweb/parts/input/text_input.html',
-                                          'step': 'any',
-                                          'min': 0.000001,
-                                          'max': 1,
-                                          'help_text_in_popover': True})
     nu = serializers.FloatField(initial=0.95, label='Nu', min_value=0.000001, max_value=1, required=False,
                                 help_text='An upper bound on the fraction of training errors and a lower bound of the fraction of support vectors. Should be in the interval (0, 1]. If none, the default value 0.5 will be used.',
                                 style={'template': 'vadetisweb/parts/input/text_input.html',

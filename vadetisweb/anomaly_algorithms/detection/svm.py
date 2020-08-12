@@ -8,7 +8,7 @@ from .helper_functions import *
 # SVM
 #########################################################
 
-def svm(df, df_class, df_train, df_train_class, maximize_score=F1_SCORE, gamma=0.000562, nu=0.5, kernel='rbf', train_size=0.5, random_seed=10):
+def svm(df, df_class, df_train, df_train_class, maximize_score=F1_SCORE, nu=0.5, kernel='rbf', train_size=0.5, random_seed=10):
 
     df_train_common_class = df_anomaly_instances(df_train_class)
     df_train_with_common_class = df_train.join(df_train_common_class)
@@ -17,7 +17,7 @@ def svm(df, df_class, df_train, df_train_class, maximize_score=F1_SCORE, gamma=0
 
     train, valid = get_train_valid_sets(df_train_with_common_class, train_size=train_size, random_seed=random_seed)
 
-    model = OneClassSVM(gamma=gamma, nu=nu, kernel=kernel)
+    model = OneClassSVM(gamma='scale', nu=nu, kernel=kernel)
     model.fit(train.drop('class', axis=1).values)
 
     thresholds = np.linspace(0, 1, 200)

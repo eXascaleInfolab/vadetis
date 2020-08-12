@@ -51,10 +51,6 @@ class ConfJsonField(serializers.JSONField):
                     title='kernel',
                     type=openapi.TYPE_STRING,
                 ),
-                'gamma': openapi.Schema(
-                    title='gamma',
-                    type=openapi.TYPE_NUMBER,
-                ),
                 'nu': openapi.Schema(
                     title='nu',
                     type=openapi.TYPE_NUMBER,

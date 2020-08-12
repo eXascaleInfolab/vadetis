@@ -8,6 +8,7 @@ from .helper_function_utils import *
 
 
 def min_max_normalization(scores):
+    # TODO zero division
     return (scores - np.min(scores)) / (np.max(scores) - np.min(scores))
 
 

@@ -62,7 +62,7 @@ var VadetisHighcharts = function () {
                         for (var i = 0; i < this.points.length; i++) {
                             var point = this.points[i];
                             if (point.hasOwnProperty('point') && point.point.score !== undefined) {
-                                tooltip += '<tr><td><strong>Score:</strong></td><td>' + point.point.score.toFixed(3) + '</td></tr>';
+                                tooltip += '<tr><td><strong>Score:</strong></td><td>' + point.point.score.toFixed(7) + '</td></tr>';
                                 break;
                             }
                         }

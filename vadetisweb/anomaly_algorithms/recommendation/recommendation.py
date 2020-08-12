@@ -93,7 +93,6 @@ def svm_recommendation(df, df_class, validated_data):
 
     scores, y_hat_results, df_common_class, info = svm(df, df_class, df_train, df_train_class,
                                                        maximize_score=validated_data['maximize_score'],
-                                                       gamma=validated_data['gamma'],
                                                        nu=validated_data['nu'],
                                                        kernel=validated_data['kernel'],
                                                        train_size=validated_data['train_size'])
