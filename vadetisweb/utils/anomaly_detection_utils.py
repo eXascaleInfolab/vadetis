@@ -2,14 +2,14 @@ import numpy as np
 import pandas as pd
 from pandas.tseries.frequencies import to_offset
 from sklearn.metrics import fbeta_score, precision_score, recall_score, accuracy_score, confusion_matrix, normalized_mutual_info_score, mean_squared_error
-
+from sklearn.preprocessing import minmax_scale
 from vadetisweb.parameters import *
 from .helper_function_utils import *
 
 
 def min_max_normalization(scores):
-    # TODO zero division
-    return (scores - np.min(scores)) / (np.max(scores) - np.min(scores))
+    #return (scores - np.min(scores)) / (np.max(scores) - np.min(scores))
+    return minmax_scale(scores)
 
 
 def get_detection_choices(dataset, with_empty=True):
