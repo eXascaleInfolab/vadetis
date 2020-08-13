@@ -109,6 +109,17 @@ Create a virtual python 3.7 environment, e.g.
 mkdir /var/www/vadetis.exascale.info/venv
 python3.7 -m venv /var/www/vadetis.exascale.info/venv
 ```
+
+Copy contents of vadetis into the folder /var/www/vadetis.exascale.info
+Install python requirements in venv
+```
+cd /var/www/vadetis.exascale.info
+source venv/bin/activate
+pip3 install -r requirements.txt
+deactivate
+```
+
+
 Check if the venv is working
 ```
 cd /var/www/vadetis.exascale.info/venv
@@ -138,6 +149,7 @@ export LC_ALL='en_US.UTF-8'
 ```
 
 A common location to put this configuration is /etc/apache2/envvars.
+
 
 ## Jupyter Notebook
 To start Jupyter notebook with Django shell execute from started venv in the main application folder:

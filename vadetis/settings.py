@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'django.contrib.sites',  # required for django-allauth
     'django_extensions',  # needed for jupyter notebooks
     'vadetisweb',
-    'django_celery_results',
     'django_bootstrap_breadcrumbs',
     'allauth',
     'allauth.account',
