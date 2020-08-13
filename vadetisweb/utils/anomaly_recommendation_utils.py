@@ -1,6 +1,6 @@
 from vadetisweb.models import *
 from vadetisweb.utils.date_utils import dt_to_unix_time_millis, unix_time_millis_to_dt
-
+from vadetisweb.anomaly_algorithms.detection.helper_functions import df_anomaly_instances
 
 def get_recommendation(scores):
 
@@ -64,7 +64,7 @@ def get_default_configuration(algorithm, maximize_score, dataset):
         return _isolation_forest_default(maximize_score, dataset)
 
 
-def get_time_series_lisa_recommendation(dataset):
+def get_time_series_recommendation(dataset):
     """
     For recommendation we choose the time series with the most anomalies
 
@@ -82,23 +82,60 @@ def get_time_series_lisa_recommendation(dataset):
     return time_series
 
 
-def get_time_range(dataset, max_range=500):
+def get_time_range(df, df_class, ts_id=None, max_range=500):
     """
     For recommendation we do not compute over the whole dataset, as we have several algorithms and each dataset could contain up to 100'000 points
-    the computation would take too long. Therefore we compute for a max index range of 500 values
+    the computation would take too long. Therefore we compute for a max index range of "max_range" values
 
-    :param dataset: the dataset to determine the range for
+    :param df: the dataframe to determine the range
+    :param df_class: the class dataframe to determine the most suitable range
+    :param ts_id: time series id for lisa
     :param max_range: the maximum index size
     :return: range_start and range_end
     """
-    df = dataset.dataframe.copy()
     index_length = len(df.index)
-    if index_length <= max_range:
+    if index_length <= max_range: # index length shorter than max_range => take all
         start_index = 0
         return dt_to_unix_time_millis(df.index[start_index]), dt_to_unix_time_millis(df.index[index_length-1])
+    else: # get most suitable range
+        start_index, end_index = _get_indexes(df_class, ts_id, max_range)
+        return dt_to_unix_time_millis(df.index[start_index]), dt_to_unix_time_millis(df.index[end_index])
+
+
+def _get_indexes(df_class, ts_id, max_range):
+    df_common_class = df_anomaly_instances(df_class) if ts_id is None else df_class.rename(columns={ ts_id : 'class'})
+
+    a = df_common_class['class'].values  # df as array of values
+    m = np.concatenate(([False], a == True, [False]))  # mask
+    anomalous_intervals = np.flatnonzero(m[1:] != m[:-1]).reshape(-1, 2)  # start-stop limits
+    anomalous_start_indexes = anomalous_intervals[:, 0]
+    anomalous_end_indexes = anomalous_intervals[:, 1]
+
+    max_length = len(a) - 1
+    start, end = _get_best_range(anomalous_start_indexes, anomalous_end_indexes, max_length, max_range)
+
+    if end >= max_range:
+        return end - max_range + 1, end
     else:
-        start_index = max_range
-        return dt_to_unix_time_millis(df.index[-start_index]), dt_to_unix_time_millis(df.index[index_length-1])
+        return 0, max_range - 1
+
+
+def _get_best_range(anomalous_start_indexes, anomalous_end_indexes, max_length, max_range):
+    start = 0
+    end = max_length
+    max_iterate_range = 0
+    for end_index in anomalous_end_indexes:
+        for start_index in anomalous_start_indexes:
+            if start_index <= end_index:
+                range = end_index - start_index
+                if range >= max_range:
+                    return start, end
+                elif range >= max_iterate_range:
+                    start = start_index
+                    end = end_index
+                    max_iterate_range = range
+
+    return start, end
 
 
 def get_training_dataset(dataset):
@@ -120,8 +157,10 @@ def get_training_dataset(dataset):
 
 
 def _lisa_pearson_default(maximize_score, dataset):
-    time_series = get_time_series_lisa_recommendation(dataset)
-    range_start, range_end = get_time_range(dataset)
+    time_series = get_time_series_recommendation(dataset)
+    df = dataset.dataframe.copy()
+    df_class = dataset.dataframe_class.copy()
+    range_start, range_end = get_time_range(df, df_class, ts_id=time_series.id)
 
     return {
         'dataset': dataset,
@@ -136,8 +175,10 @@ def _lisa_pearson_default(maximize_score, dataset):
 
 
 def _lisa_dtw_default(maximize_score, dataset):
-    time_series = get_time_series_lisa_recommendation(dataset)
-    range_start, range_end = get_time_range(dataset)
+    time_series = get_time_series_recommendation(dataset)
+    df = dataset.dataframe.copy()
+    df_class = dataset.dataframe_class.copy()
+    range_start, range_end = get_time_range(df, df_class, ts_id=time_series.id)
 
     return {
         'dataset': dataset,
@@ -153,8 +194,10 @@ def _lisa_dtw_default(maximize_score, dataset):
 
 
 def _lisa_geo_default(maximize_score, dataset):
-    time_series = get_time_series_lisa_recommendation(dataset)
-    range_start, range_end = get_time_range(dataset)
+    time_series = get_time_series_recommendation(dataset)
+    df = dataset.dataframe.copy()
+    df_class = dataset.dataframe_class.copy()
+    range_start, range_end = get_time_range(df, df_class, ts_id=time_series.id)
 
     return {
         'dataset': dataset,
@@ -168,7 +211,9 @@ def _lisa_geo_default(maximize_score, dataset):
 
 def _rpca_default(maximize_score, dataset):
     training_dataset = get_training_dataset(dataset)
-    range_start, range_end = get_time_range(dataset)
+    df = dataset.dataframe.copy()
+    df_class = dataset.dataframe_class.copy()
+    range_start, range_end = get_time_range(df, df_class)
 
     return {
         'dataset': dataset,
@@ -185,7 +230,9 @@ def _rpca_default(maximize_score, dataset):
 
 def _histogram_default(maximize_score, dataset):
     training_dataset = get_training_dataset(dataset)
-    range_start, range_end = get_time_range(dataset)
+    df = dataset.dataframe.copy()
+    df_class = dataset.dataframe_class.copy()
+    range_start, range_end = get_time_range(df, df_class)
 
     return {
         'dataset': dataset,
@@ -200,7 +247,9 @@ def _histogram_default(maximize_score, dataset):
 
 def _cluster_default(maximize_score, dataset):
     training_dataset = get_training_dataset(dataset)
-    range_start, range_end = get_time_range(dataset)
+    df = dataset.dataframe.copy()
+    df_class = dataset.dataframe_class.copy()
+    range_start, range_end = get_time_range(df, df_class)
 
     return {
         'dataset': dataset,
@@ -217,7 +266,9 @@ def _cluster_default(maximize_score, dataset):
 
 def _svm_default(maximize_score, dataset):
     training_dataset = get_training_dataset(dataset)
-    range_start, range_end = get_time_range(dataset)
+    df = dataset.dataframe.copy()
+    df_class = dataset.dataframe_class.copy()
+    range_start, range_end = get_time_range(df, df_class)
 
     return {
         'dataset': dataset,
@@ -235,7 +286,9 @@ def _svm_default(maximize_score, dataset):
 
 def _isolation_forest_default(maximize_score, dataset):
     training_dataset = get_training_dataset(dataset)
-    range_start, range_end = get_time_range(dataset)
+    df = dataset.dataframe.copy()
+    df_class = dataset.dataframe_class.copy()
+    range_start, range_end = get_time_range(df, df_class)
 
     return {
         'dataset': dataset,

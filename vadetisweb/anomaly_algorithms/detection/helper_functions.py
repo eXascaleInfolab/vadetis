@@ -9,12 +9,12 @@ from vadetisweb.utils import unix_time_millis_to_dt, next_earlier_dt
 
 
 def df_range(df, df_class, range_start_millis, range_end_millis, start_offset=None):
-
     range_start = unix_time_millis_to_dt(range_start_millis)
     if start_offset is not None:
         range_start = next_earlier_dt(range_start, df.index.inferred_freq, start_offset - 1)
         if range_start < df.index[0]:
-            logging.warning("You selected a window size of {}, but first timestamp {} is out of bounds. Fallback to minimum index.".format(start_offset, range_start))
+            logging.warning(
+                "You selected a window size of {}, but first timestamp {} is out of bounds. Fallback to minimum index.".format(start_offset, range_start))
             range_start = df.index[0]
 
     range_end = unix_time_millis_to_dt(range_end_millis)
@@ -85,7 +85,7 @@ def get_max_score_index_for_score_type(threshold_scores, score_type):
     elif score_type == NMI:
         return threshold_scores[:, 4].argmax()
     elif score_type == RMSE:
-        return threshold_scores[:, 5].argmin() # best RMSE is lowest value
+        return threshold_scores[:, 5].argmin()  # best RMSE is lowest value
 
     raise ValueError
 
@@ -112,8 +112,8 @@ def estimate_score_bound(lower, higher):
     logging.debug('Threshold Normal: %f', higher)
     logging.debug('Threshold Anomaly: %f', lower)
 
-    higher_bound = (higher + np.abs((higher / 100) * 20)) #.astype(int)
-    lower_bound = (lower - np.abs((lower / 100) * 20)) #.astype(int)
+    higher_bound = (higher + np.abs((higher / 100) * 20))  # .astype(int)
+    lower_bound = (lower - np.abs((lower / 100) * 20))  # .astype(int)
 
     logging.debug('Higher Bound %f', higher_bound)
     logging.debug('Lower Bound %f', lower_bound)
@@ -126,29 +126,28 @@ def get_train_valid_sets(df_train, train_size=0.5, random_seed=10):
     Splits the training dataset into a train and validation set. Use this method for semi supervised techniques
     as those models should be trained with only normal data.
 
-    :param df_train: training data set with normal and anomalous data, should contain a class column to indicate anomalies
+    :param df_train: training data set with normal and anomalous data, should contain a "class" column to indicate anomalies
     :param train_size: the proportion of the dataset to include in the split
     :param random_seed: the seed used by the random number generator
 
-    :return: a train set of normal data, a valid test set of normal and anomalous data, a test set of normal and anomalous data
+    :return: a train set of normal data, a validation test set of normal and anomalous data
     """
     normal = df_train[df_train['class'] == False]
-    anomaly = df_train[df_train['class'] == True]
+    anomalous = df_train[df_train['class'] == True]
 
     train, normal_test, _, _ = train_test_split(normal, normal,
                                                 train_size=train_size,
                                                 random_state=random_seed)
 
     normal_valid, _, _, _ = train_test_split(normal_test, normal_test,
-                                                       train_size=train_size,
-                                                       random_state=random_seed)
+                                             train_size=train_size,
+                                             random_state=random_seed)
 
-    anormal_valid, _, _, _ = train_test_split(anomaly, anomaly,
-                                                         train_size=train_size,
-                                                         random_state=random_seed)
+    anomalous_valid, _, _, _ = train_test_split(anomalous, anomalous,
+                                                train_size=train_size,
+                                                random_state=random_seed)
 
-    valid = normal_valid.append(anormal_valid).sample(frac=1, random_state=random_seed)
-
+    valid = normal_valid.append(anomalous_valid).sample(frac=1, random_state=random_seed)
 
     logging.debug('Train shape: %s' % repr(train.shape))
     logging.debug('Valid shape: %s' % repr(valid.shape))

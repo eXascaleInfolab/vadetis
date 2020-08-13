@@ -184,7 +184,7 @@ var DatasetRecommendationForm = function () {
                                 highchart.hideLoading();
                                 $(":submit").attr("disabled", false);
                                 requestRecommendationSummaryPortlet(recommendation_summary_portlet_url, "recommendation_summary_portlet", function (data) {
-                                    $('#recommendation_portlet').remove();
+                                    $('#recommendation_summary_portlet').remove();
                                     $('#form_portlets').append(data);
                                     KTApp.initPortlet();
                                     KTApp.initTooltips();

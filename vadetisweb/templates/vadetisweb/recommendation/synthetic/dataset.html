@@ -85,7 +85,7 @@
                 </div>
                 <div class="kt-portlet__body kt-portlet__body--fit">
                     {% url 'vadetisweb:recommendation_scores' dataset_id=dataset.id  as recommendation_url %}
-                    {% include 'vadetisweb/parts/forms/serializer_variable_form.html' with formid="recommendation_form" url=recommendation_url form_serializer=recommendation_serializer submit_label="Compute" %}
+                    {% include 'vadetisweb/parts/forms/serializer_variable_form.html' with formid="recommendation_form" url=recommendation_url form_serializer=recommendation_serializer submit_label="Recommend" %}
                 </div>
             </div>
         </div>

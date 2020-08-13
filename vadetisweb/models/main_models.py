@@ -15,24 +15,6 @@ from vadetisweb.parameters import *
 # Vadetis Models
 #########################################################
 
-class Category(models.Model):
-    name = models.CharField(max_length=255, null=False, unique=True)
-    order = models.IntegerField(default=10, null=False, unique=False)
-
-    def __str__(self):
-        return '%s' % (self.name)
-
-
-class FrequentlyAskedQuestion(models.Model):
-    category = models.ForeignKey(Category, null=False, on_delete=models.CASCADE)
-
-    question = models.CharField(max_length=255, null=False)
-    answer = models.TextField(null=False, help_text="HTML allowed")
-
-    def __str__(self):
-        return '%s' % (self.question)
-
-
 class Location(models.Model):
     """
     The Location model holds the information about the location including label of a single time series.

@@ -1,4 +1,4 @@
-from vadetisweb.utils import get_detection_meta, get_threshold_scores
+from vadetisweb.utils import get_detection_meta, get_threshold_scores, min_max_normalization
 from .helper_functions import *
 from .rpca import *
 
@@ -77,6 +77,5 @@ def normalized_anomaly_scores(df_original, df_reconstructed):
 
     diff = np.sum((np.array(df_original) - np.array(df_reconstructed)) ** 2, axis=1)
     diff = pd.Series(data=diff, index=df_original.index)
-    diff = (diff - np.min(diff)) / (np.max(diff) - np.min(diff))
 
-    return diff
+    return min_max_normalization(diff)
