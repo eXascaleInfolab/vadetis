@@ -9,25 +9,19 @@
         <div id="collapse_detection1" class="collapse" aria-labelledby="heading_detection1" data-parent="#faq_detection_content">
             <div class="card-body">
                 <p>
-                    <strong>Histogram, Cluster, SVM, Isolation Forest</strong><br/>
-                    These methods use the selected proportion of normal data instances in the training dataset for semi-supervised learning.
-                    The rest of the normal data as well as outlier instances will be split by the given proportion to a validation set. For
-                    example: with a dataset of 1000 data instances containing 60 outlier instances and a proportion of 0.5, then the
-                    training set will contain 470 normal data instances, whereas the validation set contains 235 normal and 30 outlier
-                    instances. The validation set is used to determine the decision boundary (threshold). Data instances with a score below
-                    the threshold will be marked as anomalies.
+                    <strong>Histogram, Cluster, SVM, Isolation Forest, RPCA</strong><br/>
+                    Histogram, Cluster, SVM, Isolation Forest and RPCA use a selected proportion of normal data instances in the training dataset for
+                    semi-supervised learning. The rest of the normal data as well as outlier instances will be split by the given proportion to a validation
+                    set. No data instances are shared between training and validation sets. For example, given a dataset of 1000 data instances containing 60
+                    outlier data instances and a proportion of 0.5, then the training set will contain 470 normal data instances whereas the validation set
+                    contains 235 normal and 30 outlier instances. The validation set is used to determine the threshold for the decision boundary that maximizes
+                    a performance metric.
                 </p>
                 <p>
-                    <strong>RPCA</strong><br/>
-                    Training on RPCA directly splits the training data by the given proportion into a training and validation set
-                    so that both sets share the same level of contamination. Then, the model is fitted with the given training set computing
-                    the principal components and applied to the validation set reducing the dimensions. Afterwards the data is translated
-                    back to the original dimension space. The outliers scores are computed from the reconstruction error and the most
-                    appropriate decision boundary is set. Data instances with a score above the threshold will be marked as outliers.
-                </p>
-                <p>
-                    <strong>LISA</strong><br/>
-                    LISA is a statistical method that does not require training and is directly applied to the data.
+                    Afterwards, the trained model is applied on the evaluation dataset. Data instances with a score below the threshold will be marked as
+                    anomalies for Histogram, Cluster, SVM, Isolation Forest whereas RPCA marks outliers if they are above the threshold. Contrary to these
+                    techniques, LISA does not require training and is directly applied to the data. It marks points as outliers if their score is below the
+                    threshold.
                 </p>
             </div>
         </div>
@@ -48,7 +42,7 @@
                 <table style="border:1px solid black;">
                     <tbody>
                     <tr>
-                        <th style="background:white; border:none;" colspan="2" rowspan="2"> </th>
+                        <th style="background:white; border:none;" colspan="2" rowspan="2"></th>
                         <th colspan="2" style="background:none;">Predicted class</th>
                     </tr>
                     <tr>
@@ -76,33 +70,6 @@
         </div>
     </div>
     <div class="card">
-        <div class="card-header" id="heading_detection4">
-            <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse_detection4" aria-expanded="false"
-                 aria-controls="collapse_detection4">
-                What are the performance metrics and how are they defined?
-            </div>
-        </div>
-        <div id="collapse_detection4" class="collapse" aria-labelledby="heading_detection4" data-parent="#faq_detection_content">
-            <div class="card-body">
-                <p>
-                    The performance metrics are Accuracy, F1-Score, Precision or Recall.
-                </p>
-                <p>
-                    <span style="vertical-align:14px;">Accuracy = </span><span class="frac"><sup>TP + TN</sup> <span>/</span> <sub>TP + TN + FN + FP</sub></span>
-                </p>
-                <p>
-                    <span style="vertical-align:14px;">F1-Score = </span><span style="vertical-align:14px;">2 * </span><span class="frac"><sup>Precision * Recall</sup> <span>/</span> <sub>Precision + Recall</sub></span>
-                </p>
-                <p>
-                    <span style="vertical-align:14px;">Precision = </span><span class="frac"><sup>TP</sup> <span>/</span> <sub>TP + FP</sub></span>
-                </p>
-                <p>
-                    <span style="vertical-align:14px;">Recall = </span><span class="frac"><sup>TP</sup> <span>/</span> <sub>TP + FN</sub></span>
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="card">
         <div class="card-header" id="heading_detection2">
             <div class="card-title collapsed" data-toggle="collapse" data-target="#collapse_detection2" aria-expanded="false"
                  aria-controls="collapse_detection2">
@@ -113,7 +80,7 @@
             <div class="card-body">
                 <p>
                     The tool always validates 200 threshold candidates from range 0 to 1. Because the data is supervised the performance can be computed
-                    for each threshold candidate. Depending on the score type (Accuracy, F1-Score, Precision or Recall)
+                    for each threshold candidate. Depending on the score type (NMI, RMSE, Accuracy, F1-Score, Precision or Recall)
                     which is selected to be maximized, the tool will select the most appropriate that maximizes the selected performance metric.
                 </p>
             </div>
