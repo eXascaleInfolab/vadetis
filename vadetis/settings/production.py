@@ -5,7 +5,7 @@ from .common import *
 DEBUG = False
 
 # You will have to determine, which hostnames should be served by Django
-ALLOWED_HOSTS = ['vadetis.exascale.info']
+ALLOWED_HOSTS = ['localhost', 'vadetis.exascale.info']
 
 # ##### DATABASE CONFIGURATION ############################
 
@@ -20,6 +20,10 @@ DATABASES = {
         'PORT': '3306',
     }
 }
+
+# ##### APPLICATION CONFIGURATION #########################
+
+INSTALLED_APPS = DEFAULT_APPS
 
 # ##### SECURITY CONFIGURATION ############################
 

@@ -3,6 +3,9 @@
 Vadetis is web application to perform, compare and validate various anomaly detection algorithms using different configurations. It allows users to upload their own datasets as well as training data in order to perform outlier detection. The datasets can either be shared with other users or only be used by yourself. 
 The datasets can be altered by injecting additional outliers.
 
+python3 manage.py makemigrations --settings vadetis.settings.development
+
+
 ## Prerequisites
 
 ### MySQL
@@ -154,5 +157,5 @@ A common location to put this configuration is /etc/apache2/envvars.
 ## Jupyter Notebook
 To start Jupyter notebook with Django shell execute from started venv in the main application folder:
 ```bash
-env DJANGO_ALLOW_ASYNC_UNSAFE=true ./manage.py shell_plus --notebook
+env DJANGO_ALLOW_ASYNC_UNSAFE=true ./manage.py shell_plus --notebook --settings vadetis.settings.development
 ```
