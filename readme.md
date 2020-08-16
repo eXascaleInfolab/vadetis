@@ -3,14 +3,14 @@
 Vadetis is web application to perform, compare and validate various anomaly detection algorithms using different configurations. It allows users to upload their own datasets as well as training data in order to perform outlier detection. The datasets can either be shared with other users or only be used by yourself. 
 The datasets can be altered by injecting additional outliers.
 
-python3 manage.py makemigrations --settings vadetis.settings.development
-
 
 ## Prerequisites
 
-### MySQL
-There are two settings.py configuration files. One for development usage and one for productive environment. 
-In order to start, install a MySQL 5.x, create a database and make the necessary configuration in the settings.py files. 
+There are two settings.py configuration files (development.py and production.py). One for development usage and one for productive environment. 
+Common settings are defined in the common.py file.
+
+### MySQL 
+In order to start, install a MySQL 5.x, create a database and make the necessary configuration in development.py and production.py files. 
 ```
 DATABASES = {
     'default': {
@@ -34,13 +34,52 @@ sudo apt install python3.7-venv
 
 ## Development
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
-
+### Database
+In order to setup the database go to the main application folder of Vadetis, where the manage.py file is located and run:
 ```bash
-pip install foobar
+python3 manage.py makemigrations --settings vadetis.settings.development
+python3 manage.py migrate --settings vadetis.settings.development
+```
+Create an admin user
+```bash
+python3 manage.py createsuperuser
 ```
 
+### venv
+Make a virtual env for development and install all requirements:
+```bash
+python3 -m venv /path/to/new/virtual/environment
+cd /path/to/new/virtual/environment
+source bin/activate
+pip3 install -r /path/to/vadetis/requirements.txt
+deactivate
+```
+
+### PyCharm
+
+In PyCharm configure the newly created virtual environment and make sure you set the correct interpreter. 
+To run Django you can use the integrated Django template with the correct settings under the environment variables.
+```
+PYTHONUNBUFFERED=1;DJANGO_SETTINGS_MODULE=vadetis.settings.development
+```
+
+### Site
+
+
+### Useful Links
+Swagger REST Interface http://localhost:8000/swagger
+
+Django Admin Backend http://localhost:8000/admin 
+
 ## Deployment
+
+### Database
+
+
+```bash
+python3 manage.py makemigrations --settings vadetis.settings.production
+python3 manage.py migrate --settings vadetis.settings.development
+```
 
 ### Apache
 
