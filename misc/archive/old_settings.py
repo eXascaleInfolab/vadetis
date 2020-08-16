@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'u)0a*o(9z(*wcrj8$wq421r0g&4xd0@e&2)2kzum5p2=9@=_z9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -77,9 +77,9 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),  # global templates, e.g. admin backend
-            os.path.join(BASE_DIR, 'vadetisweb', 'templates'),  # vadetisweb site templates
-            os.path.join(BASE_DIR, 'vadetisweb', 'templates', 'allauth')  # vadetisweb allauth templates
+            os.path.join(BASE_DIR, '../../templates'),  # global templates, e.g. admin backend
+            os.path.join(BASE_DIR, '../../vadetisweb', 'templates'),  # vadetisweb site templates
+            os.path.join(BASE_DIR, '../../vadetisweb', 'templates', 'allauth')  # vadetisweb allauth templates
         ],
         'APP_DIRS': True,
         'OPTIONS': {
