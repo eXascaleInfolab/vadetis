@@ -117,7 +117,6 @@ var VadetisHighcharts = function () {
             },
 
             yAxis: [{
-                floor: -40,
                 title: {
                     text: '',
                 },
