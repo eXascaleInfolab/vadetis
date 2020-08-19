@@ -83,10 +83,22 @@ source $venv_dir/bin/activate
 pip3 install -r requirements.txt
 deactivate
 
-# ENABLE APACHE EXTENSION
-
+# APACHE VHOST
+sudo envsubst "$server_name $server_admin $project_directory $project_name $venv_dir" < ./misc/apache2_vhosts.sample.conf | sudo tee /etc/apache/sites-available/$project_name.conf
 
 # SETUP DJANGO
+echo "Install Django"
+virtualenv -q -p /usr/bin/python3.7 $venv_dir
+source $venv_dir/bin/activate
+python3 manage.py makemigrations --settings vadetis.settings.production
+python3 manage.py migrate --settings vadetis.settings.production
+python3 manage.py createsuperuser
+deactivate
 
+# ENABLE APACHE EXTENSIONS
+sudo a2enmod mod_wsgi
+sudo a2ensite $project_name
+sudo service apache2 reload
+sudo service apache2 restart
 
 echo "Vadetis Installation: DONE"
