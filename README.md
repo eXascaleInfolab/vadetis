@@ -53,7 +53,7 @@ python3 manage.py migrate --settings vadetis.settings.development
 ```
 Create an admin user
 ```bash
-python3 manage.py createsuperuser
+python3 manage.py createsuperuser --settings vadetis.settings.development
 ```
 
 

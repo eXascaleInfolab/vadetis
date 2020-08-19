@@ -90,12 +90,19 @@ sudo envsubst "$server_name $server_admin $project_directory $project_name $venv
 echo "Install Django"
 virtualenv -q -p /usr/bin/python3.7 $venv_dir
 source $venv_dir/bin/activate
-python3 manage.py makemigrations --settings vadetis.settings.production
-python3 manage.py migrate --settings vadetis.settings.production
-python3 manage.py createsuperuser
+python3 $project_directory/manage.py makemigrations --settings vadetis.settings.production
+python3 $project_directory/manage.py migrate --settings vadetis.settings.production
+python3 $project_directory/manage.py createsuperuser --settings vadetis.settings.production
+python3 $project_directory/manage.py collectstatic --settings vadetis.settings.production
 deactivate
 
 # ENABLE APACHE EXTENSIONS
+if ! grep -q "export LANG" "/etc/apache2/envvars"; then
+  sudo echo "export LANG='en_US.UTF-8'" | sudo tee /etc/apache2/envvars
+fi
+if ! grep -q "export LC_ALL" "/etc/apache2/envvars"; then
+  sudo echo "export LC_ALL='en_US.UTF-8'" | sudo tee /etc/apache2/envvars
+fi
 sudo a2enmod mod_wsgi
 sudo a2ensite $project_name
 sudo service apache2 reload
