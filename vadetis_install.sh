@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "Vadetis Installation: START"
 
-# PRE INSTALL
+## PRE INSTALL
 sudo apt update
 
 # MySQL
@@ -55,12 +55,12 @@ sudo mkdir -p $venv_dir
 
 # COPY CONTENTS
 echo "Copy files"
-sudo \cp build $project_directory
-sudo \cp run $project_directory
-sudo \cp static $project_directory
-sudo \cp templates $project_directory
-sudo \cp vadetis $project_directory
-sudo \cp vadetisweb $project_directory
+sudo \cp -r build $project_directory
+sudo \cp -r run $project_directory
+sudo \cp -r static $project_directory
+sudo \cp -r templates $project_directory
+sudo \cp -r vadetis $project_directory
+sudo \cp -r vadetisweb $project_directory
 sudo \cp *.py $project_directory
 sudo \cp requirements.txt $project_directory
 sudo \cp README.md $project_directory
@@ -84,7 +84,8 @@ pip3 install -r requirements.txt
 deactivate
 
 # APACHE VHOST
-sudo envsubst "$server_name $server_admin $project_directory $project_name $venv_dir" < ./misc/apache2_vhosts.sample.conf | sudo tee /etc/apache/sites-available/$project_name.conf
+echo "Create VHOST Config"
+sed -e "s|\${server_name}|$server_name|" -e "s|\${server_admin}|$server_admin|" -e "s|\${project_directory}|$project_directory|" -e "s/\${project_name}/$project_name/" -e "s|\${venv_dir}|$venv_dir|" ./misc/apache_tpl/apache2_vhost.sample.conf | sudo tee /etc/apache2/sites-available/$project_name.conf
 
 # SETUP DJANGO
 echo "Install Django"
@@ -92,16 +93,17 @@ virtualenv -q -p /usr/bin/python3.7 $venv_dir
 source $venv_dir/bin/activate
 python3 $project_directory/manage.py makemigrations --settings vadetis.settings.production
 python3 $project_directory/manage.py migrate --settings vadetis.settings.production
+echo "Create Django Admin User"
 python3 $project_directory/manage.py createsuperuser --settings vadetis.settings.production
 python3 $project_directory/manage.py collectstatic --settings vadetis.settings.production
 deactivate
 
 # ENABLE APACHE EXTENSIONS
 if ! grep -q "export LANG" "/etc/apache2/envvars"; then
-  sudo echo "export LANG='en_US.UTF-8'" | sudo tee /etc/apache2/envvars
+  sudo echo "export LANG='en_US.UTF-8'" | sudo tee -a /etc/apache2/envvars
 fi
 if ! grep -q "export LC_ALL" "/etc/apache2/envvars"; then
-  sudo echo "export LC_ALL='en_US.UTF-8'" | sudo tee /etc/apache2/envvars
+  sudo echo "export LC_ALL='en_US.UTF-8'" | sudo tee -a /etc/apache2/envvars
 fi
 sudo a2enmod mod_wsgi
 sudo a2ensite $project_name
