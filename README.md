@@ -85,8 +85,16 @@ To start Jupyter notebook with Django shell execute from started venv in the mai
 env DJANGO_ALLOW_ASYNC_UNSAFE=true ./manage.py shell_plus --notebook --settings vadetis.settings.development
 ```
 
+## Automatic Deployment
 
-## Deployment
+Run the vadetis_install.sh script from the main application folder. 
+It's tested on Ubuntu 18.04 and changes may be needed if you are running a different OS.
+
+```bash
+./vadetis_install.sh
+```
+
+## Manual Deployment
 
 ### Copy contents
 Copy the contents of Vadetis into the sites folder for apache, e.g. /var/www/vadetis.exascale.info
