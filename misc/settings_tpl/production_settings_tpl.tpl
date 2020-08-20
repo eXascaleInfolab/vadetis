@@ -5,7 +5,7 @@ from .common import *
 DEBUG = False
 
 # You will have to determine, which hostnames should be served by Django
-ALLOWED_HOSTS = ['localhost', 'vadetis.exascale.info']
+ALLOWED_HOSTS = ['localhost', '${server_name}']
 
 # ##### DATABASE CONFIGURATION ############################
 
@@ -13,9 +13,9 @@ ALLOWED_HOSTS = ['localhost', 'vadetis.exascale.info']
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'vadetisv2',
-        'USER': 'vadetisadmin',
-        'PASSWORD': 'Cast40analysts5Roofing',
+        'NAME': '${project_name}',
+        'USER': '${vadetis_db_user}',
+        'PASSWORD': '${db_user_pw}',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }

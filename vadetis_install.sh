@@ -1,32 +1,51 @@
 #!/bin/bash
 echo "Vadetis Installation: START"
 
-### PRE INSTALL
+#### PRE INSTALL
 sudo apt update
 
-# MySQL
+## MySQL
 sudo apt install mysql-server
 # Run the MySQL Secure Installation wizard, utility prompts you to define the mysql root password and other security-related options
 sudo mysql_secure_installation utility
 sudo systemctl start mysql
 sudo systemctl enable mysql
 
+# CONFIGURATION
+read -p "Enter domain [default: vadetis.exascale.info]: " server_name
+server_name=${server_name:-vadetis.exascale.info}
+read -p "Enter server admin [default: webmaster@vadetis.exascale.info]: " server_admin
+server_admin=${server_admin:-webmaster@vadetis.exascale.info}
+read -p "Enter project directory [default: /var/www/vadetis.exascale.info]: " project_directory
+project_directory=${project_directory:-/var/www/vadetis.exascale.info}
+sudo mkdir -p $project_directory
+read -p "Enter project name [default: vadetis]: " project_name
+project_name=${project_name:-vadetis}
+read -p "Enter venv directory [default: /usr/local/venvs/venv_vadetis]: " venv_dir
+venv_dir=${venv_dir:-/usr/local/venvs/venv_vadetis}
+sudo mkdir -p $venv_dir
+
+read -p "Enter database user [default: vadetisadmin]: " vadetis_db_user
+vadetis_db_user=${vadetis_db_user:-vadetisadmin}
+read -p "Enter database user password [default: Cast40analysts5Roofing]: " db_user_pw
+db_user_pw=${db_user_pw:-Cast40analysts5Roofing}
+
 # INSTALL DATABASE
-read -s -p "Enter MySQL Root Password: " mysql_password
+read -s -p "Enter MySQL ROOT Password: " mysql_password
 echo "Install database... "
 mysql_password="$mysql_password"
 echo "Drop existing schema..."
-mysql -u root --password="$mysql_password" -h localhost -e '
-DROP SCHEMA IF EXISTS vadetisv2;
-'
+mysql -u root --password="$mysql_password" -h localhost -e "
+DROP SCHEMA IF EXISTS $project_name;
+"
 echo "Create new schema..."
-mysql -u root --password="$mysql_password" -h localhost -e '
-CREATE SCHEMA vadetisv2 DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_general_ci;
-'
+mysql -u root --password="$mysql_password" -h localhost -e "
+CREATE SCHEMA $project_name DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_general_ci;
+"
 echo "Create mysql user..."
 mysql -u root --password="$mysql_password" -h localhost -e "
-CREATE USER IF NOT EXISTS 'vadetisadmin'@'localhost' IDENTIFIED BY 'Cast40analysts5Roofing';
-GRANT ALL PRIVILEGES ON vadetisv2.* TO 'vadetisadmin'@'localhost';
+CREATE USER IF NOT EXISTS $vadetis_db_user@'localhost' IDENTIFIED BY '$db_user_pw';
+GRANT ALL PRIVILEGES ON $project_name.* TO $vadetis_db_user@'localhost';
 FLUSH PRIVILEGES;
 "
 echo "Install database done"
@@ -52,21 +71,7 @@ sudo echo "LoadModule wsgi_module /usr/lib/apache2/modules/mod_wsgi.so" | sudo t
 cd ..
 sudo rm -rf mod_wsgi-4.7.1
 
-# CONFIGURATION
-read -p "Enter domain [default: vadetis.exascale.info]: " server_name
-server_name=${server_name:-vadetis.exascale.info}
-read -p "Enter server admin [default: webmaster@vadetis.exascale.info]: " server_admin
-server_admin=${server_admin:-webmaster@vadetis.exascale.info}
-read -p "Enter project directory [default: /var/www/vadetis.exascale.info]: " project_directory
-project_directory=${project_directory:-/var/www/vadetis.exascale.info}
-sudo mkdir -p $project_directory
-read -p "Enter project name [default: vadetis]: " project_name
-project_name=${project_name:-vadetis}
-read -p "Enter venv directory [default: /usr/local/venvs/venv_vadetis]: " venv_dir
-venv_dir=${venv_dir:-/usr/local/venvs/venv_vadetis}
-sudo mkdir -p $venv_dir
-
-## COPY CONTENTS
+# COPY CONTENTS
 echo "Copy files"
 sudo \cp -r build $project_directory
 sudo \cp -r run $project_directory
@@ -78,16 +83,19 @@ sudo \cp *.py $project_directory
 sudo \cp requirements.txt $project_directory
 sudo \cp README.md $project_directory
 
+# PRODUCTIVE SETTINGS
+sed -e "s|\${server_name}|$server_name|" -e "s/\${project_name}/$project_name/" -e "s|\${vadetis_db_user}|$vadetis_db_user|" -e "s|\${db_user_pw}|$db_user_pw|" ./misc/settings_tpl/production_settings_tpl.tpl | sudo tee $project_directory/vadetis/settings/production.py
+
 # SET RIGHTS
-# Adding current user to www-data
+ Adding current user to www-data
 sudo adduser $USER www-data
-# change ownership to user:www-data and
+ change ownership to user:www-data and
 sudo chown $USER:www-data -R $project_directory
 sudo chmod u=rwX,g=srX,o=rX -R $project_directory
 sudo chown $USER:www-data -R $venv_dir
 sudo chmod u=rwX,g=srX,o=rX -R $venv_dir
 
-# change file permissions of existing files and folders to 755/644
+ change file permissions of existing files and folders to 755/644
 sudo find $project_directory -type d -exec chmod g=rwxs "{}" \;
 sudo find $project_directory -type f -exec chmod g=rws "{}" \;
 sudo find $venv_dir -type d -exec chmod g=rwxs "{}" \;
@@ -121,6 +129,10 @@ fi
 if ! grep -q "export LC_ALL" "/etc/apache2/envvars"; then
   sudo echo "export LC_ALL='en_US.UTF-8'" | sudo tee -a /etc/apache2/envvars
 fi
+if ! grep -q "127.0.0.1  $server_name" "/etc/hosts"; then
+  sudo echo "$server_name not in /etc/hosts, will append.."
+  sudo echo "127.0.0.1  $server_name" | sudo tee -a /etc/hosts
+fi
 sudo a2enmod mod_wsgi
 sudo a2dissite 000-default
 sudo a2ensite $project_name
@@ -128,4 +140,5 @@ sudo service apache2 reload
 sudo service apache2 restart
 
 echo "Vadetis Installation: DONE"
-echo "You may have to edit your /etc/hosts file according to your network configuration."
+echo "You may have to check your /etc/hosts file according to your network configuration."
+echo "Check the production.py settings file in the deployment folder for additional security settings."
