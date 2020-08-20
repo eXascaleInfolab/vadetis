@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "Vadetis Installation: START"
 
-## PRE INSTALL
+### PRE INSTALL
 sudo apt update
 
 # MySQL
@@ -37,7 +37,20 @@ sudo apt install python3.7 python3-pip python3.7-venv
 
 # APACHE2
 echo "Install Apache2"
-sudo apt install apache2 apache2-dev apache2-utils ssl-cert libapache2-mod-wsgi
+sudo apt install apache2 apache2-dev apache2-utils ssl-cert
+
+# INSTALL MOD WSGI
+echo "Install MOD WSGI"
+wget https://github.com/GrahamDumpleton/mod_wsgi/archive/4.7.1.tar.gz
+tar xvfz 4.7.1.tar.gz
+sudo rm -rf 4.7.1.tar.gz
+cd mod_wsgi-4.7.1/
+./configure --with-python=/usr/bin/python3.7
+sudo make
+sudo make install
+sudo echo "LoadModule wsgi_module /usr/lib/apache2/modules/mod_wsgi.so" | sudo tee /etc/apache2/mods-available/mod_wsgi.load
+cd ..
+sudo rm -rf mod_wsgi-4.7.1
 
 # CONFIGURATION
 read -p "Enter domain [default: vadetis.exascale.info]: " server_name
@@ -53,7 +66,7 @@ read -p "Enter venv directory [default: /usr/local/venvs/venv_vadetis]: " venv_d
 venv_dir=${venv_dir:-/usr/local/venvs/venv_vadetis}
 sudo mkdir -p $venv_dir
 
-# COPY CONTENTS
+## COPY CONTENTS
 echo "Copy files"
 sudo \cp -r build $project_directory
 sudo \cp -r run $project_directory
@@ -71,43 +84,48 @@ sudo adduser $USER www-data
 # change ownership to user:www-data and
 sudo chown $USER:www-data -R $project_directory
 sudo chmod u=rwX,g=srX,o=rX -R $project_directory
+sudo chown $USER:www-data -R $venv_dir
+sudo chmod u=rwX,g=srX,o=rX -R $venv_dir
 
 # change file permissions of existing files and folders to 755/644
 sudo find $project_directory -type d -exec chmod g=rwxs "{}" \;
 sudo find $project_directory -type f -exec chmod g=rws "{}" \;
+sudo find $venv_dir -type d -exec chmod g=rwxs "{}" \;
+sudo find $venv_dir -type f -exec chmod g=rws "{}" \;
 
 # INSTALL PYTHON REQUIREMENTS
 echo "Install Python Requirements"
-virtualenv -q -p /usr/bin/python3.7 $venv_dir
+#virtualenv -q -p /usr/bin/python3.7 $venv_dir
+python3.7 -m venv $venv_dir
 source $venv_dir/bin/activate
 pip3 install -r requirements.txt
 deactivate
-
-# APACHE VHOST
+#
+## APACHE VHOST
 echo "Create VHOST Config"
 sed -e "s|\${server_name}|$server_name|" -e "s|\${server_admin}|$server_admin|" -e "s|\${project_directory}|$project_directory|" -e "s/\${project_name}/$project_name/" -e "s|\${venv_dir}|$venv_dir|" ./misc/apache_tpl/apache2_vhost.sample.conf | sudo tee /etc/apache2/sites-available/$project_name.conf
 
 # SETUP DJANGO
 echo "Install Django"
-virtualenv -q -p /usr/bin/python3.7 $venv_dir
 source $venv_dir/bin/activate
 python3 $project_directory/manage.py makemigrations --settings vadetis.settings.production
 python3 $project_directory/manage.py migrate --settings vadetis.settings.production
-echo "Create Django Admin User"
 python3 $project_directory/manage.py createsuperuser --settings vadetis.settings.production
 python3 $project_directory/manage.py collectstatic --settings vadetis.settings.production
 deactivate
 
-# ENABLE APACHE EXTENSIONS
-if ! grep -q "export LANG" "/etc/apache2/envvars"; then
+ ENABLE APACHE EXTENSIONS
+if ! grep -q "export LANG='en_US.UTF-8'" "/etc/apache2/envvars"; then
   sudo echo "export LANG='en_US.UTF-8'" | sudo tee -a /etc/apache2/envvars
 fi
 if ! grep -q "export LC_ALL" "/etc/apache2/envvars"; then
   sudo echo "export LC_ALL='en_US.UTF-8'" | sudo tee -a /etc/apache2/envvars
 fi
 sudo a2enmod mod_wsgi
+sudo a2dissite 000-default
 sudo a2ensite $project_name
 sudo service apache2 reload
 sudo service apache2 restart
 
 echo "Vadetis Installation: DONE"
+echo "You may have to edit your /etc/hosts file according to your network configuration."
