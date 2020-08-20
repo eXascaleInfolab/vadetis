@@ -89,13 +89,13 @@ sed -e "s|\${server_name}|$server_name|" -e "s/\${project_name}/$project_name/" 
 # SET RIGHTS
  Adding current user to www-data
 sudo adduser $USER www-data
- change ownership to user:www-data and
+# change ownership to user:www-data and
 sudo chown $USER:www-data -R $project_directory
 sudo chmod u=rwX,g=srX,o=rX -R $project_directory
 sudo chown $USER:www-data -R $venv_dir
 sudo chmod u=rwX,g=srX,o=rX -R $venv_dir
 
- change file permissions of existing files and folders to 755/644
+# change file permissions of existing files and folders to 755/644
 sudo find $project_directory -type d -exec chmod g=rwxs "{}" \;
 sudo find $project_directory -type f -exec chmod g=rws "{}" \;
 sudo find $venv_dir -type d -exec chmod g=rwxs "{}" \;
@@ -103,7 +103,6 @@ sudo find $venv_dir -type f -exec chmod g=rws "{}" \;
 
 # INSTALL PYTHON REQUIREMENTS
 echo "Install Python Requirements"
-#virtualenv -q -p /usr/bin/python3.7 $venv_dir
 python3.7 -m venv $venv_dir
 source $venv_dir/bin/activate
 pip3 install -r requirements.txt
@@ -122,13 +121,20 @@ python3 $project_directory/manage.py createsuperuser --settings vadetis.settings
 python3 $project_directory/manage.py collectstatic --settings vadetis.settings.production
 deactivate
 
- ENABLE APACHE EXTENSIONS
+# ENABLE APACHE EXTENSIONS
 if ! grep -q "export LANG='en_US.UTF-8'" "/etc/apache2/envvars"; then
   sudo echo "export LANG='en_US.UTF-8'" | sudo tee -a /etc/apache2/envvars
 fi
 if ! grep -q "export LC_ALL" "/etc/apache2/envvars"; then
   sudo echo "export LC_ALL='en_US.UTF-8'" | sudo tee -a /etc/apache2/envvars
 fi
+
+# ACTIVATE ALL DJANGO USERS
+mysql -u root --password="$mysql_password" -h localhost -e "
+UPDATE $project_name.account_emailaddress SET verified=1 WHERE verified = 0;
+"
+
+# etc/hosts
 if ! grep -q "127.0.0.1  $server_name" "/etc/hosts"; then
   sudo echo "$server_name not in /etc/hosts, will append.."
   sudo echo "127.0.0.1  $server_name" | sudo tee -a /etc/hosts
