@@ -132,7 +132,7 @@ fi
 
 # ACTIVATE ALL DJANGO USERS and SET DJANGO SITE
 mysql -u root --password="$mysql_password" -h localhost -e "
-UPDATE $project_name.account_emailaddress SET verified=1 WHERE verified = 0;
+INSERT INTO $project_name.account_emailaddress (email, verified, \`primary\`, user_id) SELECT u.email, 1, 0, u.id FROM $project_name.auth_user u WHERE u.is_superuser = 1;
 DELETE FROM $project_name.django_site;
 INSERT INTO $project_name.django_site (id, domain, name) VALUES (1, '$server_name', 'Vadetis');
 "
