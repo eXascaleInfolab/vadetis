@@ -196,14 +196,6 @@ LANGUAGE_COOKIE_SAMESITE = 'Lax'
 RECAPTCHA_PUBLIC_KEY = '6Lc452UUAAAAAFYADmbUZgYf7qBx3A8i-nnLUde2'
 RECAPTCHA_PRIVATE_KEY = '6Lc452UUAAAAAA-XsnkMfh7xA-HhzN8Oliq4dZED'
 
-# MAILING - CHANGE MAIL SETTINGS WHEN GOING PRODUCTION!
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'lisaexascale@gmail.com'
-EMAIL_HOST_PASSWORD = 'svQcdxXQ'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
 # MAP BOX - ACCOUNT
 MAPBOX_USER = 'vadetis'
 MAPBOX_ACCOUNT = 'lisaexascale@gmail.com'
@@ -225,10 +217,10 @@ BREADCRUMBS_TEMPLATE = 'vadetisweb/parts/breadcrumbs.html'
 SECRET_FILE = normpath(join(PROJECT_ROOT, 'run', 'SECRET.key'))
 
 # these persons receive error notification
-ADMINS = (
-    ('your name', 'your_name@example.com'),
-)
-MANAGERS = ADMINS
+# ADMINS = (
+#     ('your name', 'your_name@example.com'),
+# )
+# MANAGERS = ADMINS
 
 # ##### DJANGO RUNNING CONFIGURATION ######################
 

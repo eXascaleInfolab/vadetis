@@ -12,6 +12,7 @@ sudo systemctl start mysql
 sudo systemctl enable mysql
 
 # CONFIGURATION
+echo "Leave blank to use default values"
 read -p "Enter domain [default: vadetis.exascale.info]: " server_name
 server_name=${server_name:-vadetis.exascale.info}
 read -p "Enter server admin [default: webmaster@vadetis.exascale.info]: " server_admin
@@ -29,6 +30,15 @@ read -p "Enter database user [default: vadetisadmin]: " vadetis_db_user
 vadetis_db_user=${vadetis_db_user:-vadetisadmin}
 read -p "Enter database user password [default: Cast40analysts5Roofing]: " db_user_pw
 db_user_pw=${db_user_pw:-Cast40analysts5Roofing}
+
+read -p "Enter SMTP host [default: smtp.gmail.com]: " smtp_host
+smtp_host=${smtp_host:-smtp.gmail.com}
+read -p "Enter SMTP port [default: 587]: " smtp_port
+smtp_port=${smtp_port:-587}
+read -p "Enter mail user [default: lisaexascale@gmail.com]: " mail_user
+mail_user=${mail_user:-lisaexascale@gmail.com}
+read -p "Enter mail user password [default: svQcdxXQ]: " mail_user_pwd
+mail_user_pwd=${mail_user_pwd:-svQcdxXQ}
 
 # INSTALL DATABASE
 read -s -p "Enter MySQL ROOT Password: " mysql_password
@@ -84,7 +94,7 @@ sudo \cp requirements.txt $project_directory
 sudo \cp README.md $project_directory
 
 # PRODUCTIVE SETTINGS
-sed -e "s|\${server_name}|$server_name|" -e "s/\${project_name}/$project_name/" -e "s|\${vadetis_db_user}|$vadetis_db_user|" -e "s|\${db_user_pw}|$db_user_pw|" ./misc/settings_tpl/production_settings_tpl.tpl | sudo tee $project_directory/vadetis/settings/production.py
+sed -e "s|\${server_name}|$server_name|" -e "s/\${project_name}/$project_name/" -e "s|\${vadetis_db_user}|$vadetis_db_user|" -e "s|\${db_user_pw}|$db_user_pw|" -e "s|\${smtp_host}|$smtp_host|" -e "s|\${smtp_port}|$smtp_port|" -e "s|\${mail_user}|$mail_user|" -e "s|\${mail_user_pwd}|$mail_user_pwd|" ./misc/settings_tpl/production_settings_tpl.tpl | sudo tee $project_directory/vadetis/settings/production.py
 
 # SET RIGHTS
 # Adding current user to www-data
@@ -142,6 +152,8 @@ if ! grep -q "127.0.0.1  $server_name" "/etc/hosts"; then
   sudo echo "$server_name not in /etc/hosts, will append.."
   sudo echo "127.0.0.1  $server_name" | sudo tee -a /etc/hosts
 fi
+
+# CONFIGURE AND START APACHE
 sudo a2enmod mod_wsgi
 sudo a2dissite 000-default
 sudo a2ensite $project_name
@@ -150,4 +162,4 @@ sudo service apache2 restart
 
 echo "Vadetis Installation: DONE"
 echo "You may have to check your /etc/hosts file according to your network configuration."
-echo "Check the production.py settings file in the deployment folder for additional security settings and common.py for mail settings."
+echo "Check the production.py settings file in the deployment folder for additional security settings."
