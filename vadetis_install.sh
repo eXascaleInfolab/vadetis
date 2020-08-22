@@ -1,10 +1,10 @@
 #!/bin/bash
 echo "Vadetis Installation: START"
 
-#### PRE INSTALL
+# PRE INSTALL
 sudo apt update
 
-## MySQL
+# MySQL
 sudo apt install mysql-server
 # Run the MySQL Secure Installation wizard, utility prompts you to define the mysql root password and other security-related options
 sudo mysql_secure_installation utility
@@ -87,9 +87,9 @@ sudo \cp README.md $project_directory
 sed -e "s|\${server_name}|$server_name|" -e "s/\${project_name}/$project_name/" -e "s|\${vadetis_db_user}|$vadetis_db_user|" -e "s|\${db_user_pw}|$db_user_pw|" ./misc/settings_tpl/production_settings_tpl.tpl | sudo tee $project_directory/vadetis/settings/production.py
 
 # SET RIGHTS
- Adding current user to www-data
+# Adding current user to www-data
 sudo adduser $USER www-data
-# change ownership to user:www-data and
+# Change ownership to user:www-data and
 sudo chown $USER:www-data -R $project_directory
 sudo chmod u=rwX,g=srX,o=rX -R $project_directory
 sudo chown $USER:www-data -R $venv_dir
@@ -107,8 +107,8 @@ python3.7 -m venv $venv_dir
 source $venv_dir/bin/activate
 pip3 install -r requirements.txt
 deactivate
-#
-## APACHE VHOST
+
+# APACHE VHOST
 echo "Create VHOST Config"
 sed -e "s|\${server_name}|$server_name|" -e "s|\${server_admin}|$server_admin|" -e "s|\${project_directory}|$project_directory|" -e "s/\${project_name}/$project_name/" -e "s|\${venv_dir}|$venv_dir|" ./misc/apache_tpl/apache2_vhost.sample.conf | sudo tee /etc/apache2/sites-available/$project_name.conf
 
@@ -117,6 +117,7 @@ echo "Install Django"
 source $venv_dir/bin/activate
 python3 $project_directory/manage.py makemigrations --settings vadetis.settings.production
 python3 $project_directory/manage.py migrate --settings vadetis.settings.production
+echo "Create Django Admin User..."
 python3 $project_directory/manage.py createsuperuser --settings vadetis.settings.production
 python3 $project_directory/manage.py collectstatic --settings vadetis.settings.production
 deactivate
@@ -129,9 +130,11 @@ if ! grep -q "export LC_ALL" "/etc/apache2/envvars"; then
   sudo echo "export LC_ALL='en_US.UTF-8'" | sudo tee -a /etc/apache2/envvars
 fi
 
-# ACTIVATE ALL DJANGO USERS
+# ACTIVATE ALL DJANGO USERS and SET DJANGO SITE
 mysql -u root --password="$mysql_password" -h localhost -e "
 UPDATE $project_name.account_emailaddress SET verified=1 WHERE verified = 0;
+DELETE FROM $project_name.django_site;
+INSERT INTO $project_name.django_site (id, domain, name) VALUES (1, '$server_name', 'Vadetis');
 "
 
 # etc/hosts
@@ -147,4 +150,4 @@ sudo service apache2 restart
 
 echo "Vadetis Installation: DONE"
 echo "You may have to check your /etc/hosts file according to your network configuration."
-echo "Check the production.py settings file in the deployment folder for additional security settings."
+echo "Check the production.py settings file in the deployment folder for additional security settings and common.py for mail settings."
