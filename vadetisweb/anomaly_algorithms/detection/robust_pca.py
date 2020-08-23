@@ -53,7 +53,7 @@ def robust_pca_huber_loss(df, df_class, df_train, df_train_class, delta=1, n_com
 
     y_hat_results = (scores > selected_threshold).astype(int)
     y_truth = df_common_class.values.astype(int)
-    detection_threshold_scores = get_threshold_scores(thresholds, scores, df_common_class['class'])
+    detection_threshold_scores = get_threshold_scores(thresholds, scores, df_common_class['class'], upper_boundary=True)
     info = get_detection_meta(selected_threshold, y_hat_results, y_truth, upper_boundary=True)
 
     info['thresholds'] = thresholds.tolist()
