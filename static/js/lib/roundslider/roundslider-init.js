@@ -87,8 +87,8 @@ var RoundSliders = function () {
                         this.control.find(".rs-border").css("border-color", "#D7D700");
 
                     } else {
-                        this.control.find(".rs-range-color").css("background", "#008000");
-                        this.control.find(".rs-border").css("border-color", "#008000");
+                        this.control.find(".rs-range-color").css("background", "#FF0000");
+                        this.control.find(".rs-border").css("border-color", "#FF0000");
                     }
                 }
             });
