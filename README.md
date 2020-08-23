@@ -4,10 +4,20 @@ Vadetis is web application to perform, compare and validate various anomaly dete
 The datasets can be altered by injecting additional outliers.
 
 
-## Prerequisites
+## Settings
 
-There are two settings.py configuration files (development.py and production.py). One for development usage and one for productive environment. 
+There are two settings.py configuration files (development.py and production.py template). One for development usage and one for productive environment. 
 Common settings are defined in the common.py file.
+
+## Development
+
+### Python 3.7
+Install python 3.7 along with pip3, then install virtualenv
+```
+sudo apt install python3.7
+sudo apt install python3-pip
+sudo apt install python3.7-venv
+```
 
 ### MySQL 
 In order to start, install a MySQL 5.x, create a database and make the necessary configuration in development.py. 
@@ -24,18 +34,6 @@ DATABASES = {
 }
 ```
 
-If you want to deploy Vadetis onto an Apache2 webserver make another database for production and edit the production.py settings file.
-
-### Python 3.7
-Install python 3.7 along with pip3, then install virtualenv
-```
-sudo apt install python3.7
-sudo apt install python3-pip
-sudo apt install python3.7-venv
-```
-
-## Development
-
 ### venv
 Make a virtual env for development and install all requirements:
 ```bash
@@ -51,10 +49,14 @@ In order to setup the database go to the main application folder of Vadetis, whe
 python3 manage.py makemigrations --settings vadetis.settings.development
 python3 manage.py migrate --settings vadetis.settings.development
 ```
-Create an admin user
+
+### Admin User 
+Create an admin user with:
 ```bash
 python3 manage.py createsuperuser --settings vadetis.settings.development
 ```
+
+To enable login into Vadetis with your super user, make sure that the super users email address has the verified flag set in table "account_emailaddress".
 
 
 ### PyCharm
@@ -88,7 +90,7 @@ env DJANGO_ALLOW_ASYNC_UNSAFE=true ./manage.py shell_plus --notebook --settings 
 ## Automatic Deployment
 
 Run the vadetis_install.sh script from the main application folder. 
-It's tested on Ubuntu 18.04 and changes may be needed if you are running a different OS.
+It's tested on Ubuntu 18.04. Changes may be needed if you are running a different OS.
 
 ```bash
 ./vadetis_install.sh
@@ -120,6 +122,7 @@ Create an admin user
 ```bash
 python3 manage.py createsuperuser
 ```
+To enable login into Vadetis with your super user, make sure that the super users email address has the verified flag set in table "account_emailaddress".
 
 ### Apache
 
@@ -284,7 +287,7 @@ You may have to edit /etc/hosts file for the domain.
 
 With Vadetis in production mode running, login into the Django admin backend.
 
-Under Sites, add an entry with:
+Under Sites, add an entry with your domain name, e.g.:
 
 Domain Name: http://vadetis.exascale.info (or https://vadetis.exascale.info if SSL is configured)
 
