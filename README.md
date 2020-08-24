@@ -67,6 +67,12 @@ To run Django you can use the integrated Django template with the correct settin
 PYTHONUNBUFFERED=1;DJANGO_SETTINGS_MODULE=vadetis.settings.development
 ```
 
+### Start the tool
+Either you can directly start the tool from PyCharm IDE running the Django template or by command line. To start the tool from command line run:
+```bash
+python3 manage.py runserver --settings vadetis.settings.development
+```
+
 ### Site
 Run Vadetis in development mode from the PyCharm configuration and login into the Django admin backend.
 
@@ -132,6 +138,11 @@ sudo apt install apache2
 On Linux systems, if Apache has been installed from a package repository, you must have installed the corresponding Apache "dev" package as well.
 ```bash
 sudo apt install apache2-dev
+```
+
+Other extensions needed:
+```bash
+sudo apt install apache2-utils ssl-cert
 ```
 
 ### mod_wsgi
@@ -278,7 +289,7 @@ python3 manage.py collectstatic --settings vadetis.settings.production
 Activate the site with:
 ```
 cd /etc/apache2/sites-available
-a2ensite vadetis
+sudo a2ensite vadetis
 sudo service apache2 reload
 sudo service apache2 restart
 ```
@@ -292,3 +303,17 @@ Under Sites, add an entry with your domain name, e.g.:
 Domain Name: http://vadetis.exascale.info (or https://vadetis.exascale.info if SSL is configured)
 
 Display Name: Vadetis
+
+### Start and stop the tool
+
+After deployment the tool should be already running. However you can enable Vadetis with:
+```
+sudo a2ensite vadetis
+sudo service apache2 reload
+```
+
+to disable Vadetis, run:
+```
+sudo a2dissite vadetis
+sudo service apache2 reload
+```
