@@ -20,7 +20,7 @@ def get_highcharts_range_button_preselector(inferred_freq):
     elif inferred_freq.endswith(('BH', 'H')): # freq of hours
         return 3 # week
     elif inferred_freq.endswith(('T', 'min')):  # freq of minutes
-        return 1 # hour
+        return 2 # day
     elif inferred_freq.endswith(('S')):  # freq of seconds
         return 0 # minute
 
