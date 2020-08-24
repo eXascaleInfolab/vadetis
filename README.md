@@ -9,6 +9,29 @@ The datasets can be altered by injecting additional outliers.
 There are two settings.py configuration files (development.py and production.py template). One for development usage and one for productive environment. 
 Common settings are defined in the common.py file.
 
+## Automatic Deployment
+
+Run the vadetis_install.sh script from the main application folder. 
+It's tested on Ubuntu 18.04. Changes may be needed if you are running a different OS.
+
+```bash
+./vadetis_install.sh
+```
+
+### Start and stop the tool
+
+After deployment the tool should be already running. However you can enable Vadetis with:
+```
+sudo a2ensite vadetis
+sudo service apache2 reload
+```
+
+to disable Vadetis, run:
+```
+sudo a2dissite vadetis
+sudo service apache2 reload
+```
+
 ## Development
 
 ### Python 3.7
@@ -91,15 +114,6 @@ Django Admin Backend http://localhost:8000/admin
 To start Jupyter notebook with Django shell execute from started venv in the main application folder:
 ```bash
 env DJANGO_ALLOW_ASYNC_UNSAFE=true ./manage.py shell_plus --notebook --settings vadetis.settings.development
-```
-
-## Automatic Deployment
-
-Run the vadetis_install.sh script from the main application folder. 
-It's tested on Ubuntu 18.04. Changes may be needed if you are running a different OS.
-
-```bash
-./vadetis_install.sh
 ```
 
 ## Manual Deployment
@@ -303,17 +317,3 @@ Under Sites, add an entry with your domain name, e.g.:
 Domain Name: http://vadetis.exascale.info (or https://vadetis.exascale.info if SSL is configured)
 
 Display Name: Vadetis
-
-### Start and stop the tool
-
-After deployment the tool should be already running. However you can enable Vadetis with:
-```
-sudo a2ensite vadetis
-sudo service apache2 reload
-```
-
-to disable Vadetis, run:
-```
-sudo a2dissite vadetis
-sudo service apache2 reload
-```
