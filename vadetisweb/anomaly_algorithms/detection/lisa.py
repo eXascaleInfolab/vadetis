@@ -20,12 +20,14 @@ def z_pi(v_xi, v_i_mean, std_deviation_i):
     :param std_deviation_i: the standard deviation at time i
     :return: the z value
     """
-
     try:
+        if std_deviation_i == 0:
+            raise ZeroDivisionError
         z_pi = (v_xi - v_i_mean) / std_deviation_i
     except ZeroDivisionError:
-        print("Division by Zero occurred")
-        z_pi = np.nan
+        # z_pi = np.nan
+        # set z_pi to zero if std deviation is zero
+        z_pi = 0
 
     return z_pi
 
