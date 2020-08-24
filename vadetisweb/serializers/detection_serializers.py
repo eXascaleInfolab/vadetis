@@ -47,10 +47,10 @@ class RPCAMEstimatorLossSerializer(ConditionalRequiredFieldMixin, serializers.Se
                                           'step': 'any',
                                           'help_text_in_popover': True})
 
-    n_components = serializers.IntegerField(initial=2, label='Number of components', min_value=2, required=True,
+    n_components = serializers.IntegerField(initial=2, label='Number of components', min_value=1, required=True,
                                             help_text='The number of components for dimensionality reduction.',
                                             style={'template': 'vadetisweb/parts/input/text_input.html',
-                                                   'step': 'any', 'min': 2,
+                                                   'step': 'any', 'min': 1,
                                                    'help_text_in_popover': True})
 
     train_size = TrainSizeFloatField(initial=0.5, min_value=0.2, max_value=0.8, required=True)
