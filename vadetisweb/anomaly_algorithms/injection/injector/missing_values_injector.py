@@ -18,13 +18,13 @@ class MissingValuesInjector(OutlierInjector):
             return 1
 
         elif anomaly_scale == ANOMALY_INJECTION_SCALE_MEDIUM:
-            return 5
+            return 4
 
         elif anomaly_scale == ANOMALY_INJECTION_SCALE_HIGH:
-            return 10
+            return 9
 
         elif anomaly_scale == ANOMALY_INJECTION_SCALE_RANDOM:
-            return np.random.choice([1, 5, 10])
+            return np.random.choice([1, 4, 9])
 
         else:
             raise ValueError

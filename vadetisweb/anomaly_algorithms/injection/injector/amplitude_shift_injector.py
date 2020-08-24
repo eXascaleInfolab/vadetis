@@ -59,8 +59,8 @@ class AmplitudeShiftInjector(OutlierInjector):
         inject_at_index = self.next_injection_index(range_index)
         if inject_at_index is not None:
 
-            lower_boundary = max(next_earlier_dt(inject_at_index, self.df.index.inferred_freq, 10), self.df.index.min())
-            upper_boundary = min(next_later_dt(inject_at_index, self.df.index.inferred_freq, 10), self.df.index.max())
+            lower_boundary = max(next_earlier_dt(inject_at_index, self.df.index.inferred_freq, 4), self.df.index.min())
+            upper_boundary = min(next_later_dt(inject_at_index, self.df.index.inferred_freq, 5), self.df.index.max())
 
             level_shift_indexes = pd.date_range(lower_boundary, upper_boundary, freq=self.df.index.inferred_freq)
             adjustment_value = self.get_value(inject_at_index, ts_id)

@@ -27,7 +27,7 @@ class GrowthInjector(OutlierInjector):
         inject_at_index = self.next_injection_index(range)
         if inject_at_index is not None:
 
-            upper_boundary = min(next_later_dt(inject_at_index, self.df.index.inferred_freq, 10), self.df.index.max())
+            upper_boundary = min(next_later_dt(inject_at_index, self.df.index.inferred_freq, 9), self.df.index.max())
             growth_indexes = pd.date_range(inject_at_index, upper_boundary, freq=self.df.index.inferred_freq)
             slope = np.random.choice([-1, 1]) * self.get_factor() * np.arange(len(growth_indexes))
 
