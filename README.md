@@ -18,7 +18,7 @@ It's tested on Ubuntu 18.04. Changes may be needed if you are running a differen
 ./vadetis_install.sh
 ```
 
-### Start and stop the tool
+## Start and stop the tool
 
 After deployment the tool should be already running. However you can enable Vadetis with:
 ```
@@ -32,7 +32,7 @@ sudo a2dissite vadetis
 sudo service apache2 reload
 ```
 
-## Development
+## Manual Deployment
 
 ### Python 3.7
 Install python 3.7 along with pip3, then install virtualenv
