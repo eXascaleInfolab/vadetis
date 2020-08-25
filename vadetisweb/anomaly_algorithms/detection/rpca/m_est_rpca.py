@@ -1,4 +1,5 @@
 import warnings
+import logging
 from sklearn.decomposition import PCA
 from sklearn.decomposition._base import _BasePCA
 from sklearn.utils import check_array
@@ -180,9 +181,9 @@ class MRobustPCA(_BasePCA):
             else:
                 rel_error = 0.
 
-            print('[RPCA] Iteraton %d: error %f, relative error %f'%(self.n_iterations_,
-                                                                     total_error,
-                                                                     rel_error))
+            logging.debug('[RPCA] Iteraton %d: error %f, relative error %f'%(self.n_iterations_,
+                                                                             total_error,
+                                                                             rel_error))
             self.errors_.append(total_error)
             not_done_yet = rel_error > self.eps and self.n_iterations_ < self.max_iter
         if rel_error > self.eps:
