@@ -5,7 +5,7 @@ echo "Vadetis Installation: START"
 sudo apt update
 
 # MySQL
-sudo apt install mysql-server
+sudo apt install mysql-server libmysqlclient-dev
 # Run the MySQL Secure Installation wizard, utility prompts you to define the mysql root password and other security-related options
 sudo mysql_secure_installation utility
 sudo systemctl start mysql
@@ -62,7 +62,7 @@ echo "Install database done"
 
 # PYTHON
 echo "Install Python 3.7"
-sudo apt install python3.7 python3-pip python3.7-venv
+sudo apt install python3.7 python3.7-dev python3-pip python3.7-venv
 
 # APACHE2
 echo "Install Apache2"
@@ -115,6 +115,7 @@ sudo find $venv_dir -type f -exec chmod g=rws "{}" \;
 echo "Install Python Requirements"
 python3.7 -m venv $venv_dir
 source $venv_dir/bin/activate
+pip3 install -U wheel --user
 pip3 install -r requirements.txt
 deactivate
 
