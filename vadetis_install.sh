@@ -15,10 +15,9 @@ sudo systemctl enable mysql
 read -s -p "Enter MySQL ROOT Password: " mysql_password
 mysql_password="$mysql_password"
 # MySQL has sometimes a strange issue where root cannot login into a fresh installation (!!!)
-sudo mysql -u root --password="$mysql_password" -h localhost -e "
-USE mysql;
-UPDATE user SET plugin='mysql_native_password' WHERE User='root';
-UPDATE user SET authentication_string=password('$mysql_password') where User='root';
+sudo mysql -u root -h localhost -e "
+UPDATE mysql.user SET plugin='mysql_native_password' WHERE User='root';
+UPDATE mysql.user SET authentication_string=password('$mysql_password') where User='root';
 FLUSH PRIVILEGES;
 "
 sudo systemctl mysql restart
