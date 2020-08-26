@@ -135,6 +135,7 @@ sed -e "s|\${server_name}|$server_name|" -e "s|\${server_admin}|$server_admin|" 
 # SETUP DJANGO
 echo "Install Django"
 source $venv_dir/bin/activate
+python3 $project_directory/manage.py makemigrations vadetisweb --settings vadetis.settings.production
 python3 $project_directory/manage.py makemigrations --settings vadetis.settings.production
 python3 $project_directory/manage.py migrate --settings vadetis.settings.production
 echo "Create Django Admin User..."
