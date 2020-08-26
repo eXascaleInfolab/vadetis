@@ -11,6 +11,18 @@ sudo mysql_secure_installation utility
 sudo systemctl start mysql
 sudo systemctl enable mysql
 
+# DATABASE
+read -s -p "Enter MySQL ROOT Password: " mysql_password
+mysql_password="$mysql_password"
+# MySQL has sometimes a strange issue where root cannot login into a fresh installation (!!!)
+sudo mysql -u root --password="$mysql_password" -h localhost -e "
+USE mysql;
+UPDATE user SET plugin='mysql_native_password' WHERE User='root';
+UPDATE user SET authentication_string=password('$mysql_password') where User='root';
+FLUSH PRIVILEGES;
+"
+sudo systemctl mysql restart
+
 # CONFIGURATION
 echo "Leave blank to use default values"
 read -p "Enter domain [default: vadetis.exascale.info]: " server_name
@@ -41,9 +53,8 @@ read -p "Enter mail user password [default: svQcdxXQ]: " mail_user_pwd
 mail_user_pwd=${mail_user_pwd:-svQcdxXQ}
 
 # INSTALL DATABASE
-read -s -p "Enter MySQL ROOT Password: " mysql_password
 echo "Install database... "
-mysql_password="$mysql_password"
+
 echo "Drop existing schema..."
 mysql -u root --password="$mysql_password" -h localhost -e "
 DROP SCHEMA IF EXISTS $project_name;
