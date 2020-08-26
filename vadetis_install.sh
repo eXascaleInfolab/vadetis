@@ -115,7 +115,7 @@ sudo find $venv_dir -type f -exec chmod g=rws "{}" \;
 echo "Install Python Requirements"
 python3.7 -m venv $venv_dir
 source $venv_dir/bin/activate
-pip3 install -U wheel --user
+pip3 install wheel
 pip3 install -r requirements.txt
 deactivate
 
