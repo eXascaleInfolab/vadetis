@@ -134,6 +134,7 @@ pip3 install -r /var/www/vadetis.exascale.info/requirements.txt
 
 Similar to development mode, we have to setup the database
 ```bash
+python3 manage.py makemigrations vadetisweb --settings vadetis.settings.production
 python3 manage.py makemigrations --settings vadetis.settings.production
 python3 manage.py migrate --settings vadetis.settings.production
 ```
