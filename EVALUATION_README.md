@@ -1,11 +1,19 @@
 # Evaluation
 
+Make sure that Vadetis contains the datasets needed for the experiments, i.e. you can connect with:
+
+```
+sudo ssh -L 80:localhost:80 username@diufrm144
+```
+
+Then access Vadetis frontend via http://localhost in your browser.
+
 If Vadetis is installed and operating, add the datasets located in the misc/datasets/evaluation folder. 
 The test_\*.csv file is the evaluation dataset whereas the train_\*.csv is the training dataset. 
 Humidity and Temperature dataset contain an additional loc\*.csv file that contains 
-the spatial coordinates of the time series.
+the spatial coordinates of the time series. (However, they should already be available on the diufrm144 server)
 
-In order to run the experiments, you must add the following datasets for scenarios:
+In order to run the experiments, the following datasets for scenarios must be available:
 
 ## Single Contaminated Time Series
 
@@ -72,17 +80,49 @@ Name | Folder
 Temperature TS14 | misc/datasets/evaluation/temp1/single_contaminated/ts_number_14
 Humidity | misc/datasets/evaluation/hum1/single_contaminated/ts_number_9
 
-## Perform the experiments
+## Perform experiments
 
-The Jupyter notebooks to perform the experiments are located in misc/notebooks/eval
+### Productive environment
 
-To start Jupyter notebook with Django shell execute from started venv in the main application folder
+In order to perform the experiments on the productive environment, map the port for Jupyter notebooks
+ to your local machine, i.e.:
+```
+sudo ssh -L 8888:localhost:8888 username@diufrm144
+``` 
+
+As soon as you are connected to the machine running the productive environment, just start the venv on you terminal 
+(location depends on the folder configured during installation), i.e.:
+
+```
+source /usr/local/venvs/venv_vadetis/bin/activate
+``` 
+
+Go to the installation folder of productive Vadetis (where the manage.py file is located), i.e.:
+
+```
+cd /var/www/vadetis.exascale.info/
+```
+
+then run:
+
 ```bash
 env DJANGO_ALLOW_ASYNC_UNSAFE=true ./manage.py shell_plus --notebook --settings vadetis.settings.development
 ```
-or 
+
+If you are connected on a remote machine, then you will see in the terminal 
+the link to start the Juypter notebooks. Copy and paste this in the browser 
+of your local machine. The Jupyter notebooks to perform the experiments are located in misc/notebooks/eval
+
+
+### Development environment
+
+
+If you want to perform the experiments on your local machine, just start:
+
 ```bash
 env DJANGO_ALLOW_ASYNC_UNSAFE=true ./manage.py shell_plus --notebook --settings vadetis.settings.production
 ```
-depending on the development or production environment. The browser page should be opened automatically, 
-then goto the notebook of the experiment which you want to run.
+The browser page should be opened automatically, 
+then goto the notebook of the experiment which you want to run. 
+Don't forget to add the datasets on your local machine as mentioned above.
+
