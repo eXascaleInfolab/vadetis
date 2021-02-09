@@ -38,7 +38,7 @@ sudo service apache2 reload
 ```
 
 ___
-## Personalized Deployment
+## Manual Deployment
 
 ### Python 3.7
 Install python 3.7 along with pip3, then install virtualenv
@@ -123,7 +123,7 @@ env DJANGO_ALLOW_ASYNC_UNSAFE=true ./manage.py shell_plus --notebook --settings 
 ```
 ___
 
-## Manual Deployment
+## Production Deployment
 
 ### Copy contents
 Copy the contents of Vadetis into the sites folder for apache, e.g. /var/www/vadetis.exascale.info
@@ -139,7 +139,7 @@ pip3 install -r /var/www/vadetis.exascale.info/requirements.txt
 
 ### Database
 
-Similar to development mode, we have to setup the database
+Similar to manual development mode, we have to setup the database
 ```bash
 python3 manage.py makemigrations vadetisweb --settings vadetis.settings.production
 python3 manage.py makemigrations --settings vadetis.settings.production
