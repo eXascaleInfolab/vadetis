@@ -102,10 +102,10 @@ sudo \cp *.py $project_directory
 sudo \cp requirements.txt $project_directory
 sudo \cp README.md $project_directory
 
-# PRODUCTIVE SETTINGS
+# PRODUCTION SETTINGS
 sed -e "s|\${server_name}|$server_name|" -e "s/\${project_name}/$project_name/" -e "s|\${vadetis_db_user}|$vadetis_db_user|" -e "s|\${db_user_pw}|$db_user_pw|" -e "s|\${smtp_host}|$smtp_host|" -e "s|\${smtp_port}|$smtp_port|" -e "s|\${mail_user}|$mail_user|" -e "s|\${mail_user_pwd}|$mail_user_pwd|" ./misc/settings_tpl/production_settings_tpl.tpl | sudo tee $project_directory/vadetis/settings/production.py
 
-# SET RIGHTS
+# MANAGE RIGHTS
 # Adding current user to www-data
 sudo adduser $USER www-data
 # Change ownership to user:www-data and
