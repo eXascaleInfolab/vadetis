@@ -1,7 +1,9 @@
 # Vadetis
 
-Vadetis is web application to perform, compare and validate various anomaly detection algorithms using different configurations. It allows users to upload their own datasets as well as training data in order to perform outlier detection. The datasets can either be shared with other users or only be used by yourself. 
-The datasets can be altered by injecting additional outliers.
+Vadetis is a web application to perform, compare and validate various anomaly detection algorithms using different configurations. It allows users to upload their own datasets as well as training data in order to perform anomaly detection. The datasets can be altered by injecting additional outliers.  Technical details can be found in our ICDE 2021 Demo paper:  <a href = "https://icde2021.gr">VADETIS: An Explainable Evaluator forAnomaly Detection Techniques </a>. The tool can be easity extended with new algorithms, new datasets and new metrics.
+
+- The tool implements the following anomaly detectors: One-Class SVM, LISA (Pearson and DTW), GMM, Histogram, Isolation Forest, and Robust PCA.  
+- The tool evaluates the following metrics: Precision, Recall, Accuracy, F1-score, RMSE, NMI, and AUC.
 
 ___
 
@@ -22,7 +24,7 @@ Run the vadetis_install.sh script in the root folder.
 
 ### Start and stop the tool
 
-After deployment the tool should be already running. However you can enable Vadetis with:
+After deployment the tool should be already running. However, you need to enable Vadetis with:
 ```
 sudo a2ensite vadetis
 sudo service apache2 reload
@@ -118,6 +120,7 @@ To start Jupyter notebook with Django shell execute from started venv in the mai
 ```bash
 env DJANGO_ALLOW_ASYNC_UNSAFE=true ./manage.py shell_plus --notebook --settings vadetis.settings.development
 ```
+___
 
 ## Manual Deployment
 
