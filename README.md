@@ -3,22 +3,24 @@
 Vadetis is web application to perform, compare and validate various anomaly detection algorithms using different configurations. It allows users to upload their own datasets as well as training data in order to perform outlier detection. The datasets can either be shared with other users or only be used by yourself. 
 The datasets can be altered by injecting additional outliers.
 
+___
 
 ## Settings
 
-There are two settings.py configuration files (development.py and production.py template). One for development usage and one for productive environment. 
+- There are two settings.py configuration files (development.py and production.py template). One for development usage and one for productive environment. 
 Common settings are defined in the common.py file.
+- Prerequisites: Ubuntu 16 or Ubuntu 18.
+___
+## Full Deployment
+### Build
 
-## Automatic Deployment
-
-Run the vadetis_install.sh script from the main application folder. 
-It's tested on Ubuntu 18.04. Changes may be needed if you are running a different OS.
+Run the vadetis_install.sh script in the root folder. 
 
 ```bash
 ./vadetis_install.sh
 ```
 
-## Start and stop the tool
+### Start and stop the tool
 
 After deployment the tool should be already running. However you can enable Vadetis with:
 ```
@@ -32,7 +34,8 @@ sudo a2dissite vadetis
 sudo service apache2 reload
 ```
 
-## Manual Deployment
+___
+## Personalized Deployment
 
 ### Python 3.7
 Install python 3.7 along with pip3, then install virtualenv
