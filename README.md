@@ -11,7 +11,7 @@ ___
 ## Settings
 
 - There are three possible ways for installation: Full Deployment (default automatic), Manual Deployment (development usage) and Production Depolyment (Production usage). 
-- Prerequisites: Ubuntu 16 or Ubuntu 18.
+- Prerequisites: Ubuntu 16/Ubuntu 18.
 ___
 ## Full Deployment
 ### Build
