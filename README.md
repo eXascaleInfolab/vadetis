@@ -315,6 +315,21 @@ sudo service apache2 reload
 sudo service apache2 restart
 ```
 
+
+### Adding Datasets
+
+The path to adding a new dataset is : https://github.com/eXascaleInfolab/vadetis/tree/master/misc/datasets
+
+### Adding Algorithms
+
+The path to adding a new detection, injection or recommendation algorithm is : https://github.com/eXascaleInfolab/vadetis/tree/master/vadetisweb/anomaly_algorithms
+
+### Adding Metrics
+
+The path to adding a new dataset is : https://github.com/eXascaleInfolab/vadetis/blob/master/vadetisweb/utils/anomaly_detection_utils.py
+
+
+
 You may have to edit /etc/hosts file for the domain.
 
 With Vadetis in production mode running, login into the Django admin backend.
