@@ -13,7 +13,7 @@ ___
 - There are three possible ways for installation: Full Deployment (default automatic), Manual Deployment (development usage) and Production Depolyment (Production usage). 
 - Prerequisites: Ubuntu 16 or Ubuntu 18.
 ___
-## Full Deployment
+## Automated Deployment
 ### Build
 
 Run the vadetis_install.sh script in the root folder. 
