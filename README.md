@@ -1,3 +1,4 @@
+
 # Vadetis
 
 Vadetis is a web application to perform, compare and validate various anomaly detection algorithms using different configurations. It allows users to upload their own datasets as well as training data in order to perform anomaly detection. The datasets can be altered by injecting additional outliers.  Technical details can be found in our ICDE 2021 Demo paper:  <a href = "https://icde2021.gr">VADETIS: An Explainable Evaluator forAnomaly Detection Techniques </a>. The tool can be easily extended with new algorithms, new datasets and new metrics.
@@ -305,6 +306,16 @@ source /usr/local/venvs/venv_vadetis/bin/activate
 python3 manage.py collectstatic --settings vadetis.settings.production
 ```
 
+
+### Adding Datasets, Algorithms and Metrics 
+
+The path to adding a new dataset is : [datasets](https://github.com/eXascaleInfolab/vadetis/tree/master/misc/datasets).
+
+The path to adding a new detection, injection or recommendation algorithm is : [algorithms folder](https://github.com/eXascaleInfolab/vadetis/tree/master/vadetisweb/anomaly_algorithms).
+
+The path to adding a new dataset is :  [metrics](https://github.com/eXascaleInfolab/vadetis/blob/master/vadetisweb/utils/anomaly_detection_utils.py).
+
+
 ### Site
 
 Activate the site with:
@@ -315,18 +326,6 @@ sudo service apache2 reload
 sudo service apache2 restart
 ```
 
-
-### Adding Datasets
-
-The path to adding a new dataset is : https://github.com/eXascaleInfolab/vadetis/tree/master/misc/datasets
-
-### Adding Algorithms
-
-The path to adding a new detection, injection or recommendation algorithm is : https://github.com/eXascaleInfolab/vadetis/tree/master/vadetisweb/anomaly_algorithms
-
-### Adding Metrics
-
-The path to adding a new dataset is : https://github.com/eXascaleInfolab/vadetis/blob/master/vadetisweb/utils/anomaly_detection_utils.py
 
 
 
