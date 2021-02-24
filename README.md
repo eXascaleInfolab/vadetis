@@ -46,20 +46,20 @@ sudo service apache2 reload
 
 ___
 ## Manual Deployment
-The individual components of Vadetis can be installed separately. We provide a step-by-step tutorial on how to manually deploy the tool [tutorial](https://github.com/eXascaleInfolab/vadetis/tree/master/vadetis/README.MD)
+The individual components of Vadetis can be installed separately. We provide a step-by-step tutorial on how to manually deploy the tool [tutorial](https://github.com/eXascaleInfolab/vadetis/tree/master/vadetis/README.MD).
 
 
 ___
 
 ## Extension
 The tool can be extended by adding:
-- algorithms:
-- datasets:
-- metrics:
+- *algorithms*:
+- *datasets*:
+- *metrics*:
 ___
 
 ## Contributors
-Mourad Khayati (mkhayati@exascale.info),  Abdelouahab Khelifati and Adrian Hänni.
+Mourad Khayati (mkhayati@exascale.info),  Abdelouahab Khelifati, and Adrian Hänni.
 
 ___
 
