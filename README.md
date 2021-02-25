@@ -45,7 +45,7 @@ sudo a2dissite vadetis
 sudo service apache2 reload
 ```
 ### Manual Deployment
-The individual components of Vadetis can be installed separately. We provide a step-by-step tutorial on how to manually deploy the tool [tutorial](https://github.com/eXascaleInfolab/vadetis/tree/master/vadetis/README.MD).
+The individual components of Vadetis can be installed separately. We provide a step-by-step tutorial on how to manually deploy the tool [tutorial](https://github.com/eXascaleInfolab/vadetis/blob/master/vadetis/README.md).
 
 
 ___
