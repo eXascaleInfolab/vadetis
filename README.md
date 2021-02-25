@@ -11,42 +11,6 @@ Vadetis is a web application to perform, compare and validate various anomaly de
 
 
 
-[**Prerequisites**](#prerequisites) | [**Deployment**](#deployment)  | [**Extension**](#extension)  | [**Contributors**](#contributors) | [**Citation**](#citation)
-
-
-___
-
-## Prerequisites
-
-- Ubuntu 16 or Ubuntu 18.
-- Clone this repository.
-___
-
-## Deployment
-### Build
-
-Run the vadetis_install.sh script in the root folder. 
-
-```bash
-./vadetis_install.sh
-```
-
-### Start and stop the tool
-
-After deployment the tool should be already running. However, you need to enable Vadetis with:
-```
-sudo a2ensite vadetis
-sudo service apache2 reload
-```
-
-to disable Vadetis, run:
-```
-sudo a2dissite vadetis
-sudo service apache2 reload
-```
-### Manual Deployment
-The individual components of Vadetis can be installed separately. We provide a step-by-step tutorial on how to manually deploy the tool [tutorial](https://github.com/eXascaleInfolab/vadetis/blob/master/vadetis/README.md).
-
 
 ___
 
