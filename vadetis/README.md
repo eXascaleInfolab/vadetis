@@ -1,6 +1,41 @@
 
 # Vadetis
 
+
+[**Prerequisites**](#prerequisites) | [**Auto Deployment**](#auto-deployment)  | [**Manual Depolyment**](#manual-deployment)  
+
+
+___
+
+## Prerequisites
+
+- Ubuntu 16 or Ubuntu 18.
+- Clone this repository.
+___
+
+## Auto Deployment
+### Build
+
+Run the vadetis_install.sh script in the root folder. 
+
+```bash
+./vadetis_install.sh
+```
+
+### Start and stop the tool
+
+After deployment the tool should be already running. However, you need to enable Vadetis with:
+```
+sudo a2ensite vadetis
+sudo service apache2 reload
+```
+
+to disable Vadetis, run:
+```
+sudo a2dissite vadetis
+sudo service apache2 reload
+```
+
 ___
 ## Manual Deployment
 
