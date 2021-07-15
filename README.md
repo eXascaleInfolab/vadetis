@@ -13,7 +13,7 @@ Vadetis is a web application to perform, compare and validate various anomaly de
 <img img align="center" width="1000" height="400" src="vadetis_in_action.png" >
 
 ## Contributors
-Mourad Khayati (mkhayati@exascale.info),  Abdelouahab Khelifati, and Adrian Hänni.
+Mourad Khayati (mkhayati@exascale.info),  Abdelouahab Khelifati (abdel@exascale.info), and Adrian Hänni.
 
 ___
 
