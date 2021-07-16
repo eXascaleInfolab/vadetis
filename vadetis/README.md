@@ -12,9 +12,9 @@ ___
 
 ## Development Setup
 
-With this setup Vadetis uses a SQLite Database and prints e-mails on the console.
+With this setup, Vadetis uses an SQLite Database and prints e-mails on the console.
 
-To work with timeserie with spatial data you will need to add your mapbox credentials to *vadetis/settings/.env*.
+To work with time series with spatial data you will need to add your Mapbox credentials to *vadetis/settings/.env*.
 
 ### Setup
 
@@ -37,7 +37,7 @@ pip3 install -r /path/to/vadetis/requirements.txt
 ```
 
 ### Database
-In order to setup the database go to the main application folder of Vadetis, where the manage.py file is located and run:
+To set up the database, go to the main application folder of Vadetis, where the manage.py file is located and run:
 ```bash
 python3 manage.py makemigrations --settings vadetis.settings.development
 python3 manage.py migrate --settings vadetis.settings.development
@@ -90,8 +90,8 @@ ___
 
 ## Production Deployment
 
-With this setup Vadetis uses a PostgreSQL Database and sends out e-mail with the configured SMTP server. We use docker-compose to orchastrate 3 containers: web (django), db (postgres) and nginx (nginx).
-We provide a prebuilt version of the container on [dockerhub](https://hub.docker.com/r/exascalelab/vadetis) which is also used in docker-compose.yml by default. This means that if you want to deploy a unmodified version of Vadetis, you can skip the next step (build image). Otherwise you will have to build the image, upload this image to a docker registry and change the "image" field in docker-compose.yml to the location of the uploaded image.
+With this setup, Vadetis uses a PostgreSQL Database and sends out e-mails with the configured SMTP server. We use docker-compose to orchestrate 3 containers: web (django), db (postgres) and nginx (nginx).
+We provide a prebuilt version of the container on [dockerhub](https://hub.docker.com/r/exascalelab/vadetis) which is also used in docker-compose.yml by default. This means that if you want to deploy an unmodified version of Vadetis, you can skip the next step (build image). Otherwise, you will have to build the image, upload this image to a docker registry and change the "image" field in docker-compose.yml to the location of the uploaded image.
 
 
 ### Build Image
@@ -101,16 +101,16 @@ docker build -t username/vadetis:version .
 docker login
 docker push username/vadetis:version
 ```
-### Deploy remotly
+### Deploy remotely
 
-Copy \[db|web\]-variables_template.env to \[db|web\]-variables.env and fill in the db credentials (which can be freely choosen) and the email, recaptcha and mapbox credentials (given to you by the corresponding vendor).
-By default the built-in webserver will listen on port 12006, if no other webserver is running on the host, you might want to simply change this to 80, avoiding having to run another webserver in front of it.
+Copy \[db|web\]-variables_template.env to \[db|web\]-variables.env and fill in the db credentials (which can be freely chosen) and the email, ReCaptcha and Mapbox credentials (given to you by the corresponding vendor).
+By default the built-in webserver will listen on port 12006, if no other web server is running on the host, you might want to simply change this to 80, avoiding having to run another webserver in front of it.
 
 ```bash
 docker-compose up -d
 ```
 
-We setup the database
+We set up the database
 ```bash
 docker-compose exec web python manage.py makemigrations vadetisweb --settings vadetis.settings.production
 docker-compose exec web python manage.py makemigrations --settings vadetis.settings.production
