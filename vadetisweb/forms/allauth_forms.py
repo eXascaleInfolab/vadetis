@@ -3,6 +3,7 @@ from allauth.account.forms import LoginForm, ResetPasswordForm, ChangePasswordFo
     set_form_field_order, SignupForm as AllauthAccountSignupForm
 from captcha.fields import ReCaptchaField
 from django.forms import CharField, PasswordInput, BooleanField, EmailField
+from django.conf import settings
 
 from vadetisweb.widgets import FormCheckboxInput, UserTextInput
 
@@ -27,7 +28,6 @@ class AccountLoginForm(LoginForm):
 
     password = AddonPasswordField(label="Password")
     remember = BooleanField(widget=FormCheckboxInput(default=True, label='Stay signed in'), required=False, label='Stay signed in')
-    captcha = ReCaptchaField(label="")
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
@@ -54,6 +54,9 @@ class AccountLoginForm(LoginForm):
                                     widget=login_widget)
 
         self.fields["login"] = login_field
+        
+        if not settings.DEBUG:
+            self.fields["captcha"] = ReCaptchaField(label="")
 
         set_form_field_order(self, ["login", "password", "remember"])
         if app_settings.SESSION_REMEMBER is not None:
@@ -75,7 +78,6 @@ class AccountSignUpForm(AllauthAccountSignupForm):
     email = EmailField(widget=UserTextInput('email', attrs={'type' : 'email',
                                                             'placeholder':  'E-mail address',
                                                             'autofocus': 'autofocus'}))
-    captcha = ReCaptchaField(label="")
 
     def __init__(self, *args, **kwargs):
         super(AccountSignUpForm, self).__init__(*args, **kwargs)
@@ -88,6 +90,9 @@ class AccountSignUpForm(AllauthAccountSignupForm):
 
         if hasattr(self, 'field_order'):
             set_form_field_order(self, self.field_order)
+            
+        if not settings.DEBUG:
+            self.fields["captcha"] = ReCaptchaField(label="")
 
 
 class AccountResetPasswordForm(ResetPasswordForm):
@@ -95,10 +100,13 @@ class AccountResetPasswordForm(ResetPasswordForm):
     email = EmailField(label='E-mail', required=True, widget=UserTextInput('email', attrs={'type' : 'email',
                                                                                            'size' : '30',
                                                                                            'placeholder': 'E-mail address',}))
-    captcha = ReCaptchaField(label="")
+    #captcha = ReCaptchaField(label="")
 
     def __init__(self, *args, **kwargs):
         super(AccountResetPasswordForm, self).__init__(*args, **kwargs)
+
+        if not settings.DEBUG:
+            self.fields["captcha"] = ReCaptchaField(label="")
 
 
 class AccountChangePasswordForm(ChangePasswordForm):

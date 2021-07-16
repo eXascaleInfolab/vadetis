@@ -3,6 +3,13 @@
 venv
 vadetisweb/migrations
 dump.rdb
+vadetis-deploy/web-variables.env
+vadetis-deploy/db-variables.env
+**/*.sqlite3
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
 
 # Created by https://www.gitignore.io/api/linux,macos,pycharm
 # Edit at https://www.gitignore.io/?templates=linux,macos,pycharm

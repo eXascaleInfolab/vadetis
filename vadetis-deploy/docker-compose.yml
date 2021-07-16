@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    env_file:
+      - db-variables.env
+    volumes:
+      - pgdata:/var/lib/posgresql/data
+    restart: always
+  web:
+    image: exascalelab/vadetis:v1
+    command: gunicorn vadetis.wsgi:application --bind 0.0.0.0:8000
+    env_file:
+      - web-variables.env
+    volumes:
+      - static_volume:/usr/src/app/run/static
+    expose:
+      - 8000
+    depends_on:
+      - db
+    restart: always
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/usr/src/app/run/static
+    ports:
+      - 12006:80
+    depends_on:
+      - web
+    restart: always
+volumes:
+  pgdata:                         
+  static_volume:
+

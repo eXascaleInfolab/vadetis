@@ -192,16 +192,6 @@ CSRF_COOKIE_SAMESITE = 'Lax'
 SESSION_COOKIE_SAMESITE = 'Lax'
 LANGUAGE_COOKIE_SAMESITE = 'Lax'
 
-# RECAPTCHA
-RECAPTCHA_PUBLIC_KEY = '6Lc452UUAAAAAFYADmbUZgYf7qBx3A8i-nnLUde2'
-RECAPTCHA_PRIVATE_KEY = '6Lc452UUAAAAAA-XsnkMfh7xA-HhzN8Oliq4dZED'
-
-# MAP BOX - ACCOUNT
-MAPBOX_USER = 'vadetis'
-MAPBOX_ACCOUNT = 'lisaexascale@gmail.com'
-MAPBOX_PW = 'J*V6%gsIxWjp'
-MAPBOX_TOKEN = 'pk.eyJ1IjoidmFkZXRpcyIsImEiOiJja2NiMTB4NW8yMHI2MnRvMHk2aDl6ZG5kIn0.5CarskUSNdP8fWdvSx7Omw'
-
 # Django Registration Redux
 ACCOUNT_ACTIVATION_DAYS = 7  # One-week activation window
 REGISTRATION_OPEN = True  # set to False to disable User registration
@@ -211,10 +201,6 @@ REGISTRATION_SALT = 'encoded_username:timestamp:signature'
 BREADCRUMBS_TEMPLATE = 'vadetisweb/parts/breadcrumbs.html'
 
 # ##### SECURITY CONFIGURATION ############################
-
-# We store the secret key here
-# The required SECRET_KEY is fetched at the end of this file
-SECRET_FILE = normpath(join(PROJECT_ROOT, 'run', 'SECRET.key'))
 
 # these persons receive error notification
 # ADMINS = (
@@ -235,20 +221,3 @@ STATIC_URL = '/static/'
 
 # the URL for media files
 MEDIA_URL = '/media/'
-
-# ##### DEBUG CONFIGURATION ###############################
-DEBUG = False
-
-# finally grab the SECRET KEY
-try:
-    SECRET_KEY = open(SECRET_FILE).read().strip()
-except IOError:
-    try:
-        from django.utils.crypto import get_random_string
-        chars = 'abcdefghijklmnopqrstuvwxyz0123456789!$%&()=+-_'
-        SECRET_KEY = get_random_string(50, chars)
-        with open(SECRET_FILE, 'w') as f:
-            f.write(SECRET_KEY)
-    except IOError:
-        raise Exception('Could not open %s for writing!' % SECRET_FILE)
-

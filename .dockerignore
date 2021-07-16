@@ -1,0 +1,4 @@
+**/.env
+**/*.sqlite3
+vadetis-deploy/web-variables.env
+vadetis-deploy/db-variables.env

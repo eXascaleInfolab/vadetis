@@ -1,32 +1,53 @@
-# project imports
-from vadetis.settings.common import *
+import environ
+env = environ.Env()
+
+from .common import *
 
 # turn off all debugging
 DEBUG = False
 
 # You will have to determine, which hostnames should be served by Django
-ALLOWED_HOSTS = ['localhost', 'vadetis.exascale.info']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'vadetis.exascale.info']
 
 # ##### MAIL CONFIGURATION ###############################
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'lisaexascale@gmail.com'
-EMAIL_HOST_PASSWORD = 'svQcdxXQ'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_CONFIG = env.email_url('EMAIL_URL')
+vars().update(EMAIL_CONFIG)
+DEFAULT_FROM_EMAIL = env('EMAIL_ADDRESS')
+
+# ##### Tokens #############################
+
+# RECAPTCHA
+RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY')
+RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY')
+
+# MAP BOX - ACCOUNT
+MAPBOX_USER = env('MAPBOX_USER')
+MAPBOX_ACCOUNT = env('MAPBOX_ACCOUNT')
+MAPBOX_PW = env('MAPBOX_PW')
+MAPBOX_TOKEN = env('MAPBOX_TOKEN')
 
 # ##### DATABASE CONFIGURATION ############################
 
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'vadetisv2',
-        'USER': 'vadetisadmin',
-        'PASSWORD': 'Cast40analysts5Roofing',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-    }
+     'default': env.db()
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler'
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    },
 }
 
 # ##### APPLICATION CONFIGURATION #########################
@@ -34,6 +55,8 @@ DATABASES = {
 INSTALLED_APPS = DEFAULT_APPS
 
 # ##### SECURITY CONFIGURATION ############################
+
+SECRET_KEY = env('SECRET_KEY')
 
 # TODO: Make sure, that sensitive information uses https
 # TODO: Evaluate the following settings, before uncommenting them
@@ -51,3 +74,5 @@ INSTALLED_APPS = DEFAULT_APPS
 
 # how many days a password reset should work. I'd say even one day is too long
 # PASSWORD_RESET_TIMEOUT_DAYS = 1
+
+

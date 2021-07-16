@@ -1,73 +1,38 @@
-
 # Vadetis
 
-
-[**Prerequisites**](#prerequisites) | [**Auto Deployment**](#auto-deployment)  | [**Manual Depolyment**](#manual-deployment)  
-
+[**Prerequisites**](#prerequisites) | [**Auto Deployment**](#auto-deployment)  | [**Manual Depolyment**](#manual-deployment)
 
 ___
 
 ## Prerequisites
-
-- Ubuntu 16 or Ubuntu 18.
-- Clone this repository.
+- Working Python 3 environment (for development)
+- Docker and Docker-Compose installed (for production)
+- Cloned this repository.
 ___
 
-## Auto Deployment
-### Build
+## Development Setup
 
-Run the vadetis_install.sh script in the root folder. 
+With this setup Vadetis uses a SQLite Database and prints e-mails on the console.
 
-```bash
-./vadetis_install.sh
+To work with timeserie with spatial data you will need to add your mapbox credentials to *vadetis/settings/.env*.
+
+### Setup
+
+### Python 3
+Install python 3.7 or later along with pip3 and virtualenv. For Ubuntu:
 ```
-
-### Start and stop the tool
-
-After deployment the tool should be already running. However, you need to enable Vadetis with:
-```
-sudo a2ensite vadetis
-sudo service apache2 reload
-```
-
-to disable Vadetis, run:
-```
-sudo a2dissite vadetis
-sudo service apache2 reload
-```
-
-___
-## Manual Deployment
-
-### Python 3.7
-Install python 3.7 along with pip3, then install virtualenv
-```
-sudo apt install python3.7
+sudo apt install python3
 sudo apt install python3-pip
-sudo apt install python3.7-venv
-```
-
-### MySQL 
-In order to start, install a MySQL 5.x, create a database and make the necessary configuration in development.py. 
-```
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'database_name',
-        'USER': 'database_user',
-        'PASSWORD': 'database_password',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-    }
-}
+sudo apt install python3-venv
 ```
 
 ### venv
 Make a virtual env for development and install all requirements:
 ```bash
-python3.7 -m venv /path/to/new/virtual/environment
+python3 -m venv /path/to/new/virtual/environment
 cd /path/to/new/virtual/environment
 source bin/activate
+pip3 install -r /path/to/vadetis/slow_requirements.txt
 pip3 install -r /path/to/vadetis/requirements.txt
 ```
 
@@ -83,9 +48,6 @@ Create an admin user with:
 ```bash
 python3 manage.py createsuperuser --settings vadetis.settings.development
 ```
-
-To enable login into Vadetis with your super user, make sure that the super users email address has the verified flag set in table "account_emailaddress".
-
 
 ### PyCharm
 
@@ -106,14 +68,17 @@ Run Vadetis in development mode from the PyCharm configuration and login into th
 
 Under Sites, add an entry with:
 
+```
 Domain Name: http://localhost:8000
-
 Display Name: Vadetis
+```
+
+Under Users, enable the e-mail verified flag.
 
 ### Useful Links
-Swagger REST Interface http://localhost:8000/swagger
 
-Django Admin Backend http://localhost:8000/admin 
+* Swagger REST Interface http://localhost:8000/swagger
+* Django Admin Backend http://localhost:8000/admin 
 
 ### Jupyter Notebook
 To start Jupyter notebook with Django shell execute from started venv in the main application folder:
@@ -122,209 +87,48 @@ env DJANGO_ALLOW_ASYNC_UNSAFE=true ./manage.py shell_plus --notebook --settings 
 ```
 ___
 
+
 ## Production Deployment
 
-### Copy contents
-Copy the contents of Vadetis into the sites folder for apache, e.g. /var/www/vadetis.exascale.info
+With this setup Vadetis uses a PostgreSQL Database and sends out e-mail with the configured SMTP server. We use docker-compose to orchastrate 3 containers: web (django), db (postgres) and nginx (nginx).
+We provide a prebuilt version of the container on [dockerhub](https://hub.docker.com/r/exascalelab/vadetis) which is also used in docker-compose.yml by default. This means that if you want to deploy a unmodified version of Vadetis, you can skip the next step (build image). Otherwise you will have to build the image, upload this image to a docker registry and change the "image" field in docker-compose.yml to the location of the uploaded image.
 
-### venv
-Make a virtual env for production and install all requirements:
-```bash
-python3.7 -m venv /usr/local/venvs/venv_vadetis
-cd /usr/local/venvs/venv_vadetis
-source bin/activate
-pip3 install -r /var/www/vadetis.exascale.info/requirements.txt
-```
 
-### Database
-
-Similar to manual development mode, we have to setup the database
-```bash
-python3 manage.py makemigrations vadetisweb --settings vadetis.settings.production
-python3 manage.py makemigrations --settings vadetis.settings.production
-python3 manage.py migrate --settings vadetis.settings.production
-```
-
-Create an admin user
-```bash
-python3 manage.py createsuperuser
-```
-To enable login into Vadetis with your super user, make sure that the super users email address has the verified flag set in table "account_emailaddress".
-
-### Apache
+### Build Image
 
 ```bash
-sudo apt install apache2
+docker build -t username/vadetis:version .
+docker login
+docker push username/vadetis:version
 ```
-On Linux systems, if Apache has been installed from a package repository, you must have installed the corresponding Apache "dev" package as well.
+### Deploy remotly
+
+Copy \[db|web\]-variables_template.env to \[db|web\]-variables.env and fill in the db credentials (which can be freely choosen) and the email, recaptcha and mapbox credentials (given to you by the corresponding vendor).
+By default the built-in webserver will listen on port 12006, if no other webserver is running on the host, you might want to simply change this to 80, avoiding having to run another webserver in front of it.
+
 ```bash
-sudo apt install apache2-dev
+docker-compose up -d
 ```
 
-Other extensions needed:
+We setup the database
 ```bash
-sudo apt install apache2-utils ssl-cert
+docker-compose exec web python manage.py makemigrations vadetisweb --settings vadetis.settings.production
+docker-compose exec web python manage.py makemigrations --settings vadetis.settings.production
+docker-compose exec web python manage.py migrate --settings vadetis.settings.production
 ```
 
-### mod_wsgi
-The following steps are described on https://modwsgi.readthedocs.io/en/develop/user-guides/quick-installation-guide.html
+We create a superuser
 
-Download [mod_wsgi](https://github.com/GrahamDumpleton/mod_wsgi/releases) from https://github.com/GrahamDumpleton/mod_wsgi/releases
-After having downloaded the tar ball for the version you want to use, unpack it with the command:
-```
-tar xvfz mod_wsgi-X.Y.tar.gz
-```
-Replace ‘X.Y’ with the actual version number for that being used
-To setup the package ready for building run the “configure” script from within the source code directory:
-```
-./configure
-```
-The configure script will attempt to identify the Apache installation to use by searching in various standard locations for the Apache build tools included with your distribution called “apxs2” or “apxs”. If not found in any of these standard locations, your PATH will be searched.
-
-Which Python installation to use will be determined by looking for the “python” executable in your PATH.
-        
-If these programs are not in a standard location, they cannot be found in your PATH, or you wish to use alternate versions to those found, the --with-apxs and --with-python options can be used in conjunction with the “configure” script:
-```
-./configure --with-apxs=/usr/local/apache/bin/apxs --with-python=/usr/bin/python3.7
-```
-If makefile succeeded, then the package has been configured, it can be built by running:
-```
-make
-```
-If the mod_wsgi source code does not build successfully, see: https://modwsgi.readthedocs.io/en/develop/user-guides/installation-issues.html
-
-To install the Apache module into the standard location for Apache modules as dictated by Apache for your installation, run:
-```
-sudo make install
-```
-Once the Apache module has been installed into your Apache installation’s module directory, it is still necessary to configure Apache to actually load the module.
-Exactly how this is done and in which of the main Apache configuration files it should be placed, is dependent on which version of Apache you are using and may also be influenced by how your operating system’s Apache distribution has organised the Apache configuration files. You may therefore need to check with any documentation for your operating system to see in what way the procedure may need to be modified.
-In the simplest case, all that is required is to add a line of the form:
-```
-LoadModule wsgi_module /usr/lib/apache2/modules/mod_wsgi.so
-```
-into the main Apache “httpd.conf” configuration file at the same point that other Apache modules are being loaded. (In Ubuntu, all configuration options have been moved to apache2.conf)
-If your apache version uses "mods-enabled/mods-available" with symlinks, add a mod_wsgi.load file in "mods-available" with:
-```
-LoadModule wsgi_module /usr/lib/apache2/modules/mod_wsgi.so
-```
-Then enable by 
-```
-sudo a2enmod mod_wsgi
-sudo service apache2 restart
-```
-Afterwards mod_wsgi should be listed in "mods_enabled".
-
-
-### Apache Configuration for mod_wsgi
-Once you’ve got mod_wsgi installed and activated, add a virtual host file "vadetis.conf" in /etc/apache/sites-available
-
-```
-<VirtualHost *:80>
-    # This is name based virtual hosting. So place an appropriate server name
-    #   here. Example: django.devsrv.local
-    ServerName  vadetis.exascale.info
-    ServerAdmin webmaster@localhost
-    DocumentRoot /var/www/vadetis.exascale.info
-
-    # This alias makes serving static files possible.
-    #   Please note, that this is geared to our settings/common.py
-    #   In production environment, you will propably adjust this!
-    Alias /static/  /var/www/vadetis.exascale.info/run/static/
-
-    # This alias makes serving media files possible.
-    #   Please note, that this is geared to our settings/common.py
-    #   In production environment, you will propably adjust this!
-    Alias /media/  /var/www/vadetis.exascale.info/run/media/
-
-    # Insert the full path to the wsgi.py-file here
-    WSGIScriptAlias /   /var/www/vadetis.exascale.info/vadetis/wsgi.py
-
-    #Required for extensions that use C, e.g. scipy, numpy (!!!)
-    WSGIApplicationGroup %{GLOBAL}
-
-    # PROCESS_NAME specifies a distinct name of this process
-    #   see: https://code.google.com/p/modwsgi/wiki/ConfigurationDirectives#WSGIDaemonProcess
-    # PATH/TO/PROJECT_ROOT is the full path to your project's root directory,
-    #   containing your project files
-    # PATH/TO/VIRTUALENV/ROOT: If you are using a virtualenv specify the full
-    #   path to its directory.
-    #   Generally you must specify the path to Python's site-packages.
-    WSGIDaemonProcess   vadetis     python-home=/usr/local/venvs/venv_vadetis   python-path=/var/www/vadetis.exascale.info
-
-    # PROCESS_GROUP specifies a distinct name for the process group
-    #   see: https://code.google.com/p/modwsgi/wiki/ConfigurationDirectives#WSGIProcessGroup
-    WSGIProcessGroup    vadetis
-
-    <Directory /var/www/vadetis.exascale.info/vadetis>
-    <Files wsgi.py>
-    Require all granted
-    </Files>
-    </Directory>
-
-    # Serving static files from this directory
-    #   Please note, that this is geared to our settings/common.py
-    #   In production environment, you will propably adjust this!
-    <Directory /var/www/vadetis.exascale.info/run/static>
-        Options -Indexes
-        Order deny,allow
-        Allow from all
-    </Directory>
-
-    # Serving media files from this directory
-    #   Please note, that this is geared to our settings/common.py
-    #   In production environment, you will propably adjust this!
-    <Directory /var/www/vadetis.exascale.info/run/media>
-        Options -Indexes
-        Order deny,allow
-        Allow from all
-    </Directory>
-
-    LogLevel warn
-
-    # PROJECT_NAME is used to separate the log files of this application
-    ErrorLog    /var/log/apache2/vadetis.exascale.info/vadetis_error.log
-    CustomLog   /var/log/apache2/vadetis.exascale.info/vadetis_access.log combined
-</VirtualHost>
-```
-
-Make sure Apache is configured to accept non-ASCII file names:
-```
-export LANG='en_US.UTF-8'
-export LC_ALL='en_US.UTF-8'
-```
-
-A common location to put this configuration is /etc/apache2/envvars.
-
-### Collect static files
-
-On the server, run collectstatic to copy all the static files into STATIC_ROOT.
 ```bash
-cd /var/www/vadetis.exascale.info
-source /usr/local/venvs/venv_vadetis/bin/activate
-python3 manage.py collectstatic --settings vadetis.settings.production
+docker-compose exec web python manage.py createsuperuser --settings vadetis.settings.production
+docker-compose exec web python manage.py collectstatic --settings vadetis.settings.production
 ```
-
-
-### Site
-
-Activate the site with:
-```
-cd /etc/apache2/sites-available
-sudo a2ensite vadetis
-sudo service apache2 reload
-sudo service apache2 restart
-```
-
-
-
-
-You may have to edit /etc/hosts file for the domain.
+To enable login into Vadetis with your superuser, make sure that you login via the admin interface (/admin) and set the verified flag for the email address.
 
 With Vadetis in production mode running, login into the Django admin backend.
 
 Under Sites, add an entry with your domain name, e.g.:
 
-Domain Name: http://vadetis.exascale.info (or https://vadetis.exascale.info if SSL is configured)
+* Domain Name: http://vadetis.exascale.info (or https://vadetis.exascale.info if SSL is configured)
+* Display Name: Vadetis
 
-Display Name: Vadetis
