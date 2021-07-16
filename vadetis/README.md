@@ -1,6 +1,6 @@
 # Vadetis
 
-[**Prerequisites**](#prerequisites) | [**Auto Deployment**](#auto-deployment)  | [**Manual Depolyment**](#manual-deployment)
+[**Prerequisites**](#prerequisites) | [**Development Setup**](#development-setup)  | [**Production Deployment*](#production-deployment)
 
 ___
 
