@@ -1,7 +1,7 @@
 
 # Vadetis
 
-<a href = "vadetis.exascale.info">VADETIS </a>.  is a web application to perform, compare and validate various anomaly detection algorithms using different configurations. It allows users to upload their own datasets as well as training data in order to perform anomaly detection. The datasets can be altered by injecting additional outliers.  Technical details can be found in our ICDE 2021 paper:  <a href = "https://icde2021.gr">VADETIS: An Explainable Evaluator for Anomaly Detection Techniques </a>. 
+<a href = "vadetis.exascale.info">VADETIS </a> is a web application to perform, compare and validate various anomaly detection algorithms using different configurations. It allows users to upload their own datasets as well as training data in order to perform anomaly detection. The datasets can be altered by injecting additional outliers.  Technical details can be found in our ICDE 2021 paper:  <a href = "https://icde2021.gr">VADETIS: An Explainable Evaluator for Anomaly Detection Techniques </a>. 
 
 - Vadetis uses the following
     - *anomaly detectors*: One-Class SVM, LISA (Pearson and DTW), GMM, Histogram, Isolation Forest, and Robust PCA.  
