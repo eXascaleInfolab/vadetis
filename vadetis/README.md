@@ -1,30 +1,76 @@
 # Vadetis
 
-[**Prerequisites**](#prerequisites) | [**Development Setup**](#development-setup)  | [**Production Deployment*](#production-deployment)
+[**Requirements**](#requirements) | [**Fast Deployment**](#fast-deployment) | [**Dev Deployment**](#dev-deployment)   
 
-___
 
-## Prerequisites
-- Working Python 3 environment (for development)
-- Docker and Docker-Compose installed (for production)
-- Cloned this repository.
-___
+## Requirements
 
-## Development Setup
-
-With this setup, Vadetis uses an SQLite Database and prints e-mails on the console.
-
-To work with time series with spatial data you will need to add your Mapbox credentials to *vadetis/settings/.env*.
-
-### Setup
-
-### Python 3
-Install python 3.7 or later along with pip3 and virtualenv. For Ubuntu:
+- Clone this repo
+- Install python 3.7 or later along with pip3 and virtualenv. For Ubuntu:
 ```
 sudo apt install python3
 sudo apt install python3-pip
 sudo apt install python3-venv
 ```
+___
+
+## Fast Deployment
+
+With this setup, Vadetis:
+- uses PostgreSQL Database 
+- sends out e-mails with the configured SMTP server
+- uses docker-compose to orchestrate 3 containers: web (django), db (postgres) and nginx (nginx).
+
+For docker, we provide a prebuilt version of the container on [dockerhub](https://hub.docker.com/r/exascalelab/vadetis) which is also used in docker-compose.yml by default. This means that if you want to deploy an unmodified version of Vadetis, you can skip the next step (build image). Otherwise, you will have to build the image, upload this image to a docker registry and change the "image" field in docker-compose.yml to the location of the uploaded image.
+
+
+### Build Image
+
+```bash
+docker build -t username/vadetis:version .
+docker login
+docker push username/vadetis:version
+```
+### Deploy remotely
+
+- Copy \[db|web\]-variables_template.env to \[db|web\]-variables.env and fill in the db credentials (which can be freely chosen) and the email, ReCaptcha and Mapbox credentials (given to you by the corresponding vendor).
+- By default the built-in webserver will listen on port 12006, if no other web server is running on the host, you might want to simply change this to 80, avoiding having to run another webserver in front of it.
+
+```bash
+docker-compose up -d
+```
+To set up the database
+```bash
+docker-compose exec web python manage.py makemigrations vadetisweb --settings vadetis.settings.production
+docker-compose exec web python manage.py makemigrations --settings vadetis.settings.production
+docker-compose exec web python manage.py migrate --settings vadetis.settings.production
+```
+
+To create the superuser
+
+```bash
+docker-compose exec web python manage.py createsuperuser --settings vadetis.settings.production
+docker-compose exec web python manage.py collectstatic --settings vadetis.settings.production
+```
+To enable login into Vadetis with your superuser, make sure that you login via the admin interface (/admin) and set the verified flag for the email address.
+
+With Vadetis in production mode running, login into the Django admin backend.
+
+Under Sites, add an entry with your domain name, e.g.:
+
+* Domain Name: http://vadetis.exascale.info (or https://vadetis.exascale.info if SSL is configured)
+* Display Name: Vadetis
+
+
+___
+
+## Dev Deployment
+
+With this setup, Vadetis:
+- uses SQLite Database
+- prints e-mails on the console.
+
+To work with time series with spatial data you need to add your Mapbox credentials to *vadetis/settings/.env*.
 
 ### venv
 Make a virtual env for development and install all requirements:
@@ -87,48 +133,4 @@ env DJANGO_ALLOW_ASYNC_UNSAFE=true ./manage.py shell_plus --notebook --settings 
 ```
 ___
 
-
-## Production Deployment
-
-With this setup, Vadetis uses a PostgreSQL Database and sends out e-mails with the configured SMTP server. We use docker-compose to orchestrate 3 containers: web (django), db (postgres) and nginx (nginx).
-We provide a prebuilt version of the container on [dockerhub](https://hub.docker.com/r/exascalelab/vadetis) which is also used in docker-compose.yml by default. This means that if you want to deploy an unmodified version of Vadetis, you can skip the next step (build image). Otherwise, you will have to build the image, upload this image to a docker registry and change the "image" field in docker-compose.yml to the location of the uploaded image.
-
-
-### Build Image
-
-```bash
-docker build -t username/vadetis:version .
-docker login
-docker push username/vadetis:version
-```
-### Deploy remotely
-
-Copy \[db|web\]-variables_template.env to \[db|web\]-variables.env and fill in the db credentials (which can be freely chosen) and the email, ReCaptcha and Mapbox credentials (given to you by the corresponding vendor).
-By default the built-in webserver will listen on port 12006, if no other web server is running on the host, you might want to simply change this to 80, avoiding having to run another webserver in front of it.
-
-```bash
-docker-compose up -d
-```
-
-We set up the database
-```bash
-docker-compose exec web python manage.py makemigrations vadetisweb --settings vadetis.settings.production
-docker-compose exec web python manage.py makemigrations --settings vadetis.settings.production
-docker-compose exec web python manage.py migrate --settings vadetis.settings.production
-```
-
-We create a superuser
-
-```bash
-docker-compose exec web python manage.py createsuperuser --settings vadetis.settings.production
-docker-compose exec web python manage.py collectstatic --settings vadetis.settings.production
-```
-To enable login into Vadetis with your superuser, make sure that you login via the admin interface (/admin) and set the verified flag for the email address.
-
-With Vadetis in production mode running, login into the Django admin backend.
-
-Under Sites, add an entry with your domain name, e.g.:
-
-* Domain Name: http://vadetis.exascale.info (or https://vadetis.exascale.info if SSL is configured)
-* Display Name: Vadetis
 
