@@ -19,8 +19,8 @@ We provide a runnig Vadetis instance at [vadetis.exascale.info](https://vadetis.
 How to setup the tool either locally in development mode or in a production setting is documented [here](vadetis/README.md)
 
 ## Contributors
-- Abdelouahab Khelifati (abdel@exascale.info)
 - Mourad Khayati (mkhayati@exascale.info)
+- Abdelouahab Khelifati (abdel@exascale.info)
 - Adrian Hänni
 
 ___
